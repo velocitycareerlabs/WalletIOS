@@ -31,6 +31,6 @@ class PresentationRequestMocks {
     static let PresentationRequest = VCLPresentationRequest(
         jwt: PresentationRequestJwt,
         publicKey: publicKey,
-        deepLink: DeepLinkMocks.PresentationRequestDeepLink
+        deepLink: VCLDeepLink(value: "")
     )
 }
