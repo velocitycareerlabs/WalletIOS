@@ -10,7 +10,7 @@ import Foundation
 
 class VCLCredentialManifestDescriptorMocks {
     
-    static let DeepLink = DeepLinkMocks.CredentialManifestDeepLink
+    static let DeepLink = DeepLinkMocks.CredentialManifestDeepLinkMainNet
     
     static let DeepLinkRequestUri = DeepLinkMocks.CredentialManifestRequestDecodedUriStr
     
