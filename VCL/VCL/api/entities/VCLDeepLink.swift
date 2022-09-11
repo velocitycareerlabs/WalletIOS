@@ -40,9 +40,6 @@ public struct VCLDeepLink {
     }
     
     struct CodingKeys {
-        static let KeyPresentationRequestPrefix = "velocity-network://inspect?request_uri="
-        static let KeyCredentialManifestPrefix = "velocity-network://issue?request_uri="
-
         static let KeyRequestUri = "request_uri"
         static let KeyVendorOriginContext = "vendorOriginContext"
     }

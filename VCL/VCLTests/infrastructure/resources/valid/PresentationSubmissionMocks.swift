@@ -13,7 +13,7 @@ class PresentationSubmissionMocks {
     static let PresentationRequest = VCLPresentationRequest(
         jwt: JwtServiceMocks.JWT,
         publicKey: JwtServiceMocks.PublicKey,
-        deepLink: DeepLinkMocks.PresentationRequestDeepLink
+        deepLink: DeepLinkMocks.CredentialManifestDeepLinkMainNet
     )
 
     static let SelectionsList = [
