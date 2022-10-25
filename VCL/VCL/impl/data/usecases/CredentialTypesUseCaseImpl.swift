@@ -19,9 +19,12 @@ class CredentialTypesUseCaseImpl: CredentialTypesUseCase  {
         self.executor = executor
     }
     
-    func getCredentialTypes(completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void) {
+    func getCredentialTypes(
+        resetCache: Bool,
+        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
+    ) {
         executor.runOnBackgroundThread { [weak self] in
-            self?.credentialTypesRepository.getCredentialTypes{ result in
+            self?.credentialTypesRepository.getCredentialTypes(resetCache: resetCache){ result in
                 self?.executor.runOnMainThread {
                     completionBlock(result)
                 }

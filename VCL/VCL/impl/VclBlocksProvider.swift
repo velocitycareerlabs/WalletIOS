@@ -17,7 +17,8 @@ class VclBlocksProvider {
         return CountriesModelImpl(
             CountriesUseCaseImpl(
                 CountriesRepositoryImpl(
-                    NetworkServiceImpl()
+                    NetworkServiceImpl(),
+                    CacheServiceImpl()
                 ),
                 ExecutorImpl()
             )
@@ -28,7 +29,8 @@ class VclBlocksProvider {
         return CredentialTypeSchemasModelImpl(
             CredentialTypeSchemasUseCaseImpl(
                 CredentialTypeSchemaRepositoryImpl(
-                    NetworkServiceImpl()
+                    NetworkServiceImpl(),
+                    CacheServiceImpl()
                 ),
                 credenctiialTypes,
                 ExecutorImpl(),
@@ -42,7 +44,8 @@ class VclBlocksProvider {
         return CredentialTypesModelImpl(
             CredentialTypesUseCaseImpl(
                 CredentialTypesRepositoryImpl(
-                    NetworkServiceImpl()
+                    NetworkServiceImpl(),
+                    CacheServiceImpl()
                 ),
                 ExecutorImpl()
             )

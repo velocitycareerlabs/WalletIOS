@@ -22,7 +22,7 @@ final class CredentialTypeSchemasUseCaseTest: XCTestCase {
         // Arrange
         subject = CredentialTypeSchemasUseCaseImpl(
             CredentialTypeSchemaRepositoryImpl(
-                NetworkServiceSuccess(validResponse: CredentialTypeSchemaMocks.CredentialTypeSchemaJson)
+                NetworkServiceSuccess(validResponse: CredentialTypeSchemaMocks.CredentialTypeSchemaJson), EmptyCacheService()
             ),
             CredentialTypeSchemaMocks.CredentialTypes,
             EmptyExecutor(),
@@ -33,7 +33,7 @@ final class CredentialTypeSchemasUseCaseTest: XCTestCase {
         var result: VCLResult<VCLCredentialTypeSchemas>? = nil
         
         // Action
-        subject.getCredentialTypeSchemas {
+        subject.getCredentialTypeSchemas(resetCache: false) {
             result = $0
         }
         

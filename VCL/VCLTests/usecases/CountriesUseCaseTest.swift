@@ -19,18 +19,18 @@ final class CountriesUseCaseTest: XCTestCase {
     }
     
     func testGetCountriesSuccess() {
-//        Arrange
+        //        Arrange
         subject = CountriesUseCaseImpl(
             CountriesRepositoryImpl(
                 NetworkServiceSuccess(
                     validResponse: CountriesMocks.CountriesJson
-                )            ),
+                ), EmptyCacheService()            ),
             EmptyExecutor()
         )
         var result: VCLResult<VCLCountries>? = nil
         
-//        Action
-        subject?.getCountries {
+        //        Action
+        subject?.getCountries(resetCache: false) {
             result = $0
         }
         do {
