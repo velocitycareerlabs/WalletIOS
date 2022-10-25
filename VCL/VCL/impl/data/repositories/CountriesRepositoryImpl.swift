@@ -12,23 +12,46 @@ import Foundation
 class CountriesRepositoryImpl: CountriesRepository {
     
     private let networkService: NetworkService
+    private let cacheService: CacheService
     
-    init(_ networkService: NetworkService) {
+    init(_ networkService: NetworkService, _ cacheService: CacheService) {
         self.networkService = networkService
+        self.cacheService = cacheService
     }
     
-    func getCountries(completionBlock: @escaping (VCLResult<VCLCountries>) -> Void) {
-        networkService.sendRequest(endpoint: Urls.Countries,
+    func getCountries(
+        resetCache: Bool,
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
+    ) {
+        let endpoint = Urls.Countries
+        if (resetCache) {
+            fetchCountries(endpoint: endpoint, completionBlock: completionBlock)
+        } else {
+            if let countries = cacheService.getCountries(keyUrl: endpoint) {
+                if let countriesList = countries.toList() {
+                    completionBlock(.success(self.listToCountries(countriesList as? [[String: Any]])))
+                } else {
+                    completionBlock(.failure(VCLError(description: "Failed to parse \(countries)")))
+                }
+            } else {
+                fetchCountries(endpoint: endpoint, completionBlock: completionBlock)
+            }
+        }
+    }
+    
+    private func fetchCountries(endpoint: String, completionBlock: @escaping (VCLResult<VCLCountries>) -> Void) {
+        networkService.sendRequest(endpoint: endpoint,
                                    contentType: .ApplicationJson,
                                    method: .GET,
                                    cachePolicy: .useProtocolCachePolicy) {
             [weak self] res in
             do {
-                let countriesResponse = try res.get()
-                if let countriesList = countriesResponse.payload.toList(), let _self = self {
-                    completionBlock(.success(_self.listToCountries(countriesList as? [[String: Any]])))
+                let payload = try res.get().payload
+                self?.cacheService.setCountries(keyUrl: endpoint, value: payload)
+                if let countriesList = payload.toList() as? [[String: Any]], let _self = self {
+                    completionBlock(.success(_self.listToCountries(countriesList)))
                 } else {
-                    completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: countriesResponse.payload, encoding: .utf8) ?? "")")))
+                    completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: payload, encoding: .utf8) ?? "")")))
                 }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))

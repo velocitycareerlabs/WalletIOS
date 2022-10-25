@@ -29,7 +29,10 @@ class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
         self.dsptchQueue = dsptchQueue
     }
     
-    func getCredentialTypeSchemas(completionBlock: @escaping (VCLResult<VCLCredentialTypeSchemas>) -> Void) {
+    func getCredentialTypeSchemas(
+        resetCache: Bool,
+        completionBlock: @escaping (VCLResult<VCLCredentialTypeSchemas>) -> Void
+    ) {
         var credentialTypeSchemasMap = [String: VCLCredentialTypeSchema]()
         var credentialTypeSchemasMapIsEmpty = true
         
@@ -41,6 +44,7 @@ class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
                 self?.dispatcher.enter()
                 self?.credentialTypeSchemasRepository.getCredentialTypeSchema(
                     schemaName: schemaName,
+                    resetCache: resetCache,
                     completionBlock: { result in
                         do {
                             let credentialTypeSchema = try result.get()

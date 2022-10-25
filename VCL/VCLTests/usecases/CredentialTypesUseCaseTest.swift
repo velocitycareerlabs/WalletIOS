@@ -23,14 +23,14 @@ final class CredentialTypesUseCaseTest: XCTestCase {
             CredentialTypesRepositoryImpl(
                 NetworkServiceSuccess(
                     validResponse: CredentialTypesMocks.CredentialTypesJson
-                )
+                ), EmptyCacheService()
             ),
             EmptyExecutor()
         )
         var result: VCLResult<VCLCredentialTypes>? = nil
         
         // Action
-        subject.getCredentialTypes{
+        subject.getCredentialTypes(resetCache: false) {
             result = $0
         }
         

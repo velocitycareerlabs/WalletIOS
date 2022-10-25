@@ -18,8 +18,11 @@ class CountriesModelImpl: CountriesModel {
         self.countriesUseCase = countriesUseCase
     }
     
-    func initialize(completionBlock: @escaping (VCLResult<VCLCountries>) -> Void) {
-        countriesUseCase.getCountries { [weak self] result in
+    func initialize(
+        resetCache: Bool,
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
+    ) {
+        countriesUseCase.getCountries(resetCache: resetCache) { [weak self] result in
                 do {
                     self?.data = try result.get()
                 } catch {}

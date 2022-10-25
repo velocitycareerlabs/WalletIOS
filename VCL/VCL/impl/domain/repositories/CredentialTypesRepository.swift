@@ -10,5 +10,5 @@
 import Foundation
 
 protocol CredentialTypesRepository {
-    func getCredentialTypes(completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void)
+    func getCredentialTypes(resetCache: Bool, completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void)
 }

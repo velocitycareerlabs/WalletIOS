@@ -16,8 +16,11 @@ class CredentialTypesModelImpl: CredentialTypesModel {
         self.credentialTypesUseCase = credentialTypesUseCase
     }
     
-    func initialize(completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void) {
-        credentialTypesUseCase.getCredentialTypes { [weak self] response in
+    func initialize(
+        resetCache: Bool,
+        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
+    ) {
+        credentialTypesUseCase.getCredentialTypes(resetCache: resetCache) { [weak self] response in
             do {
                 self?.data = try response.get()
             } catch {}

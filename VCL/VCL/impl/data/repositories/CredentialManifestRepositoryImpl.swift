@@ -17,7 +17,7 @@ class CredentialManifestRepositoryImpl: CredentialManifestRepository {
     }
     
     func getCredentialManifest(credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-                               completionBlock: @escaping (VCLResult<String>) -> Void) {        
+                               completionBlock: @escaping (VCLResult<String>) -> Void) {
         networkService.sendRequest(endpoint:credentialManifestDescriptor.endpoint,
                                    contentType: .ApplicationJson,
                                    method: .GET) { response in
