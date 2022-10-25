@@ -12,19 +12,44 @@ import Foundation
 class CredentialTypesRepositoryImpl: CredentialTypesRepository {
     
     private let networkService: NetworkService
+    private let cacheService: CacheService
     
-    init(_ networkService: NetworkService) {
+    init(_ networkService: NetworkService, _ cacheService: CacheService) {
         self.networkService = networkService
+        self.cacheService = cacheService
     }
     
-    func getCredentialTypes(completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void) {
-        networkService.sendRequest(endpoint: Urls.CredentialTypes,
+    func getCredentialTypes(
+        resetCache: Bool,
+        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
+    ) {
+        let endpoint = Urls.CredentialTypes
+        if(resetCache) {
+            fetchCredentialTypes(endpoint: endpoint, completionBlock: completionBlock)
+        } else {
+            if let credentialTypes = cacheService.getCredentialTypes(keyUrl: endpoint) {
+                if let credentialTypesList = credentialTypes.toList() as? [[String: Any]?] {
+                    completionBlock(.success(self.parse(credentialTypesList)))
+                } else {
+                    completionBlock(.failure(VCLError(description: "Failed to parse VCLCredentialTypes)")))
+                }
+            } else {
+                fetchCredentialTypes(endpoint: endpoint, completionBlock: completionBlock)
+            }
+        }
+    }
+    
+    private func fetchCredentialTypes(endpoint: String, completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void) {
+        networkService.sendRequest(endpoint: endpoint,
                                    contentType: .ApplicationJson,
                                    method: .GET,
-                                   cachePolicy: .useProtocolCachePolicy) { response in
+                                   cachePolicy: .useProtocolCachePolicy) {
+            [weak self] res in
             do {
-                if let credentialTypesList = try response.get().payload.toList() as? [[String: Any]?] {
-                    completionBlock(.success(self.parse(credentialTypesList)))
+                let payload = try res.get().payload
+                self?.cacheService.setCredentialTypes(keyUrl: endpoint, value: payload)
+                if let credentialTypesList = payload.toList() as? [[String: Any]?], let _self = self {
+                    completionBlock(.success(_self.parse(credentialTypesList)))
                 } else {
                     completionBlock(.failure(VCLError(description: "Failed to parse VCLCredentialTypes)")))
                 }

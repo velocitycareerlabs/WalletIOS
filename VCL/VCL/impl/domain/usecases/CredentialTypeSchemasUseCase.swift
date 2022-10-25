@@ -8,5 +8,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 protocol CredentialTypeSchemasUseCase {
-    func getCredentialTypeSchemas(completionBlock: @escaping (VCLResult<VCLCredentialTypeSchemas>) -> Void)
+    func getCredentialTypeSchemas(
+        resetCache: Bool,
+        completionBlock: @escaping (VCLResult<VCLCredentialTypeSchemas>) -> Void
+    )
 }

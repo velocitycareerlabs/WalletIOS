@@ -10,7 +10,7 @@
 public protocol VCL {
     
     func initialize(
-        environment: VCLEnvironment,
+        initializationDescriptor: VCLInitializationDescriptor,
         successHandler: @escaping () -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )

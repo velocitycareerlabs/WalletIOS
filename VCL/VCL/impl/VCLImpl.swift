@@ -30,13 +30,13 @@ public class VCLImpl: VCL {
     private var initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitilizeAmount)
     
     public func initialize(
-        environment: VCLEnvironment = VCLEnvironment.PROD,
+        initializationDescriptor: VCLInitializationDescriptor,
         successHandler: @escaping () -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitilizeAmount)
         
-        initGlobalConfigurations(environment)
+        initGlobalConfigurations(initializationDescriptor.environment)
         
         printVersion()
         
@@ -48,7 +48,7 @@ public class VCLImpl: VCL {
                 successHandler()
             }
         }
-        countriesModel.initialize { [weak self] result in
+        countriesModel.initialize(resetCache: initializationDescriptor.resetCache) { [weak self] result in
             do {
                 _ = try result.get()
                 if self?.initializationWatcher.onInitializedModel(error: nil) == true {
@@ -60,7 +60,7 @@ public class VCLImpl: VCL {
                 }
             }
         }
-        credentialTypesModel.initialize { [weak self] result in
+        credentialTypesModel.initialize(resetCache: initializationDescriptor.resetCache) { [weak self] result in
             do {
                 _ = try result.get()
                 if self?.initializationWatcher.onInitializedModel(error: nil) == true {
@@ -69,7 +69,7 @@ public class VCLImpl: VCL {
                 else {
                     if let credentialTypes = self?.credentialTypesModel.data {
                         self?.credentialTypeSchemasModel = VclBlocksProvider.provideCredentialTypeSchemasModel(credenctiialTypes: credentialTypes)
-                        self?.credentialTypeSchemasModel?.initialize { result in
+                        self?.credentialTypeSchemasModel?.initialize(resetCache: initializationDescriptor.resetCache) { result in
                             do {
                                 _ = try result.get()
                                 if self?.initializationWatcher.onInitializedModel(error: nil) == true {

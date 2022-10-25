@@ -19,9 +19,12 @@ class CountriesUseCaseImpl: CountriesUseCase  {
         self.executor = executor
     }
     
-    func getCountries(completionBlock: @escaping (VCLResult<VCLCountries>) -> Void) {
+    func getCountries(
+        resetCache: Bool,
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
+    ) {
         executor.runOnBackgroundThread { [weak self] in
-            self?.countriesRepository.getCountries { result in
+            self?.countriesRepository.getCountries(resetCache: resetCache) { result in
                 self?.executor.runOnMainThread {
                     completionBlock(result)
                 }
