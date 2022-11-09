@@ -18,21 +18,30 @@ class CacheServiceTest: XCTestCase {
     }
 
     func testGetCountries() {
-        subject.setCountries(keyUrl: "key1", value: "value1".toData())
-
-        assert(String(data: subject.getCountries(keyUrl: "key1")!, encoding: .utf8) == "value1")
+        subject.setCountries(key: "key", value: "country".toData(), cacheSequence: 1)
+        assert(String(data: subject.getCountries(key: "key")!, encoding: .utf8) == "country")
+        
+        assert(subject.isResetCacheCountries(cacheSequence: 0) == false)
+        assert(subject.isResetCacheCountries(cacheSequence: 1) == false)
+        assert(subject.isResetCacheCountries(cacheSequence: 2))
     }
 
     func testGetCredentialTypes() {
-        subject.setCountries(keyUrl: "key2", value: "value2".toData())
-
-        assert(String(data: subject.getCountries(keyUrl: "key2")!, encoding: .utf8) == "value2")
+        subject.setCountries(key: "key", value: "credential types".toData(), cacheSequence: 1)
+        assert(String(data: subject.getCountries(key: "key")!, encoding: .utf8) == "credential types")
+        
+        assert(subject.isResetCacheCountries(cacheSequence: 0) == false)
+        assert(subject.isResetCacheCountries(cacheSequence: 1) == false)
+        assert(subject.isResetCacheCountries(cacheSequence: 2))
     }
 
     func testGetCredentialTypeSchema() {
-        subject.setCountries(keyUrl: "key3", value: "value3".toData())
-
-        assert(String(data: subject.getCountries(keyUrl: "key3")!, encoding: .utf8) == "value3")
+        subject.setCountries(key: "key", value: "credential type schemas".toData(), cacheSequence: 1)
+        assert(String(data: subject.getCountries(key: "key")!, encoding: .utf8) == "credential type schemas")
+        
+        assert(subject.isResetCacheCountries(cacheSequence: 0) == false)
+        assert(subject.isResetCacheCountries(cacheSequence: 1) == false)
+        assert(subject.isResetCacheCountries(cacheSequence: 2))
     }
     
     override func tearDown() {

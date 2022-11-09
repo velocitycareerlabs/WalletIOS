@@ -9,7 +9,7 @@
 
 protocol CredentialTypeSchemasUseCase {
     func getCredentialTypeSchemas(
-        resetCache: Bool,
+        cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCredentialTypeSchemas>) -> Void
     )
 }

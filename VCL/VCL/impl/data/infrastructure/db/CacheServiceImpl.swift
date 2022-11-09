@@ -10,6 +10,10 @@
 import Foundation
 
 class CacheServiceImpl: CacheService {
+    
+    private static let KEY_CACHE_SEQUENCE_COUNTRIES = "KEY_CACHE_SEQUENCE_COUNTRIES"
+    private static let KEY_CACHE_SEQUENCE_CREDENTIAL_TYPES = "KEY_CACHE_SEQUENCE_CREDENTIAL_TYPES"
+    private static let KEY_CACHE_SEQUENCE_CREDENTIAL_TYPE_SCHEMA = "KEY_CACHE_SEQUENCE_CREDENTIAL_TYPE_SCHEMA"
 
     private var defaults: UserDefaults = UserDefaults()
 
@@ -20,24 +24,43 @@ class CacheServiceImpl: CacheService {
         defaults.set(value, forKey: key)
     }
     
-    func getCountries(keyUrl: String) -> Data? {
-        return getData(key: keyUrl)
+    private func getInt(key: String) -> Int {
+        return defaults.integer(forKey: key)
     }
-    func setCountries(keyUrl: String, value: Data) {
-        setData(key: keyUrl, value: value)
-    }
-
-    func getCredentialTypes(keyUrl: String) -> Data? {
-        return getData(key: keyUrl)
-    }
-    func setCredentialTypes(keyUrl: String, value: Data) {
-        setData(key: keyUrl, value: value)
+    private func setInt(key: String, value: Int) {
+        defaults.set(value, forKey: key)
     }
     
-    func getCredentialTypeSchema(keyUrl: String) -> Data? {
-        return getData(key: keyUrl)
+    func getCountries(key: String) -> Data? {
+        return getData(key: key)
     }
-    func setCredentialTypeSchema(keyUrl: String, value: Data) {
-        setData(key: keyUrl, value: value)
+    func setCountries(key: String, value: Data, cacheSequence: Int) {
+        setData(key: key, value: value)
+        setInt(key: CacheServiceImpl.KEY_CACHE_SEQUENCE_COUNTRIES, value: cacheSequence)
+    }
+    func isResetCacheCountries(cacheSequence: Int) -> Bool {
+        getInt(key: CacheServiceImpl.KEY_CACHE_SEQUENCE_COUNTRIES) < cacheSequence
+    }
+    
+    func getCredentialTypes(key: String) -> Data? {
+        return getData(key: key)
+    }
+    func setCredentialTypes(key: String, value: Data, cacheSequence: Int) {
+        setData(key: key, value: value)
+        setInt(key: CacheServiceImpl.KEY_CACHE_SEQUENCE_CREDENTIAL_TYPES, value: cacheSequence)
+    }
+    func isResetCacheCredentialTypes(cacheSequence: Int) -> Bool {
+        return getInt(key: CacheServiceImpl.KEY_CACHE_SEQUENCE_CREDENTIAL_TYPES) < cacheSequence
+    }
+    
+    func getCredentialTypeSchema(key: String) -> Data? {
+        return getData(key: key)
+    }
+    func setCredentialTypeSchema(key: String, value: Data, cacheSequence: Int) {
+        setData(key: key, value: value)
+        setInt(key: CacheServiceImpl.KEY_CACHE_SEQUENCE_CREDENTIAL_TYPE_SCHEMA, value: cacheSequence)
+    }
+    func isResetCacheCredentialTypeSchema(cacheSequence: Int) -> Bool {
+        return getInt(key: CacheServiceImpl.KEY_CACHE_SEQUENCE_CREDENTIAL_TYPE_SCHEMA) < cacheSequence
     }
 }

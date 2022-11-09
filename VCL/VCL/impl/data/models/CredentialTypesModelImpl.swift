@@ -17,10 +17,10 @@ class CredentialTypesModelImpl: CredentialTypesModel {
     }
     
     func initialize(
-        resetCache: Bool,
+        cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
     ) {
-        credentialTypesUseCase.getCredentialTypes(resetCache: resetCache) { [weak self] response in
+        credentialTypesUseCase.getCredentialTypes(cacheSequence: cacheSequence) { [weak self] response in
             do {
                 self?.data = try response.get()
             } catch {}

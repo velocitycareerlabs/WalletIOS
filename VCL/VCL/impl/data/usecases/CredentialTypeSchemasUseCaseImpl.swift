@@ -30,7 +30,7 @@ class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
     }
     
     func getCredentialTypeSchemas(
-        resetCache: Bool,
+        cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCredentialTypeSchemas>) -> Void
     ) {
         var credentialTypeSchemasMap = [String: VCLCredentialTypeSchema]()
@@ -44,7 +44,7 @@ class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
                 self?.dispatcher.enter()
                 self?.credentialTypeSchemasRepository.getCredentialTypeSchema(
                     schemaName: schemaName,
-                    resetCache: resetCache,
+                    cacheSequence: cacheSequence,
                     completionBlock: { result in
                         do {
                             let credentialTypeSchema = try result.get()

@@ -11,10 +11,13 @@ import Foundation
 
 public struct VCLInitializationDescriptor {
     public let environment: VCLEnvironment
-    public let resetCache: Bool
+    public let cacheSequence: Int
     
-    public init(environment: VCLEnvironment = VCLEnvironment.PROD, resetCache: Bool = false) {
+    public init(
+        environment: VCLEnvironment = VCLEnvironment.PROD,
+        cacheSequence: Int = 0
+    ) {
         self.environment = environment
-        self.resetCache = resetCache
+        self.cacheSequence = cacheSequence
     }
 }

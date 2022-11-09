@@ -21,27 +21,29 @@ class CredentialTypeSchemaRepositoryImpl: CredentialTypeSchemaRepository {
     
     func getCredentialTypeSchema(
         schemaName: String,
-        resetCache: Bool,
+        cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCredentialTypeSchema>) -> Void
     ) {
         let endpoint = Urls.CredentialTypeSchemas + schemaName
-        if(resetCache) {
-            fetchCredentialTypeSchema(endpoint: endpoint, completionBlock: completionBlock)
+        if(cacheService.isResetCacheCredentialTypeSchema(cacheSequence: cacheSequence)) {
+            fetchCredentialTypeSchema(endpoint: endpoint, cacheSequence: cacheSequence, completionBlock: completionBlock)
         } else {
-            if let credentialTypeSchema = cacheService.getCredentialTypeSchema(keyUrl: endpoint) {
+            if let credentialTypeSchema = cacheService.getCredentialTypeSchema(key: endpoint) {
                 if let payload = credentialTypeSchema.toDictionary() {
                     completionBlock(.success(VCLCredentialTypeSchema(payload: payload)))
                 } else {
                     completionBlock(.failure(VCLError(description: "Failed to parse \(credentialTypeSchema)")))
                 }
             } else {
-                fetchCredentialTypeSchema(endpoint: endpoint, completionBlock: completionBlock)
+                fetchCredentialTypeSchema(endpoint: endpoint, cacheSequence: cacheSequence, completionBlock: completionBlock)
             }
         }
     }
     
     private func fetchCredentialTypeSchema(
-        endpoint: String, completionBlock: @escaping (VCLResult<VCLCredentialTypeSchema>) -> Void
+        endpoint: String,
+        cacheSequence: Int,
+        completionBlock: @escaping (VCLResult<VCLCredentialTypeSchema>) -> Void
     ) {
         networkService.sendRequest(endpoint: endpoint,
                                    contentType: .ApplicationJson,
@@ -50,7 +52,7 @@ class CredentialTypeSchemaRepositoryImpl: CredentialTypeSchemaRepository {
             [weak self] res in
             do {
                 let payload = try res.get().payload
-                self?.cacheService.setCredentialTypeSchema(keyUrl: endpoint, value: payload)
+                self?.cacheService.setCredentialTypeSchema(key: endpoint, value: payload, cacheSequence: cacheSequence)
                 if let credentialTypeSchemaList = payload.toDictionary() {
                     completionBlock(.success(VCLCredentialTypeSchema(payload: credentialTypeSchemaList)))
                 } else {

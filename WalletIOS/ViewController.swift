@@ -42,8 +42,7 @@ class ViewController: UIViewController {
         
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
-                environment: environment,
-                resetCache: false
+                environment: environment
             ),
             successHandler: { [weak self] in
                 NSLog("VCL initialization succeed!")

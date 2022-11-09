@@ -11,21 +11,15 @@ import Foundation
 @testable import VCL
 
 class EmptyCacheService: CacheService {
-    func getCountries(keyUrl: String) -> Data? {
-        return nil
-    }
-    func setCountries(keyUrl: String, value: Data) {
-    }
+    func getCountries(key: String) -> Data? { return nil }
+    func setCountries(key: String, value: Data, cacheSequence: Int) {}
+    func isResetCacheCountries(cacheSequence: Int) -> Bool { return false }
 
-    func getCredentialTypes(keyUrl: String) -> Data? {
-        return nil
-    }
-    func setCredentialTypes(keyUrl: String, value: Data) {
-    }
+    func getCredentialTypes(key: String) -> Data? { return nil }
+    func setCredentialTypes(key: String, value: Data, cacheSequence: Int) {}
+    func isResetCacheCredentialTypes(cacheSequence: Int) -> Bool { return false }
 
-    func getCredentialTypeSchema(keyUrl: String) -> Data? {
-        return nil
-    }
-    func setCredentialTypeSchema(keyUrl: String, value: Data) {
-    }
+    func getCredentialTypeSchema(key: String) -> Data? { return nil }
+    func setCredentialTypeSchema(key: String, value: Data, cacheSequence: Int) {}
+    func isResetCacheCredentialTypeSchema(cacheSequence: Int) -> Bool { return false }
 }

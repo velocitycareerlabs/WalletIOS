@@ -10,5 +10,8 @@
 import Foundation
 
 protocol CountriesUseCase {
-    func getCountries(resetCache: Bool, completionBlock: @escaping (VCLResult<VCLCountries>) -> Void)
+    func getCountries(
+        cacheSequence: Int,
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
+    )
 }
