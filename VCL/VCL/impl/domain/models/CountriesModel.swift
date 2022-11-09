@@ -11,5 +11,8 @@ import Foundation
 
 protocol CountriesModel: Model {
     var data: VCLCountries? { get }
-    func initialize(resetCache: Bool, completionBlock: @escaping (VCLResult<VCLCountries>) -> Void)
+    func initialize(
+        cacheSequence: Int,
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
+    )
 }

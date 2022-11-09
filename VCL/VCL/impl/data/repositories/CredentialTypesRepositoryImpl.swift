@@ -20,26 +20,30 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
     }
     
     func getCredentialTypes(
-        resetCache: Bool,
+        cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
     ) {
         let endpoint = Urls.CredentialTypes
-        if(resetCache) {
-            fetchCredentialTypes(endpoint: endpoint, completionBlock: completionBlock)
+        if(cacheService.isResetCacheCredentialTypes(cacheSequence: cacheSequence)) {
+            fetchCredentialTypes(endpoint: endpoint, cacheSequence: cacheSequence, completionBlock: completionBlock)
         } else {
-            if let credentialTypes = cacheService.getCredentialTypes(keyUrl: endpoint) {
+            if let credentialTypes = cacheService.getCredentialTypes(key: endpoint) {
                 if let credentialTypesList = credentialTypes.toList() as? [[String: Any]?] {
                     completionBlock(.success(self.parse(credentialTypesList)))
                 } else {
                     completionBlock(.failure(VCLError(description: "Failed to parse VCLCredentialTypes)")))
                 }
             } else {
-                fetchCredentialTypes(endpoint: endpoint, completionBlock: completionBlock)
+                fetchCredentialTypes(endpoint: endpoint, cacheSequence: cacheSequence, completionBlock: completionBlock)
             }
         }
     }
     
-    private func fetchCredentialTypes(endpoint: String, completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void) {
+    private func fetchCredentialTypes(
+        endpoint: String,
+        cacheSequence: Int,
+        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
+    ) {
         networkService.sendRequest(endpoint: endpoint,
                                    contentType: .ApplicationJson,
                                    method: .GET,
@@ -47,7 +51,7 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
             [weak self] res in
             do {
                 let payload = try res.get().payload
-                self?.cacheService.setCredentialTypes(keyUrl: endpoint, value: payload)
+                self?.cacheService.setCredentialTypes(key: endpoint, value: payload, cacheSequence: cacheSequence)
                 if let credentialTypesList = payload.toList() as? [[String: Any]?], let _self = self {
                     completionBlock(.success(_self.parse(credentialTypesList)))
                 } else {

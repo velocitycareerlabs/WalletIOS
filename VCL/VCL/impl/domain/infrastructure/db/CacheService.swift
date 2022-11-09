@@ -10,12 +10,15 @@
 import Foundation
 
 protocol CacheService {
-    func getCountries(keyUrl: String) -> Data?
-    func setCountries(keyUrl: String, value: Data)
+    func getCountries(key: String) -> Data?
+    func setCountries(key: String, value: Data, cacheSequence: Int)
+    func isResetCacheCountries(cacheSequence: Int) -> Bool
 
-    func getCredentialTypes(keyUrl: String) -> Data?
-    func setCredentialTypes(keyUrl: String, value: Data)
+    func getCredentialTypes(key: String) -> Data?
+    func setCredentialTypes(key: String, value: Data, cacheSequence: Int)
+    func isResetCacheCredentialTypes(cacheSequence: Int) -> Bool
 
-    func getCredentialTypeSchema(keyUrl: String) -> Data?
-    func setCredentialTypeSchema(keyUrl: String, value: Data)
+    func getCredentialTypeSchema(key: String) -> Data?
+    func setCredentialTypeSchema(key: String, value: Data, cacheSequence: Int)
+    func isResetCacheCredentialTypeSchema(cacheSequence: Int) -> Bool
 }

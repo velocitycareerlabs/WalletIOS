@@ -11,5 +11,8 @@ import Foundation
 
 protocol CredentialTypesModel: Model {
     var data: VCLCredentialTypes? { get }
-    func initialize(resetCache: Bool, completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void)
+    func initialize(
+        cacheSequence: Int,
+        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
+    )
 }

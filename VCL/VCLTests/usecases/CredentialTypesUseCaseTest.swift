@@ -30,7 +30,7 @@ final class CredentialTypesUseCaseTest: XCTestCase {
         var result: VCLResult<VCLCredentialTypes>? = nil
         
         // Action
-        subject.getCredentialTypes(resetCache: false) {
+        subject.getCredentialTypes(cacheSequence: 1) {
             result = $0
         }
         

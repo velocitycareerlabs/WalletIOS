@@ -33,7 +33,7 @@ final class CredentialTypeSchemasUseCaseTest: XCTestCase {
         var result: VCLResult<VCLCredentialTypeSchemas>? = nil
         
         // Action
-        subject.getCredentialTypeSchemas(resetCache: false) {
+        subject.getCredentialTypeSchemas(cacheSequence: 1) {
             result = $0
         }
         
