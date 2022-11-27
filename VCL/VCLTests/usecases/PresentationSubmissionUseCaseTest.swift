@@ -25,8 +25,8 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: PresentationSubmissionMocks.PresentationSubmissionResultJson)),
             JwtServiceRepositoryImpl(
                 JwtServiceSuccess(VclJwt: PresentationSubmissionMocks.PresentationSubmissionJwt)
-//                Can't be tested, because of storing exception
-//                JwtServiceMicrosoftImpl()
+                //                Can't be tested, because of storing exception
+                //                JwtServiceMicrosoftImpl()
             ),
             EmptyExecutor()
         )
@@ -44,20 +44,30 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
             result = $0
         }
         
+        let expectedPresentationSubmissionResult =
+            expectedPresentationSubmissionResult(
+                jsonDict: PresentationSubmissionMocks.PresentationSubmissionResultJson.toDictionary()!,
+                id: presentationSubmission.id
+            )
+        
         // Assert
         do {
             let presentationSubmissionResult = try result?.get()
-            assert(presentationSubmissionResult == expectedPresentationSubmissionResult(jsonDict: PresentationSubmissionMocks.PresentationSubmissionResultJson.toDictionary()!))
+            
+            assert(presentationSubmissionResult?.token.value == expectedPresentationSubmissionResult.token.value)
+            assert(presentationSubmissionResult?.exchange.id == expectedPresentationSubmissionResult.exchange.id)
+            assert(presentationSubmissionResult?.id == expectedPresentationSubmissionResult.id)
         } catch {
             XCTFail()
         }
     }
     
-    private func expectedPresentationSubmissionResult(jsonDict: [String: Any]) -> VCLPresentationSubmissionResult {
+    private func expectedPresentationSubmissionResult(jsonDict: [String: Any], id: String) -> VCLPresentationSubmissionResult {
         let exchangeJsonDict = jsonDict[VCLPresentationSubmissionResult.CodingKeys.KeyExchange]
         return VCLPresentationSubmissionResult(
             token: VCLToken(value: (jsonDict[VCLPresentationSubmissionResult.CodingKeys.KeyToken] as! String)),
-            exchange: expectedExchange(exchangeJsonDict: exchangeJsonDict as! [String : Any])
+            exchange: expectedExchange(exchangeJsonDict: exchangeJsonDict as! [String : Any]),
+            id: id
         )
     }
     
