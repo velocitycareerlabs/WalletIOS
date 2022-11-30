@@ -13,21 +13,25 @@ public struct VCLSubmissionResult {
     
     public let token: VCLToken
     public let exchange: VCLExchange
-    public let id: String
+    public let jti: String
+    public let submissionId: String
     
     public init(
         token: VCLToken,
         exchange: VCLExchange,
-        id: String
+        jti: String,
+        submissionId: String
     ) {
         self.token = token
         self.exchange = exchange
-        self.id = id
+        self.jti = jti
+        self.submissionId = submissionId
     }
     
     struct CodingKeys {
         static let KeyToken = "token"
         static let KeyExchange = "exchange"
-        static let KeyId = "id"
+        static let KeyJti = "jti"
+        static let KeySubmissionId = "submissionId"
     }
 }

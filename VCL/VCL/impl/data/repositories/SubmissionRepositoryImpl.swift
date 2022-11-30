@@ -32,8 +32,9 @@ class SubmissionRepositoryImpl: SubmissionRepository {
         ) { [weak self] _response in
             do{
                 let submissionResponse = try _response.get()
-                if let presentationSubmissionResult = self?.parse(submissionResponse.payload.toDictionary(), submission.id) {
-                    completionBlock(.success(presentationSubmissionResult))
+                if let submissionResult =
+                    self?.parse(submissionResponse.payload.toDictionary(), submission.jti, submission.submissionId) {
+                    completionBlock(.success(submissionResult))
                 } else {
                     completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: submissionResponse.payload, encoding: .utf8) ?? "")")))
                 }
@@ -44,12 +45,13 @@ class SubmissionRepositoryImpl: SubmissionRepository {
         }
     }
     
-    private func parse(_ jsonDict: [String: Any]?, _ id: String) -> VCLPresentationSubmissionResult {
+    private func parse(_ jsonDict: [String: Any]?, _ jti: String, _ submissionId: String) -> VCLPresentationSubmissionResult {
         let exchangeJsonDict = jsonDict?[VCLPresentationSubmissionResult.CodingKeys.KeyExchange]
         return VCLPresentationSubmissionResult(
             token: VCLToken(value: jsonDict?[VCLPresentationSubmissionResult.CodingKeys.KeyToken] as? String ?? ""),
             exchange: parseExchange(exchangeJsonDict as? [String : Any]),
-            id: id
+            jti: jti,
+            submissionId: submissionId
         )
     }
     

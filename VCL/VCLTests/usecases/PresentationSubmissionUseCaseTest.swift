@@ -46,32 +46,34 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
         
         let expectedPresentationSubmissionResult =
             expectedPresentationSubmissionResult(
-                jsonDict: PresentationSubmissionMocks.PresentationSubmissionResultJson.toDictionary()!,
-                id: presentationSubmission.id
+                PresentationSubmissionMocks.PresentationSubmissionResultJson.toDictionary()!,
+                presentationSubmission.jti, submissionId: presentationSubmission.submissionId
             )
         
         // Assert
         do {
             let presentationSubmissionResult = try result?.get()
             
-            assert(presentationSubmissionResult?.token.value == expectedPresentationSubmissionResult.token.value)
-            assert(presentationSubmissionResult?.exchange.id == expectedPresentationSubmissionResult.exchange.id)
-            assert(presentationSubmissionResult?.id == expectedPresentationSubmissionResult.id)
+            assert(presentationSubmissionResult!.token.value == expectedPresentationSubmissionResult.token.value)
+            assert(presentationSubmissionResult!.exchange.id == expectedPresentationSubmissionResult.exchange.id)
+            assert(presentationSubmissionResult!.jti == expectedPresentationSubmissionResult.jti)
+            assert(presentationSubmissionResult!.submissionId == expectedPresentationSubmissionResult.submissionId)
         } catch {
             XCTFail()
         }
     }
     
-    private func expectedPresentationSubmissionResult(jsonDict: [String: Any], id: String) -> VCLPresentationSubmissionResult {
+    private func expectedPresentationSubmissionResult(_ jsonDict: [String: Any], _ jti: String, submissionId: String) -> VCLPresentationSubmissionResult {
         let exchangeJsonDict = jsonDict[VCLPresentationSubmissionResult.CodingKeys.KeyExchange]
         return VCLPresentationSubmissionResult(
             token: VCLToken(value: (jsonDict[VCLPresentationSubmissionResult.CodingKeys.KeyToken] as! String)),
-            exchange: expectedExchange(exchangeJsonDict: exchangeJsonDict as! [String : Any]),
-            id: id
+            exchange: expectedExchange(exchangeJsonDict as! [String : Any]),
+            jti: jti,
+            submissionId: submissionId
         )
     }
     
-    private func expectedExchange(exchangeJsonDict: [String: Any]) -> VCLExchange {
+    private func expectedExchange(_ exchangeJsonDict: [String: Any]) -> VCLExchange {
         return VCLExchange(id: (exchangeJsonDict[VCLExchange.CodingKeys.KeyId] as! String),
                            type: (exchangeJsonDict[VCLExchange.CodingKeys.KeyType] as! String),
                            disclosureComplete: (exchangeJsonDict[VCLExchange.CodingKeys.KeyDisclosureComplete] as! Bool),
