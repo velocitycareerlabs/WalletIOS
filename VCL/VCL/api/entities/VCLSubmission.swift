@@ -32,16 +32,16 @@ public class VCLSubmission {
     }
     
     public lazy var  payload = generatePayload()
-    
-    public lazy var id = UUID().uuidString
+    public lazy var jti = UUID().uuidString
+    public lazy var submissionId = UUID().uuidString
     
     private func generatePayload() -> [String: Any] {
         var retVal = [String: Any]()
-        retVal[CodingKeys.KeyJti] = UUID().uuidString
+        retVal[CodingKeys.KeyJti] = self.jti
         var vp = [String: Any]()
         vp[CodingKeys.KeyType] = CodingKeys.ValueVerifiablePresentation
         var presentationSubmissionDict = [String: Any]()
-        presentationSubmissionDict[CodingKeys.KeyId] = self.id
+        presentationSubmissionDict[CodingKeys.KeyId] = self.submissionId
         presentationSubmissionDict[CodingKeys.KeyDefinitionId] = presentationDefinitionId
         var descriptorMap = [[String: String]]()
         for (index, credential) in self.verifiableCredentials.enumerated() {
