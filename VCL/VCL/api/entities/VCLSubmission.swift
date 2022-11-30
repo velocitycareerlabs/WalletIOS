@@ -17,6 +17,9 @@ public class VCLSubmission {
     public let verifiableCredentials: [VCLVerifiableCredential]
     public let vendorOriginContext: String?
     
+    public let jti = UUID().uuidString
+    public let submissionId = UUID().uuidString
+    
     public init(submitUri: String,
                 iss: String,
                 exchangeId: String,
@@ -31,9 +34,7 @@ public class VCLSubmission {
         self.vendorOriginContext = vendorOriginContext
     }
     
-    public lazy var  payload = generatePayload()
-    public lazy var jti = UUID().uuidString
-    public lazy var submissionId = UUID().uuidString
+    public var payload: [String: Any] { get { return generatePayload() } }
     
     private func generatePayload() -> [String: Any] {
         var retVal = [String: Any]()
@@ -59,7 +60,7 @@ public class VCLSubmission {
         return retVal
     }
     
-    struct CodingKeys {
+    public struct CodingKeys {
         static let KeyJti = "jti"
         static let KeyId = "id"
         static let KeyVp = "vp"
