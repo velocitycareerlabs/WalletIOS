@@ -68,7 +68,7 @@ class JwtServiceVCLImpl: JwtService {
         }
     }
     
-    func sign(payload: [String: Any], iss: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
+    func sign(payload: [String: Any], iss: String, jti: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
         networkService.sendRequest(endpoint: JwtServiceVCLImpl.SignUrl,
                                    body: generateBodyForSigning(payload, iss).toJsonString(),
                                    contentType: .ApplicationJson,

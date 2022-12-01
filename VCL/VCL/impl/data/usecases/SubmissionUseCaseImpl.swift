@@ -27,7 +27,8 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
         executor.runOnBackgroundThread  { [weak self] in
             self?.jwtServiceRepository.generateSignedJwt(
                 payload: submission.payload,
-                iss: submission.iss
+                iss: submission.iss,
+                jti: submission.jti
             ) { signedJwtResult in
                 do {
                     let jwt = try signedJwtResult.get()

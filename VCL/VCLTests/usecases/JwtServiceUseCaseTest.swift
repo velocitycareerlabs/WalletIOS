@@ -31,11 +31,12 @@ final class JwtServiceUseCaseTest: XCTestCase {
             EmptyExecutor()
         )
         let iss = "some iss"
+        let jti = "some jti"
         var resultJwt: VCLResult<VCLJWT>? = nil
         var resultVerified: VCLResult<Bool>? = nil
 
         // Action
-        subject.generateSignedJwt(payload: JwtServiceMocks.Json.toDictionary() ?? [String: String](), iss: iss) {
+        subject.generateSignedJwt(payload: JwtServiceMocks.Json.toDictionary() ?? [String: String](), iss: iss, jti: jti) {
             resultJwt = $0
         }
 

@@ -29,7 +29,7 @@ class JwtServiceSuccess: JwtService {
         completionBlock(.success(true))
     }
     
-    func sign(payload: [String :Any], iss: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
+    func sign(payload: [String :Any], iss: String, jti: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
         completionBlock(.success(VCLJWT(header: nil, payload: nil, signature: nil, encodedJwt: JwtServiceMocks.SignedJwt)))
     }
     
