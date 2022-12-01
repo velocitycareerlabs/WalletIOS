@@ -310,7 +310,7 @@ class ViewController: UIViewController {
 
     @objc private func generateSignedJwt() {
         vcl.generateSignedJwt(
-            payload: Constants.SomePayload, iss: "123", successHandler: { jwt in
+            payload: Constants.SomePayload, iss: "iss123", jti: "jti123", successHandler: { jwt in
                 NSLog("VCL JWT generated: \(jwt.encodedJwt)")
             },
             errorHandler: { error in

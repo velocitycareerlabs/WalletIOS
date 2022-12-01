@@ -38,8 +38,8 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
             }
         }
     }
-    func generateSignedJwt(payload: [String: Any], iss: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
-        jwtService.sign(payload: payload, iss: iss) { signedJwtResult in
+    func generateSignedJwt(payload: [String: Any], iss: String, jti: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
+        jwtService.sign(payload: payload, iss: iss, jti: jti) { signedJwtResult in
             do {
                 let jwt = try signedJwtResult.get()
                 completionBlock(.success(jwt))

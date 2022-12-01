@@ -27,9 +27,9 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
         }
     }
     
-    func generateSignedJwt(payload: [String: Any], iss: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
+    func generateSignedJwt(payload: [String: Any], iss: String, jti: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
         executor.runOnBackgroundThread { [weak self] in
-            self?.jwtServiceRepository.generateSignedJwt(payload: payload, iss: iss) { isVeriviedResult in
+            self?.jwtServiceRepository.generateSignedJwt(payload: payload, iss: iss, jti: jti) { isVeriviedResult in
                 self?.executor.runOnMainThread { completionBlock(isVeriviedResult) }
             }
         }

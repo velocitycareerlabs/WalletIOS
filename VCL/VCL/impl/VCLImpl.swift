@@ -328,10 +328,11 @@ public class VCLImpl: VCL {
     public func generateSignedJwt(
         payload: [String: Any],
         iss: String,
+        jti: String,
         successHandler: @escaping (VCLJWT) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.generateSignedJwt(payload: payload, iss: iss) {
+        jwtServiceUseCase.generateSignedJwt(payload: payload, iss: iss, jti: jti) {
             [weak self] jwtResult in
             do {
                 successHandler(try jwtResult.get())
