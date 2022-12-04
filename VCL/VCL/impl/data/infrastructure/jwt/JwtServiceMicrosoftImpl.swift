@@ -32,7 +32,7 @@ class JwtServiceMicrosoftImpl: JwtService {
         }
     }
     
-    func sign(payload: [String : Any], iss: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
+    func sign(payload: [String : Any], iss: String, jti: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
         do {
             let keyId = UUID().uuidString
             
@@ -45,7 +45,7 @@ class JwtServiceMicrosoftImpl: JwtService {
                                 jsonWebKey: publicKey, // try publicKey.getThumbprint(),
                                 keyId: keyId)
             
-            let payload = JwtServiceMicrosoftImpl.generatePayload(payload, iss)
+            let payload = JwtServiceMicrosoftImpl.generatePayload(payload, iss, jti)
             
             let claims = VCLClaims(all: payload)
             let protectedMessage = try? JwtServiceMicrosoftImpl.createProtectedMessage(headers: header, claims: claims)
@@ -84,13 +84,12 @@ class JwtServiceMicrosoftImpl: JwtService {
         }
     }
     
-    private static func generatePayload(_ payload: [String: Any], _ iss: String) -> [String: Any] {
+    private static func generatePayload(_ payload: [String: Any], _ iss: String, _ jti: String) -> [String: Any] {
         var retVal = payload
-        let uuid = UUID().uuidString
         retVal["iss"] = iss
         retVal["aud"] = iss
         retVal["sub"] = randomString(length: 10)
-        retVal["jti"] = uuid
+        retVal["jti"] = jti
         let date = Date()
         retVal["iat"] = date.toDouble()
         retVal["nbf"] = date.toDouble()

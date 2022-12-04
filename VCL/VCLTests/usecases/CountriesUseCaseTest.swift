@@ -30,7 +30,7 @@ final class CountriesUseCaseTest: XCTestCase {
         var result: VCLResult<VCLCountries>? = nil
         
         //        Action
-        subject?.getCountries(resetCache: false) {
+        subject?.getCountries(cacheSequence: 1) {
             result = $0
         }
         do {

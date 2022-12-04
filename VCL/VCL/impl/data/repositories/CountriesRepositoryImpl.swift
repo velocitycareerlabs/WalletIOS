@@ -20,26 +20,30 @@ class CountriesRepositoryImpl: CountriesRepository {
     }
     
     func getCountries(
-        resetCache: Bool,
+        cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
     ) {
         let endpoint = Urls.Countries
-        if (resetCache) {
-            fetchCountries(endpoint: endpoint, completionBlock: completionBlock)
+        if (cacheService.isResetCacheCountries(cacheSequence: cacheSequence)) {
+            fetchCountries(endpoint: endpoint, cacheSequence: cacheSequence, completionBlock: completionBlock)
         } else {
-            if let countries = cacheService.getCountries(keyUrl: endpoint) {
+            if let countries = cacheService.getCountries(key: endpoint) {
                 if let countriesList = countries.toList() {
                     completionBlock(.success(self.listToCountries(countriesList as? [[String: Any]])))
                 } else {
                     completionBlock(.failure(VCLError(description: "Failed to parse \(countries)")))
                 }
             } else {
-                fetchCountries(endpoint: endpoint, completionBlock: completionBlock)
+                fetchCountries(endpoint: endpoint, cacheSequence: cacheSequence, completionBlock: completionBlock)
             }
         }
     }
     
-    private func fetchCountries(endpoint: String, completionBlock: @escaping (VCLResult<VCLCountries>) -> Void) {
+    private func fetchCountries(
+        endpoint: String,
+        cacheSequence: Int,
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
+    ) {
         networkService.sendRequest(endpoint: endpoint,
                                    contentType: .ApplicationJson,
                                    method: .GET,
@@ -47,7 +51,7 @@ class CountriesRepositoryImpl: CountriesRepository {
             [weak self] res in
             do {
                 let payload = try res.get().payload
-                self?.cacheService.setCountries(keyUrl: endpoint, value: payload)
+                self?.cacheService.setCountries(key: endpoint, value: payload, cacheSequence: cacheSequence)
                 if let countriesList = payload.toList() as? [[String: Any]], let _self = self {
                     completionBlock(.success(_self.listToCountries(countriesList)))
                 } else {

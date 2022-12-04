@@ -20,11 +20,11 @@ class CountriesUseCaseImpl: CountriesUseCase  {
     }
     
     func getCountries(
-        resetCache: Bool,
+        cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
     ) {
         executor.runOnBackgroundThread { [weak self] in
-            self?.countriesRepository.getCountries(resetCache: resetCache) { result in
+            self?.countriesRepository.getCountries(cacheSequence: cacheSequence) { result in
                 self?.executor.runOnMainThread {
                     completionBlock(result)
                 }

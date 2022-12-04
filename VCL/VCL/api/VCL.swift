@@ -91,6 +91,7 @@ public protocol VCL {
     func generateSignedJwt(
         payload: [String: Any],
         iss: String,
+        jti: String,
         successHandler: @escaping (VCLJWT) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )

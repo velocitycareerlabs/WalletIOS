@@ -48,7 +48,7 @@ public class VCLImpl: VCL {
                 successHandler()
             }
         }
-        countriesModel.initialize(resetCache: initializationDescriptor.resetCache) { [weak self] result in
+        countriesModel.initialize(cacheSequence: initializationDescriptor.cacheSequence) { [weak self] result in
             do {
                 _ = try result.get()
                 if self?.initializationWatcher.onInitializedModel(error: nil) == true {
@@ -60,7 +60,7 @@ public class VCLImpl: VCL {
                 }
             }
         }
-        credentialTypesModel.initialize(resetCache: initializationDescriptor.resetCache) { [weak self] result in
+        credentialTypesModel.initialize(cacheSequence: initializationDescriptor.cacheSequence) { [weak self] result in
             do {
                 _ = try result.get()
                 if self?.initializationWatcher.onInitializedModel(error: nil) == true {
@@ -69,7 +69,7 @@ public class VCLImpl: VCL {
                 else {
                     if let credentialTypes = self?.credentialTypesModel.data {
                         self?.credentialTypeSchemasModel = VclBlocksProvider.provideCredentialTypeSchemasModel(credenctiialTypes: credentialTypes)
-                        self?.credentialTypeSchemasModel?.initialize(resetCache: initializationDescriptor.resetCache) { result in
+                        self?.credentialTypeSchemasModel?.initialize(cacheSequence: initializationDescriptor.cacheSequence) { result in
                             do {
                                 _ = try result.get()
                                 if self?.initializationWatcher.onInitializedModel(error: nil) == true {
@@ -328,10 +328,11 @@ public class VCLImpl: VCL {
     public func generateSignedJwt(
         payload: [String: Any],
         iss: String,
+        jti: String,
         successHandler: @escaping (VCLJWT) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.generateSignedJwt(payload: payload, iss: iss) {
+        jwtServiceUseCase.generateSignedJwt(payload: payload, iss: iss, jti: jti) {
             [weak self] jwtResult in
             do {
                 successHandler(try jwtResult.get())

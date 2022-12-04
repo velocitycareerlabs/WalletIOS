@@ -17,6 +17,9 @@ public class VCLSubmission {
     public let verifiableCredentials: [VCLVerifiableCredential]
     public let vendorOriginContext: String?
     
+    public let jti = UUID().uuidString
+    public let submissionId = UUID().uuidString
+    
     public init(submitUri: String,
                 iss: String,
                 exchangeId: String,
@@ -31,17 +34,15 @@ public class VCLSubmission {
         self.vendorOriginContext = vendorOriginContext
     }
     
-    var payload: [String: Any] { get {
-        generatePayload()
-    } }
+    public var payload: [String: Any] { get { return generatePayload() } }
     
     private func generatePayload() -> [String: Any] {
         var retVal = [String: Any]()
-        retVal[CodingKeys.KeyId] = UUID().uuidString
+        retVal[CodingKeys.KeyJti] = self.jti
         var vp = [String: Any]()
         vp[CodingKeys.KeyType] = CodingKeys.ValueVerifiablePresentation
         var presentationSubmissionDict = [String: Any]()
-        presentationSubmissionDict[CodingKeys.KeyId] = UUID().uuidString
+        presentationSubmissionDict[CodingKeys.KeyId] = self.submissionId
         presentationSubmissionDict[CodingKeys.KeyDefinitionId] = presentationDefinitionId
         var descriptorMap = [[String: String]]()
         for (index, credential) in self.verifiableCredentials.enumerated() {
@@ -59,7 +60,7 @@ public class VCLSubmission {
         return retVal
     }
     
-    struct CodingKeys {
+    public struct CodingKeys {
         static let KeyJti = "jti"
         static let KeyId = "id"
         static let KeyVp = "vp"

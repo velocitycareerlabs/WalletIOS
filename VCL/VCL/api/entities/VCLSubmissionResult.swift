@@ -13,25 +13,25 @@ public struct VCLSubmissionResult {
     
     public let token: VCLToken
     public let exchange: VCLExchange
+    public let jti: String
+    public let submissionId: String
     
-    public init(token: VCLToken, exchange: VCLExchange) {
+    public init(
+        token: VCLToken,
+        exchange: VCLExchange,
+        jti: String,
+        submissionId: String
+    ) {
         self.token = token
         self.exchange = exchange
+        self.jti = jti
+        self.submissionId = submissionId
     }
     
     struct CodingKeys {
         static let KeyToken = "token"
         static let KeyExchange = "exchange"
+        static let KeyJti = "jti"
+        static let KeySubmissionId = "submissionId"
     }
-}
-
-extension VCLSubmissionResult: Equatable {
-}
-
-public func == (lhs: VCLSubmissionResult, rhs: VCLSubmissionResult) -> Bool {
-    return lhs.token == rhs.token && lhs.exchange == rhs.exchange
-}
-
-public func != (lhs: VCLSubmissionResult, rhs: VCLSubmissionResult) -> Bool {
-    return !(lhs == rhs)
 }

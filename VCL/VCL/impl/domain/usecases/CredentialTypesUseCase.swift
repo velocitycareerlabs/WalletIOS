@@ -9,7 +9,7 @@
 
 protocol CredentialTypesUseCase {
     func getCredentialTypes(
-        resetCache: Bool,
+        cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
     )
 }

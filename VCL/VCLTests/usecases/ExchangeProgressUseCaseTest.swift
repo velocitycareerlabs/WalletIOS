@@ -27,7 +27,7 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
             EmptyExecutor()
         )
         var result: VCLResult<VCLExchange>? = nil
-        let submissionResult = VCLSubmissionResult(token: VCLToken(value: ""), exchange: VCLExchange())
+        let submissionResult = VCLSubmissionResult(token: VCLToken(value: ""), exchange: VCLExchange(), jti: "", submissionId: "")
         let exchangeDescriptor = VCLExchangeDescriptor(
             presentationSubmission: VCLPresentationSubmission(
                 presentationRequest: PresentationRequestMocks.PresentationRequest,

@@ -20,7 +20,7 @@ final class JwtServiceUseCaseTest: XCTestCase {
     override func setUp() {
     }
     
-    func testGetCredentialManifest() {
+    func testSignVerify() {
         // Arrange
         subject = JwtServiceUseCaseImpl(
             JwtServiceRepositoryImpl(
@@ -30,12 +30,11 @@ final class JwtServiceUseCaseTest: XCTestCase {
             ),
             EmptyExecutor()
         )
-        let iss = "some iss"
         var resultJwt: VCLResult<VCLJWT>? = nil
         var resultVerified: VCLResult<Bool>? = nil
 
         // Action
-        subject.generateSignedJwt(payload: JwtServiceMocks.Json.toDictionary() ?? [String: String](), iss: iss) {
+        subject.generateSignedJwt(payload: JwtServiceMocks.Json.toDictionary() ?? [String: String](), iss: "", jti: "") {
             resultJwt = $0
         }
 

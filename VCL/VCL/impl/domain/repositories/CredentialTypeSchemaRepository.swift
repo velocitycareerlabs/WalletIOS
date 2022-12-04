@@ -12,7 +12,7 @@ import Foundation
 protocol CredentialTypeSchemaRepository {
     func getCredentialTypeSchema(
         schemaName: String,
-        resetCache: Bool,
+        cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCredentialTypeSchema>) -> Void
     )
 }
