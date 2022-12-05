@@ -10,5 +10,8 @@
 import Foundation
 
 protocol PresentationRequestRepository {
-    func getPresentationRequest(deepLink: VCLDeepLink, completionBlock: @escaping (VCLResult<String>) -> Void)
+    func getPresentationRequest(
+        presentationRequestDescriptor: VCLPresentationRequestDescriptor,
+        completionBlock: @escaping (VCLResult<String>) -> Void
+    )
 }

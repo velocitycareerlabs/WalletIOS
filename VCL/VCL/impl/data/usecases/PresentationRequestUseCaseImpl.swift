@@ -27,14 +27,16 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     }
     
     func getPresentationRequest(
-        deepLink: VCLDeepLink,
+        presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         executor.runOnBackgroundThread { [weak self] in
-            self?.presentationRequestRepository.getPresentationRequest(deepLink: deepLink) { encodedJwtStrResult in
+            self?.presentationRequestRepository.getPresentationRequest(
+                presentationRequestDescriptor: presentationRequestDescriptor
+            ) { encodedJwtStrResult in
                 do {
                     let encodedJwtStr = try encodedJwtStrResult.get()
-                    self?.onGetJwtSuccess(encodedJwtStr, deepLink, completionBlock)
+                    self?.onGetJwtSuccess(encodedJwtStr, presentationRequestDescriptor.deepLink, completionBlock)
                 } catch {
                     self?.onError(VCLError(error: error), completionBlock)
                 }
