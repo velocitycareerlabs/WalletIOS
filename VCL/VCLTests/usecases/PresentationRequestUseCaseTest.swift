@@ -37,7 +37,9 @@ final class PresentationRequestUseCaseTest: XCTestCase {
         var result: VCLResult<VCLPresentationRequest>? = nil
         
         // Action
-        subject.getPresentationRequest(deepLink: VCLDeepLink(value: "")) {
+        subject.getPresentationRequest(
+            presentationRequestDescriptor: VCLPresentationRequestDescriptor(deepLink: VCLDeepLink(value: ""))
+        ) {
             result = $0
         }
         

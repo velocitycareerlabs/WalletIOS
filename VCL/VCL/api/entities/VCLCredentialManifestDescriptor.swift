@@ -22,14 +22,14 @@ public class VCLCredentialManifestDescriptor {
         self.pushDelegate = pushDelegate
     }
     
-    struct CodingKeys {
-        public static let KeyId = "id"
-        public static let KeyCredentialTypes = "credential_types"
-        public static let KeyPushDelegatePushUrl = "push_delegate.push_url"
-        public static let KeyPushDelegatePushToken = "push_delegate.push_token"
+    public struct CodingKeys {
+        static let KeyId = "id"
+        static let KeyCredentialTypes = "credential_types"
+        static let KeyPushDelegatePushUrl = "push_delegate.push_url"
+        static let KeyPushDelegatePushToken = "push_delegate.push_token"
         
-        public static let KeyCredentialId = "credentialId"
-        public static let KeyRefresh = "refresh"
+        static let KeyCredentialId = "credentialId"
+        static let KeyRefresh = "refresh"
     }
     
     public var endpoint: String { get { uri } }

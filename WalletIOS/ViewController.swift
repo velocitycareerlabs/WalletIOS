@@ -70,8 +70,14 @@ class ViewController: UIViewController {
         let deepLink = environment == VCLEnvironment.DEV ?
         VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrDev) :
         VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrStaging)
+        
         vcl.getPresentationRequest(
-            deepLink: deepLink,
+            presentationRequestDescriptor: VCLPresentationRequestDescriptor(
+                deepLink: deepLink,
+                pushDelegate: VCLPushDelegate(
+                    pushUrl: "pushUrl",
+                    pushToken: "pushToken"
+                )),
             successHandler: { [weak self] presentationRequest in
                 NSLog("VCL Presentation request received: \(presentationRequest.jwt.payload?.toJson() ?? "")")
                 // NSLog("VCL Presentation request received")
@@ -81,8 +87,7 @@ class ViewController: UIViewController {
             errorHandler: {error in
                 NSLog("VCL Presentation request failed: \(error)")
             }
-        )
-    }
+        )}
     
     private func submitPresentation(presentationRequest: VCLPresentationRequest)  {
         let presentationSubmission = VCLPresentationSubmission(
@@ -121,7 +126,7 @@ class ViewController: UIViewController {
             organizationsSearchDescriptor: Constants.OrganizationsSearchDescriptorByDid,
             successHandler: { [weak self] organizations in
                 NSLog("VCL Organizations received: \(organizations.all)")
-//                NSLog("VCL Organizations received")
+                //                NSLog("VCL Organizations received")
                 
                 // choosing services[0] for testing purposes
                 if organizations.all.count == 0 || organizations.all[0].serviceCredentialAgentIssuers.isEmpty {
@@ -148,7 +153,7 @@ class ViewController: UIViewController {
             credentialManifestDescriptor: credentialManifestDescriptorRefresh,
             successHandler: { credentialManifest in
                 NSLog("VCL Vredentials refreshed, credential manifest: \(credentialManifest.jwt.payload?.toJson() ?? "")")
-//                 NSLog("VCL Credential Manifest received")
+                //                 NSLog("VCL Credential Manifest received")
             },
             errorHandler: { error in
                 NSLog("VCL Refresh credentials failed: \(error)")
@@ -166,7 +171,7 @@ class ViewController: UIViewController {
             credentialManifestDescriptor: credentialManifestDescriptorByOrganization,
             successHandler: { [weak self] credentialManifest in
                 NSLog("VCL Credential Manifest received: \(credentialManifest.jwt.payload?.toJson() ?? "")")
-//                 NSLog("VCL Credential Manifest received")
+                //                 NSLog("VCL Credential Manifest received")
                 
                 self?.generateOffers(credentialManifest: credentialManifest)
             },
@@ -188,8 +193,8 @@ class ViewController: UIViewController {
             credentialManifestDescriptor: credentialManifestDescriptorByDeepLink,
             successHandler: { [weak self] credentialManifest in
                 NSLog("VCL Credential Manifest received: \(credentialManifest.jwt.payload as Optional)")
-//                NSLog("VCL Credential Manifest received")
-
+                //                NSLog("VCL Credential Manifest received")
+                
                 self?.generateOffers(credentialManifest: credentialManifest)
             },
             errorHandler: { error in
@@ -209,8 +214,8 @@ class ViewController: UIViewController {
                 NSLog("VCL Generated Offers: \(offers.all)")
                 NSLog("VCL Generated Offers Response Code: \(offers.responseCode)")
                 NSLog("VCL Generated Offers Token: \(offers.token)")
-
-//                Check offers invoked after the push notification is notified the app that offers are ready:
+                
+                //                Check offers invoked after the push notification is notified the app that offers are ready:
                 self?.checkForOffers(
                     credentialManifest: credentialManifest,
                     generateOffersDescriptor: generateOffersDescriptor,
@@ -222,7 +227,7 @@ class ViewController: UIViewController {
             }
         )
     }
-
+    
     private func checkForOffers(
         credentialManifest: VCLCredentialManifest,
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
@@ -263,7 +268,7 @@ class ViewController: UIViewController {
             token: offers.token,
             successHandler: { verifiableCredentials in
                 NSLog("VCL finalized Offers: \(verifiableCredentials.all)")
-//                NSLog("VCL finalized Offers")
+                //                NSLog("VCL finalized Offers")
             },
             errorHandler: { error in
                 NSLog("VCL failed to finalize Offers: \(error)")
@@ -307,7 +312,7 @@ class ViewController: UIViewController {
             }
         )
     }
-
+    
     @objc private func generateSignedJwt() {
         vcl.generateSignedJwt(
             payload: Constants.SomePayload, iss: "iss123", jti: "jti123", successHandler: { jwt in

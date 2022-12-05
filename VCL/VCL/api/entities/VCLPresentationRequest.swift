@@ -33,7 +33,7 @@ public struct VCLPresentationRequest {
     var submitPresentationUri: String { get {
         (jwt.payload?[CodingKeys.KeyMetadata] as? [String: Any])?[CodingKeys.KeySubmitPresentationUri] as? String ?? "" } }
     
-    struct CodingKeys {
+    public struct CodingKeys {
         static let KeyId = "id"
         static let KeyIss = "iss"
         static let KeyPresentationRequest = "presentation_request"

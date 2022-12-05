@@ -26,17 +26,7 @@ public class VCLCredentialManifestDescriptorByService: VCLCredentialManifestDesc
         guard let queryParams = generateQueryParams() else {
             return endpoint
         }
-        if let urlComponents = URLComponents(string: uri) {
-            if (urlComponents.queryItems != nil) {
-                endpoint += "&"
-            } else {
-                endpoint += "?"
-            }
-            endpoint += queryParams
-        } else {
-            endpoint += "?\(queryParams)"
-        }
-        return endpoint
+        return endpoint.appendQueryParams(queryParams: queryParams)
     }}
     
     func generateQueryParams() -> String? {

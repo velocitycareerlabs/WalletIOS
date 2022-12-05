@@ -18,11 +18,11 @@ class PresentationRequestRepositoryImpl: PresentationRequestRepository {
     }
     
     func getPresentationRequest(
-        deepLink: VCLDeepLink,
+        presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         completionBlock: @escaping (VCLResult<String>) -> Void
     ) {
         networkService.sendRequest(
-            endpoint: deepLink.requestUri,
+            endpoint: presentationRequestDescriptor.endpoint,
             contentType: .ApplicationJson,
             method: .GET) { response in
             do {
