@@ -104,12 +104,13 @@ public class VCLImpl: VCL {
     public var credentialTypeSchemas: VCLCredentialTypeSchemas? { get { return credentialTypeSchemasModel?.data } }
     
     public func getPresentationRequest(
-        deepLink: VCLDeepLink,
+        presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         successHandler: @escaping (VCLPresentationRequest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        presentationRequestUseCase.getPresentationRequest(deepLink: deepLink) {
-            [weak self] presentationRequestResult in
+        presentationRequestUseCase.getPresentationRequest(
+            presentationRequestDescriptor: presentationRequestDescriptor
+        ) { [weak self] presentationRequestResult in
             do {
                 successHandler(try presentationRequestResult.get())
             } catch {

@@ -56,6 +56,17 @@ extension String {
         return nil
     }
     
+    func appendQueryParams(queryParams: String) -> String {
+        if let urlComponents = URLComponents(string: self) {
+            if (urlComponents.queryItems != nil) {
+                return "\(self)&\(queryParams)"
+            } else {
+                return "\(self)?\(queryParams)"
+            }
+        }
+        return "\(self)?\(queryParams)"
+    }
+    
     func encode() -> String? {
         return self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
     }

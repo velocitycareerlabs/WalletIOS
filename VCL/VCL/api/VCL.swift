@@ -20,7 +20,7 @@ public protocol VCL {
     var credentialTypeSchemas: VCLCredentialTypeSchemas? { get }
     
     func getPresentationRequest(
-        deepLink: VCLDeepLink,
+        presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         successHandler: @escaping (VCLPresentationRequest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
