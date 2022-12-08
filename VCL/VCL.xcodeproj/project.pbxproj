@@ -85,7 +85,6 @@
 		286415C0264D65E2006C1AA3 /* Urls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28641545264D65E2006C1AA3 /* Urls.swift */; };
 		286415C2264D65E2006C1AA3 /* CredentialTypeSchemasModelImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28641548264D65E2006C1AA3 /* CredentialTypeSchemasModelImpl.swift */; };
 		286415C3264D65E2006C1AA3 /* CredentialTypesModelImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28641549264D65E2006C1AA3 /* CredentialTypesModelImpl.swift */; };
-		286415C6264D65E2006C1AA3 /* JwtServiceVCLImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2864154E264D65E2006C1AA3 /* JwtServiceVCLImpl.swift */; };
 		286415C7264D65E2006C1AA3 /* NetworkServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28641550264D65E2006C1AA3 /* NetworkServiceImpl.swift */; };
 		286415C8264D65E2006C1AA3 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28641551264D65E2006C1AA3 /* Request.swift */; };
 		286415C9264D65E2006C1AA3 /* ExecutorImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28641553264D65E2006C1AA3 /* ExecutorImpl.swift */; };
@@ -357,7 +356,6 @@
 		28641545264D65E2006C1AA3 /* Urls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Urls.swift; sourceTree = "<group>"; };
 		28641548264D65E2006C1AA3 /* CredentialTypeSchemasModelImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialTypeSchemasModelImpl.swift; sourceTree = "<group>"; };
 		28641549264D65E2006C1AA3 /* CredentialTypesModelImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialTypesModelImpl.swift; sourceTree = "<group>"; };
-		2864154E264D65E2006C1AA3 /* JwtServiceVCLImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JwtServiceVCLImpl.swift; sourceTree = "<group>"; };
 		28641550264D65E2006C1AA3 /* NetworkServiceImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkServiceImpl.swift; sourceTree = "<group>"; };
 		28641551264D65E2006C1AA3 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		28641553264D65E2006C1AA3 /* ExecutorImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecutorImpl.swift; sourceTree = "<group>"; };
@@ -673,7 +671,6 @@
 			isa = PBXGroup;
 			children = (
 				282F1C822670AFE200887A5C /* JwtServiceMicrosoftImpl.swift */,
-				2864154E264D65E2006C1AA3 /* JwtServiceVCLImpl.swift */,
 			);
 			path = jwt;
 			sourceTree = "<group>";
@@ -1291,7 +1288,6 @@
 				286415B2264D65E2006C1AA3 /* DateExtensions.swift in Sources */,
 				286415DB264D65E2006C1AA3 /* OrganizationsRepository.swift in Sources */,
 				28692925267661B3000C0F72 /* CredentialTypesFormSchemaUseCase.swift in Sources */,
-				286415C6264D65E2006C1AA3 /* JwtServiceVCLImpl.swift in Sources */,
 				28C527FD293DEB2000D5D7FF /* VCLPresentationRequestDescriptor.swift in Sources */,
 				286415DE264D65E2006C1AA3 /* JwtServiceRepository.swift in Sources */,
 				286415F6264D65E2006C1AA3 /* VCLProvider.swift in Sources */,
