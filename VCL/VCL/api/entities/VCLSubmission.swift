@@ -15,6 +15,7 @@ public class VCLSubmission {
     public let exchangeId: String
     public let presentationDefinitionId: String
     public let verifiableCredentials: [VCLVerifiableCredential]
+    public let pushDelegate: VCLPushDelegate?
     public let vendorOriginContext: String?
     
     public let jti = UUID().uuidString
@@ -25,12 +26,14 @@ public class VCLSubmission {
                 exchangeId: String,
                 presentationDefinitionId: String,
                 verifiableCredentials: [VCLVerifiableCredential],
+                pushDelegate: VCLPushDelegate? = nil,
                 vendorOriginContext: String? = nil) {
         self.submitUri = submitUri
         self.iss = iss
         self.exchangeId = exchangeId
         self.presentationDefinitionId = presentationDefinitionId
         self.verifiableCredentials = verifiableCredentials
+        self.pushDelegate = pushDelegate
         self.vendorOriginContext = vendorOriginContext
     }
     
@@ -60,11 +63,22 @@ public class VCLSubmission {
         return retVal
     }
     
+    func generateRequestBody(jwt: VCLJWT) -> [String: Any] {
+        var retVal = [String: Any] ()
+        retVal[CodingKeys.KeyExchangeId] = exchangeId
+        retVal[CodingKeys.KeyJwtVp] = jwt.encodedJwt
+        retVal[CodingKeys.KeyPushDelegate] = pushDelegate?.toDictionary()
+        return retVal
+    }
+    
     public struct CodingKeys {
         static let KeyJti = "jti"
+        static let KeyIss = "iss"
         static let KeyId = "id"
         static let KeyVp = "vp"
         static let KeyDid = "did"
+        static let KeyPushDelegate = "push_delegate"
+        
         static let KeyType = "type"
         static let KeyPresentationSubmission = "presentation_submission"
         static let KeyDefinitionId = "definition_id"

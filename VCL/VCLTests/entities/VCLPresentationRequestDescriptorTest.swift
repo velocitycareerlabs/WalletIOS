@@ -28,6 +28,8 @@ final class VCLPresentationRequestDescriptorTest: XCTestCase {
         let mockEndpoint = ((PresentationRequestDescriptorMocks.RequestUri.decode()!) + "?" + queryParams)
         
         assert(subject.endpoint == mockEndpoint)
+        assert(subject.pushDelegate!.pushUrl == PresentationRequestDescriptorMocks.PushDelegate.pushUrl)
+        assert(subject.pushDelegate!.pushToken == PresentationRequestDescriptorMocks.PushDelegate.pushToken)
     }
     
     func testPresentationRequestDescriptorWithoutPushDelegateOnlySuccess() {
@@ -36,6 +38,7 @@ final class VCLPresentationRequestDescriptorTest: XCTestCase {
         )
         
         assert(subject.endpoint == PresentationRequestDescriptorMocks.RequestUri.decode())
+        assert(subject.pushDelegate == nil)
     }
     
     func testPresentationRequestDescriptorWithQParamsWithPushDelegateSuccess() {
@@ -52,6 +55,8 @@ final class VCLPresentationRequestDescriptorTest: XCTestCase {
         )
         
         assert(subject.endpoint == mockEndpoint)
+        assert(subject.pushDelegate!.pushUrl == PresentationRequestDescriptorMocks.PushDelegate.pushUrl)
+        assert(subject.pushDelegate!.pushToken == PresentationRequestDescriptorMocks.PushDelegate.pushToken)
     }
     
     func testPresentationRequestDescriptorWithQParamsWithoutPushDelegateOnlySuccess() {
@@ -62,6 +67,7 @@ final class VCLPresentationRequestDescriptorTest: XCTestCase {
         let mockEndpoint = (PresentationRequestDescriptorMocks.RequestUri.decode()! + "?" + PresentationRequestDescriptorMocks.QParms)
         
         assert(subject.endpoint == mockEndpoint)
+        assert(subject.pushDelegate == nil)
     }
     
     override func tearDown() {

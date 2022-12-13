@@ -13,11 +13,18 @@ public struct VCLPresentationRequest {
     public let jwt: VCLJWT
     public let publicKey: VCLPublicKey
     public let deepLink: VCLDeepLink
+    public let pushDelegate: VCLPushDelegate?
     
-    public init(jwt: VCLJWT, publicKey: VCLPublicKey, deepLink: VCLDeepLink) {
+    public init(
+        jwt: VCLJWT,
+        publicKey: VCLPublicKey,
+        deepLink: VCLDeepLink,
+        pushDelegate: VCLPushDelegate? = nil
+    ) {
         self.jwt = jwt
         self.publicKey = publicKey
         self.deepLink = deepLink
+        self.pushDelegate = pushDelegate
     }
     
     public var iss: String { get { jwt.payload?[CodingKeys.KeyIss] as? String ?? "" } }

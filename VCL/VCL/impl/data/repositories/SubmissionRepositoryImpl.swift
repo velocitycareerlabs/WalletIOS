@@ -20,13 +20,9 @@ class SubmissionRepositoryImpl: SubmissionRepository {
     func submit(submission: VCLSubmission,
                 jwt: VCLJWT,
                 completionBlock: @escaping (VCLResult<VCLPresentationSubmissionResult>) -> Void) {
-        var body = [String: String]()
-        body[VCLPresentationSubmission.CodingKeys.KeyDid] = submission.iss
-        body[VCLPresentationSubmission.CodingKeys.KeyExchangeId] = submission.exchangeId
-        body[VCLPresentationSubmission.CodingKeys.KeyJwtVp] = jwt.encodedJwt
         networkService.sendRequest(
             endpoint: submission.submitUri,
-            body: body.toJsonString(),
+            body: submission.generateRequestBody(jwt: jwt).toJsonString(),
             contentType: Request.ContentType.ApplicationJson,
             method: Request.HttpMethod.POST
         ) { [weak self] _response in

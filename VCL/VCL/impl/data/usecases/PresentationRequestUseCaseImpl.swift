@@ -36,7 +36,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
             ) { encodedJwtStrResult in
                 do {
                     let encodedJwtStr = try encodedJwtStrResult.get()
-                    self?.onGetJwtSuccess(encodedJwtStr, presentationRequestDescriptor.deepLink, completionBlock)
+                    self?.onGetJwtSuccess(encodedJwtStr, presentationRequestDescriptor, completionBlock)
                 } catch {
                     self?.onError(VCLError(error: error), completionBlock)
                 }
@@ -46,7 +46,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
     private func onGetJwtSuccess(
         _ encodedJwtStr: String,
-        _ deepLink: VCLDeepLink,
+        _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         self.jwtServiceRepository.decode(encodedJwt: encodedJwtStr) { [weak self] signedJwtResult in
@@ -54,7 +54,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                 let jwt = try signedJwtResult.get()
                 self?.onDecodeJwtSuccess(
                     jwt,
-                    deepLink,
+                    presentationRequestDescriptor,
                     completionBlock
                 )
             } catch {
@@ -65,7 +65,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
     private func onDecodeJwtSuccess(
         _ jwt: VCLJWT,
-        _ deepLink: VCLDeepLink,
+        _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         if let keyID = jwt.keyID?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
@@ -76,7 +76,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                     self?.onResolvePublicKeySuccess(
                         publicKey,
                         jwt,
-                        deepLink,
+                        presentationRequestDescriptor,
                         completionBlock
                     )
                 }
@@ -92,10 +92,15 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     private func onResolvePublicKeySuccess(
         _ publicKey: VCLPublicKey,
         _ jwt: VCLJWT,
-        _ deepLink: VCLDeepLink,
+        _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
-        let presentationRequest = VCLPresentationRequest(jwt: jwt, publicKey: publicKey, deepLink: deepLink)
+        let presentationRequest = VCLPresentationRequest(
+            jwt: jwt,
+            publicKey: publicKey,
+            deepLink: presentationRequestDescriptor.deepLink,
+            pushDelegate: presentationRequestDescriptor.pushDelegate
+        )
         self.jwtServiceRepository.verifyJwt(
             jwt: presentationRequest.jwt,
             publicKey: presentationRequest.publicKey

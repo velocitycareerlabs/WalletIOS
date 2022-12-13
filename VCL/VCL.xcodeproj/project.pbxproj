@@ -158,6 +158,7 @@
 		2884060626C9262D0030E967 /* VCLDeepLinkTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884060526C9262D0030E967 /* VCLDeepLinkTest.swift */; };
 		2884060C26C9289F0030E967 /* VCLCredentialManifestDescriptorByDeepLinkTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884060B26C9289F0030E967 /* VCLCredentialManifestDescriptorByDeepLinkTest.swift */; };
 		2885C85D26D6864600FCAB99 /* VCLServiceCredentialAgentIssuer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2885C85C26D6864600FCAB99 /* VCLServiceCredentialAgentIssuer.swift */; };
+		288A27D92946744400B6AC63 /* VCLSubmissionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A27D82946744400B6AC63 /* VCLSubmissionTest.swift */; };
 		288FBDBE2762697F00154BF6 /* CountriesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FBDBD2762697F00154BF6 /* CountriesModel.swift */; };
 		288FBDC9276269BC00154BF6 /* VCLCountries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FBDC8276269BC00154BF6 /* VCLCountries.swift */; };
 		288FBDCB27626A3F00154BF6 /* CountriesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288FBDCA27626A3F00154BF6 /* CountriesRepository.swift */; };
@@ -429,6 +430,7 @@
 		2884060526C9262D0030E967 /* VCLDeepLinkTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLDeepLinkTest.swift; sourceTree = "<group>"; };
 		2884060B26C9289F0030E967 /* VCLCredentialManifestDescriptorByDeepLinkTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLCredentialManifestDescriptorByDeepLinkTest.swift; sourceTree = "<group>"; };
 		2885C85C26D6864600FCAB99 /* VCLServiceCredentialAgentIssuer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLServiceCredentialAgentIssuer.swift; sourceTree = "<group>"; };
+		288A27D82946744400B6AC63 /* VCLSubmissionTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLSubmissionTest.swift; sourceTree = "<group>"; };
 		288FBDBD2762697F00154BF6 /* CountriesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesModel.swift; sourceTree = "<group>"; };
 		288FBDC8276269BC00154BF6 /* VCLCountries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLCountries.swift; sourceTree = "<group>"; };
 		288FBDCA27626A3F00154BF6 /* CountriesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesRepository.swift; sourceTree = "<group>"; };
@@ -919,6 +921,7 @@
 				28A72FF926C939440079EFEA /* VCLOrganizationsDescriptorTest.swift */,
 				28C52807293DF98500D5D7FF /* VCLPresentationRequestDescriptorTest.swift */,
 				28C7513D2937D1BF0053CCEC /* VCLSubmissionResultTest.swift */,
+				288A27D82946744400B6AC63 /* VCLSubmissionTest.swift */,
 			);
 			path = entities;
 			sourceTree = "<group>";
@@ -1432,6 +1435,7 @@
 				289A53A1264D64E500B84389 /* NetworkServiceSuccess.swift in Sources */,
 				2884060C26C9289F0030E967 /* VCLCredentialManifestDescriptorByDeepLinkTest.swift in Sources */,
 				289A536F264D647200B84389 /* VCLTests.swift in Sources */,
+				288A27D92946744400B6AC63 /* VCLSubmissionTest.swift in Sources */,
 				28F6093B27678B5C00EBDEC5 /* CountriesUseCaseTest.swift in Sources */,
 				28C15C9A26CA8D3C00E248C3 /* ExchangeProgressMocks.swift in Sources */,
 				289A53AA264D64E500B84389 /* CredentialTypesUseCaseTest.swift in Sources */,
@@ -1629,7 +1633,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 54;
+				CURRENT_PROJECT_VERSION = 57;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1641,7 +1645,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;
@@ -1654,7 +1658,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 54;
+				CURRENT_PROJECT_VERSION = 57;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1666,7 +1670,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;
