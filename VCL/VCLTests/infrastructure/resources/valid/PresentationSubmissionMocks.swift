@@ -11,11 +11,16 @@ import Foundation
 @testable import VCL
 
 class PresentationSubmissionMocks {
+    static let PushDelegate = VCLPushDelegate(
+        pushUrl: "https://devservices.velocitycareerlabs.io/api/push-gateway",
+        pushToken: "if0123asd129smw321"
+    )
     static let PresentationSubmissionResultJson = "{\"token\":\"u7yLD8KS2eTEqkg9aRQE\",\"exchange\":{\"id\":\"64131231\",\"type\":\"DISCLOSURE\",\"disclosureComplete\":true,\"exchangeComplete\":true}}"
     static let PresentationRequest = VCLPresentationRequest(
         jwt: JwtServiceMocks.JWT,
         publicKey: JwtServiceMocks.PublicKey,
-        deepLink: DeepLinkMocks.CredentialManifestDeepLinkMainNet
+        deepLink: DeepLinkMocks.CredentialManifestDeepLinkMainNet,
+        pushDelegate: PushDelegate
     )
 
     static let SelectionsList = [

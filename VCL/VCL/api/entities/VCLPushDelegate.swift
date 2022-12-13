@@ -10,11 +10,28 @@
 import Foundation
 
 public struct VCLPushDelegate {
+    /// the url of the endpoint that will send pushes to the device
     public let pushUrl: String
+    /// the token to use for identifying the group of devices this device belongs to
     public let pushToken: String
     
-    public init(pushUrl: String, pushToken: String) {
+    public init(
+        pushUrl: String,
+        pushToken: String
+    ) {
         self.pushUrl = pushUrl
         self.pushToken = pushToken
+    }
+    
+    func toDictionary() -> [String: String] {
+        var retVal = [String: String]()
+        retVal[CodingKeys.KeyPushUrl] = pushUrl
+        retVal[CodingKeys.KeyPushToken] = pushToken
+        return retVal
+    }
+    
+    public struct CodingKeys {
+        static let KeyPushUrl = "pushUrl"
+        static let KeyPushToken = "pushToken"
     }
 }
