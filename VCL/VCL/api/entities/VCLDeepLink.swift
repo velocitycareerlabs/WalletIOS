@@ -41,7 +41,11 @@ public struct VCLDeepLink {
         return resRequestUri
     }
     
-    struct CodingKeys {
+    private func retrieveVendorOriginContext() -> String? {
+        return self.value.decode()?.getUrlQueryParams()?[CodingKeys.KeyVendorOriginContext]
+    }
+    
+    public struct CodingKeys {
         static let KeyRequestUri = "request_uri"
         static let KeyVendorOriginContext = "vendorOriginContext"
     }

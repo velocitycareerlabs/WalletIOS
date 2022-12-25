@@ -25,11 +25,15 @@ class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
             endpoint: Urls.VerifiedProfile.replacingOccurrences(of: Params.Did, with: verifiedProfileDescriptor.did),
             method: Request.HttpMethod.GET,
             cachePolicy: .useProtocolCachePolicy) {
-                publicKeyResponse in
+                [weak self] publicKeyResponse in
                 do {
                     let verifiedProfileResponse = try publicKeyResponse.get()
                     if let verifiedProfileDict = verifiedProfileResponse.payload.toDictionary() {
-                        completionBlock(.success(VCLVerifiedProfile(payload: verifiedProfileDict)))
+                        self?.verifyServiceType(
+                            verifiedProfileDict: verifiedProfileDict,
+                            expectedServiceType: verifiedProfileDescriptor.serviceType,
+                            completionBlock: completionBlock)
+                        
                     } else {
                         completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: verifiedProfileResponse.payload, encoding: .utf8) ?? "")")))
                     }
@@ -39,5 +43,24 @@ class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
             }
     }
     
-    
+    private func verifyServiceType(
+        verifiedProfileDict: [String: Any],
+        expectedServiceType: VCLServiceType?,
+        completionBlock: @escaping (VCLResult<VCLVerifiedProfile>) -> Void
+    ) {
+        let verifiedProfile: VCLVerifiedProfile = VCLVerifiedProfile(payload: verifiedProfileDict)
+        if let expectedServiceType = expectedServiceType {
+            if (verifiedProfile.serviceTypes.contains(serviceType: expectedServiceType)) {
+                completionBlock(VCLResult.success(verifiedProfile))
+            }
+            else {
+                completionBlock(VCLResult.failure(VCLError(
+                    description: "Wrong service type - expected: \(expectedServiceType.rawValue), found: \(verifiedProfile.serviceTypes.all)",
+                    code: VCLErrorCode.VerificationError.rawValue
+                )))
+            }
+        } else {
+            completionBlock(VCLResult.success(verifiedProfile))
+        }
+    }
 }

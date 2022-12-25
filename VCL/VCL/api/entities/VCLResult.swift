@@ -26,19 +26,15 @@ extension VCLResult {
 }
 
 public struct VCLError: Error {
+    public let description: String?
     public let code: Int?
-    public let description: String
 
-    public init(error: Error, code: Int? = nil) {
-        self.description = "\(error)"
+    public init(error: Error? = nil, code: Int? = nil) {
+        self.description = "\(String(describing: error))"
         self.code = code
     }
-    public init(description: String, code: Int? = nil) {
+    public init(description: String? = nil, code: Int? = nil) {
         self.description = description
         self.code = code
     }
-}
-
-enum VCLErrorCodes: Int {
-    case NetworkError = 1
 }

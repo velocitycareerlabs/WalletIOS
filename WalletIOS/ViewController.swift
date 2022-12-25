@@ -67,7 +67,8 @@ class ViewController: UIViewController {
     }
     
     @objc private func getPresentationRequest() {
-        let deepLink = environment == VCLEnvironment.DEV ?
+        let deepLink =
+        environment == VCLEnvironment.DEV ?
         VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrDev) :
         VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrStaging)
         
@@ -122,8 +123,11 @@ class ViewController: UIViewController {
     }
     
     @objc private func getOrganizationsThenCredentialManifestByService() {
+        let organizationDescriptor =
+        environment == VCLEnvironment.DEV ?
+        Constants.OrganizationsSearchDescriptorByDidDev : Constants.OrganizationsSearchDescriptorByDidStaging
         vcl.searchForOrganizations(
-            organizationsSearchDescriptor: Constants.OrganizationsSearchDescriptorByDid,
+            organizationsSearchDescriptor: organizationDescriptor,
             successHandler: { [weak self] organizations in
                 NSLog("VCL Organizations received: \(organizations.all)")
                 //                NSLog("VCL Organizations received")

@@ -41,7 +41,7 @@ class NetworkServiceImpl: NetworkService {
         }
         let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
             if let taskError = error {
-                completionBlock(.failure(VCLError(error: taskError, code: VCLErrorCodes.NetworkError.rawValue)))
+                completionBlock(.failure(VCLError(error: taskError, code: VCLErrorCode.NetworkError.rawValue)))
             }
             else {
                 guard let httpResponse = response as? HTTPURLResponse else {

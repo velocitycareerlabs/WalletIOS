@@ -115,7 +115,7 @@ public class VCLImpl: VCL {
                 successHandler(try presentationRequestResult.get())
             } catch {
                 self?.logError(message: "getPresentationRequest", error: error)
-                errorHandler(VCLError(error: error))
+                errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
     }
@@ -131,7 +131,7 @@ public class VCLImpl: VCL {
                 successHandler(try presentationSubmissionResult.get())
             } catch {
                 self?.logError(message: "submit presentation", error: error)
-                errorHandler(VCLError(error: error))
+                errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
     }
@@ -147,7 +147,7 @@ public class VCLImpl: VCL {
                 successHandler(try exchangeProgressResult.get())
             } catch {
                 self?.logError(message: "getExchangeProgress", error: error)
-                errorHandler(VCLError(error: error))
+                errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
     }
@@ -163,7 +163,7 @@ public class VCLImpl: VCL {
                 successHandler(try organizationsResult.get())
             } catch {
                 self?.logError(message: "searchForOrganizations", error: error)
-                errorHandler(VCLError(error: error))
+                errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
     }
@@ -179,7 +179,7 @@ public class VCLImpl: VCL {
                 successHandler(try credentialManifest.get())
             } catch {
                 self?.logError(message: "getCredentialManifest", error: error)
-                errorHandler(VCLError(error: error))
+                errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
     }
@@ -205,13 +205,13 @@ public class VCLImpl: VCL {
                         successHandler(try vnOffersResult.get())
                     } catch {
                         self?.logError(message: "submit identification", error: error)
-                        errorHandler(VCLError(error: error))
+                        errorHandler(error as? VCLError ?? VCLError(error: error))
                     }
                 }
                 
             } catch {
                 self?.logError(message: "submit identification", error: error)
-                errorHandler(VCLError(error: error))
+                errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
     }
@@ -245,7 +245,7 @@ public class VCLImpl: VCL {
                 successHandler(try vnOffersResult.get())
             } catch {
                 self?.logError(message: "generateOffers", error: error)
-                errorHandler(VCLError(error: error))
+                errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
     }
@@ -264,7 +264,7 @@ public class VCLImpl: VCL {
                     successHandler(try jwtVerifiableCredentials.get())
                 } catch {
                     self?.logError(message: "finalizeOffers", error: error)
-                    errorHandler(VCLError(error: error))
+                    errorHandler(error as? VCLError ?? VCLError(error: error))
                 }
             }
     }
@@ -283,7 +283,7 @@ public class VCLImpl: VCL {
                     successHandler(try credentialTypesUIFormSchemaResult.get())
                 } catch {
                     self?.logError(message: "getCredentialTypesUIFormSchema", error: error)
-                    errorHandler(VCLError(error: error))
+                    errorHandler(error as? VCLError ?? VCLError(error: error))
                 }
             }
         } else {
@@ -304,7 +304,7 @@ public class VCLImpl: VCL {
                 successHandler(try verifiedProfileResult.get())
             } catch {
                 self?.logError(message: "getVerifiedProfile", error: error)
-                errorHandler(VCLError(error: error))
+                errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
     }
@@ -321,7 +321,7 @@ public class VCLImpl: VCL {
                 successHandler(try isVerifiedResult.get())
             } catch {
                 self?.logError(message: "verifyJwt", error: error)
-                errorHandler(VCLError(error: error))
+                errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
     }
@@ -339,7 +339,7 @@ public class VCLImpl: VCL {
                 successHandler(try jwtResult.get())
             } catch {
                 self?.logError(message: "generateSignedJwt", error: error)
-                errorHandler(VCLError(error: error))
+                errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
     }

@@ -16,26 +16,25 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
     var subject: VerifiedProfileUseCase!
     
     override func setUp() {
-    }
-    
-    func testGetVerifiedProfile() {
-        // Arrange
         subject = VerifiedProfileUseCaseImpl(
             VerifiedProfileRepositoryImpl(
-                NetworkServiceSuccess(
-                    validResponse: VerifiedProfileMocks.VerifiedProfileJsonStr
-                )
-            ), EmptyExecutor()
+                NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileJsonStr)
+            ),
+            EmptyExecutor()
         )
-        
+    }
+    
+    func testGetVerifiedProfileAnyServiceSuccess() {
         var result: VCLResult<VCLVerifiedProfile>? = nil
         
-        // Action
-        subject.getVerifiedProfile(verifiedProfileDescriptor: VerifiedProfileMocks.VerifiedProfileDescriptor) {
+        subject.getVerifiedProfile(
+            verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
+                did: "did123"
+            )
+        ) {
             result = $0
         }
         
-        // Assert
         do {
             let verifiedProfile = (try result?.get())!
             assert(verifiedProfile.id == VerifiedProfileMocks.ExpectedId)
@@ -43,6 +42,49 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             assert(verifiedProfile.name == VerifiedProfileMocks.ExpectedName)
         } catch {
             XCTFail()
+        }
+    }
+    
+    func testGetVerifiedProfileSuccess() {
+
+        var result: VCLResult<VCLVerifiedProfile>? = nil
+        
+        subject.getVerifiedProfile(
+            verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
+                did: "did123",
+                serviceType: VCLServiceType.Issuer
+            )
+        ) {
+            result = $0
+        }
+        
+        do {
+            let verifiedProfile = (try result?.get())!
+            assert(verifiedProfile.id == VerifiedProfileMocks.ExpectedId)
+            assert(verifiedProfile.logo == VerifiedProfileMocks.ExpectedLogo)
+            assert(verifiedProfile.name == VerifiedProfileMocks.ExpectedName)
+        } catch {
+            XCTFail()
+        }
+    }
+
+    func testGetVerifiedProfileError() {
+
+        var result: VCLResult<VCLVerifiedProfile>? = nil
+
+        subject.getVerifiedProfile(
+            verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
+                did: "did123",
+                serviceType: VCLServiceType.IdentityIssuer
+            )
+        ) {
+            result = $0
+        }
+        
+        do {
+            (try result?.get())!
+        } catch {
+            assert((error as! VCLError).code == VCLErrorCode.VerificationError.rawValue)
         }
     }
     
