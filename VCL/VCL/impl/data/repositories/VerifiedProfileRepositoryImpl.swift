@@ -45,18 +45,22 @@ class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
     
     private func verifyServiceType(
         verifiedProfileDict: [String: Any],
-        expectedServiceType: VCLServiceType,
+        expectedServiceType: VCLServiceType?,
         completionBlock: @escaping (VCLResult<VCLVerifiedProfile>) -> Void
     ) {
         let verifiedProfile: VCLVerifiedProfile = VCLVerifiedProfile(payload: verifiedProfileDict)
-        if (verifiedProfile.serviceTypes.contains(serviceType: expectedServiceType)) {
+        if let expectedServiceType = expectedServiceType {
+            if (verifiedProfile.serviceTypes.contains(serviceType: expectedServiceType)) {
+                completionBlock(VCLResult.success(verifiedProfile))
+            }
+            else {
+                completionBlock(VCLResult.failure(VCLError(
+                    description: "Wrong service type - expected: \(expectedServiceType.rawValue), found: \(verifiedProfile.serviceTypes.all)",
+                    code: VCLErrorCode.VerificationError.rawValue
+                )))
+            }
+        } else {
             completionBlock(VCLResult.success(verifiedProfile))
-        }
-        else {
-            completionBlock(VCLResult.failure(VCLError(
-                description: "Wrong service type - expected: \(expectedServiceType.rawValue), found: \(verifiedProfile.serviceTypes.all)",
-                code: VCLErrorCode.VerificationError.rawValue
-            )))
         }
     }
 }

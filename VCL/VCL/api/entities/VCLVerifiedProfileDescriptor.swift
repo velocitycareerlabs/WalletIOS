@@ -12,9 +12,9 @@ import Foundation
 public struct VCLVerifiedProfileDescriptor {
     
     public let did: String
-    public let serviceType: VCLServiceType
+    public let serviceType: VCLServiceType?
     
-    public init(did: String, serviceType: VCLServiceType) {
+    public init(did: String, serviceType: VCLServiceType?=nil) {
         self.did = did
         self.serviceType = serviceType
     }

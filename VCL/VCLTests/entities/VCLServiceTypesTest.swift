@@ -15,12 +15,18 @@ class VCLServiceTypesTest: XCTestCase {
 
     func testContainsFull() {
         let serviceTypes = VCLServiceTypes(
-            all:[VCLServiceType.Issuer, VCLServiceType.Inspector, VCLServiceType.TrustRoot]
+            all:[
+                VCLServiceType.Issuer,
+                VCLServiceType.Inspector,
+                VCLServiceType.TrustRoot,
+                VCLServiceType.CareerIssuer
+            ]
         )
 
         assert(serviceTypes.contains(serviceType: VCLServiceType.Issuer))
         assert(serviceTypes.contains(serviceType: VCLServiceType.Inspector))
         assert(serviceTypes.contains(serviceType: VCLServiceType.TrustRoot))
+        assert(serviceTypes.contains(serviceType: VCLServiceType.CareerIssuer))
 
         assert(!serviceTypes.contains(serviceType: VCLServiceType.NodeOperator))
         assert(!serviceTypes.contains(serviceType: VCLServiceType.NotaryIssuer))
@@ -36,6 +42,7 @@ class VCLServiceTypesTest: XCTestCase {
         assert(!serviceTypes.contains(serviceType: VCLServiceType.Issuer))
         assert(!serviceTypes.contains(serviceType: VCLServiceType.Inspector))
         assert(!serviceTypes.contains(serviceType: VCLServiceType.TrustRoot))
+        assert(!serviceTypes.contains(serviceType: VCLServiceType.CareerIssuer))
         assert(!serviceTypes.contains(serviceType: VCLServiceType.NodeOperator))
         assert(!serviceTypes.contains(serviceType: VCLServiceType.NotaryIssuer))
         assert(!serviceTypes.contains(serviceType: VCLServiceType.IdentityIssuer))
