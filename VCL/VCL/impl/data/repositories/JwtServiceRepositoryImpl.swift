@@ -17,32 +17,52 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
         self.jwtService = jwtService
     }
     
-    func decode(encodedJwt: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
+    func decode(
+        encodedJwt: String,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    ) {
         jwtService.decode(encodedJwt: encodedJwt) { decodedJwtResult in
             do {
-                let jwt = try decodedJwtResult.get()
-                completionBlock(.success(jwt))
+                completionBlock(.success(try decodedJwtResult.get()))
             } catch {
                 completionBlock(.failure(VCLError(error: error)))
             }
         }
     }
 
-    func verifyJwt(jwt: VCLJWT, publicKey: VCLPublicKey, completionBlock: @escaping (VCLResult<Bool>) -> Void) {
-        jwtService.verify(jwt: jwt, publicKey: publicKey) { signedJwtResult in
+    func verifyJwt(
+        jwt: VCLJwt,
+        jwkPublic: VCLJwkPublic,
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
+    ) {
+        jwtService.verify(jwt: jwt, jwkPublic: jwkPublic) { isVerifiedResult in
             do {
-                let isVerified = try signedJwtResult.get()
-                completionBlock(.success(isVerified))
+                completionBlock(.success(try isVerifiedResult.get()))
             } catch {
                 completionBlock(.failure(VCLError(error: error)))
             }
         }
     }
-    func generateSignedJwt(payload: [String: Any], iss: String, jti: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
-        jwtService.sign(payload: payload, iss: iss, jti: jti) { signedJwtResult in
+    
+    func generateSignedJwt(
+        jwtDescriptor: VCLJwtDescriptor,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    ) {
+        jwtService.sign(jwtDescriptor: jwtDescriptor) { signedJwtResult in
             do {
-                let jwt = try signedJwtResult.get()
-                completionBlock(.success(jwt))
+                completionBlock(.success(try signedJwtResult.get()))
+            } catch {
+                completionBlock(.failure(VCLError(error: error)))
+            }
+        }
+    }
+    
+    func generateDidJwk(
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+    ) {
+        jwtService.generateDidJwk { didJwkResult in
+            do {
+                completionBlock(.success(try didJwkResult.get()))
             } catch {
                 completionBlock(.failure(VCLError(error: error)))
             }

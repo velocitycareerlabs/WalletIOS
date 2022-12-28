@@ -28,7 +28,7 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceSuccess(VclJwt: VCLJWT(encodedJwt: CredentialManifestMocks.CredentialManifestEncodedJwt))
+                JwtServiceSuccess(VclJwt: VCLJwt(encodedJwt: CredentialManifestMocks.CredentialManifestEncodedJwt))
 //                Can't be tested, because of storing exception
 //                JwtServiceMicrosoftImpl()
             ),

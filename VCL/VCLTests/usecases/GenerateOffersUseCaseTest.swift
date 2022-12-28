@@ -28,7 +28,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         )
         var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            credentialManifest: VCLCredentialManifest(jwt: VCLJWT(encodedJwt: "")),
+            credentialManifest: VCLCredentialManifest(jwt: VCLJwt(encodedJwt: "")),
             identificationVerifiableCredentials: [VCLVerifiableCredential]()
         )
 
@@ -56,7 +56,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         )
         var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            credentialManifest: VCLCredentialManifest(jwt: VCLJWT(encodedJwt: "")),
+            credentialManifest: VCLCredentialManifest(jwt: VCLJwt(encodedJwt: "")),
             identificationVerifiableCredentials: [VCLVerifiableCredential]()
         )
 
@@ -84,7 +84,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         )
         var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            credentialManifest: VCLCredentialManifest(jwt: VCLJWT(encodedJwt: "")),
+            credentialManifest: VCLCredentialManifest(jwt: VCLJwt(encodedJwt: "")),
             identificationVerifiableCredentials: [VCLVerifiableCredential]()
         )
 

@@ -32,8 +32,8 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
         )
         let presentationSubmission = VCLPresentationSubmission(
             presentationRequest: VCLPresentationRequest(
-                jwt: VCLJWT(encodedJwt: ""),
-                publicKey: VCLPublicKey(jwkStr: "{}"),
+                jwt: VCLJwt(encodedJwt: ""),
+                jwkPublic: VCLJwkPublic(valueStr: "{}"),
                 deepLink: VCLDeepLink(value: "")),
             verifiableCredentials: [VCLVerifiableCredential]()
         )

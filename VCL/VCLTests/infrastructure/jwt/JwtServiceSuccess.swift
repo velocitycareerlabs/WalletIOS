@@ -12,25 +12,43 @@ import Foundation
 
 class JwtServiceSuccess: JwtService {
     
-    let VclJwt: VCLJWT!
+    let VclJwt: VCLJwt!
     
-    init(VclJwt: VCLJWT) {
+    init(VclJwt: VCLJwt) {
         self.VclJwt = VclJwt
     }
     
-    func decode(encodedJwt: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
+    func decode(
+        encodedJwt: String,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    ) {
         completionBlock(.success(self.VclJwt))
     }
     
-    func encode(jwt: String, completionBlock: @escaping (VCLResult<String>) -> Void) {
+    func encode(
+        jwt: String,
+        completionBlock: @escaping (VCLResult<String>) -> Void
+    ) {
     }
     
-    func verify(jwt: VCLJWT, publicKey: VCLPublicKey, completionBlock: @escaping (VCLResult<Bool>) -> Void) {
+    func verify(
+        jwt: VCLJwt,
+        jwkPublic: VCLJwkPublic,
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
+    ) {
         completionBlock(.success(true))
     }
     
-    func sign(payload: [String :Any], iss: String, jti: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
-        completionBlock(.success(VCLJWT(header: nil, payload: nil, signature: nil, encodedJwt: JwtServiceMocks.SignedJwt)))
+    func sign(
+        jwtDescriptor: VCLJwtDescriptor,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    ) {
+        completionBlock(.success(VCLJwt(header: nil, payload: nil, signature: nil, encodedJwt: JwtServiceMocks.SignedJwt)))
     }
     
+    func generateDidJwk(
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+    ) {
+        completionBlock(.success(VCLDidJwk(value: VCLDidJwk.DidJwkPrefix)))
+    }
 }

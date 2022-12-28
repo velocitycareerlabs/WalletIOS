@@ -31,7 +31,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
             EmptyDispatcher()
         )
         var result: VCLResult<VCLJwtVerifiableCredentials>? = nil
-        let credentialManifest = VCLCredentialManifest(jwt: VCLJWT(encodedJwt: ""))
+        let credentialManifest = VCLCredentialManifest(jwt: VCLJwt(encodedJwt: ""))
         let finalizeOffersDescriptor = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifest, approvedOfferIds: [String](), rejectedOfferIds: [String]())
         

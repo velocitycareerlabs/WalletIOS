@@ -11,6 +11,6 @@ import Foundation
 
 protocol SubmissionRepository {
     func submit(submission: VCLSubmission,
-                jwt: VCLJWT,
+                jwt: VCLJwt,
                 completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void)
 }
