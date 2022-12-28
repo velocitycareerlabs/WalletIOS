@@ -64,7 +64,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     }
     
     private func onDecodeJwtSuccess(
-        _ jwt: VCLJWT,
+        _ jwt: VCLJwt,
         _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
@@ -90,20 +90,20 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     }
     
     private func onResolvePublicKeySuccess(
-        _ publicKey: VCLPublicKey,
-        _ jwt: VCLJWT,
+        _ jwkPublic: VCLJwkPublic,
+        _ jwt: VCLJwt,
         _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         let presentationRequest = VCLPresentationRequest(
             jwt: jwt,
-            publicKey: publicKey,
+            jwkPublic: jwkPublic,
             deepLink: presentationRequestDescriptor.deepLink,
             pushDelegate: presentationRequestDescriptor.pushDelegate
         )
         self.jwtServiceRepository.verifyJwt(
             jwt: presentationRequest.jwt,
-            publicKey: presentationRequest.publicKey
+            jwkPublic: presentationRequest.jwkPublic
         ) {
             [weak self] isVerifiedResult in
             do {

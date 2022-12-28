@@ -1,5 +1,5 @@
 //
-//  VCLJWT.swift
+//  VCLJwt.swift
 //  
 //
 //  Created by Michael Avoyan on 26/04/2021.
@@ -10,7 +10,7 @@
 import Foundation
 import VCToken
 
-public struct VCLJWT {
+public struct VCLJwt {
     public private(set) var header: [String: Any]? = nil
     public private(set) var payload: [String: Any]? = nil
     public private(set) var signature: String? = nil

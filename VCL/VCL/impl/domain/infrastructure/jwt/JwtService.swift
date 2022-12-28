@@ -10,8 +10,25 @@
 import Foundation
 
 protocol JwtService {
-    func decode(encodedJwt: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void)
-    func encode(jwt: String, completionBlock: @escaping (VCLResult<String>) -> Void)
-    func verify(jwt: VCLJWT, publicKey: VCLPublicKey, completionBlock: @escaping (VCLResult<Bool>) -> Void)
-    func sign(payload: [String: Any], iss: String, jti: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void)
+    func decode(
+        encodedJwt: String,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    )
+    func encode(
+        jwt: String,
+        completionBlock: @escaping (VCLResult<String>) -> Void
+    )
+    func verify(
+        jwt: VCLJwt,
+        jwkPublic: VCLJwkPublic,
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
+    )
+    func sign(
+        jwtDescriptor: VCLJwtDescriptor,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    )
+
+    func generateDidJwk(
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+    )
 }

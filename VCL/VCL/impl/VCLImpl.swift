@@ -310,12 +310,12 @@ public class VCLImpl: VCL {
     }
     
     public func verifyJwt(
-        jwt: VCLJWT,
-        publicKey: VCLPublicKey,
+        jwt: VCLJwt,
+        jwkPublic: VCLJwkPublic,
         successHandler: @escaping (Bool) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.verifyJwt(jwt: jwt, publicKey: publicKey) {
+        jwtServiceUseCase.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) {
             [weak self] isVerifiedResult in
             do {
                 successHandler(try isVerifiedResult.get())
@@ -327,18 +327,31 @@ public class VCLImpl: VCL {
     }
     
     public func generateSignedJwt(
-        payload: [String: Any],
-        iss: String,
-        jti: String,
-        successHandler: @escaping (VCLJWT) -> Void,
+        jwtDescriptor: VCLJwtDescriptor,
+        successHandler: @escaping (VCLJwt) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.generateSignedJwt(payload: payload, iss: iss, jti: jti) {
+        jwtServiceUseCase.generateSignedJwt(jwtDescriptor: jwtDescriptor) {
             [weak self] jwtResult in
             do {
                 successHandler(try jwtResult.get())
             } catch {
                 self?.logError(message: "generateSignedJwt", error: error)
+                errorHandler(error as? VCLError ?? VCLError(error: error))
+            }
+        }
+    }
+    
+    public func generateDidJwk(
+        successHandler: @escaping (VCLDidJwk) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        jwtServiceUseCase.generateDidJwk {
+            [weak self] didJwkResult in
+            do {
+                successHandler(try didJwkResult.get())
+            } catch {
+                self?.logError(message: "generateDidJwk", error: error)
                 errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }

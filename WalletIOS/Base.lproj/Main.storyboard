@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -36,7 +36,7 @@
                                 </constraints>
                             </view>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="QyK-Bi-EZc">
-                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                                <rect key="frame" x="197" y="442" width="20" height="16"/>
                                 <color key="color" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </activityIndicatorView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NN0-vU-K8E" userLabel="Controls">
@@ -59,22 +59,27 @@
                                         <state key="normal" title="Self Reporting Credentials (aka Self Attested)"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cOr-pZ-m8J" userLabel="Refresh Credentials">
-                                        <rect key="frame" x="8" y="311" width="398" height="31"/>
+                                        <rect key="frame" x="8" y="311" width="398" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Refresh Credentials"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fyh-5A-Z42">
-                                        <rect key="frame" x="8" y="363" width="398" height="31"/>
+                                        <rect key="frame" x="8" y="366.5" width="398" height="34.5"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Get Verified Profile"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5iO-Ty-hGB" userLabel="Verify JWT">
-                                        <rect key="frame" x="8" y="410" width="398" height="30"/>
+                                        <rect key="frame" x="8" y="417" width="398" height="30"/>
                                         <state key="normal" title="Verify JWT"/>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E5z-8i-QgU" userLabel="Generate Signed JWT">
-                                        <rect key="frame" x="8" y="455" width="398" height="30"/>
+                                        <rect key="frame" x="8" y="462" width="398" height="30"/>
                                         <state key="normal" title="Generate Signed JWT"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9ZS-GK-RtM" userLabel="Generate DID:JWK">
+                                        <rect key="frame" x="8" y="507" width="398" height="34.5"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Generate DID:JWK"/>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -93,6 +98,8 @@
                                     <constraint firstItem="jvd-pB-NfM" firstAttribute="top" secondItem="4Vi-e2-bFn" secondAttribute="bottom" constant="40" id="V5I-Mh-BKo"/>
                                     <constraint firstItem="fzE-LE-zNg" firstAttribute="leading" secondItem="NN0-vU-K8E" secondAttribute="leading" constant="8" id="VW5-VU-yN8"/>
                                     <constraint firstItem="ILx-GI-dt3" firstAttribute="leading" secondItem="NN0-vU-K8E" secondAttribute="leading" constant="8" id="Vus-J6-G47"/>
+                                    <constraint firstItem="9ZS-GK-RtM" firstAttribute="leading" secondItem="NN0-vU-K8E" secondAttribute="leading" constant="8" id="WQG-o0-S7S"/>
+                                    <constraint firstItem="9ZS-GK-RtM" firstAttribute="top" secondItem="E5z-8i-QgU" secondAttribute="bottom" constant="15" id="ace-E3-eI1"/>
                                     <constraint firstItem="cOr-pZ-m8J" firstAttribute="top" secondItem="fzE-LE-zNg" secondAttribute="bottom" constant="31" id="bCF-7t-kTC"/>
                                     <constraint firstAttribute="trailing" secondItem="jvd-pB-NfM" secondAttribute="trailing" constant="8" id="dRv-lY-ObR"/>
                                     <constraint firstAttribute="trailing" secondItem="fyh-5A-Z42" secondAttribute="trailing" constant="8" id="drQ-e0-igL"/>
@@ -103,6 +110,7 @@
                                     <constraint firstItem="E5z-8i-QgU" firstAttribute="top" secondItem="5iO-Ty-hGB" secondAttribute="bottom" constant="15" id="m31-na-QgR"/>
                                     <constraint firstItem="fyh-5A-Z42" firstAttribute="top" secondItem="cOr-pZ-m8J" secondAttribute="bottom" constant="21" id="wv0-gl-Xtt"/>
                                     <constraint firstItem="fzE-LE-zNg" firstAttribute="top" secondItem="jvd-pB-NfM" secondAttribute="bottom" constant="40" id="x0l-Xq-HnC"/>
+                                    <constraint firstAttribute="trailing" secondItem="9ZS-GK-RtM" secondAttribute="trailing" constant="8" id="y7E-2v-oDL"/>
                                     <constraint firstItem="5iO-Ty-hGB" firstAttribute="top" secondItem="fyh-5A-Z42" secondAttribute="bottom" constant="16" id="zIN-Mn-Ebf"/>
                                 </constraints>
                             </view>
@@ -128,6 +136,7 @@
                         <outlet property="controlsView" destination="NN0-vU-K8E" id="aOG-Hw-4Hi"/>
                         <outlet property="disclosingCredentialsBtn" destination="ILx-GI-dt3" id="bkC-RM-QcU"/>
                         <outlet property="errorView" destination="hDP-rV-lDC" id="VbE-Ys-90C"/>
+                        <outlet property="generateDidJwkBtn" destination="9ZS-GK-RtM" id="hZM-KE-uQO"/>
                         <outlet property="generateSignedJwtBtn" destination="E5z-8i-QgU" id="Whh-aE-cOY"/>
                         <outlet property="loadingIndicator" destination="QyK-Bi-EZc" id="NRa-Rw-4yT"/>
                         <outlet property="receivingCredentialsByDeepLinkBtn" destination="4Vi-e2-bFn" id="mgv-2L-6hh"/>

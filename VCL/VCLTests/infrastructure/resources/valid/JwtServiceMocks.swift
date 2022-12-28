@@ -34,7 +34,7 @@ class JwtServiceMocks{
 //
 //    static let SignedJWT = SignedJWT(Base64URL(splittedPresentationRequestJwt[0]), Base64URL(splittedPresentationRequestJwt[1]), Base64URL(splittedPresentationRequestJwt[2]))
 //
-    static let PublicKey = VCLPublicKey(jwkStr: JWK)
+    static let JwkPublic = VCLJwkPublic(valueStr: JWK)
 //
-    static let JWT = VCLJWT(encodedJwt: SignedJwt)
+    static let JWT = VCLJwt(encodedJwt: SignedJwt)
 }

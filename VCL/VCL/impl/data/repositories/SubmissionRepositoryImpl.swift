@@ -18,7 +18,7 @@ class SubmissionRepositoryImpl: SubmissionRepository {
     }
     
     func submit(submission: VCLSubmission,
-                jwt: VCLJWT,
+                jwt: VCLJwt,
                 completionBlock: @escaping (VCLResult<VCLPresentationSubmissionResult>) -> Void) {
         networkService.sendRequest(
             endpoint: submission.submitUri,

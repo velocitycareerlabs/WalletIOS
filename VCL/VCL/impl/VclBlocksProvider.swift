@@ -64,7 +64,7 @@ class VclBlocksProvider {
 //                JwtServiceVCLImpl(
 //                    NetworkServiceImpl()
 //                )
-                JwtServiceMicrosoftImpl() // ok
+                JwtServiceImpl() // ok
             ),
             ExecutorImpl()
         )
@@ -79,7 +79,7 @@ class VclBlocksProvider {
 //                JwtServiceVCLImpl(
 //                    NetworkServiceImpl()
 //                )
-                JwtServiceMicrosoftImpl()
+                JwtServiceImpl()
             ),
             ExecutorImpl()
         )
@@ -106,7 +106,7 @@ class VclBlocksProvider {
 //                JwtServiceVCLImpl(
 //                    NetworkServiceImpl()
 //                )
-                JwtServiceMicrosoftImpl() // ok
+                JwtServiceImpl() // ok
             ),
             ExecutorImpl()
         )
@@ -138,7 +138,7 @@ class VclBlocksProvider {
 //                JwtServiceVCLImpl(
 //                    NetworkServiceImpl()
 //                )
-                JwtServiceMicrosoftImpl()
+                JwtServiceImpl()
             ),
             ExecutorImpl()
         )
@@ -171,7 +171,7 @@ class VclBlocksProvider {
 //                JwtServiceVCLImpl(
 //                    NetworkServiceImpl()
 //                )
-                JwtServiceMicrosoftImpl()
+                JwtServiceImpl()
             ),
             ExecutorImpl(),
             DispatcherImpl()
@@ -200,7 +200,7 @@ class VclBlocksProvider {
     static func provideJwtServiceUseCase() -> JwtServiceUseCase {
         return JwtServiceUseCaseImpl(
             JwtServiceRepositoryImpl(
-                JwtServiceMicrosoftImpl()
+                JwtServiceImpl()
             ),
             ExecutorImpl()
         )
