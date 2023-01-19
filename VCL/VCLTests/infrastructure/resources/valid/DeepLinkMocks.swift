@@ -15,6 +15,12 @@ class DeepLinkMocks {
     private static let DevNetProtocol = "velocity-network-devnet"
     private static let TestNetProtocol = "velocity-network-testnet"
     private static let MainNetProtocol = "velocity-network"
+    
+    static let Issuer =
+        "https%3A%2F%2Fdevagent.velocitycareerlabs.io%2Fapi%2Fholder%2Fv0.6%2Forg%2Fdid%3Avelocity%3A0xc257274276a4e539741ca11b590b9447b26a8051%2Foidc%26credential_type%3DPastEmploymentPosition%26pre-authorized_code%3D8L1UArquTYvE-ylC2BV_2"
+    static let IssuerDecoded =
+        "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:velocity:0xc257274276a4e539741ca11b590b9447b26a8051/oidc&credential_type=PastEmploymentPosition&pre-authorized_code=8L1UArquTYvE-ylC2BV_2"
+    static let OpenidInitiateIssuanceStrDev = "openid-initiate-issuance://?issuer=\(Issuer)"
 
     static let InspectorDid = "did:ion:EiByBvq95tfmhl41DOxJeaa26HjSxAUoz908PITFwMRDNA"
 

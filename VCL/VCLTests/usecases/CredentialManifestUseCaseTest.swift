@@ -38,7 +38,7 @@ final class CredentialManifestUseCaseTest: XCTestCase {
 
         // Action
         subject.getCredentialManifest(
-            credentialManifestDescriptor: VCLCredentialManifestDescriptorByDeepLink(deepLink: VCLDeepLink(value: ""))
+            credentialManifestDescriptor: VCLCredentialManifestDescriptorByDeepLink(deepLink: DeepLinkMocks.CredentialManifestDeepLinkDevNet)
         ) {
             result = $0
         }

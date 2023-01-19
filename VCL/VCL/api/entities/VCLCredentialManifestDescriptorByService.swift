@@ -21,12 +21,12 @@ public class VCLCredentialManifestDescriptorByService: VCLCredentialManifestDesc
     }
 ///    TODO: validate credentialTypes by services.credentialTypes
     
-    public override var endpoint: String { get {
-        var endpoint = self.uri
-        guard let queryParams = generateQueryParams() else {
-            return endpoint
+    public override var endpoint: String? { get {
+        if let queryParams = generateQueryParams() {
+            return self.uri?.appendQueryParams(queryParams: queryParams)
+        } else {
+            return self.uri
         }
-        return endpoint.appendQueryParams(queryParams: queryParams)
     }}
     
     func generateQueryParams() -> String? {

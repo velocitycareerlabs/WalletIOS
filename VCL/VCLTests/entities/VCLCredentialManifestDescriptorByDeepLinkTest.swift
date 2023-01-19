@@ -23,7 +23,7 @@ final class VCLCredentialManifestDescriptorByDeepLinkTest: XCTestCase {
             deepLink: VCLCredentialManifestDescriptorMocks.DeepLink
         )
         
-        assert(subject.endpoint == VCLCredentialManifestDescriptorMocks.DeepLinkRequestUri)
+        assert(subject.endpoint == VCLCredentialManifestDescriptorMocks.DeepLinkRequestUri.decode()!)
     }
     
     override func tearDown() {

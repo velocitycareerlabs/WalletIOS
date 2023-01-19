@@ -14,7 +14,7 @@ class VCLCredentialManifestDescriptorMocks {
     
     static let DeepLink = DeepLinkMocks.CredentialManifestDeepLinkMainNet
     
-    static let DeepLinkRequestUri = DeepLinkMocks.CredentialManifestRequestDecodedUriStr
+    static let DeepLinkRequestUri = DeepLinkMocks.CredentialManifestRequestUriStr.decode()!
     
     static let CredentialTypesList = ["PastEmploymentPosition", "CurrentEmploymentPosition"]
     

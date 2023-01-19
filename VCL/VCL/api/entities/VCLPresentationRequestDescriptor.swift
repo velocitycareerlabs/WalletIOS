@@ -23,11 +23,13 @@ public class VCLPresentationRequestDescriptor {
         static let KeyPushDelegatePushToken = "push_delegate.push_token"
     }
     
-    var endpoint: String { get { if let queryParams = generateQueryParams() {
-        return deepLink.requestUri.appendQueryParams(queryParams: queryParams)
-    } else {
-        return deepLink.requestUri
-    }}}
+    var endpoint: String? { get {
+        if let queryParams = generateQueryParams() {
+            return deepLink.requestUri?.appendQueryParams(queryParams: queryParams)
+        } else {
+            return deepLink.requestUri
+        }}
+    }
     
     private func generateQueryParams() -> String? {
         var pPushDelegate = ""

@@ -10,11 +10,11 @@
 import Foundation
 
 public class VCLCredentialManifestDescriptor {
-    public let uri: String
+    public let uri: String?
     public let credentialTypes: [String]?
     public let pushDelegate: VCLPushDelegate?
     
-    public init(uri: String,
+    public init(uri: String?,
                 credentialTypes: [String]? = nil,
                 pushDelegate: VCLPushDelegate? = nil) {
         self.uri = uri
@@ -32,5 +32,5 @@ public class VCLCredentialManifestDescriptor {
         static let KeyRefresh = "refresh"
     }
     
-    public var endpoint: String { get { uri } }
+    public var endpoint: String? { get { uri } }
 }

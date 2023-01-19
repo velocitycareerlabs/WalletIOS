@@ -17,6 +17,15 @@ final class VCLDeepLinkTest: XCTestCase {
     
     override func setUp() {
     }
+    
+    func testOpenidInitiateIssuance() {
+        subject = VCLDeepLink(value: DeepLinkMocks.OpenidInitiateIssuanceStrDev)
+
+        assert(subject.value == DeepLinkMocks.OpenidInitiateIssuanceStrDev)
+        assert(subject.value.decode() == DeepLinkMocks.OpenidInitiateIssuanceStrDev.decode())
+        assert(subject.requestUri == nil)
+        assert(subject.issuer == DeepLinkMocks.IssuerDecoded)
+    }
 
     func testPresentationRequestDeepLinkDevNetValidAggregation() {
 
@@ -24,6 +33,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.PresentationRequestDeepLinkDevNetStr)
         assert(subject.value.decode() == DeepLinkMocks.PresentationRequestDeepLinkDevNetStr.decode())
+        assert(subject.issuer == nil)
         assert(subject.requestUri == DeepLinkMocks.PresentationRequestRequestDecodedUriStr)
         assert(subject.vendorOriginContext == DeepLinkMocks.PresentationRequestVendorOriginContext)
     }
@@ -34,6 +44,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.PresentationRequestDeepLinkTestNetStr)
         assert(subject.value.decode() == DeepLinkMocks.PresentationRequestDeepLinkTestNetStr.decode())
+        assert(subject.issuer == nil)
         assert(subject.requestUri == DeepLinkMocks.PresentationRequestRequestDecodedUriStr)
         assert(subject.vendorOriginContext == DeepLinkMocks.PresentationRequestVendorOriginContext)
     }
@@ -44,6 +55,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.PresentationRequestDeepLinkMainNetStr)
         assert(subject.value.decode() == DeepLinkMocks.PresentationRequestDeepLinkMainNetStr.decode())
+        assert(subject.issuer == nil)
         assert(subject.requestUri == DeepLinkMocks.PresentationRequestRequestDecodedUriStr)
         assert(subject.vendorOriginContext == DeepLinkMocks.PresentationRequestVendorOriginContext)
     }
@@ -54,6 +66,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.CredentialManifestDeepLinkDevNetStr)
         assert(subject.value.decode() == DeepLinkMocks.CredentialManifestDeepLinkDevNetStr.decode())
+        assert(subject.issuer == nil)
         assert(subject.requestUri == DeepLinkMocks.CredentialManifestRequestDecodedUriStr)
         assert(subject.vendorOriginContext == nil)
     }
@@ -64,6 +77,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.CredentialManifestDeepLinkTestNetStr)
         assert(subject.value.decode() == DeepLinkMocks.CredentialManifestDeepLinkTestNetStr.decode())
+        assert(subject.issuer == nil)
         assert(subject.requestUri == DeepLinkMocks.CredentialManifestRequestDecodedUriStr)
         assert(subject.vendorOriginContext == nil)
     }
@@ -74,6 +88,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.CredentialManifestDeepLinkMainNetStr)
         assert(subject.value.decode() == DeepLinkMocks.CredentialManifestDeepLinkMainNetStr.decode())
+        assert(subject.issuer == nil)
         assert(subject.requestUri == DeepLinkMocks.CredentialManifestRequestDecodedUriStr)
         assert(subject.vendorOriginContext == nil)
     }

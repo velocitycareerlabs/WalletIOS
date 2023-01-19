@@ -23,19 +23,11 @@ public class VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescri
         super.init(uri: service.serviceEndpoint)
     }
 
-    public override var endpoint: String { get {
-        var endPoint = "\(uri)?\(CodingKeys.KeyRefresh)=\(true)"
+    public override var endpoint: String? { get {
         if let queryParams = generateQueryParams() {
-            if let urlComponents = URLComponents(string: uri) {
-                var allQueryParams = "?"
-                if (urlComponents.queryItems != nil) {
-                    allQueryParams = "&"
-                }
-                allQueryParams += "\(CodingKeys.KeyRefresh)=\(true)&\(queryParams)"
-                endPoint = uri + allQueryParams
-            }
+            return uri?.appendQueryParams(queryParams: "\(CodingKeys.KeyRefresh)=\(true)&\(queryParams)")
         }
-        return endPoint
+        return uri?.appendQueryParams(queryParams: "\(CodingKeys.KeyRefresh)=\(true)")
     }}
     
     func generateQueryParams() -> String? {
