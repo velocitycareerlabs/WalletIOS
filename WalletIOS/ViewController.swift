@@ -77,6 +77,7 @@ class ViewController: UIViewController {
         vcl.getPresentationRequest(
             presentationRequestDescriptor: VCLPresentationRequestDescriptor(
                 deepLink: deepLink,
+                serviceType: VCLServiceType.Inspector,
                 pushDelegate: VCLPushDelegate(
                     pushUrl: "pushUrl",
                     pushToken: "pushToken"
@@ -153,6 +154,7 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorRefresh =
         VCLCredentialManifestDescriptorRefresh(
             service: service,
+            serviceType: VCLServiceType.Issuer,
             credentialIds: Constants.CredentialIds
         )
         vcl.getCredentialManifest(
@@ -171,6 +173,7 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorByOrganization =
         VCLCredentialManifestDescriptorByService(
             service: serviceCredentialAgentIssuer,
+            serviceType: VCLServiceType.Issuer,
             credentialTypes: serviceCredentialAgentIssuer.credentialTypes // Can come from any where
         )
         vcl.getCredentialManifest(
@@ -193,7 +196,8 @@ class ViewController: UIViewController {
         VCLDeepLink(value: Constants.CredentialManifestDeepLinkStrStaging)
         let credentialManifestDescriptorByDeepLink =
         VCLCredentialManifestDescriptorByDeepLink(
-            deepLink: deepLink
+            deepLink: deepLink,
+            serviceType: VCLServiceType.Issuer
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorByDeepLink,

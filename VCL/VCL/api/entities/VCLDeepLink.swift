@@ -16,6 +16,12 @@ public struct VCLDeepLink {
         self.value = value
     }
     
+    public var did: String? { get{
+        if let did = requestUri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix) {
+            return did
+        }
+        return issuer?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix)
+    } }
     public var issuer: String? { get {
         return generateUri(uriKey: CodingKeys.KeyIssuer, asSubParams: true)
     } }
@@ -50,6 +56,7 @@ public struct VCLDeepLink {
     }
     
     public struct CodingKeys {
+        static let KeyDidPrefix = "did:"
         static let KeyIssuer = "issuer"
         static let KeyRequestUri = "request_uri"
         static let KeyVendorOriginContext = "vendorOriginContext"

@@ -12,12 +12,15 @@ import Foundation
 public class VCLCredentialManifestDescriptorByService: VCLCredentialManifestDescriptor {
     public init(
         service: VCLService,
+        serviceType: VCLServiceType,
         credentialTypes: [String]? = nil,
         pushDelegate: VCLPushDelegate? = nil
     ) {
-        super.init(uri: service.serviceEndpoint,
-                   credentialTypes: credentialTypes,
-                   pushDelegate: pushDelegate)
+        super.init(
+            uri: service.serviceEndpoint,
+            serviceType: serviceType,
+            credentialTypes: credentialTypes,
+            pushDelegate: pushDelegate)
     }
 ///    TODO: validate credentialTypes by services.credentialTypes
     
