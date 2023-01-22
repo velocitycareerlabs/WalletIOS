@@ -9,18 +9,17 @@ import Foundation
 
 public class VCLPresentationRequestDescriptor {
     public let deepLink: VCLDeepLink
+    public let serviceType: VCLServiceType
     public let pushDelegate: VCLPushDelegate?
     
-    public init(deepLink: VCLDeepLink, pushDelegate: VCLPushDelegate? = nil) {
+    public init(
+        deepLink: VCLDeepLink,
+        serviceType: VCLServiceType,
+        pushDelegate: VCLPushDelegate? = nil
+    ) {
         self.deepLink = deepLink
+        self.serviceType = serviceType
         self.pushDelegate = pushDelegate
-    }
-    
-    public struct CodingKeys {
-        static let KeyId = "id"
-        
-        static let KeyPushDelegatePushUrl = "push_delegate.push_url"
-        static let KeyPushDelegatePushToken = "push_delegate.push_token"
     }
     
     var endpoint: String? { get {
@@ -31,6 +30,8 @@ public class VCLPresentationRequestDescriptor {
         }}
     }
     
+    var did: String? { get { deepLink.did } }
+    
     private func generateQueryParams() -> String? {
         var pPushDelegate = ""
         if let pd = pushDelegate {
@@ -39,5 +40,12 @@ public class VCLPresentationRequestDescriptor {
         let qParams = [pPushDelegate].compactMap{ $0 }.filter { !$0.isEmpty }
         if qParams.isEmpty { return nil }
         else { return qParams.joined(separator: "&") }
+    }
+    
+    public struct CodingKeys {
+        static let KeyId = "id"
+        
+        static let KeyPushDelegatePushUrl = "push_delegate.push_url"
+        static let KeyPushDelegatePushToken = "push_delegate.push_token"
     }
 }

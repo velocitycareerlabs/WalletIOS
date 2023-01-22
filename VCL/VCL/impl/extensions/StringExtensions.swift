@@ -67,6 +67,16 @@ extension String {
         return "\(self)?\(queryParams)"
     }
     
+    func getUrlSubPath(subPathPrefix: String) -> String? {
+        if let urlSubPath = (URLComponents(string: self)?
+            .path.split(separator: "/")
+            .filter{ $0.hasPrefix(subPathPrefix) }
+            .first) {
+                return String(urlSubPath)
+            }
+        return nil
+    }
+    
     func encode() -> String? {
         return self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
     }

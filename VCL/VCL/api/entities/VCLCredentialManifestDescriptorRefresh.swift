@@ -10,17 +10,19 @@
 import Foundation
 
 public class VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescriptor {
-    let service: VCLService
     let credentialIds:[String]
     
     public init(
         service: VCLService,
+        serviceType: VCLServiceType,
         credentialIds:[String]
     ) {
-        self.service = service
         self.credentialIds = credentialIds
         
-        super.init(uri: service.serviceEndpoint)
+        super.init(
+            uri: service.serviceEndpoint,
+            serviceType: serviceType
+        )
     }
 
     public override var endpoint: String? { get {
