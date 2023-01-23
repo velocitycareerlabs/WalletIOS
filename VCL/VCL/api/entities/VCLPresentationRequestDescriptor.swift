@@ -14,7 +14,7 @@ public class VCLPresentationRequestDescriptor {
     
     public init(
         deepLink: VCLDeepLink,
-        serviceType: VCLServiceType,
+        serviceType: VCLServiceType = VCLServiceType.Inspector,
         pushDelegate: VCLPushDelegate? = nil
     ) {
         self.deepLink = deepLink

@@ -10,9 +10,10 @@
 import Foundation
 
 public class VCLCredentialManifestDescriptorByService: VCLCredentialManifestDescriptor {
+    
     public init(
         service: VCLService,
-        serviceType: VCLServiceType,
+        serviceType: VCLServiceType = VCLServiceType.Issuer,
         credentialTypes: [String]? = nil,
         pushDelegate: VCLPushDelegate? = nil
     ) {
