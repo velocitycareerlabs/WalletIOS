@@ -14,7 +14,7 @@ public class VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescri
     
     public init(
         service: VCLService,
-        serviceType: VCLServiceType,
+        serviceType: VCLServiceType = VCLServiceType.Issuer,
         credentialIds:[String]
     ) {
         self.credentialIds = credentialIds

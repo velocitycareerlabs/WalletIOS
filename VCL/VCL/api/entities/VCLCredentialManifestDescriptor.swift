@@ -17,7 +17,7 @@ public class VCLCredentialManifestDescriptor {
     public var did: String?
     
     public init(uri: String?,
-                serviceType: VCLServiceType,
+                serviceType: VCLServiceType = VCLServiceType.Issuer,
                 credentialTypes: [String]? = nil,
                 pushDelegate: VCLPushDelegate? = nil) {
         self.uri = uri

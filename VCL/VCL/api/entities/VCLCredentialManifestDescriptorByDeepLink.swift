@@ -10,9 +10,10 @@
 import Foundation
 
 public class VCLCredentialManifestDescriptorByDeepLink: VCLCredentialManifestDescriptor {
+    
     public init(
         deepLink: VCLDeepLink,
-        serviceType: VCLServiceType
+        serviceType: VCLServiceType = VCLServiceType.Issuer
     ) {
         super.init(
             uri: deepLink.requestUri,
