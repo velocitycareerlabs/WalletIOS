@@ -24,7 +24,8 @@ class SubmissionRepositoryImpl: SubmissionRepository {
             endpoint: submission.submitUri,
             body: submission.generateRequestBody(jwt: jwt).toJsonString(),
             contentType: Request.ContentType.ApplicationJson,
-            method: Request.HttpMethod.POST
+            method: Request.HttpMethod.POST,
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)]
         ) { [weak self] _response in
             do{
                 let submissionResponse = try _response.get()

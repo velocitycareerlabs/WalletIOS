@@ -25,7 +25,9 @@ class PresentationRequestRepositoryImpl: PresentationRequestRepository {
             networkService.sendRequest(
                 endpoint: endpoint,
                 contentType: .ApplicationJson,
-                method: .GET) { response in
+                method: .GET,
+                headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)]
+            ) { response in
                     do {
                         let presentationRequestResponse = try response.get()
                         if let encodedJwtStr = presentationRequestResponse.payload.toDictionary()?[VCLPresentationRequest.CodingKeys.KeyPresentationRequest] as? String {

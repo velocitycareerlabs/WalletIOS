@@ -19,9 +19,12 @@ class CredentialManifestRepositoryImpl: CredentialManifestRepository {
     func getCredentialManifest(credentialManifestDescriptor: VCLCredentialManifestDescriptor,
                                completionBlock: @escaping (VCLResult<String>) -> Void) {
         if let endpoint = credentialManifestDescriptor.endpoint {
-            networkService.sendRequest(endpoint: endpoint,
-                                       contentType: .ApplicationJson,
-                                       method: .GET) { response in
+            networkService.sendRequest(
+                endpoint: endpoint,
+                contentType: .ApplicationJson,
+                method: .GET,
+                headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)]
+            ) { response in
                 do {
                     let credentialManifestReposnse = try response.get()
                     if let jwtStr = credentialManifestReposnse.payload.toDictionary()?[VCLCredentialManifest.CodingKeys.KeyIssuingRequest] as? String {

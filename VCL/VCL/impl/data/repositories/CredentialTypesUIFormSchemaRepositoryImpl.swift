@@ -24,7 +24,9 @@ class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSchemaRepo
         networkService.sendRequest(
             endpoint: Urls.CredentialTypesFormSchema.replacingOccurrences(of: Params.CredentialType, with: credentialTypesUIFormSchemaDescriptor.credentialType),
             contentType: .ApplicationJson,
-            method: .GET) { [weak self] response in
+            method: .GET,
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)]
+        ) { [weak self] response in
                 do {
                     let credentialTypesUiFoermResponse = try response.get()
                     if let _self = self, let credentialTypesUiFoerm = credentialTypesUiFoermResponse.payload.toDictionary() {

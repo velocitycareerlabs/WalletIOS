@@ -24,7 +24,9 @@ class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
         networkService.sendRequest(
             endpoint: Urls.VerifiedProfile.replacingOccurrences(of: Params.Did, with: verifiedProfileDescriptor.did),
             method: Request.HttpMethod.GET,
-            cachePolicy: .useProtocolCachePolicy) {
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)],
+            cachePolicy: .useProtocolCachePolicy
+        ) {
                 [weak self] publicKeyResponse in
                 do {
                     let verifiedProfileResponse = try publicKeyResponse.get()
