@@ -41,3 +41,13 @@ struct Params {
     static let Did = "{did}"
     static let CredentialType = "{credentialType}"
 }
+
+struct HeaderKeys {
+    static let HeaderKeyAuthorization = "Authorization"
+    static let HeaderValuePrefixBearer = "Bearer"
+    static let XVnfProtocolVersion = "x-vnf-protocol-version"
+}
+
+struct HeaderKValues {
+    static let XVnfProtocolVersion = "1.0"
+}

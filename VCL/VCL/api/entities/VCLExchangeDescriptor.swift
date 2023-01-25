@@ -26,7 +26,5 @@ public struct VCLExchangeDescriptor {
     
     public struct CodingKeys {
         static let KeyExchangeId = "exchange_id"
-        static let HeaderKeyAuthorization = "Authorization"
-        static let HeaderValuePrefixBearer = "Bearer"
     }
 }

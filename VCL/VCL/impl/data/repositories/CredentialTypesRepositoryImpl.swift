@@ -44,10 +44,13 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
         cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
     ) {
-        networkService.sendRequest(endpoint: endpoint,
-                                   contentType: .ApplicationJson,
-                                   method: .GET,
-                                   cachePolicy: .useProtocolCachePolicy) {
+        networkService.sendRequest(
+            endpoint: endpoint,
+            contentType: .ApplicationJson,
+            method: .GET,
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)],
+            cachePolicy: .useProtocolCachePolicy
+        ) {
             [weak self] res in
             do {
                 let payload = try res.get().payload

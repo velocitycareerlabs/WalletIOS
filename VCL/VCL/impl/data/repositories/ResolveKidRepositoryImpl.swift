@@ -18,9 +18,12 @@ class ResolveKidRepositoryImpl: ResolveKidRepository {
     }
     
     func getPublicKey(keyID: String, completionBlock: @escaping (VCLResult<VCLJwkPublic>) -> Void) {
-        networkService.sendRequest(endpoint: Urls.ResolveKid + keyID + "?format=\(VCLJwkPublic.Format.jwk)",
-                                   contentType: Request.ContentType.ApplicationJson,
-                                   method: Request.HttpMethod.GET) {
+        networkService.sendRequest(
+            endpoint: Urls.ResolveKid + keyID + "?format=\(VCLJwkPublic.Format.jwk)",
+            contentType: Request.ContentType.ApplicationJson,
+            method: .GET,
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)]
+        ) {
             response in
             do{
                 let publicKeyResponse = try response.get()

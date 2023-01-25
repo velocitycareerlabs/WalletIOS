@@ -26,7 +26,9 @@ class OrganizationsRepositoryImpl: OrganizationsRepository {
         networkService.sendRequest(
             endpoint: endpoint,
             contentType: .ApplicationJson,
-            method: Request.HttpMethod.GET) {
+            method: Request.HttpMethod.GET,
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)]
+        ) {
             [weak self] response in
             do {
                 let organizationsResponse = try response.get()
