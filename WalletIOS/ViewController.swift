@@ -90,7 +90,8 @@ class ViewController: UIViewController {
             errorHandler: {error in
                 NSLog("VCL Presentation request failed: \(error)")
             }
-        )}
+        )
+    }
     
     private func submitPresentation(presentationRequest: VCLPresentationRequest)  {
         let presentationSubmission = VCLPresentationSubmission(
@@ -110,8 +111,8 @@ class ViewController: UIViewController {
                         presentationSubmission: presentationSubmission,
                         submissionResult: presentationSubmissionResult
                     ),
-                    successHandler: { submissionResult in
-                        NSLog("VCL Presentation exchange progress \(submissionResult)")
+                    successHandler: { exchange in
+                        NSLog("VCL Presentation exchange progress \(exchange)")
                     },
                     errorHandler: { error in
                         NSLog("VCL Presentation exchange progress failed: \(error)")
@@ -279,7 +280,8 @@ class ViewController: UIViewController {
             },
             errorHandler: { error in
                 NSLog("VCL failed to finalize Offers: \(error)")
-            })
+            }
+        )
     }
     
     @objc private func getCredentialTypesUIFormSchema() {
