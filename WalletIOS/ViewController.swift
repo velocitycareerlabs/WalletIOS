@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var verifiedProfileBtn: UIButton!
     @IBOutlet weak var verifyJwtBtn: UIButton!
     @IBOutlet weak var generateSignedJwtBtn: UIButton!
+    @IBOutlet weak var generateDidJwkBtn: UIButton!
     @IBOutlet weak var errorView: UIView!
     
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
@@ -39,7 +40,8 @@ class ViewController: UIViewController {
         verifiedProfileBtn.addTarget(self, action: #selector(getVerifiedProfile), for: .touchUpInside)
         verifyJwtBtn.addTarget(self, action: #selector(verifyJwt), for: .touchUpInside)
         generateSignedJwtBtn.addTarget(self, action: #selector(generateSignedJwt), for: .touchUpInside)
-        
+        generateDidJwkBtn.addTarget(self, action: #selector(generateDidJwk), for: .touchUpInside)
+
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
                 environment: environment
@@ -108,8 +110,8 @@ class ViewController: UIViewController {
                         presentationSubmission: presentationSubmission,
                         submissionResult: presentationSubmissionResult
                     ),
-                    successHandler: { submissionResult in
-                        NSLog("VCL Presentation exchange progress \(submissionResult)")
+                    successHandler: { exchange in
+                        NSLog("VCL Presentation exchange progress \(exchange)")
                     },
                     errorHandler: { error in
                         NSLog("VCL Presentation exchange progress failed: \(error)")
@@ -169,6 +171,7 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorByOrganization =
         VCLCredentialManifestDescriptorByService(
             service: serviceCredentialAgentIssuer,
+            serviceType: VCLServiceType.Issuer,
             credentialTypes: serviceCredentialAgentIssuer.credentialTypes // Can come from any where
         )
         vcl.getCredentialManifest(
@@ -276,7 +279,8 @@ class ViewController: UIViewController {
             },
             errorHandler: { error in
                 NSLog("VCL failed to finalize Offers: \(error)")
-            })
+            }
+        )
     }
     
     @objc private func getCredentialTypesUIFormSchema() {
@@ -308,22 +312,33 @@ class ViewController: UIViewController {
     
     @objc private func verifyJwt() {
         vcl.verifyJwt(
-            jwt: Constants.SomeJwt, publicKey: Constants.SomePublicKey, successHandler: { isVerified in
+            jwt: Constants.SomeJwt, jwkPublic: Constants.SomeJwkPublic, successHandler: { isVerified in
                 NSLog("VCL JWT verified: \(isVerified)")
             },
             errorHandler: { error in
-                NSLog("VCL JWT verification failed: $error")
+                NSLog("VCL JWT verification failed: \(error)")
             }
         )
     }
     
     @objc private func generateSignedJwt() {
         vcl.generateSignedJwt(
-            payload: Constants.SomePayload, iss: "iss123", jti: "jti123", successHandler: { jwt in
+            jwtDescriptor: VCLJwtDescriptor(payload: Constants.SomePayload, iss: "iss123", jti: "jti123"), successHandler: { jwt in
                 NSLog("VCL JWT generated: \(jwt.encodedJwt)")
             },
             errorHandler: { error in
-                NSLog("VCL JWT generation failed: $error")
+                NSLog("VCL JWT generation failed: \(error)")
+            }
+        )
+    }
+    
+    @objc private func generateDidJwk() {
+        vcl.generateDidJwk(
+            successHandler: { didJwk in
+                NSLog("VCL DID:JWK generated: \(didJwk.value)")
+            },
+            errorHandler: { error in
+                NSLog("VCL DID:JWK generation failed: \(error)")
             }
         )
     }

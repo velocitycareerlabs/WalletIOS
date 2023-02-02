@@ -57,7 +57,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     }
     
     private func onDecodeJwtSuccess(
-        _ jwt: VCLJWT,
+        _ jwt: VCLJwt,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if let keyID = jwt.keyID?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
@@ -78,11 +78,11 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     }
     
     private func onResolvePublicKeySuccess(
-        _ publicKey: VCLPublicKey,
-        _ jwt: VCLJWT,
+        _ jwkPublic: VCLJwkPublic,
+        _ jwt: VCLJwt,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        self.jwtServiceRepository.verifyJwt(jwt: jwt, publicKey: publicKey) {
+        self.jwtServiceRepository.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) {
             [weak self] isVerifiedResult in
             do {
                 let isVerified = try isVerifiedResult.get()
@@ -95,7 +95,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onVerificationSuccess(
         _ isVerified: Bool,
-        _ jwt: VCLJWT,
+        _ jwt: VCLJwt,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if isVerified == true {

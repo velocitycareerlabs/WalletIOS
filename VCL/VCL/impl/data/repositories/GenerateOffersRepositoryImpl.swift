@@ -25,8 +25,8 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
             contentType: .ApplicationJson,
             method: .POST,
             headers:[
-                (VCLExchangeDescriptor.CodingKeys.HeaderKeyAuthorization,
-                 "\(VCLExchangeDescriptor.CodingKeys.HeaderValuePrefixBearer) \(token.value)")
+                (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(token.value)"),
+                (HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)
             ]) { [weak self] response in
             do {
                 let offersResponse = try response.get()

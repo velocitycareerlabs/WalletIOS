@@ -10,19 +10,19 @@
 import Foundation
 
 public struct VCLPresentationRequest {
-    public let jwt: VCLJWT
-    public let publicKey: VCLPublicKey
+    public let jwt: VCLJwt
+    public let jwkPublic: VCLJwkPublic
     public let deepLink: VCLDeepLink
     public let pushDelegate: VCLPushDelegate?
     
     public init(
-        jwt: VCLJWT,
-        publicKey: VCLPublicKey,
+        jwt: VCLJwt,
+        jwkPublic: VCLJwkPublic,
         deepLink: VCLDeepLink,
         pushDelegate: VCLPushDelegate? = nil
     ) {
         self.jwt = jwt
-        self.publicKey = publicKey
+        self.jwkPublic = jwkPublic
         self.deepLink = deepLink
         self.pushDelegate = pushDelegate
     }
@@ -44,7 +44,6 @@ public struct VCLPresentationRequest {
         static let KeyId = "id"
         static let KeyIss = "iss"
         static let KeyPresentationRequest = "presentation_request"
-        static let KeyPublicKey = "publicKey"
         static let KeyExchangeId = "exchange_id" // for presentationDefinitionId value
         static let KeyPresentationDefinition = "presentation_definition"
         

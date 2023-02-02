@@ -22,14 +22,17 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
         self.executor = executor
     }
     
-    func submit(submission: VCLSubmission,
-                completionBlock: @escaping (VCLResult<VCLPresentationSubmissionResult>) -> Void) {
+    func submit(
+        submission: VCLSubmission,
+        completionBlock: @escaping (VCLResult<VCLPresentationSubmissionResult>) -> Void
+    ) {
         executor.runOnBackgroundThread  { [weak self] in
             self?.jwtServiceRepository.generateSignedJwt(
-                payload: submission.payload,
-                iss: submission.iss,
-                jti: submission.jti
-            ) { signedJwtResult in
+                jwtDescriptor: VCLJwtDescriptor(
+                    payload: submission.payload,
+                    iss: submission.iss,
+                    jti: submission.jti
+            )) { signedJwtResult in
                 do {
                     let jwt = try signedJwtResult.get()
                     self?.submissionRepository.submit(

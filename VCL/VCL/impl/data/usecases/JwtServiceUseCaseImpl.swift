@@ -19,18 +19,35 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
         self.executor = executor
     }
     
-    func verifyJwt(jwt: VCLJWT, publicKey: VCLPublicKey, completionBlock: @escaping (VCLResult<Bool>) -> Void) {
+    func verifyJwt(
+        jwt: VCLJwt,
+        jwkPublic: VCLJwkPublic,
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
+    ) {
         executor.runOnBackgroundThread { [weak self] in
-            self?.jwtServiceRepository.verifyJwt(jwt: jwt, publicKey: publicKey) { isVeriviedResult in
+            self?.jwtServiceRepository.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) { isVeriviedResult in
                 self?.executor.runOnMainThread { completionBlock(isVeriviedResult) }
             }
         }
     }
     
-    func generateSignedJwt(payload: [String: Any], iss: String, jti: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
+    func generateSignedJwt(
+        jwtDescriptor: VCLJwtDescriptor,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    ) {
         executor.runOnBackgroundThread { [weak self] in
-            self?.jwtServiceRepository.generateSignedJwt(payload: payload, iss: iss, jti: jti) { isVeriviedResult in
+            self?.jwtServiceRepository.generateSignedJwt(jwtDescriptor: jwtDescriptor) { isVeriviedResult in
                 self?.executor.runOnMainThread { completionBlock(isVeriviedResult) }
+            }
+        }
+    }
+    
+    func generateDidJwk(
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+    ) {
+        executor.runOnBackgroundThread { [weak self] in
+            self?.jwtServiceRepository.generateDidJwk { didJwkResult in
+                self?.executor.runOnMainThread { completionBlock(didJwkResult) }
             }
         }
     }

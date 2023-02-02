@@ -10,23 +10,27 @@
 import Foundation
 
 public class VCLCredentialManifestDescriptorByService: VCLCredentialManifestDescriptor {
+    
     public init(
         service: VCLService,
+        serviceType: VCLServiceType = VCLServiceType.Issuer,
         credentialTypes: [String]? = nil,
         pushDelegate: VCLPushDelegate? = nil
     ) {
-        super.init(uri: service.serviceEndpoint,
-                   credentialTypes: credentialTypes,
-                   pushDelegate: pushDelegate)
+        super.init(
+            uri: service.serviceEndpoint,
+            serviceType: serviceType,
+            credentialTypes: credentialTypes,
+            pushDelegate: pushDelegate)
     }
 ///    TODO: validate credentialTypes by services.credentialTypes
     
-    public override var endpoint: String { get {
-        var endpoint = self.uri
-        guard let queryParams = generateQueryParams() else {
-            return endpoint
+    public override var endpoint: String? { get {
+        if let queryParams = generateQueryParams() {
+            return self.uri?.appendQueryParams(queryParams: queryParams)
+        } else {
+            return self.uri
         }
-        return endpoint.appendQueryParams(queryParams: queryParams)
     }}
     
     func generateQueryParams() -> String? {

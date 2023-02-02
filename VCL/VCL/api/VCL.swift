@@ -82,17 +82,20 @@ public protocol VCL {
     )
     
     func verifyJwt(
-        jwt: VCLJWT,
-        publicKey: VCLPublicKey,
+        jwt: VCLJwt,
+        jwkPublic: VCLJwkPublic,
         successHandler: @escaping (Bool) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
     
     func generateSignedJwt(
-        payload: [String: Any],
-        iss: String,
-        jti: String,
-        successHandler: @escaping (VCLJWT) -> Void,
+        jwtDescriptor: VCLJwtDescriptor,
+        successHandler: @escaping (VCLJwt) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    )
+    
+    func generateDidJwk(
+        successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
 }

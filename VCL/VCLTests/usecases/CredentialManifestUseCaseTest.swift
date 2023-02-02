@@ -28,7 +28,7 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceSuccess(VclJwt: VCLJWT(encodedJwt: CredentialManifestMocks.CredentialManifestEncodedJwt))
+                JwtServiceSuccess(VclJwt: VCLJwt(encodedJwt: CredentialManifestMocks.CredentialManifestEncodedJwt))
 //                Can't be tested, because of storing exception
 //                JwtServiceMicrosoftImpl()
             ),
@@ -38,7 +38,10 @@ final class CredentialManifestUseCaseTest: XCTestCase {
 
         // Action
         subject.getCredentialManifest(
-            credentialManifestDescriptor: VCLCredentialManifestDescriptorByDeepLink(deepLink: VCLDeepLink(value: ""))
+            credentialManifestDescriptor: VCLCredentialManifestDescriptorByDeepLink(
+                deepLink: DeepLinkMocks.CredentialManifestDeepLinkDevNet,
+                serviceType: VCLServiceType.Inspector
+            )
         ) {
             result = $0
         }

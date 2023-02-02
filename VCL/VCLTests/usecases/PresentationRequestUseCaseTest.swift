@@ -41,6 +41,7 @@ final class PresentationRequestUseCaseTest: XCTestCase {
         // Action
         subject.getPresentationRequest(presentationRequestDescriptor: VCLPresentationRequestDescriptor(
             deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet,
+            serviceType: VCLServiceType.Inspector,
             pushDelegate: VCLPushDelegate(
                 pushUrl: pushUrl,
                 pushToken: pushToken
@@ -53,18 +54,10 @@ final class PresentationRequestUseCaseTest: XCTestCase {
         do {
             let presentationRequest = try result!.get()
             
-//            JWK Dictionary
-            assert(presentationRequest.publicKey == VCLPublicKey(jwkDict: PresentationRequestMocks.JWK.toDictionary()!))
+            assert(presentationRequest.jwkPublic.valueDict == VCLJwkPublic(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueDict)
             assert(presentationRequest.jwt.encodedJwt == PresentationRequestMocks.PresentationRequestJwt.encodedJwt)
             assert(presentationRequest.jwt.header! == PresentationRequestMocks.PresentationRequestJwt.header!)
             assert(presentationRequest.jwt.payload! == PresentationRequestMocks.PresentationRequestJwt.payload!)
-            
-//            JWK String
-            assert(presentationRequest.publicKey == VCLPublicKey(jwkStr: PresentationRequestMocks.JWK))
-            assert(presentationRequest.jwt.encodedJwt == PresentationRequestMocks.PresentationRequestJwt.encodedJwt)
-            assert(presentationRequest.jwt.header! == PresentationRequestMocks.PresentationRequestJwt.header!)
-            assert(presentationRequest.jwt.payload! == PresentationRequestMocks.PresentationRequestJwt.payload!)
-            
             assert(presentationRequest.pushDelegate!.pushUrl == pushUrl)
             assert(presentationRequest.pushDelegate!.pushToken == pushToken)
         } catch {

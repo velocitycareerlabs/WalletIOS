@@ -18,23 +18,28 @@ final class JwtServiceUseCaseTest: XCTestCase {
     var subject: JwtServiceUseCase!
 
     override func setUp() {
-    }
-    
-    func testSignVerify() {
-        // Arrange
         subject = JwtServiceUseCaseImpl(
             JwtServiceRepositoryImpl(
-//                Can't be tested, because of storing exception 
+//                Can't be tested, because of storing exception
 //                JwtServiceMicrosoftImpl()
-                JwtServiceSuccess(VclJwt: VCLJWT(encodedJwt: JwtServiceMocks.SignedJwt))
+                JwtServiceSuccess(VclJwt: VCLJwt(encodedJwt: JwtServiceMocks.SignedJwt))
             ),
             EmptyExecutor()
         )
-        var resultJwt: VCLResult<VCLJWT>? = nil
+    }
+    
+    func testSignVerify() {
+        var resultJwt: VCLResult<VCLJwt>? = nil
         var resultVerified: VCLResult<Bool>? = nil
 
         // Action
-        subject.generateSignedJwt(payload: JwtServiceMocks.Json.toDictionary() ?? [String: String](), iss: "", jti: "") {
+        subject.generateSignedJwt(
+            jwtDescriptor: VCLJwtDescriptor(
+                payload: JwtServiceMocks.Json.toDictionary() ?? [String: String](),
+                iss: "",
+                jti: ""
+            )
+        ) {
             resultJwt = $0
         }
 
@@ -44,7 +49,7 @@ final class JwtServiceUseCaseTest: XCTestCase {
                 return
             }
             // Remote API
-            subject.verifyJwt(jwt: jwt, publicKey: VCLPublicKey(jwkDict: jwt.jwsToken!.headers.jsonWebKey!.toDictionary() as! [String: String])) {
+            subject.verifyJwt(jwt: jwt, jwkPublic: VCLJwkPublic(valueDict: jwt.jwsToken!.headers.jsonWebKey!.toDictionary() as! [String: String])) {
                 resultVerified = $0
             }
             // Verification actual algorithm

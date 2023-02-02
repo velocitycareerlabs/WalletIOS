@@ -1,5 +1,5 @@
 //
-//  JwtServiceMicrosoftImpl.swift
+//  JwtServiceImpl.swift
 //  VCL
 //
 //  Created by Michael Avoyan on 03/06/2021.
@@ -11,19 +11,29 @@ import Foundation
 import VCToken
 import VCCrypto
 
-class JwtServiceMicrosoftImpl: JwtService {
-    func decode(encodedJwt: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
-        completionBlock(.success(VCLJWT(encodedJwt: encodedJwt)))
+class JwtServiceImpl: JwtService {
+    func decode(
+        encodedJwt: String,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    ) {
+        completionBlock(.success(VCLJwt(encodedJwt: encodedJwt)))
     }
     
-    func encode(jwt: String, completionBlock: @escaping (VCLResult<String>) -> Void) {
+    func encode(
+        jwt: String,
+        completionBlock: @escaping (VCLResult<String>) -> Void
+    ) {
         completionBlock(.failure(VCLError(description: "Not implemented")))
     }
     
-    func verify(jwt: VCLJWT, publicKey: VCLPublicKey, completionBlock: @escaping (VCLResult<Bool>) -> Void) {
-        let pubKey = ECPublicJwk(x: publicKey.jwkDict[VCLJWT.CodingKeys.KeyX] as? String ?? "",
-                                 y: publicKey.jwkDict[VCLJWT.CodingKeys.KeyY] as? String ?? "",
-                                 keyId: publicKey.jwkDict[VCLJWT.CodingKeys.KeyKid] as? String ?? "")
+    func verify(
+        jwt: VCLJwt,
+        jwkPublic: VCLJwkPublic,
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
+    ) {
+        let pubKey = ECPublicJwk(x: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyX] as? String ?? "",
+                                 y: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyY] as? String ?? "",
+                                 keyId: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyKid] as? String ?? "")
         do {
             let isVerified = try jwt.jwsToken?.verify(using: Secp256k1Verifier(), withPublicKey: pubKey) == true
             completionBlock(.success(isVerified))
@@ -32,10 +42,12 @@ class JwtServiceMicrosoftImpl: JwtService {
         }
     }
     
-    func sign(payload: [String : Any], iss: String, jti: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void) {
+    func sign(
+        jwtDescriptor: VCLJwtDescriptor,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    ) {
         do {
             let keyId = UUID().uuidString
-            
             let secp256k1Signer = Secp256k1Signer()
             let secret = try CryptoOperations().generateKey()
             let publicKey = try secp256k1Signer.getPublicJwk(from: secret, withKeyId: keyId)
@@ -45,10 +57,10 @@ class JwtServiceMicrosoftImpl: JwtService {
                                 jsonWebKey: publicKey, // try publicKey.getThumbprint(),
                                 keyId: keyId)
             
-            let payload = JwtServiceMicrosoftImpl.generatePayload(payload, iss, jti)
+            let payload = generatePayload(jwtDescriptor)
             
             let claims = VCLClaims(all: payload)
-            let protectedMessage = try? JwtServiceMicrosoftImpl.createProtectedMessage(headers: header, claims: claims)
+            let protectedMessage = try? createProtectedMessage(headers: header, claims: claims)
             guard let jwsToken = JwsToken(headers: header,
                                           content: claims,
                                           protectedMessage: protectedMessage) else {
@@ -66,30 +78,37 @@ class JwtServiceMicrosoftImpl: JwtService {
                 return
             }
             
-//            VERIFICATION TEST:
-//            verify(jwt: try VCLJWT(encodedJwt: jwsTokenSigned.serialize()), publicKey: VCLPublicKey(jwk: publicKey.toDictionary() as [String : Any])) {
-//            signedJwtResult in
-//                do {
-//                    let isVerified = try signedJwtResult.get()
-//                    NSLog("Verification result -> \(isVerified)")
-//                } catch {
-//                    NSLog("Verification failed -> \(error)")
-//                }
-//            }
-            
-            completionBlock(.success(try VCLJWT(encodedJwt: jwsTokenSigned.serialize())))
+            completionBlock(.success(try VCLJwt(encodedJwt: jwsTokenSigned.serialize())))
         } catch {
             completionBlock(.failure(VCLError(error: error)))
             return
         }
     }
     
-    private static func generatePayload(_ payload: [String: Any], _ iss: String, _ jti: String) -> [String: Any] {
-        var retVal = payload
-        retVal["iss"] = iss
-        retVal["aud"] = iss
+    func generateDidJwk(
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+    ) {
+        do {
+            let keyId = UUID().uuidString
+            let secp256k1Signer = Secp256k1Signer()
+            let secret = try CryptoOperations().generateKey()
+            let publicKey = try secp256k1Signer.getPublicJwk(from: secret, withKeyId: keyId)
+            
+            let pubKey = ECPublicJwk(x: publicKey.x, y: publicKey.y, keyId: keyId)
+            
+            completionBlock(.success(VCLDidJwk(value: "\(VCLDidJwk.DidJwkPrefix)\(pubKey.toJson().encodeToBase64())")))
+        } catch {
+            completionBlock(.failure(VCLError(error: error)))
+            return
+        }
+    }
+    
+    private func generatePayload(_ jwtDescrptor: VCLJwtDescriptor) -> [String: Any] {
+        var retVal = jwtDescrptor.payload
+        retVal["iss"] = jwtDescrptor.iss
+        retVal["aud"] = jwtDescrptor.iss
         retVal["sub"] = randomString(length: 10)
-        retVal["jti"] = jti
+        retVal["jti"] = jwtDescrptor.jti
         let date = Date()
         retVal["iat"] = date.toDouble()
         retVal["nbf"] = date.toDouble()
@@ -97,7 +116,7 @@ class JwtServiceMicrosoftImpl: JwtService {
         return retVal
     }
     
-    private static func createProtectedMessage(headers: Header, claims: VCLClaims) throws -> String {
+    private func createProtectedMessage(headers: Header, claims: VCLClaims) throws -> String {
         let encoder = JSONEncoder()
         let encodedHeader = try encoder.encode(headers).base64URLEncodedString()
         if let encodedContent = claims.all.toJsonString()?.toData().base64URLEncodedString() {

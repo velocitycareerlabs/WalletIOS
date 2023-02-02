@@ -16,29 +16,39 @@ public struct VCLDeepLink {
         self.value = value
     }
     
-    public var requestUri: String { get {
-        return generateRequestUri()
+    public var did: String? { get{
+        if let did = requestUri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix) {
+            return did
+        }
+        return issuer?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix)
+    } }
+    public var issuer: String? { get {
+        return generateUri(uriKey: CodingKeys.KeyIssuer, asSubParams: true)
+    } }
+
+    public var requestUri: String? { get {
+        return generateUri(uriKey: CodingKeys.KeyRequestUri)
     } }
     
     public var vendorOriginContext: String? { get {
         self.value.getUrlQueryParams()?[CodingKeys.KeyVendorOriginContext]?.decode()
     }}
     
-    private func generateRequestUri() -> String {
-        var resRequestUri = ""
+    private func generateUri(uriKey: String, asSubParams: Bool = false) -> String? {
         if let queryParams = self.value.getUrlQueryParams() {
-            resRequestUri = queryParams[CodingKeys.KeyRequestUri] ?? ""
-            let queryItems = queryParams
-                .map { (key, value) in (key, value.encode()) }
-                .filter { (key, value) in key != CodingKeys.KeyRequestUri && value?.isEmpty == false }
-                .map {(key, value) in "\(key)=\(value ?? "")" }
-                .sorted() // Sort is needed for unit tests
-                .joined(separator: "&")
-            if queryItems.isEmpty == false {
-                resRequestUri += "&\(queryItems)"
+            if let uri = queryParams[uriKey] {
+                let queryItems = queryParams
+                    .filter { (key, value) in key != uriKey && value.isEmpty == false }
+                    .map {(key, value) in "\(key)=\(value.encode() ?? "")" }
+                    .sorted() // Sort is needed for unit tests
+                    .joined(separator: "&")
+                if queryItems.isEmpty == false {
+                    return asSubParams ? "\(uri)&\(queryParams)" : uri.appendQueryParams(queryParams: queryItems)
+                }
+                return uri
             }
         }
-        return resRequestUri
+        return nil
     }
     
     private func retrieveVendorOriginContext() -> String? {
@@ -46,6 +56,8 @@ public struct VCLDeepLink {
     }
     
     public struct CodingKeys {
+        static let KeyDidPrefix = "did:"
+        static let KeyIssuer = "issuer"
         static let KeyRequestUri = "request_uri"
         static let KeyVendorOriginContext = "vendorOriginContext"
     }

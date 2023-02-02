@@ -10,6 +10,16 @@
 import Foundation
 
 protocol JwtServiceUseCase {
-    func verifyJwt(jwt: VCLJWT, publicKey: VCLPublicKey, completionBlock: @escaping (VCLResult<Bool>) -> Void)
-    func generateSignedJwt(payload: [String: Any], iss: String, jti: String, completionBlock: @escaping (VCLResult<VCLJWT>) -> Void)
+    func verifyJwt(
+        jwt: VCLJwt,
+        jwkPublic: VCLJwkPublic,
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
+    )
+    func generateSignedJwt(
+        jwtDescriptor: VCLJwtDescriptor,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    )
+    func generateDidJwk(
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+    )
 }

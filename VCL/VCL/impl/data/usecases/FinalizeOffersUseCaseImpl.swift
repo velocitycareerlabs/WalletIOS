@@ -30,7 +30,7 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
                         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
                         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void) {
         executor.runOnBackgroundThread { [weak self] in
-            var jwtVerifiableCredentials = [VCLJWT]()
+            var jwtVerifiableCredentials = [VCLJwt]()
             self?.finalizeOffersRepository.finalizeOffers(
                 token: token,
                 finalizeOffersDescriptor: finalizeOffersDescriptor) { encodedJwtOffersListResult in

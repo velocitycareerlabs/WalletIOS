@@ -10,32 +10,26 @@
 import Foundation
 
 public class VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescriptor {
-    let service: VCLService
     let credentialIds:[String]
     
     public init(
         service: VCLService,
+        serviceType: VCLServiceType = VCLServiceType.Issuer,
         credentialIds:[String]
     ) {
-        self.service = service
         self.credentialIds = credentialIds
         
-        super.init(uri: service.serviceEndpoint)
+        super.init(
+            uri: service.serviceEndpoint,
+            serviceType: serviceType
+        )
     }
 
-    public override var endpoint: String { get {
-        var endPoint = "\(uri)?\(CodingKeys.KeyRefresh)=\(true)"
+    public override var endpoint: String? { get {
         if let queryParams = generateQueryParams() {
-            if let urlComponents = URLComponents(string: uri) {
-                var allQueryParams = "?"
-                if (urlComponents.queryItems != nil) {
-                    allQueryParams = "&"
-                }
-                allQueryParams += "\(CodingKeys.KeyRefresh)=\(true)&\(queryParams)"
-                endPoint = uri + allQueryParams
-            }
+            return uri?.appendQueryParams(queryParams: "\(CodingKeys.KeyRefresh)=\(true)&\(queryParams)")
         }
-        return endPoint
+        return uri?.appendQueryParams(queryParams: "\(CodingKeys.KeyRefresh)=\(true)")
     }}
     
     func generateQueryParams() -> String? {

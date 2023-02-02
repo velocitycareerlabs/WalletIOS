@@ -10,20 +10,27 @@
 import Foundation
 
 public class VCLCredentialManifestDescriptor {
-    public let uri: String
+    public let uri: String?
+    public let serviceType: VCLServiceType
     public let credentialTypes: [String]?
     public let pushDelegate: VCLPushDelegate?
+    public var did: String?
     
-    public init(uri: String,
+    public init(uri: String?,
+                serviceType: VCLServiceType = VCLServiceType.Issuer,
                 credentialTypes: [String]? = nil,
                 pushDelegate: VCLPushDelegate? = nil) {
         self.uri = uri
+        self.serviceType = serviceType
         self.credentialTypes = credentialTypes
         self.pushDelegate = pushDelegate
+        self.did = uri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix)
     }
     
+    public var endpoint: String? { get { uri } }
+    
     public struct CodingKeys {
-        static let KeyId = "id"
+        static let KeyDidPrefix = "did:"
         static let KeyCredentialTypes = "credential_types"
         static let KeyPushDelegatePushUrl = "push_delegate.push_url"
         static let KeyPushDelegatePushToken = "push_delegate.push_token"
@@ -31,6 +38,4 @@ public class VCLCredentialManifestDescriptor {
         static let KeyCredentialId = "credentialId"
         static let KeyRefresh = "refresh"
     }
-    
-    public var endpoint: String { get { uri } }
 }

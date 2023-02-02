@@ -10,10 +10,10 @@
 import Foundation
 
 public struct VCLCredentialManifest {
-    public let jwt: VCLJWT
+    public let jwt: VCLJwt
     public let vendorOriginContext: String?
     
-    public init(jwt: VCLJWT, vendorOriginContext: String? = nil) {
+    public init(jwt: VCLJwt, vendorOriginContext: String? = nil) {
         self.jwt = jwt
         self.vendorOriginContext = vendorOriginContext
     }

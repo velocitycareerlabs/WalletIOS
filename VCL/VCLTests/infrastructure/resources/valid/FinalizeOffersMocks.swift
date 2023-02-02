@@ -15,7 +15,7 @@ class FinalizeOffersMocks {
     
     static let EncodedJwtVerifiableCredentials = "[\"\(EncodedJwtVerifiableCredential)\"]"
     
-    static let JwtFinalizedOffer = VCLJWT(
+    static let JwtFinalizedOffer = VCLJwt(
         header: nil,
         payload: nil,
         signature: nil,

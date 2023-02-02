@@ -63,7 +63,7 @@ public class VCLSubmission {
         return retVal
     }
     
-    func generateRequestBody(jwt: VCLJWT) -> [String: Any] {
+    func generateRequestBody(jwt: VCLJwt) -> [String: Any] {
         var retVal = [String: Any] ()
         retVal[CodingKeys.KeyExchangeId] = exchangeId
         retVal[CodingKeys.KeyJwtVp] = jwt.encodedJwt

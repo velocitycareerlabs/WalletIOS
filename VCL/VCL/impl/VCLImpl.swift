@@ -9,7 +9,7 @@
 
 public class VCLImpl: VCL {
     
-    private static let ModelsToInitilizeAmount = 3
+    private static let ModelsToInitializeAmount = 3
     
     private let countriesModel = VclBlocksProvider.provideCountriesModel()
     private let credentialTypesModel =  VclBlocksProvider.provideCredentialTypesModel()
@@ -27,14 +27,14 @@ public class VCLImpl: VCL {
     private let verifiedProfileUseCase = VclBlocksProvider.provideVerifiedProfileUseCase()
     private let jwtServiceUseCase = VclBlocksProvider.provideJwtServiceUseCase()
     
-    private var initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitilizeAmount)
+    private var initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
     
     public func initialize(
         initializationDescriptor: VCLInitializationDescriptor,
         successHandler: @escaping () -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitilizeAmount)
+        initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
         
         initGlobalConfigurations(initializationDescriptor.environment)
         
@@ -108,15 +108,34 @@ public class VCLImpl: VCL {
         successHandler: @escaping (VCLPresentationRequest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        presentationRequestUseCase.getPresentationRequest(
-            presentationRequestDescriptor: presentationRequestDescriptor
-        ) { [weak self] presentationRequestResult in
-            do {
-                successHandler(try presentationRequestResult.get())
-            } catch {
-                self?.logError(message: "getPresentationRequest", error: error)
-                errorHandler(error as? VCLError ?? VCLError(error: error))
-            }
+        if let did = presentationRequestDescriptor.did {
+            verifiedProfileUseCase.getVerifiedProfile(
+                verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
+                    did: did,
+                    serviceType: presentationRequestDescriptor.serviceType
+                )) { [weak self] verifiedProfileResult in
+                    do {
+                        try _ = verifiedProfileResult.get()
+                        
+                        self?.presentationRequestUseCase.getPresentationRequest(
+                            presentationRequestDescriptor: presentationRequestDescriptor
+                        ) { presentationRequestResult in
+                            do {
+                                successHandler(try presentationRequestResult.get())
+                            } catch {
+                                self?.logError(message: "getPresentationRequest", error: error)
+                                errorHandler(error as? VCLError ?? VCLError(error: error))
+                            }
+                        }
+                    } catch {
+                        self?.logError(message: "getPresentationRequest::verifiedProfile", error: error)
+                        errorHandler(error as? VCLError ?? VCLError(error: error))
+                    }
+                }
+        } else {
+            let error = VCLError(description: "did was not found in $presentationRequestDescriptor")
+            logError(message: "getPresentationRequest::verifiedProfile", error: error)
+            errorHandler(error)
         }
     }
     
@@ -173,14 +192,33 @@ public class VCLImpl: VCL {
         successHandler: @escaping (VCLCredentialManifest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        credentialManifestUseCase.getCredentialManifest(credentialManifestDescriptor: credentialManifestDescriptor) {
-            [weak self] credentialManifest in
-            do {
-                successHandler(try credentialManifest.get())
-            } catch {
-                self?.logError(message: "getCredentialManifest", error: error)
-                errorHandler(error as? VCLError ?? VCLError(error: error))
-            }
+        if let did = credentialManifestDescriptor.did {
+            verifiedProfileUseCase.getVerifiedProfile(
+                verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
+                                did: did,
+                                serviceType: credentialManifestDescriptor.serviceType
+                )) { [weak self] verifiedProfileResult in
+                    do {
+                        try _ = verifiedProfileResult.get()
+                        
+                        self?.credentialManifestUseCase.getCredentialManifest(credentialManifestDescriptor: credentialManifestDescriptor) {
+                            [weak self] credentialManifest in
+                            do {
+                                successHandler(try credentialManifest.get())
+                            } catch {
+                                self?.logError(message: "getCredentialManifest", error: error)
+                                errorHandler(error as? VCLError ?? VCLError(error: error))
+                            }
+                        }
+                    } catch {
+                        self?.logError(message: "getPresentationRequest::verifiedProfile", error: error)
+                        errorHandler(error as? VCLError ?? VCLError(error: error))
+                    }
+                }
+        } else {
+            let error = VCLError(description: "did was not found in \(credentialManifestDescriptor)")
+            logError(message: "getCredentialManifest::verifiedProfile", error: error)
+            errorHandler(error)
         }
     }
     
@@ -310,12 +348,12 @@ public class VCLImpl: VCL {
     }
     
     public func verifyJwt(
-        jwt: VCLJWT,
-        publicKey: VCLPublicKey,
+        jwt: VCLJwt,
+        jwkPublic: VCLJwkPublic,
         successHandler: @escaping (Bool) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.verifyJwt(jwt: jwt, publicKey: publicKey) {
+        jwtServiceUseCase.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) {
             [weak self] isVerifiedResult in
             do {
                 successHandler(try isVerifiedResult.get())
@@ -327,18 +365,31 @@ public class VCLImpl: VCL {
     }
     
     public func generateSignedJwt(
-        payload: [String: Any],
-        iss: String,
-        jti: String,
-        successHandler: @escaping (VCLJWT) -> Void,
+        jwtDescriptor: VCLJwtDescriptor,
+        successHandler: @escaping (VCLJwt) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.generateSignedJwt(payload: payload, iss: iss, jti: jti) {
+        jwtServiceUseCase.generateSignedJwt(jwtDescriptor: jwtDescriptor) {
             [weak self] jwtResult in
             do {
                 successHandler(try jwtResult.get())
             } catch {
                 self?.logError(message: "generateSignedJwt", error: error)
+                errorHandler(error as? VCLError ?? VCLError(error: error))
+            }
+        }
+    }
+    
+    public func generateDidJwk(
+        successHandler: @escaping (VCLDidJwk) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        jwtServiceUseCase.generateDidJwk {
+            [weak self] didJwkResult in
+            do {
+                successHandler(try didJwkResult.get())
+            } catch {
+                self?.logError(message: "generateDidJwk", error: error)
                 errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
