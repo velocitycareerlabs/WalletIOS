@@ -36,8 +36,8 @@ public struct VCLFinalizeOffersDescriptor {
     var finalizeOffersUri: String { get { credentialManifest.finalizeOffersUri } }
     
     public struct CodingKeys {
-        static let KeyExchangeId = "exchangeId"
-        static let KeyApprovedOfferIds = "approvedOfferIds"
-        static let KeyRejectedOfferIds = "rejectedOfferIds"
+        public static let KeyExchangeId = "exchangeId"
+        public static let KeyApprovedOfferIds = "approvedOfferIds"
+        public static let KeyRejectedOfferIds = "rejectedOfferIds"
     }
 }

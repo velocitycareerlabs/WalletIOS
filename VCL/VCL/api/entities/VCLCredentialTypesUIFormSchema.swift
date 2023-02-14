@@ -16,10 +16,10 @@ public struct VCLCredentialTypesUIFormSchema {
         self.payload = payload
     }
     
-    struct CodingKeys {
-        static let KeyAddressRegion = "addressRegion"
-        static let KeyAddressCountry = "addressCountry"
-        static let KeyUiEnum = "ui:enum"
-        static let KeyUiNames = "ui:enumNames"
+    public struct CodingKeys {
+        public static let KeyAddressRegion = "addressRegion"
+        public static let KeyAddressCountry = "addressCountry"
+        public static let KeyUiEnum = "ui:enum"
+        public static let KeyUiNames = "ui:enumNames"
     }
 }

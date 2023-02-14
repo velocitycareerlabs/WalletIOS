@@ -8,9 +8,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Foundation
+import UIKit
 
 class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     
+    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
+
     private let finalizeOffersRepository: FinalizeOffersRepository
     private let jwtServiceRepository: JwtServiceRepository
     private let executor: Executor
@@ -30,34 +33,43 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
                         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
                         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void) {
         executor.runOnBackgroundThread { [weak self] in
-            var jwtVerifiableCredentials = [VCLJwt]()
-            self?.finalizeOffersRepository.finalizeOffers(
-                token: token,
-                finalizeOffersDescriptor: finalizeOffersDescriptor) { encodedJwtOffersListResult in
-                do {
-                    let encodedJwts = try encodedJwtOffersListResult.get()
-                    encodedJwts.forEach{ encodedJwtOffer in
-                        self?.jwtServiceRepository.decode(encodedJwt: encodedJwtOffer) { jwtResult in
-                            do {
-                                let jwt = try jwtResult.get()
-                                jwtVerifiableCredentials.append(jwt)
-                                if(encodedJwts.count == jwtVerifiableCredentials.count) {
-                                    self?.executor.runOnMainThread {
-                                        completionBlock(.success(VCLJwtVerifiableCredentials(all: jwtVerifiableCredentials)))
+            if let _self = self {
+                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(FinalizeOffersUseCase.self)") {
+                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+                }
+                
+                var jwtVerifiableCredentials = [VCLJwt]()
+                _self.finalizeOffersRepository.finalizeOffers(
+                    token: token,
+                    finalizeOffersDescriptor: finalizeOffersDescriptor) { encodedJwtOffersListResult in
+                        do {
+                            let encodedJwts = try encodedJwtOffersListResult.get()
+                            encodedJwts.forEach{ encodedJwtOffer in
+                                _self.jwtServiceRepository.decode(encodedJwt: encodedJwtOffer) { jwtResult in
+                                    do {
+                                        let jwt = try jwtResult.get()
+                                        jwtVerifiableCredentials.append(jwt)
+                                        if(encodedJwts.count == jwtVerifiableCredentials.count) {
+                                            _self.executor.runOnMainThread {
+                                                completionBlock(.success(VCLJwtVerifiableCredentials(all: jwtVerifiableCredentials)))
+                                            }
+                                        }
+                                    } catch {
+                                        _self.onError(VCLError(error: error), completionBlock)
                                     }
                                 }
-                            } catch {
-                                self?.onError(VCLError(error: error), completionBlock)
                             }
+                            
+                            if(encodedJwts.isEmpty) {
+                                completionBlock(.success(VCLJwtVerifiableCredentials(all: jwtVerifiableCredentials)))
+                            }
+                        } catch {
+                            _self.onError(VCLError(error: error), completionBlock)
                         }
                     }
-                    
-                    if(encodedJwts.isEmpty) {
-                        completionBlock(.success(VCLJwtVerifiableCredentials(all: jwtVerifiableCredentials)))
-                    }
-                } catch {
-                    self?.onError(VCLError(error: error), completionBlock)
-                }
+                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             }
         }
     }

@@ -31,7 +31,7 @@ public struct VCLCredentialType {
         self.credentialType = credentialType
         self.recommended = recommended
     }
-    struct CodingKeys {
+    public struct CodingKeys {
         public static let KeyId = "id"
         public static let KeySchema = "schema"
         public static let KeyCreatedAt = "createdAt"

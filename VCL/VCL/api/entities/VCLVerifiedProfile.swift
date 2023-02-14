@@ -30,11 +30,11 @@ public struct VCLVerifiedProfile {
     }
     
     public struct CodingKeys {
-        static let KeyCredentialSubject = "credentialSubject"
+        public static let KeyCredentialSubject = "credentialSubject"
         
-        static let KeyName = "name"
-        static let KeyLogo = "logo"
-        static let KeyId = "id"
-        static let KeyServiceType = "permittedVelocityServiceCategory"
+        public static let KeyName = "name"
+        public static let KeyLogo = "logo"
+        public static let KeyId = "id"
+        public static let KeyServiceType = "permittedVelocityServiceCategory"
     }
 }

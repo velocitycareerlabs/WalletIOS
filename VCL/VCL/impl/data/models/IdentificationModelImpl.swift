@@ -20,7 +20,7 @@ class IdentificationModelImpl: IdentificationModel {
     
     func submit(
         identificationSubmission: VCLIdentificationSubmission,
-        completionBlock: @escaping (VCLResult<VCLIdentificationSubmissionResult>) -> Void
+        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         identificationSubmissionUseCase.submit(submission: identificationSubmission) { [weak self] result in
             do {

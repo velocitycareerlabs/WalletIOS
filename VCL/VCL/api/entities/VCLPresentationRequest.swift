@@ -41,14 +41,14 @@ public struct VCLPresentationRequest {
         (jwt.payload?[CodingKeys.KeyMetadata] as? [String: Any])?[CodingKeys.KeySubmitPresentationUri] as? String ?? "" } }
     
     public struct CodingKeys {
-        static let KeyId = "id"
-        static let KeyIss = "iss"
-        static let KeyPresentationRequest = "presentation_request"
-        static let KeyExchangeId = "exchange_id" // for presentationDefinitionId value
-        static let KeyPresentationDefinition = "presentation_definition"
+        public static let KeyId = "id"
+        public static let KeyIss = "iss"
+        public static let KeyPresentationRequest = "presentation_request"
+        public static let KeyExchangeId = "exchange_id" // for presentationDefinitionId value
+        public static let KeyPresentationDefinition = "presentation_definition"
         
-        static let KeyMetadata = "metadata"
-        static let KeyProgressUri = "progress_uri"
-        static let KeySubmitPresentationUri = "submit_presentation_uri"
+        public static let KeyMetadata = "metadata"
+        public static let KeyProgressUri = "progress_uri"
+        public static let KeySubmitPresentationUri = "submit_presentation_uri"
     }
 }

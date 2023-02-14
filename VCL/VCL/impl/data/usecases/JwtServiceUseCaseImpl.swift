@@ -8,9 +8,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Foundation
+import UIKit
 
 class JwtServiceUseCaseImpl: JwtServiceUseCase {
     
+    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
+
     private let jwtServiceRepository: JwtServiceRepository
     private let executor: Executor
     
@@ -25,8 +28,17 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         executor.runOnBackgroundThread { [weak self] in
-            self?.jwtServiceRepository.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) { isVeriviedResult in
-                self?.executor.runOnMainThread { completionBlock(isVeriviedResult) }
+            if let _self = self {
+                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(JwtServiceUseCase.self)") {
+                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+                }
+                
+                _self.jwtServiceRepository.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) { isVeriviedResult in
+                    _self.executor.runOnMainThread { completionBlock(isVeriviedResult) }
+                }
+                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             }
         }
     }
