@@ -72,16 +72,16 @@ public struct VCLOrganizationsSearchDescriptor {
     }
     
     private struct CodingKeys {
-        static let KeyQueryQ = "q"
+        public static let KeyQueryQ = "q"
 
-        static let KeySort = "sort"
+        public static let KeySort = "sort"
 
-        static let KeyFilterDid = "filter.did"
-        static let KeyFilterServiceTypes = "filter.serviceTypes"
-        static let KeyFilterCredentialTypes = "filter.credentialTypes"
+        public static let KeyFilterDid = "filter.did"
+        public static let KeyFilterServiceTypes = "filter.serviceTypes"
+        public static let KeyFilterCredentialTypes = "filter.credentialTypes"
 
-        static let KeyPageSkip = "page.skip"
-        static let KeyPageSize = "page.size"
+        public static let KeyPageSkip = "page.skip"
+        public static let KeyPageSize = "page.size"
     }
 }
 

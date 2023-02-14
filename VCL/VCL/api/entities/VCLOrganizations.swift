@@ -16,7 +16,7 @@ public struct VCLOrganizations {
         self.all = all
     }
     
-    struct CodingKeys {
-        static let KeyResult = "result"
+    public struct CodingKeys {
+        public static let KeyResult = "result"
     }
 }

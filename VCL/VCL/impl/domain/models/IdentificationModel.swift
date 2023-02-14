@@ -13,6 +13,6 @@ protocol IdentificationModel: Model {
     var data: VCLToken? { get }
     func submit(
         identificationSubmission: VCLIdentificationSubmission,
-        completionBlock: @escaping (VCLResult<VCLIdentificationSubmissionResult>) -> Void
+        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     )
 }

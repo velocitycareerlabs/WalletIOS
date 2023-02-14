@@ -43,9 +43,9 @@ public class VCLPresentationRequestDescriptor {
     }
     
     public struct CodingKeys {
-        static let KeyId = "id"
+        public static let KeyId = "id"
         
-        static let KeyPushDelegatePushUrl = "push_delegate.push_url"
-        static let KeyPushDelegatePushToken = "push_delegate.push_token"
+        public static let KeyPushDelegatePushUrl = "push_delegate.push_url"
+        public static let KeyPushDelegatePushToken = "push_delegate.push_token"
     }
 }

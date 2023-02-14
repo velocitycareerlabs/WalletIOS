@@ -141,7 +141,7 @@ public class VCLImpl: VCL {
     
     public func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
-        successHandler: @escaping (VCLPresentationSubmissionResult) -> Void,
+        successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         presentationSubmissionUseCase.submit(submission: presentationSubmission) {

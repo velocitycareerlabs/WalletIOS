@@ -8,9 +8,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Foundation
+import UIKit
 
 class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
+    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
+
     private let presentationRequestRepository: PresentationRequestRepository
     private let resolveKidRepository: ResolveKidRepository
     private let jwtServiceRepository: JwtServiceRepository
@@ -31,15 +34,25 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         executor.runOnBackgroundThread { [weak self] in
-            self?.presentationRequestRepository.getPresentationRequest(
-                presentationRequestDescriptor: presentationRequestDescriptor
-            ) { encodedJwtStrResult in
-                do {
-                    let encodedJwtStr = try encodedJwtStrResult.get()
-                    self?.onGetJwtSuccess(encodedJwtStr, presentationRequestDescriptor, completionBlock)
-                } catch {
-                    self?.onError(VCLError(error: error), completionBlock)
+            if let _self = self {
+                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(PresentationRequestUseCase.self)") {
+                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
                 }
+                
+                _self.presentationRequestRepository.getPresentationRequest(
+                    presentationRequestDescriptor: presentationRequestDescriptor
+                ) { encodedJwtStrResult in
+                    do {
+                        let encodedJwtStr = try encodedJwtStrResult.get()
+                        _self.onGetJwtSuccess(encodedJwtStr, presentationRequestDescriptor, completionBlock)
+                    } catch {
+                        _self.onError(VCLError(error: error), completionBlock)
+                    }
+                }
+                
+                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             }
         }
     }
