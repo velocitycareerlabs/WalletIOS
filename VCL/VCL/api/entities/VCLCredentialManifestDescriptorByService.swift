@@ -13,13 +13,13 @@ public class VCLCredentialManifestDescriptorByService: VCLCredentialManifestDesc
     
     public init(
         service: VCLService,
-        serviceType: VCLServiceType = VCLServiceType.Issuer,
+        issuingType: VCLIssuingType = VCLIssuingType.Career,
         credentialTypes: [String]? = nil,
         pushDelegate: VCLPushDelegate? = nil
     ) {
         super.init(
             uri: service.serviceEndpoint,
-            serviceType: serviceType,
+            issuingType: issuingType,
             credentialTypes: credentialTypes,
             pushDelegate: pushDelegate)
     }

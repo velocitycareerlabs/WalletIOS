@@ -41,7 +41,7 @@ public struct VCLOrganizationsSearchDescriptor {
             pFilterDid = "\(CodingKeys.KeyFilterDid)=\(filterDid)"
         }
         if let serviceTypes = self.filter?.serviceTypes {
-            pFilterServiceTypes = "\(CodingKeys.KeyFilterServiceTypes)=\(serviceTypes.map{ $0.rawValue }.joined(separator: ","))"
+            pFilterServiceTypes = "\(CodingKeys.KeyFilterServiceTypes)=\(serviceTypes.all.map{ $0.rawValue }.joined(separator: ","))"
         }
         if let credentialTypes = self.filter?.credentialTypes {
             pFilterCredentialTypes = "\(CodingKeys.KeyFilterCredentialTypes)=\(credentialTypes.map{ $0.encode() ?? "" }.joined(separator: ","))"
@@ -89,13 +89,13 @@ public struct VCLFilter {
     /// Filters organizations based on DIDs
     let did: String?
     /// Filters organizations based on Service Types e.g. [VCLServiceType]
-    let serviceTypes: [VCLServiceType]?
+    let serviceTypes: VCLServiceTypes?
     /// Filters organizations based on credential types e.g. [EducationDegree]
     let credentialTypes: [String]?
     
     public init(
         did: String? = nil,
-        serviceTypes: [VCLServiceType]? = nil,
+        serviceTypes: VCLServiceTypes? = nil,
         credentialTypes: [String]? = nil
     ) {
         self.did = did

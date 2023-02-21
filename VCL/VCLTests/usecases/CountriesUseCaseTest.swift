@@ -13,7 +13,7 @@ import XCTest
 
 final class CountriesUseCaseTest: XCTestCase {
     
-    var subject: CountriesUseCase? = nil
+    var subject: CountriesUseCase!
     
     override func setUp() {
     }
@@ -30,7 +30,7 @@ final class CountriesUseCaseTest: XCTestCase {
         var result: VCLResult<VCLCountries>? = nil
         
         //        Action
-        subject?.getCountries(cacheSequence: 1) {
+        subject.getCountries(cacheSequence: 1) {
             result = $0
         }
         do {

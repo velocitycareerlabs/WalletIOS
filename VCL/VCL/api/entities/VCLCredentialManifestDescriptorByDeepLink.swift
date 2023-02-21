@@ -13,11 +13,11 @@ public class VCLCredentialManifestDescriptorByDeepLink: VCLCredentialManifestDes
     
     public init(
         deepLink: VCLDeepLink,
-        serviceType: VCLServiceType = VCLServiceType.Issuer
+        issuingType: VCLIssuingType = VCLIssuingType.Career
     ) {
         super.init(
             uri: deepLink.requestUri,
-            serviceType: serviceType
+            issuingType: issuingType
         )
     }
 }

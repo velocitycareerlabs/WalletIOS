@@ -18,139 +18,132 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
     override func setUp() {
     }
 
-    func testCredentialManifestDescriptorWithFullInputByServiceSuccess() {
-        let service = VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
+    func testCredentialManifestDescriptorByServiceWithFullInput1Success() {
+        let service =
+        VCLServiceCredentialAgentIssuer(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
         subject = VCLCredentialManifestDescriptorByService(
             service: service,
-            serviceType: VCLServiceType.Issuer,
+            issuingType: VCLIssuingType.Career,
             credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList,
             pushDelegate: CredentialManifestDescriptorMocks.PushDelegate
-        )
-        
-        let credentialTypesQuery =
-            "\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialTypes)=\(CredentialManifestDescriptorMocks.CredentialTypesList[0])" +
-            "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialTypes)=\(CredentialManifestDescriptorMocks.CredentialTypesList[1])" +
-            "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushUrl)=\(CredentialManifestDescriptorMocks.PushDelegate.pushUrl.encode() ?? "")" +
-            "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushToken)=\(CredentialManifestDescriptorMocks.PushDelegate.pushToken)"
-        let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
-
-        assert(subject.endpoint == mockEndpoint)
-        assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
-    }
-    
-    func testCredentialManifestDescriptorWithCredentialTypesByServiceSuccess() {
-        let service = VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
-        subject = VCLCredentialManifestDescriptorByService(
-            service: service,
-            serviceType: VCLServiceType.Issuer,
-            credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList
         )
         
         let credentialTypesQuery =
         "\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialTypes)=\(CredentialManifestDescriptorMocks.CredentialTypesList[0])" +
-            "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialTypes)=\(CredentialManifestDescriptorMocks.CredentialTypesList[1])"
-        let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
-
-        assert(subject.endpoint == mockEndpoint)
-        assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
-    }
-    
-    func testCredentialManifestDescriptorWithPushDelegateByServiceSuccess() {
-        let service = VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
-        subject = VCLCredentialManifestDescriptorByService(
-            service: service,
-            serviceType: VCLServiceType.Issuer,
-            pushDelegate: CredentialManifestDescriptorMocks.PushDelegate
-        )
+        "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialTypes)=\(CredentialManifestDescriptorMocks.CredentialTypesList[1])" +
+        "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushUrl)=\(CredentialManifestDescriptorMocks.PushDelegate.pushUrl.encode()!)" +
+        "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushToken)=\(CredentialManifestDescriptorMocks.PushDelegate.pushToken)"
+        let mockEndpoint =
+        (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
         
-        let credentialTypesQuery =
-            "\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushUrl)=\(CredentialManifestDescriptorMocks.PushDelegate.pushUrl.encode() ?? "")" +
-            "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushToken)=\(CredentialManifestDescriptorMocks.PushDelegate.pushToken)"
-        let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
-
         assert(subject.endpoint == mockEndpoint)
         assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
     }
-    
-    func testCredentialManifestDescriptorServiceOnlySuccess() {
-        let service = VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
-        subject = VCLCredentialManifestDescriptorByService(
-            service: service,
-            serviceType: VCLServiceType.Issuer
-        )
-        
-        let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint)
 
-        assert(subject.endpoint == mockEndpoint)
-        assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
-    }
-    
-    func testCredentialManifestDescriptorWithFullInputByServiceWithParamSuccess() {
-        let service = VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceWithParamJsonStr.toDictionary()!)
+    func testCredentialManifestDescriptorByServiceWithFullInput2Success() {
+        let service =
+        VCLServiceCredentialAgentIssuer(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
         subject = VCLCredentialManifestDescriptorByService(
             service: service,
-            serviceType: VCLServiceType.Issuer,
+            issuingType: VCLIssuingType.Identity,
             credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList,
             pushDelegate: CredentialManifestDescriptorMocks.PushDelegate
         )
         
         let credentialTypesQuery =
-            "\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialTypes)=\(CredentialManifestDescriptorMocks.CredentialTypesList[0])" +
-            "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialTypes)=\(CredentialManifestDescriptorMocks.CredentialTypesList[1])" +
-            "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushUrl)=\(CredentialManifestDescriptorMocks.PushDelegate.pushUrl.encode() ?? "")" +
-            "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushToken)=\(CredentialManifestDescriptorMocks.PushDelegate.pushToken)"
-        let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceWithParamEndPoint + "&" + credentialTypesQuery)
-
+        "\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialTypes)=\(CredentialManifestDescriptorMocks.CredentialTypesList[0])" +
+        "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialTypes)=\(CredentialManifestDescriptorMocks.CredentialTypesList[1])" +
+        "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushUrl)=\(CredentialManifestDescriptorMocks.PushDelegate.pushUrl.encode()!)" +
+        "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushToken)=\(CredentialManifestDescriptorMocks.PushDelegate.pushToken)"
+        let mockEndpoint =
+        (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
+        
         assert(subject.endpoint == mockEndpoint)
         assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
     }
-    
-    func testCredentialManifestDescriptorWithCredentialTypesByServiceWithParamSuccess() {
-        let service = VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceWithParamJsonStr.toDictionary()!)
-        subject = VCLCredentialManifestDescriptorByService(
-            service: service,
-            serviceType: VCLServiceType.Issuer,
-            credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList
-        )
-        
-        let credentialTypesQuery =
+
+        func testCredentialManifestDescriptorByServiceWithPartialInput2Success() {
+            let service =
+            VCLServiceCredentialAgentIssuer(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
+            subject = VCLCredentialManifestDescriptorByService(
+                service: service,
+                issuingType: VCLIssuingType.Career,
+                pushDelegate: CredentialManifestDescriptorMocks.PushDelegate
+            )
+
+            let credentialTypesQuery =
+                "\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushUrl)=\(CredentialManifestDescriptorMocks.PushDelegate.pushUrl.encode()!)" +
+                        "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushToken)=\(CredentialManifestDescriptorMocks.PushDelegate.pushToken)"
+            let mockEndpoint =
+                (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
+
+            assert(subject.endpoint == mockEndpoint)
+            assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+        }
+
+        func testCredentialManifestDescriptorByServiceWithPartialInput3Success() {
+            let service =
+            VCLServiceCredentialAgentIssuer(payload: CredentialManifestDescriptorMocks.IssuingServiceWithParamJsonStr.toDictionary()!)
+            subject = VCLCredentialManifestDescriptorByService(
+                service: service,
+                issuingType: VCLIssuingType.Career,
+                credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList
+            )
+
+            let credentialTypesQuery =
             "\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialTypes)=\(CredentialManifestDescriptorMocks.CredentialTypesList[0])" +
             "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialTypes)=\(CredentialManifestDescriptorMocks.CredentialTypesList[1])"
-        let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceWithParamEndPoint + "&" + credentialTypesQuery)
+            let mockEndpoint =
+                (CredentialManifestDescriptorMocks.IssuingServiceWithParamEndPoint + "&" + credentialTypesQuery)
 
-        assert(subject.endpoint == mockEndpoint)
-        assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
-    }
-    
-    func testCredentialManifestDescriptorWithPushDelegateByServiceWithParamSuccess() {
-        let service = VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceWithParamJsonStr.toDictionary()!)
-        subject = VCLCredentialManifestDescriptorByService(
-            service: service,
-            serviceType: VCLServiceType.Issuer,
-            pushDelegate: CredentialManifestDescriptorMocks.PushDelegate
-        )
-        
-        let credentialTypesQuery =
-            "\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushUrl)=\(CredentialManifestDescriptorMocks.PushDelegate.pushUrl.encode() ?? "")" +
+            assert(subject.endpoint == mockEndpoint)
+            assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+        }
+
+        func testCredentialManifestDescriptorByServiceWithPartialInput4Success() {
+            let service =
+            VCLServiceCredentialAgentIssuer(payload: CredentialManifestDescriptorMocks.IssuingServiceWithParamJsonStr.toDictionary()!)
+            subject = VCLCredentialManifestDescriptorByService(
+                service: service,
+                issuingType: VCLIssuingType.Career,
+                pushDelegate: CredentialManifestDescriptorMocks.PushDelegate
+            )
+
+            let credentialTypesQuery =
+            "\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushUrl)=\(CredentialManifestDescriptorMocks.PushDelegate.pushUrl.encode()!)" +
             "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyPushDelegatePushToken)=\(CredentialManifestDescriptorMocks.PushDelegate.pushToken)"
-        let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceWithParamEndPoint + "&" + credentialTypesQuery)
+            let mockEndpoint =
+                (CredentialManifestDescriptorMocks.IssuingServiceWithParamEndPoint + "&" + credentialTypesQuery)
 
-        assert(subject.endpoint == mockEndpoint)
-        assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
-    }
-    
-    func testCredentialManifestDescriptorServiceWithParamOnlySuccess() {
-        let service = VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceWithParamJsonStr.toDictionary()!)
-        subject = VCLCredentialManifestDescriptorByService(
-            service: service,
-            serviceType: VCLServiceType.Issuer
-        )
-        
-        let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceWithParamEndPoint)
+            assert(subject.endpoint == mockEndpoint)
+            assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+        }
 
-        assert(subject.endpoint == mockEndpoint)
-        assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
-    }
+        func testCredentialManifestDescriptorByServiceWithPartialInput5Success() {
+            let service =
+            VCLServiceCredentialAgentIssuer(payload: CredentialManifestDescriptorMocks.IssuingServiceWithParamJsonStr.toDictionary()!)
+            subject = VCLCredentialManifestDescriptorByService(
+                service: service,
+                issuingType: VCLIssuingType.Career
+            )
+            let mockEndpoint = CredentialManifestDescriptorMocks.IssuingServiceWithParamEndPoint
+
+            assert(subject.endpoint == mockEndpoint)
+            assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+        }
+
+        func testCredentialManifestDescriptorByServiceWithPartialInput6Success() {
+            let service =
+            VCLServiceCredentialAgentIssuer(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
+            subject = VCLCredentialManifestDescriptorByService(
+                service: service
+            )
+            let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint)
+
+            assert(subject.endpoint == mockEndpoint)
+            assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+        }
+
     
     override func tearDown() {
     }
