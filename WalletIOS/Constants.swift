@@ -53,8 +53,8 @@ struct Constants  {
     
     static let OrganizationsSearchDescriptor = VCLOrganizationsSearchDescriptor(
         filter: VCLFilter(
-            //            did: DID,
-            serviceTypes: [VCLServiceType.Issuer],
+//            did: DID,
+            serviceTypes: VCLServiceTypes(serviceType: VCLServiceType.Issuer),
             credentialTypes: ["EducationDegree"]
         ),
         page: VCLPage(size: "1", skip: "1"),
@@ -105,8 +105,7 @@ struct Constants  {
     ]
     
     static let VerifiedProfileDescriptor = VCLVerifiedProfileDescriptor(
-        did: DidDev,
-        serviceType: VCLServiceType.Issuer
+        did: DidDev
     )
     
     static let SomeJwt = VCLJwt(

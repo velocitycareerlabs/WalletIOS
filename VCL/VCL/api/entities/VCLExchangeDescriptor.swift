@@ -25,6 +25,6 @@ public struct VCLExchangeDescriptor {
     }
     
     public struct CodingKeys {
-        static let KeyExchangeId = "exchange_id"
+        public static let KeyExchangeId = "exchange_id"
     }
 }

@@ -14,14 +14,14 @@ public class VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescri
     
     public init(
         service: VCLService,
-        serviceType: VCLServiceType = VCLServiceType.Issuer,
+        issuingType: VCLIssuingType = VCLIssuingType.Refresh,
         credentialIds:[String]
     ) {
         self.credentialIds = credentialIds
         
         super.init(
             uri: service.serviceEndpoint,
-            serviceType: serviceType
+            issuingType: issuingType
         )
     }
 

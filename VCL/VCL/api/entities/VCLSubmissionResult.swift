@@ -28,10 +28,10 @@ public struct VCLSubmissionResult {
         self.submissionId = submissionId
     }
     
-    struct CodingKeys {
-        static let KeyToken = "token"
-        static let KeyExchange = "exchange"
-        static let KeyJti = "jti"
-        static let KeySubmissionId = "submissionId"
+    public struct CodingKeys {
+        public static let KeyToken = "token"
+        public static let KeyExchange = "exchange"
+        public static let KeyJti = "jti"
+        public static let KeySubmissionId = "submissionId"
     }
 }

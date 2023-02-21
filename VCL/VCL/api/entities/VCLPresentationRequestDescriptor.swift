@@ -9,16 +9,13 @@ import Foundation
 
 public class VCLPresentationRequestDescriptor {
     public let deepLink: VCLDeepLink
-    public let serviceType: VCLServiceType
     public let pushDelegate: VCLPushDelegate?
     
     public init(
         deepLink: VCLDeepLink,
-        serviceType: VCLServiceType = VCLServiceType.Inspector,
         pushDelegate: VCLPushDelegate? = nil
     ) {
         self.deepLink = deepLink
-        self.serviceType = serviceType
         self.pushDelegate = pushDelegate
     }
     
@@ -43,9 +40,9 @@ public class VCLPresentationRequestDescriptor {
     }
     
     public struct CodingKeys {
-        static let KeyId = "id"
+        public static let KeyId = "id"
         
-        static let KeyPushDelegatePushUrl = "push_delegate.push_url"
-        static let KeyPushDelegatePushToken = "push_delegate.push_token"
+        public static let KeyPushDelegatePushUrl = "push_delegate.push_url"
+        public static let KeyPushDelegatePushToken = "push_delegate.push_token"
     }
 }

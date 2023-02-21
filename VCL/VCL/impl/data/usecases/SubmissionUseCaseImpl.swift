@@ -8,8 +8,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Foundation
+import UIKit
 
 class SubmissionUseCaseImpl: SubmissionUseCase {
+    
+    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
+    
     private let submissionRepository: SubmissionRepository
     private let jwtServiceRepository: JwtServiceRepository
     private let executor: Executor
@@ -24,26 +28,35 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
     
     func submit(
         submission: VCLSubmission,
-        completionBlock: @escaping (VCLResult<VCLPresentationSubmissionResult>) -> Void
+        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         executor.runOnBackgroundThread  { [weak self] in
-            self?.jwtServiceRepository.generateSignedJwt(
-                jwtDescriptor: VCLJwtDescriptor(
-                    payload: submission.payload,
-                    iss: submission.iss,
-                    jti: submission.jti
-            )) { signedJwtResult in
-                do {
-                    let jwt = try signedJwtResult.get()
-                    self?.submissionRepository.submit(
-                        submission: submission,
-                        jwt: jwt
-                    ) { submissionResult in
-                        self?.executor.runOnMainThread { completionBlock(submissionResult) }
-                    }
-                } catch {
-                    self?.executor.runOnMainThread { completionBlock(VCLResult.failure(VCLError(error: error))) }
+            if let _self = self {
+                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(SubmissionUseCase.self)") {
+                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
                 }
+                
+                _self.jwtServiceRepository.generateSignedJwt(
+                    jwtDescriptor: VCLJwtDescriptor(
+                        payload: submission.payload,
+                        iss: submission.iss,
+                        jti: submission.jti
+                    )) { signedJwtResult in
+                        do {
+                            let jwt = try signedJwtResult.get()
+                            _self.submissionRepository.submit(
+                                submission: submission,
+                                jwt: jwt
+                            ) { submissionResult in
+                                _self.executor.runOnMainThread { completionBlock(submissionResult) }
+                            }
+                        } catch {
+                            _self.executor.runOnMainThread { completionBlock(VCLResult.failure(VCLError(error: error))) }
+                        }
+                    }
+                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             }
         }
     }

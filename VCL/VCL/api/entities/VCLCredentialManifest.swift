@@ -32,18 +32,18 @@ public struct VCLCredentialManifest {
     public var submitPresentationUri: String { get {
         (jwt.payload?[VCLCredentialManifest.CodingKeys.KeyMetadata] as? [String: Any])?[VCLCredentialManifest.CodingKeys.KeySubmitIdentificationUri] as? String ?? "" } }
 
-    struct CodingKeys {
-        static let KeyIssuingRequest = "issuing_request"
+    public struct CodingKeys {
+        public static let KeyIssuingRequest = "issuing_request"
         
-        static let KeyId = "id"
-        static let KeyIss = "iss"
-        static let KeyIssuer = "issuer"
-        static let KeyExchangeId = "exchange_id"
-        static let KeyPresentationDefinitionId = "presentation_definition"
+        public static let KeyId = "id"
+        public static let KeyIss = "iss"
+        public static let KeyIssuer = "issuer"
+        public static let KeyExchangeId = "exchange_id"
+        public static let KeyPresentationDefinitionId = "presentation_definition"
         
-        static let KeyMetadata = "metadata"
-        static let KeyCheckOffersUri = "check_offers_uri"
-        static let KeyFinalizeOffersUri = "finalize_offers_uri"
-        static let KeySubmitIdentificationUri = "submit_presentation_uri"
+        public static let KeyMetadata = "metadata"
+        public static let KeyCheckOffersUri = "check_offers_uri"
+        public static let KeyFinalizeOffersUri = "finalize_offers_uri"
+        public static let KeySubmitIdentificationUri = "submit_presentation_uri"
     }
 }

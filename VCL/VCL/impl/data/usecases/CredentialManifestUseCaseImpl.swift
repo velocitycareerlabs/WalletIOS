@@ -8,9 +8,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Foundation
+import UIKit
 
 class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
+    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
+
     private let credentialManifestRepository: CredentialManifestRepository
     private let resolveKidRepository: ResolveKidRepository
     private let jwtServiceRepository: JwtServiceRepository
@@ -29,14 +32,23 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     func getCredentialManifest(credentialManifestDescriptor: VCLCredentialManifestDescriptor,
                                completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void) {
         executor.runOnBackgroundThread() { [weak self] in
-            self?.credentialManifestRepository.getCredentialManifest(credentialManifestDescriptor: credentialManifestDescriptor) {
-                jwtStrResult in
-                do {
-                    let jwtStr = try jwtStrResult.get()
-                    self?.onGetJwtSuccess(jwtStr,completionBlock)
-                } catch {
-                    self?.onError(error, completionBlock)
+            if let _self = self {
+                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(CredentialManifestUseCase.self)") {
+                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
                 }
+                
+                self?.credentialManifestRepository.getCredentialManifest(credentialManifestDescriptor: credentialManifestDescriptor) {
+                    jwtStrResult in
+                    do {
+                        let jwtStr = try jwtStrResult.get()
+                        _self.onGetJwtSuccess(jwtStr,completionBlock)
+                    } catch {
+                        _self.onError(error, completionBlock)
+                    }
+                }
+                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             }
         }
     }

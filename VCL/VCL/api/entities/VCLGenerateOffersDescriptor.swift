@@ -38,10 +38,10 @@ public struct VCLGenerateOffersDescriptor {
     
     var checkOffersUri: String { get { credentialManifest.checkOffersUri } }
 
-    struct CodingKeys {
-        static let KeyDid = "did"
-        static let KeyExchangeId = "exchangeId"
-        static let KeyTypes = "types"
-        static let KeyOfferHashes = "offerHashes"
+    public struct CodingKeys {
+        public static let KeyDid = "did"
+        public static let KeyExchangeId = "exchangeId"
+        public static let KeyTypes = "types"
+        public static let KeyOfferHashes = "offerHashes"
     }
 }

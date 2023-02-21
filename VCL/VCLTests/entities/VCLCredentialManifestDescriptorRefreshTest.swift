@@ -22,7 +22,6 @@ final class VCLCredentialManifestDescriptorRefreshTest: XCTestCase {
         let service = VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
         subject = VCLCredentialManifestDescriptorRefresh(
             service: service,
-            serviceType: VCLServiceType.Issuer,
             credentialIds: [CredentialManifestDescriptorMocks.CredentialId1, CredentialManifestDescriptorMocks.CredentialId2])
         
         let credentialTypesQuery = "\(VCLCredentialManifestDescriptor.CodingKeys.KeyRefresh)=\(true)" +
@@ -38,7 +37,6 @@ final class VCLCredentialManifestDescriptorRefreshTest: XCTestCase {
         let service = VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
         subject = VCLCredentialManifestDescriptorRefresh(
             service: service,
-            serviceType: VCLServiceType.Issuer,
             credentialIds: [CredentialManifestDescriptorMocks.CredentialId1]
         )
         let credentialTypesQuery = "\(VCLCredentialManifestDescriptor.CodingKeys.KeyRefresh)=\(true)" +
@@ -53,7 +51,6 @@ final class VCLCredentialManifestDescriptorRefreshTest: XCTestCase {
         let service = VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
         subject = VCLCredentialManifestDescriptorRefresh(
             service: service,
-            serviceType: VCLServiceType.Issuer,
             credentialIds: []
         )
         let credentialTypesQuery = "\(VCLCredentialManifestDescriptor.CodingKeys.KeyRefresh)=\(true)"

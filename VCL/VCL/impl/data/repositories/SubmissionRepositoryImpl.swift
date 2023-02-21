@@ -19,7 +19,7 @@ class SubmissionRepositoryImpl: SubmissionRepository {
     
     func submit(submission: VCLSubmission,
                 jwt: VCLJwt,
-                completionBlock: @escaping (VCLResult<VCLPresentationSubmissionResult>) -> Void) {
+                completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void) {
         networkService.sendRequest(
             endpoint: submission.submitUri,
             body: submission.generateRequestBody(jwt: jwt).toJsonString(),
@@ -42,10 +42,10 @@ class SubmissionRepositoryImpl: SubmissionRepository {
         }
     }
     
-    private func parse(_ jsonDict: [String: Any]?, _ jti: String, _ submissionId: String) -> VCLPresentationSubmissionResult {
-        let exchangeJsonDict = jsonDict?[VCLPresentationSubmissionResult.CodingKeys.KeyExchange]
-        return VCLPresentationSubmissionResult(
-            token: VCLToken(value: jsonDict?[VCLPresentationSubmissionResult.CodingKeys.KeyToken] as? String ?? ""),
+    private func parse(_ jsonDict: [String: Any]?, _ jti: String, _ submissionId: String) -> VCLSubmissionResult {
+        let exchangeJsonDict = jsonDict?[VCLSubmissionResult.CodingKeys.KeyExchange]
+        return VCLSubmissionResult(
+            token: VCLToken(value: jsonDict?[VCLSubmissionResult.CodingKeys.KeyToken] as? String ?? ""),
             exchange: parseExchange(exchangeJsonDict as? [String : Any]),
             jti: jti,
             submissionId: submissionId

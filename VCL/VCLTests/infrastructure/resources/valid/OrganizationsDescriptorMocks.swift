@@ -13,7 +13,7 @@ import Foundation
 class VCLOrganizationsDescriptorMocks {
     static let Filter = VCLFilter(
         did: "did:velocity:0x2bef092530ccc122f5fe439b78eddf6010685e88",
-        serviceTypes: [VCLServiceType.Inspector],
+        serviceTypes: VCLServiceTypes(serviceType: VCLServiceType.Inspector),
         credentialTypes: ["EducationDegree"]
     )
     static let Page = VCLPage(size: "1", skip: "1")

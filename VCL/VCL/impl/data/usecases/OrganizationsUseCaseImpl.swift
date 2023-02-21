@@ -8,8 +8,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Foundation
+import UIKit
 
 class OrganizationsUseCaseImpl: OrganizationsUseCase {
+    
+    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
     
     private let organizationsRepository: OrganizationsRepository
     private let executor: Executor
@@ -21,10 +24,20 @@ class OrganizationsUseCaseImpl: OrganizationsUseCase {
     
     func searchForOrganizations(organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
                                 completionBlock: @escaping (VCLResult<VCLOrganizations>) -> Void) {
-        executor.runOnBackgroundThread() {
-            self.organizationsRepository.searchForOrganizations(organizationsSearchDescriptor: organizationsSearchDescriptor) {
-                [weak self] organizations in
-                self?.executor.runOnMainThread { completionBlock(organizations) }
+        executor.runOnBackgroundThread() { [weak self] in
+            if let _self = self {
+                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(OrganizationsUseCase.self)") {
+                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+                }
+                
+                _self.organizationsRepository.searchForOrganizations(organizationsSearchDescriptor: organizationsSearchDescriptor) {
+                    organizations in
+                    _self.executor.runOnMainThread { completionBlock(organizations) }
+                }
+                
+                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
+                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             }
         }
     }

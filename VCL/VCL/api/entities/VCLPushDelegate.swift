@@ -31,7 +31,7 @@ public struct VCLPushDelegate {
     }
     
     public struct CodingKeys {
-        static let KeyPushUrl = "pushUrl"
-        static let KeyPushToken = "pushToken"
+        public static let KeyPushUrl = "pushUrl"
+        public static let KeyPushToken = "pushToken"
     }
 }

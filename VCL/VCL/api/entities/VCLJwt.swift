@@ -51,18 +51,18 @@ public struct VCLJwt {
 //                                            signature: Data(base64URLEncoded: self.signature ?? ""))
     }
     
-    struct CodingKeys {
-        static let KeyTyp = "typ"
-        static let KeyAlg = "alg"
-        static let KeyKid = "kid"
-        static let KeyJwk = "jwk"
+    public struct CodingKeys {
+        public static let KeyTyp = "typ"
+        public static let KeyAlg = "alg"
+        public static let KeyKid = "kid"
+        public static let KeyJwk = "jwk"
         
-        static let KeyX = "x"
-        static let KeyY = "y"
+        public static let KeyX = "x"
+        public static let KeyY = "y"
         
-        static let KeyHeader = "header"
-        static let KeyPayload = "payload"
-        static let KeySignature = "signature"
+        public static let KeyHeader = "header"
+        public static let KeyPayload = "payload"
+        public static let KeySignature = "signature"
     }
     
     var keyID: String? { get {

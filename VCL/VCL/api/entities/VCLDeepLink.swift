@@ -56,9 +56,9 @@ public struct VCLDeepLink {
     }
     
     public struct CodingKeys {
-        static let KeyDidPrefix = "did:"
-        static let KeyIssuer = "issuer"
-        static let KeyRequestUri = "request_uri"
-        static let KeyVendorOriginContext = "vendorOriginContext"
+        public static let KeyDidPrefix = "did:"
+        public static let KeyIssuer = "issuer"
+        public static let KeyRequestUri = "request_uri"
+        public static let KeyVendorOriginContext = "vendorOriginContext"
     }
 }

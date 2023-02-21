@@ -28,7 +28,7 @@ public struct VCLOrganization {
         return retVal
     }
     
-    struct CodingKeys {
-        static let KeyService = "service"
+    public struct CodingKeys {
+        public static let KeyService = "service"
     }
 }

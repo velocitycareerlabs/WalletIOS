@@ -22,11 +22,11 @@ public struct VCLExchange {
         self.exchangeComplete = exchangeComplete
     }
     
-    struct CodingKeys {
-        static let KeyId = "id"
-        static let KeyType = "type"
-        static let KeyDisclosureComplete = "disclosureComplete"
-        static let KeyExchangeComplete = "exchangeComplete"
+    public struct CodingKeys {
+        public static let KeyId = "id"
+        public static let KeyType = "type"
+        public static let KeyDisclosureComplete = "disclosureComplete"
+        public static let KeyExchangeComplete = "exchangeComplete"
     }
 }
 

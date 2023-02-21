@@ -26,43 +26,16 @@ class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
             method: Request.HttpMethod.GET,
             headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)],
             cachePolicy: .useProtocolCachePolicy
-        ) {
-                [weak self] publicKeyResponse in
+        ) { verifiedProfileResult in
                 do {
-                    let verifiedProfileResponse = try publicKeyResponse.get()
-                    if let verifiedProfileDict = verifiedProfileResponse.payload.toDictionary() {
-                        self?.verifyServiceType(
-                            verifiedProfileDict: verifiedProfileDict,
-                            expectedServiceType: verifiedProfileDescriptor.serviceType,
-                            completionBlock: completionBlock)
-                        
+                    if let verifiedProfileDict = try verifiedProfileResult.get().payload.toDictionary() {
+                        completionBlock(VCLResult.success(VCLVerifiedProfile(payload: verifiedProfileDict)))
                     } else {
-                        completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: verifiedProfileResponse.payload, encoding: .utf8) ?? "")")))
+                        completionBlock(VCLResult.failure(VCLError(description: "Failed to parse verified profile payload.")))
                     }
                 } catch {
                     completionBlock(.failure(VCLError(error: error)))
                 }
             }
-    }
-    
-    private func verifyServiceType(
-        verifiedProfileDict: [String: Any],
-        expectedServiceType: VCLServiceType?,
-        completionBlock: @escaping (VCLResult<VCLVerifiedProfile>) -> Void
-    ) {
-        let verifiedProfile: VCLVerifiedProfile = VCLVerifiedProfile(payload: verifiedProfileDict)
-        if let expectedServiceType = expectedServiceType {
-            if (verifiedProfile.serviceTypes.contains(serviceType: expectedServiceType)) {
-                completionBlock(VCLResult.success(verifiedProfile))
-            }
-            else {
-                completionBlock(VCLResult.failure(VCLError(
-                    description: "Wrong service type - expected: \(expectedServiceType.rawValue), found: \(verifiedProfile.serviceTypes.all)",
-                    code: VCLErrorCode.VerificationError.rawValue
-                )))
-            }
-        } else {
-            completionBlock(VCLResult.success(verifiedProfile))
-        }
     }
 }
