@@ -37,7 +37,7 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
                 deepLink: VCLDeepLink(value: "")),
             verifiableCredentials: [VCLVerifiableCredential]()
         )
-        var result: VCLResult<VCLPresentationSubmissionResult>? = nil
+        var result: VCLResult<VCLSubmissionResult>? = nil
         
         // Action
         subject.submit(submission: presentationSubmission) {
@@ -63,10 +63,10 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
         }
     }
     
-    private func expectedPresentationSubmissionResult(_ jsonDict: [String: Any], _ jti: String, submissionId: String) -> VCLPresentationSubmissionResult {
-        let exchangeJsonDict = jsonDict[VCLPresentationSubmissionResult.CodingKeys.KeyExchange]
-        return VCLPresentationSubmissionResult(
-            token: VCLToken(value: (jsonDict[VCLPresentationSubmissionResult.CodingKeys.KeyToken] as! String)),
+    private func expectedPresentationSubmissionResult(_ jsonDict: [String: Any], _ jti: String, submissionId: String) -> VCLSubmissionResult {
+        let exchangeJsonDict = jsonDict[VCLSubmissionResult.CodingKeys.KeyExchange]
+        return VCLSubmissionResult(
+            token: VCLToken(value: (jsonDict[VCLSubmissionResult.CodingKeys.KeyToken] as! String)),
             exchange: expectedExchange(exchangeJsonDict as! [String : Any]),
             jti: jti,
             submissionId: submissionId

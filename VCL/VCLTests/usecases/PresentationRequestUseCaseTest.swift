@@ -41,7 +41,6 @@ final class PresentationRequestUseCaseTest: XCTestCase {
         // Action
         subject.getPresentationRequest(presentationRequestDescriptor: VCLPresentationRequestDescriptor(
             deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet,
-            serviceType: VCLServiceType.Inspector,
             pushDelegate: VCLPushDelegate(
                 pushUrl: pushUrl,
                 pushToken: pushToken

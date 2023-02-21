@@ -172,7 +172,7 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorByOrganization =
         VCLCredentialManifestDescriptorByService(
             service: serviceCredentialAgentIssuer,
-            serviceType: VCLServiceType.Issuer,
+            issuingType: VCLIssuingType.Career,
             credentialTypes: serviceCredentialAgentIssuer.credentialTypes // Can come from any where
         )
         vcl.getCredentialManifest(

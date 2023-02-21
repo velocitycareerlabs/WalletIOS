@@ -9,16 +9,13 @@ import Foundation
 
 public class VCLPresentationRequestDescriptor {
     public let deepLink: VCLDeepLink
-    public let serviceType: VCLServiceType
     public let pushDelegate: VCLPushDelegate?
     
     public init(
         deepLink: VCLDeepLink,
-        serviceType: VCLServiceType = VCLServiceType.Inspector,
         pushDelegate: VCLPushDelegate? = nil
     ) {
         self.deepLink = deepLink
-        self.serviceType = serviceType
         self.pushDelegate = pushDelegate
     }
     

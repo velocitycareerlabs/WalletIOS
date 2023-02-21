@@ -21,7 +21,7 @@ final class VCLCredentialManifestDescriptorByDeepLinkTest: XCTestCase {
     func testCredentialManifestDescriptorFullValidByDeepLinkSuccess() {
         subject = VCLCredentialManifestDescriptorByDeepLink(
             deepLink: CredentialManifestDescriptorMocks.DeepLink,
-            serviceType: VCLServiceType.Issuer
+            issuingType: VCLIssuingType.Career
         )
         
         assert(subject.endpoint == CredentialManifestDescriptorMocks.DeepLinkRequestUri.decode()!)
