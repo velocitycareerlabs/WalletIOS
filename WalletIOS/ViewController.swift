@@ -90,7 +90,8 @@ class ViewController: UIViewController {
             errorHandler: {error in
                 NSLog("VCL Presentation request failed: \(error)")
             }
-        )}
+        )
+    }
     
     private func submitPresentation(presentationRequest: VCLPresentationRequest)  {
         let presentationSubmission = VCLPresentationSubmission(
