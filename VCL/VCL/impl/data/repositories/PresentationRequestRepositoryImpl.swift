@@ -26,21 +26,21 @@ class PresentationRequestRepositoryImpl: PresentationRequestRepository {
                 endpoint: endpoint,
                 contentType: .ApplicationJson,
                 method: .GET,
-                headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)]
+                headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
             ) { response in
                     do {
                         let presentationRequestResponse = try response.get()
                         if let encodedJwtStr = presentationRequestResponse.payload.toDictionary()?[VCLPresentationRequest.CodingKeys.KeyPresentationRequest] as? String {
                             completionBlock(.success(encodedJwtStr))
                         } else {
-                            completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: presentationRequestResponse.payload, encoding: .utf8) ?? "")")))
+                            completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: presentationRequestResponse.payload, encoding: .utf8) ?? "")")))
                         }
                     } catch {
                         completionBlock(.failure(VCLError(error: error)))
                     }
                 }
         } else {
-            completionBlock(.failure(VCLError(description: "credentialManifestDescriptor.endpoint = null")))
+            completionBlock(.failure(VCLError(message: "credentialManifestDescriptor.endpoint = null")))
         }
     }
 }

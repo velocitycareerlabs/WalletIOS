@@ -31,7 +31,7 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
                 if let credentialTypesList = credentialTypes.toList() as? [[String: Any]?] {
                     completionBlock(.success(self.parse(credentialTypesList)))
                 } else {
-                    completionBlock(.failure(VCLError(description: "Failed to parse VCLCredentialTypes)")))
+                    completionBlock(.failure(VCLError(message: "Failed to parse VCLCredentialTypes)")))
                 }
             } else {
                 fetchCredentialTypes(endpoint: endpoint, cacheSequence: cacheSequence, completionBlock: completionBlock)
@@ -48,7 +48,7 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
             endpoint: endpoint,
             contentType: .ApplicationJson,
             method: .GET,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)],
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)],
             cachePolicy: .useProtocolCachePolicy
         ) {
             [weak self] res in
@@ -58,7 +58,7 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
                 if let credentialTypesList = payload.toList() as? [[String: Any]?], let _self = self {
                     completionBlock(.success(_self.parse(credentialTypesList)))
                 } else {
-                    completionBlock(.failure(VCLError(description: "Failed to parse VCLCredentialTypes)")))
+                    completionBlock(.failure(VCLError(message: "Failed to parse VCLCredentialTypes)")))
                 }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))

@@ -26,7 +26,7 @@ class ExchangeProgressRepositoryImpl: ExchangeProgressRepository {
             method: Request.HttpMethod.GET,
             headers:[
                 (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(exchangeDescriptor.token.value)"),
-                (HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)
+                (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
             ]
         ) { [weak self] response in
             do {
@@ -34,7 +34,7 @@ class ExchangeProgressRepositoryImpl: ExchangeProgressRepository {
                 if let exchange = self?.parseExchange(exchangeProgressResponse.payload.toDictionary()) {
                     completionBlock(.success(exchange))
                 } else {
-                    completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: exchangeProgressResponse.payload, encoding: .utf8) ?? "")")))
+                    completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: exchangeProgressResponse.payload, encoding: .utf8) ?? "")")))
                 }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))

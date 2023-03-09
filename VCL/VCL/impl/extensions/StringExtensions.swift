@@ -28,7 +28,7 @@ extension String {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
-//                VCLLog.error(error)
+                VCLLog.e(error)
             }
         }
         return nil

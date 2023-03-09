@@ -36,20 +36,20 @@ class NetworkServiceImpl: NetworkService {
     private func sendRequest(request: Request,completionBlock: @escaping (VCLResult<Response>) -> Void) {
         logRequest(request)
         guard let urlRequest = createUrlRequest(request: request) else {
-            completionBlock(.failure(VCLError(description: "Request error: \(request.stringify())")))
+            completionBlock(.failure(VCLError(message: "Request error: \(request.stringify())")))
           return
         }
         let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
             if let taskError = error {
-                completionBlock(.failure(VCLError(error: taskError, code: VCLErrorCode.NetworkError.rawValue)))
+                completionBlock(.failure(VCLError(error: taskError, code: VCLStatusCode.NetworkError.rawValue)))
             }
             else {
                 guard let httpResponse = response as? HTTPURLResponse else {
-                    completionBlock(.failure(VCLError(description: "Empty response")))
+                    completionBlock(.failure(VCLError(message: "Empty response")))
                     return
                 }
                 guard let jsonData = data else {
-                    completionBlock(.failure(VCLError(description:"Empty data received")))
+                    completionBlock(.failure(VCLError(message:"Empty data received")))
                     return
                 }
                 if (200...299).contains(httpResponse.statusCode) {
@@ -58,9 +58,9 @@ class NetworkServiceImpl: NetworkService {
                 }
                 else {
                     completionBlock(.failure(VCLError(
-                                                    description:
+                                                    message:
                         "Connection failed: \((String(data: data ?? Data(bytes: [] as [UInt8], count: 0), encoding: .utf8)) ?? "")",
-                                                    code: httpResponse.statusCode)))
+                                                    statusCode: httpResponse.statusCode)))
                 }
             }
         }

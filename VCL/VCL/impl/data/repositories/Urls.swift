@@ -48,6 +48,6 @@ struct HeaderKeys {
     static let XVnfProtocolVersion = "x-vnf-protocol-version"
 }
 
-struct HeaderKValues {
+struct HeaderValues {
     static let XVnfProtocolVersion = "1.0"
 }

@@ -57,6 +57,10 @@ final class UrlsTest: XCTestCase {
         assert(Urls.CredentialTypesFormSchema.hasPrefix(expectedUrlPrefix))
     }
     
+    func testVersion() {
+        assert(HeaderValues.XVnfProtocolVersion == "1.0")
+    }
+    
     override func tearDown() {
     }
 }
