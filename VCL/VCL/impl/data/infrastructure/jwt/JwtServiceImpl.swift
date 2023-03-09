@@ -23,7 +23,7 @@ class JwtServiceImpl: JwtService {
         jwt: String,
         completionBlock: @escaping (VCLResult<String>) -> Void
     ) {
-        completionBlock(.failure(VCLError(description: "Not implemented")))
+        completionBlock(.failure(VCLError(message: "Not implemented")))
     }
     
     func verify(
@@ -64,7 +64,7 @@ class JwtServiceImpl: JwtService {
             guard let jwsToken = JwsToken(headers: header,
                                           content: claims,
                                           protectedMessage: protectedMessage) else {
-                completionBlock(.failure(VCLError(description: "Failed to create JwsToken")))
+                completionBlock(.failure(VCLError(message: "Failed to create JwsToken")))
                 return
             }
             
@@ -74,7 +74,7 @@ class JwtServiceImpl: JwtService {
                                                 protectedMessage: jwsToken.protectedMessage,
                                                 signature: signature,
                                                 rawValue: jwsToken.rawValue) else {
-                completionBlock(.failure(VCLError(description: "Failed to create signed JwsToken")))
+                completionBlock(.failure(VCLError(message: "Failed to create signed JwsToken")))
                 return
             }
             

@@ -27,7 +27,7 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
             method: .POST,
             headers:[
                 (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(token.value)"),
-                (HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)
+                (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
             ]
         ) { response in
             do {
@@ -35,7 +35,7 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
                 if let encodedJwts = finalizedOffersResponse.payload.toList() as? [String] {
                     completionBlock(.success(encodedJwts))
                 } else {
-                    completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: finalizedOffersResponse.payload, encoding: .utf8) ?? "")")))
+                    completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: finalizedOffersResponse.payload, encoding: .utf8) ?? "")")))
                 }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))

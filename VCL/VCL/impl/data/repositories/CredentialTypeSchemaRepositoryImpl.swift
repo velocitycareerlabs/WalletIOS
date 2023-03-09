@@ -32,7 +32,7 @@ class CredentialTypeSchemaRepositoryImpl: CredentialTypeSchemaRepository {
                 if let payload = credentialTypeSchema.toDictionary() {
                     completionBlock(.success(VCLCredentialTypeSchema(payload: payload)))
                 } else {
-                    completionBlock(.failure(VCLError(description: "Failed to parse \(credentialTypeSchema)")))
+                    completionBlock(.failure(VCLError(message: "Failed to parse \(credentialTypeSchema)")))
                 }
             } else {
                 fetchCredentialTypeSchema(endpoint: endpoint, cacheSequence: cacheSequence, completionBlock: completionBlock)
@@ -49,7 +49,7 @@ class CredentialTypeSchemaRepositoryImpl: CredentialTypeSchemaRepository {
             endpoint: endpoint,
             contentType: .ApplicationJson,
             method: .GET,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)],
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)],
             cachePolicy: .useProtocolCachePolicy) {
             [weak self] res in
             do {
@@ -58,7 +58,7 @@ class CredentialTypeSchemaRepositoryImpl: CredentialTypeSchemaRepository {
                 if let credentialTypeSchemaList = payload.toDictionary() {
                     completionBlock(.success(VCLCredentialTypeSchema(payload: credentialTypeSchemaList)))
                 } else {
-                    completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: payload, encoding: .utf8) ?? "")")))
+                    completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: payload, encoding: .utf8) ?? "")")))
                 }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))

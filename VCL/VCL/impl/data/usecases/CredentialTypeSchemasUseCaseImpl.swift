@@ -70,7 +70,7 @@ class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
                 }
                 _self.dispatcher.notify(queue: .main) {
                     if(credentialTypeSchemasMapIsEmpty) {
-                        completionBlock(.failure(VCLError(description: "Failed to fetch credential type schemas")))
+                        completionBlock(.failure(VCLError(message: "Failed to fetch credential type schemas")))
                     } else {
                         completionBlock(.success(VCLCredentialTypeSchemas(all: credentialTypeSchemasMap)))
                     }

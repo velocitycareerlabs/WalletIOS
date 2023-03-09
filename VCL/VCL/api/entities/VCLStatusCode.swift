@@ -1,5 +1,5 @@
 //
-//  VCLErrorCode.swift
+//  VCLStatusCode.swift
 //  VCL
 //
 //  Created by Michael Avoyan on 14/12/2022.
@@ -9,7 +9,8 @@
 
 import Foundation
 
-public enum VCLErrorCode: Int {
+public enum VCLStatusCode: Int {
     case NetworkError = 1
     case VerificationError = 403
+    case Undefined = -1
 }

@@ -25,7 +25,7 @@ class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSchemaRepo
             endpoint: Urls.CredentialTypesFormSchema.replacingOccurrences(of: Params.CredentialType, with: credentialTypesUIFormSchemaDescriptor.credentialType),
             contentType: .ApplicationJson,
             method: .GET,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)]
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
         ) { [weak self] response in
                 do {
                     let credentialTypesUiFoermResponse = try response.get()
@@ -42,7 +42,7 @@ class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSchemaRepo
                                     )))
                         )
                     } else {
-                        completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: credentialTypesUiFoermResponse.payload, encoding: .utf8) ?? "")")))
+                        completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: credentialTypesUiFoermResponse.payload, encoding: .utf8) ?? "")")))
                     }
                 } catch {
                     completionBlock(.failure(VCLError(error: error)))

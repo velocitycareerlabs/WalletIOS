@@ -27,7 +27,7 @@ class OrganizationsRepositoryImpl: OrganizationsRepository {
             endpoint: endpoint,
             contentType: .ApplicationJson,
             method: Request.HttpMethod.GET,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)]
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
         ) {
             [weak self] response in
             do {
@@ -35,7 +35,7 @@ class OrganizationsRepositoryImpl: OrganizationsRepository {
                 if let organizations = self?.parse(organizationDict: organizationsResponse.payload.toDictionary()) {
                     completionBlock(.success(organizations))
                 } else {
-                    completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: organizationsResponse.payload, encoding: .utf8) ?? "")")))
+                    completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: organizationsResponse.payload, encoding: .utf8) ?? "")")))
                 }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))

@@ -24,14 +24,14 @@ class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
         networkService.sendRequest(
             endpoint: Urls.VerifiedProfile.replacingOccurrences(of: Params.Did, with: verifiedProfileDescriptor.did),
             method: Request.HttpMethod.GET,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)],
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)],
             cachePolicy: .useProtocolCachePolicy
         ) { verifiedProfileResult in
                 do {
                     if let verifiedProfileDict = try verifiedProfileResult.get().payload.toDictionary() {
                         completionBlock(VCLResult.success(VCLVerifiedProfile(payload: verifiedProfileDict)))
                     } else {
-                        completionBlock(VCLResult.failure(VCLError(description: "Failed to parse verified profile payload.")))
+                        completionBlock(VCLResult.failure(VCLError(message: "Failed to parse verified profile payload.")))
                     }
                 } catch {
                     completionBlock(.failure(VCLError(error: error)))

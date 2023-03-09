@@ -24,17 +24,3 @@ extension VCLResult {
         }
     }
 }
-
-public struct VCLError: Error {
-    public let description: String?
-    public let code: Int?
-
-    public init(error: Error? = nil, code: Int? = nil) {
-        self.description = "\(String(describing: error))"
-        self.code = code
-    }
-    public init(description: String? = nil, code: Int? = nil) {
-        self.description = description
-        self.code = code
-    }
-}
