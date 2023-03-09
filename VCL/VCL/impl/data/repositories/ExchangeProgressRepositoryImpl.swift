@@ -23,7 +23,7 @@ class ExchangeProgressRepositoryImpl: ExchangeProgressRepository {
             endpoint: exchangeDescriptor.processUri +
                 "?\(VCLExchangeDescriptor.CodingKeys.KeyExchangeId)=\(exchangeDescriptor.exchangeId ?? "")",
             contentType: Request.ContentType.ApplicationJson,
-            method: Request.HttpMethod.GET,
+            method: .GET,
             headers:[
                 (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(exchangeDescriptor.token.value)"),
                 (HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)

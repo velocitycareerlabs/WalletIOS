@@ -12,60 +12,44 @@ import VCToken
 import VCCrypto
 
 class JwtServiceImpl: JwtService {
-    func decode(
-        encodedJwt: String,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
-    ) {
-        completionBlock(.success(VCLJwt(encodedJwt: encodedJwt)))
+    
+    func decode(encodedJwt: String) -> VCLJwt {
+        return VCLJwt(encodedJwt: encodedJwt)
+    }
+
+    func encode(jwt: String) -> VCLJwt {
+        return VCLJwt(encodedJwt: "not implemented yet")
     }
     
-    func encode(
-        jwt: String,
-        completionBlock: @escaping (VCLResult<String>) -> Void
-    ) {
-        completionBlock(.failure(VCLError(description: "Not implemented")))
-    }
-    
-    func verify(
-        jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
-    ) {
+    func verify(jwt: VCLJwt, jwkPublic: VCLJwkPublic) throws -> Bool {
         let pubKey = ECPublicJwk(x: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyX] as? String ?? "",
                                  y: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyY] as? String ?? "",
                                  keyId: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyKid] as? String ?? "")
-        do {
-            let isVerified = try jwt.jwsToken?.verify(using: Secp256k1Verifier(), withPublicKey: pubKey) == true
-            completionBlock(.success(isVerified))
-        } catch {
-            completionBlock(.failure(VCLError(error: error)))
-        }
+
+        return try jwt.jwsToken?.verify(using: Secp256k1Verifier(), withPublicKey: pubKey) == true
     }
     
-    func sign(
-        jwtDescriptor: VCLJwtDescriptor,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
-    ) {
+    func sign(jwtDescriptor: VCLJwtDescriptor) throws -> VCLJwt {
         do {
-            let keyId = UUID().uuidString
+            let privatePublicKeys = try generateJwkSECP256K1FromKid(kid: jwtDescriptor.kid)
             let secp256k1Signer = Secp256k1Signer()
-            let secret = try CryptoOperations().generateKey()
-            let publicKey = try secp256k1Signer.getPublicJwk(from: secret, withKeyId: keyId)
+            let secret = jwtDescriptor.didJwk?.privateKey ?? privatePublicKeys.privateKey
+            let publicKey = jwtDescriptor.didJwk?.publicKey ?? privatePublicKeys.publicKey
             
             let header = Header(type: GlobalConfig.TypeJwt,
                                 algorithm: GlobalConfig.AlgES256K,
                                 jsonWebKey: publicKey, // try publicKey.getThumbprint(),
-                                keyId: keyId)
+                                keyId: jwtDescriptor.kid)
             
             let payload = generatePayload(jwtDescriptor)
             
             let claims = VCLClaims(all: payload)
+            
             let protectedMessage = try? createProtectedMessage(headers: header, claims: claims)
             guard let jwsToken = JwsToken(headers: header,
                                           content: claims,
                                           protectedMessage: protectedMessage) else {
-                completionBlock(.failure(VCLError(description: "Failed to create JwsToken")))
-                return
+                throw VCLError(description: "Failed to create JwsToken")
             }
             
             let signature = try secp256k1Signer.sign(token: jwsToken, withSecret: secret)
@@ -74,45 +58,26 @@ class JwtServiceImpl: JwtService {
                                                 protectedMessage: jwsToken.protectedMessage,
                                                 signature: signature,
                                                 rawValue: jwsToken.rawValue) else {
-                completionBlock(.failure(VCLError(description: "Failed to create signed JwsToken")))
-                return
+                throw VCLError(description: "Failed to create signed JwsToken")
             }
+            return try VCLJwt(encodedJwt: jwsTokenSigned.serialize())
             
-            completionBlock(.success(try VCLJwt(encodedJwt: jwsTokenSigned.serialize())))
         } catch {
-            completionBlock(.failure(VCLError(error: error)))
-            return
+            throw VCLError(error: error)
         }
     }
     
-    func generateDidJwk(
-        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
-    ) {
-        do {
-            let keyId = UUID().uuidString
-            let secp256k1Signer = Secp256k1Signer()
-            let secret = try CryptoOperations().generateKey()
-            let publicKey = try secp256k1Signer.getPublicJwk(from: secret, withKeyId: keyId)
-            
-            let pubKey = ECPublicJwk(x: publicKey.x, y: publicKey.y, keyId: keyId)
-            
-            completionBlock(.success(VCLDidJwk(value: "\(VCLDidJwk.DidJwkPrefix)\(pubKey.toJson().encodeToBase64())")))
-        } catch {
-            completionBlock(.failure(VCLError(error: error)))
-            return
-        }
-    }
-    
-    private func generatePayload(_ jwtDescrptor: VCLJwtDescriptor) -> [String: Any] {
-        var retVal = jwtDescrptor.payload
-        retVal["iss"] = jwtDescrptor.iss
-        retVal["aud"] = jwtDescrptor.iss
+    private func generatePayload(_ jwtDescriptor: VCLJwtDescriptor) -> [String: Any] {
+        var retVal = jwtDescriptor.payload ?? [String: Any]()
+        retVal["iss"] = jwtDescriptor.iss
+        retVal["aud"] = jwtDescriptor.aud
         retVal["sub"] = randomString(length: 10)
-        retVal["jti"] = jwtDescrptor.jti
+        retVal["jti"] = jwtDescriptor.jti
         let date = Date()
         retVal["iat"] = date.toDouble()
         retVal["nbf"] = date.toDouble()
         retVal["exp"] = date.addDaysToNow(days: 7).toDouble()
+        retVal["nonce"] = jwtDescriptor.nonce ?? ""
         return retVal
     }
     
@@ -124,5 +89,23 @@ class JwtServiceImpl: JwtService {
         } else {
             return encodedHeader
         }
+    }
+    
+    func generateDidJwk(jwkDescriptor: VCLDidJwkDescriptor) throws -> VCLDidJwk {
+        let publicPrivateKeys = try generateJwkSECP256K1FromKid(kid: jwkDescriptor.kid)
+        return VCLDidJwk(
+            publicKey: publicPrivateKeys.publicKey,
+            privateKey: publicPrivateKeys.privateKey
+        )
+    }
+    
+    private func generateJwkSECP256K1FromKid(kid: String) throws -> (publicKey: ECPublicJwk, privateKey: VCCryptoSecret) {
+        let secp256k1Signer = Secp256k1Signer()
+        let secret = try CryptoOperations().generateKey()
+        let publicKey = try secp256k1Signer.getPublicJwk(from: secret, withKeyId: kid)
+        
+        let pubKey = ECPublicJwk(x: publicKey.x, y: publicKey.y, keyId: kid)
+        
+        return (pubKey, secret)
     }
 }

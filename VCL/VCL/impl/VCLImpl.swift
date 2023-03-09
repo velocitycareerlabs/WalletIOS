@@ -161,7 +161,9 @@ public class VCLImpl: VCL {
         successHandler: @escaping (VCLExchange) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        exchangeProgressUseCase.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) {
+        exchangeProgressUseCase.getExchangeProgress(
+            exchangeDescriptor: exchangeDescriptor
+        ) {
             [weak self] exchangeProgressResult in
             do {
                 successHandler(try exchangeProgressResult.get())
@@ -228,6 +230,7 @@ public class VCLImpl: VCL {
         errorHandler: @escaping (VCLError) -> Void
     ) {
         let identificationSubmission = VCLIdentificationSubmission(
+            didJwk: generateOffersDescriptor.didJwk,
             credentialManifest: generateOffersDescriptor.credentialManifest,
             verifiableCredentials: generateOffersDescriptor.identificationVerifiableCredentials
         )
@@ -381,10 +384,13 @@ public class VCLImpl: VCL {
     }
     
     public func generateDidJwk(
+        jwkDescriptor: VCLDidJwkDescriptor,
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.generateDidJwk {
+        jwtServiceUseCase.generateDidJwk(
+            jwkDescriptor: jwkDescriptor
+        ) {
             [weak self] didJwkResult in
             do {
                 successHandler(try didJwkResult.get())

@@ -19,19 +19,23 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     private let executor: Executor
     private let dispatcher: Dispatcher
     
-    init(_ finalizeOffersRepository: FinalizeOffersRepository,
-         _ jwtServiceRepository: JwtServiceRepository,
-         _ executor: Executor,
-         _ dispatcher: Dispatcher) {
+    init(
+        _ finalizeOffersRepository: FinalizeOffersRepository,
+        _ jwtServiceRepository: JwtServiceRepository,
+        _ executor: Executor,
+        _ dispatcher: Dispatcher
+    ) {
         self.finalizeOffersRepository = finalizeOffersRepository
         self.jwtServiceRepository = jwtServiceRepository
         self.executor = executor
         self.dispatcher = dispatcher
     }
     
-    func finalizeOffers(token: VCLToken,
-                        finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-                        completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void) {
+    func finalizeOffers(
+        token: VCLToken,
+        finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+    ) {
         executor.runOnBackgroundThread { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(FinalizeOffersUseCase.self)") {
@@ -70,6 +74,8 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
                     }
                 UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
                 _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+            } else {
+                completionBlock(.failure(VCLError(description: "self is nil")))
             }
         }
     }

@@ -23,7 +23,7 @@ class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
     ) {
         networkService.sendRequest(
             endpoint: Urls.VerifiedProfile.replacingOccurrences(of: Params.Did, with: verifiedProfileDescriptor.did),
-            method: Request.HttpMethod.GET,
+            method: .GET,
             headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)],
             cachePolicy: .useProtocolCachePolicy
         ) { verifiedProfileResult in

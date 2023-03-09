@@ -40,8 +40,8 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
                 _self.jwtServiceRepository.generateSignedJwt(
                     jwtDescriptor: VCLJwtDescriptor(
                         payload: submission.payload,
-                        iss: submission.iss,
-                        jti: submission.jti
+                        jti: submission.jti,
+                        iss: submission.iss
                     )) { signedJwtResult in
                         do {
                             let jwt = try signedJwtResult.get()
@@ -57,6 +57,8 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
                     }
                 UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
                 _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+            } else {
+                completionBlock(.failure(VCLError(description: "self is nil")))
             }
         }
     }

@@ -14,18 +14,21 @@ public class VCLPresentationSubmission: VCLSubmission {
     public var progressUri: String
 
     public init(
+        didJwk: VCLDidJwk,
         presentationRequest: VCLPresentationRequest,
         verifiableCredentials: [VCLVerifiableCredential]
     ) {
         self.progressUri = presentationRequest.progressUri
         
-        super.init(submitUri: presentationRequest.submitPresentationUri,
-                   iss: presentationRequest.iss,
-                   exchangeId: presentationRequest.exchangeId,
-                   presentationDefinitionId: presentationRequest.presentationDefinitionId,
-                   verifiableCredentials: verifiableCredentials,
-                   pushDelegate: presentationRequest.pushDelegate,
-                   vendorOriginContext: presentationRequest.vendorOriginContext)
-        
+        super.init(
+            submitUri: presentationRequest.submitPresentationUri,
+            didJwk: didJwk,
+            iss: presentationRequest.iss,
+            exchangeId: presentationRequest.exchangeId,
+            presentationDefinitionId: presentationRequest.presentationDefinitionId,
+            verifiableCredentials: verifiableCredentials,
+            pushDelegate: presentationRequest.pushDelegate,
+            vendorOriginContext: presentationRequest.vendorOriginContext
+        )
     }
 }

@@ -28,48 +28,38 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
                 (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(token.value)"),
                 (HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)
             ]) { [weak self] response in
-            do {
-                let offersResponse = try response.get()
-                if let zelf = self {
-                    completionBlock(.success(
-                        zelf.parse(offersResponse: offersResponse, token: token)
-                    ))
-                } else {
-                    completionBlock(.failure(VCLError(description: "VCL offers parse could not be completed - self is dead")))
+                do {
+                    let offersResponse = try response.get()
+                    if let zelf = self {
+                        completionBlock(.success(
+                            zelf.parse(offersResponse: offersResponse, token: token)
+                        ))
+                    } else {
+                        completionBlock(.failure(VCLError(description: "VCL offers parse could not be completed - self is dead")))
+                    }
+                } catch {
+                    completionBlock(.failure(VCLError(error: error)))
                 }
-            } catch {
-                completionBlock(.failure(VCLError(error: error)))
             }
-        }
     }
     
     private func parse(offersResponse: Response, token: VCLToken) -> VCLOffers {
-        if let offers = offersResponse.payload.toListOfDictionaries() {
+        if let payload = offersResponse.payload.toDictionary() {
             return VCLOffers(
-                all: offers,
+                payload: payload,
+                all: (payload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]]) ?? [[String: Any]](),
                 responseCode: offersResponse.code,
-                token: token
+                token: token,
+                challenge: (payload[VCLOffers.CodingKeys.KeyChallenge] as? String) ?? ""
             )
-        } else if let offers = offersResponse.payload.toDictionary() {
-            if(offers.isEmpty) {
-                return VCLOffers(
-                        all: [],
-                        responseCode: offersResponse.code,
-                        token: token
-                    )
-            } else {
-                return VCLOffers(
-                    all: [offers],
-                    responseCode: offersResponse.code,
-                    token: token
-                    )
-            }
         } else {
             return VCLOffers(
-                    all: [],
-                    responseCode: offersResponse.code,
-                    token: token
-                )
+                payload: [String: Any](),
+                all: [[String: Any]](),
+                responseCode: offersResponse.code,
+                token: token,
+                challenge: ""
+            )
         }
     }
 }

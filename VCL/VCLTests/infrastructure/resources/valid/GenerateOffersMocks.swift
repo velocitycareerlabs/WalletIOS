@@ -8,9 +8,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Foundation
+@testable import VCL
 
 class GenerateOffersMocks {
-    static let GeneratedOffers = "[{\"offer1\":\"some offer 1\"},{\"offer2\":\"some offer 2\"}]"
+    static let Offers = "[{\"offer1\":\"some offer 1\"},{\"offer2\":\"some offer 2\"}]"
+    static let Challenge = "CSASLD10103aa_RW"
+    static let GeneratedOffers = "{\"offers\": \(Offers), \"challenge\": \(Challenge)"
     static let GeneratedOffersEmptyJsonObj = "{}"
     static let GeneratedOffersEmptyJsonArr = "[]"
 }

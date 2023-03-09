@@ -10,13 +10,28 @@
 import Foundation
 
 public struct VCLOffers {
+    public let payload: [String: Any]
     public let all: [[String: Any]]
     public let responseCode: Int
     public let token: VCLToken
+    public let challenge: String
     
-    public init(all: [[String: Any]], responseCode: Int, token: VCLToken) {
+    public init(
+        payload: [String: Any],
+        all: [[String: Any]],
+        responseCode: Int,
+        token: VCLToken,
+        challenge: String
+    ) {
+        self.payload = payload
         self.all = all
         self.responseCode = responseCode
         self.token = token
+        self.challenge = challenge
+    }
+    
+    public struct CodingKeys {
+        public static let KeyOffers = "offers"
+        public static let KeyChallenge = "challenge"
     }
 }

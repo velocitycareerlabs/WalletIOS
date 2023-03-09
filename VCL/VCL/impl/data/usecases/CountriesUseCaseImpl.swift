@@ -41,6 +41,8 @@ class CountriesUseCaseImpl: CountriesUseCase  {
                 
                 UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
                 _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+            } else {
+                completionBlock(.failure(VCLError(description: "self is nil")))
             }
         }
     }
