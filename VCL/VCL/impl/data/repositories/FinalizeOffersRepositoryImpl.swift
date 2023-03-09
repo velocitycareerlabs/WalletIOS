@@ -45,7 +45,7 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
                     method: .POST,
                     headers: [
                         (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(token.value)"),
-                        (HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)
+                        (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
                     ])
                 { result in
                     do {

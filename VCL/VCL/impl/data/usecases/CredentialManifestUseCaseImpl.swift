@@ -86,7 +86,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
             }
         } else {
             self.executor.runOnMainThread {
-                completionBlock(.failure(VCLError(description: "Empty KeyID")))
+                completionBlock(.failure(VCLError(message: "Empty KeyID")))
             }
         }
     }
@@ -116,7 +116,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
             executor.runOnMainThread { completionBlock(.success(VCLCredentialManifest(jwt: jwt))) }
         } else {
             executor.runOnMainThread {
-                completionBlock(.failure(VCLError(description: "Failed  to verify: \(jwt)")))
+                completionBlock(.failure(VCLError(message: "Failed  to verify: \(jwt)")))
             }
         }
     }

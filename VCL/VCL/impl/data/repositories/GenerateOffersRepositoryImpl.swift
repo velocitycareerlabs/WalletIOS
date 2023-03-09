@@ -26,7 +26,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
             method: .POST,
             headers:[
                 (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(token.value)"),
-                (HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)
+                (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
             ]) { [weak self] response in
                 do {
                     let offersResponse = try response.get()
@@ -35,7 +35,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
                             zelf.parse(offersResponse: offersResponse, token: token)
                         ))
                     } else {
-                        completionBlock(.failure(VCLError(description: "VCL offers parse could not be completed - self is dead")))
+                        completionBlock(.failure(VCLError(message: "VCL offers parse could not be completed - self is dead")))
                     }
                 } catch {
                     completionBlock(.failure(VCLError(error: error)))

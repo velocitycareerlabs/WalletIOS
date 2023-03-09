@@ -31,7 +31,7 @@ class CountriesRepositoryImpl: CountriesRepository {
                 if let countriesList = countries.toList() {
                     completionBlock(.success(self.listToCountries(countriesList as? [[String: Any]])))
                 } else {
-                    completionBlock(.failure(VCLError(description: "Failed to parse \(countries)")))
+                    completionBlock(.failure(VCLError(message: "Failed to parse \(countries)")))
                 }
             } else {
                 fetchCountries(endpoint: endpoint, cacheSequence: cacheSequence, completionBlock: completionBlock)
@@ -48,7 +48,7 @@ class CountriesRepositoryImpl: CountriesRepository {
             endpoint: endpoint,
             contentType: .ApplicationJson,
             method: .GET,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)],
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)],
             cachePolicy: .useProtocolCachePolicy
         ) {
             [weak self] res in
@@ -58,7 +58,7 @@ class CountriesRepositoryImpl: CountriesRepository {
                 if let countriesList = payload.toList() as? [[String: Any]], let _self = self {
                     completionBlock(.success(_self.listToCountries(countriesList)))
                 } else {
-                    completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: payload, encoding: .utf8) ?? "")")))
+                    completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: payload, encoding: .utf8) ?? "")")))
                 }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))

@@ -98,8 +98,8 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 assert(false)
             },
             errorHandler: { error in
-                assert(error.code == VCLErrorCode.VerificationError.rawValue)
-                assert(error.description!.toDictionary()!["profileName"] as! String == "University of Massachusetts Amherst")
+                assert(error.statusCode == VCLStatusCode.VerificationError.rawValue)
+                assert(error.message!.toDictionary()!["profileName"] as! String == "University of Massachusetts Amherst")
             }
         )
     }
@@ -121,8 +121,8 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 assert(false)
             },
             errorHandler: { error in
-                assert(error.code == VCLErrorCode.VerificationError.rawValue)
-                assert(error.description!.toDictionary()!["profileName"] as! String == "University of Massachusetts Amherst")
+                assert(error.statusCode == VCLStatusCode.VerificationError.rawValue)
+                assert(error.message!.toDictionary()!["profileName"] as! String == "University of Massachusetts Amherst")
             }
         )
     }
@@ -144,8 +144,8 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 assert(false)
             },
             errorHandler: { error in
-                assert(error.code == VCLErrorCode.VerificationError.rawValue)
-                assert(error.description!.toDictionary()!["profileName"] as! String == "University of Massachusetts Amherst")
+                assert(error.statusCode == VCLStatusCode.VerificationError.rawValue)
+                assert(error.message!.toDictionary()!["profileName"] as! String == "University of Massachusetts Amherst")
             }
         )
     }

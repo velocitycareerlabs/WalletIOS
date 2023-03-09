@@ -57,7 +57,7 @@ class SubmissionRepositoryImpl: SubmissionRepository {
                             }
                         })
                 } else {
-                    completionBlock(.failure(VCLError(description: "self is nil")))
+                    completionBlock(.failure(VCLError(message: "self is nil")))
                 }
             } catch {
                     completionBlock(.failure(VCLError(error: error)))

@@ -49,7 +49,7 @@ class JwtServiceImpl: JwtService {
             guard let jwsToken = JwsToken(headers: header,
                                           content: claims,
                                           protectedMessage: protectedMessage) else {
-                throw VCLError(description: "Failed to create JwsToken")
+                throw VCLError(message: "Failed to create JwsToken")
             }
             
             let signature = try secp256k1Signer.sign(token: jwsToken, withSecret: secret)
@@ -58,7 +58,7 @@ class JwtServiceImpl: JwtService {
                                                 protectedMessage: jwsToken.protectedMessage,
                                                 signature: signature,
                                                 rawValue: jwsToken.rawValue) else {
-                throw VCLError(description: "Failed to create signed JwsToken")
+                throw VCLError(message: "Failed to create signed JwsToken")
             }
             return try VCLJwt(encodedJwt: jwsTokenSigned.serialize())
             
