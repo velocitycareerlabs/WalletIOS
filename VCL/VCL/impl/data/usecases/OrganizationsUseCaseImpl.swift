@@ -39,7 +39,7 @@ class OrganizationsUseCaseImpl: OrganizationsUseCase {
                 UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
                 _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             } else {
-                completionBlock(.failure(VCLError(description: "self is nil")))
+                completionBlock(.failure(VCLError(message: "self is nil")))
             }
         }
     }

@@ -73,7 +73,7 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
             completionBlock(.success(encodedJwts))
         } else {
             completionBlock(
-                .failure(VCLError(description: "Failed to parse: \(finalizedOffersResponse.payload)"))
+                .failure(VCLError(message: "Failed to parse: \(finalizedOffersResponse.payload)"))
             )
         }
     }

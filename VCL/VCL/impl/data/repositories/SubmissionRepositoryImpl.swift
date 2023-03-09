@@ -44,7 +44,7 @@ class SubmissionRepositoryImpl: SubmissionRepository {
                         body: submission.generateRequestBody(jwt: jwt).toJsonString(),
                         contentType: Request.ContentType.ApplicationJson,
                         method: .POST,
-                        headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)],
+                        headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)],
                         completionBlock: { result in
                             do {
                                 let submissionResponse = try result.get()
