@@ -70,10 +70,9 @@ class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
                 }
                 _self.dispatcher.notify(queue: .main) {
                     if(credentialTypeSchemasMapIsEmpty) {
-                        completionBlock(.failure(VCLError(message: "Failed to fetch credential type schemas")))
-                    } else {
-                        completionBlock(.success(VCLCredentialTypeSchemas(all: credentialTypeSchemasMap)))
+                        VCLLog.e("Failed to fetch credential type schemas")
                     }
+                    completionBlock(.success(VCLCredentialTypeSchemas(all: credentialTypeSchemasMap)))
                 }
                 
                 UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
