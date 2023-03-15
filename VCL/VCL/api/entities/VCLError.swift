@@ -51,7 +51,7 @@ public struct VCLError: Error {
             CodingKeys.KeyError: error,
             CodingKeys.KeyErrorCode: errorCode,
             CodingKeys.KeyMessage: message,
-            CodingKeys.KeyErrorCode: errorCode
+            CodingKeys.KeyStatusCode: statusCode
         ]
     }
     

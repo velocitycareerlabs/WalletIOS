@@ -22,6 +22,12 @@ class GlobalConfigTest: XCTestCase {
         assert(GlobalConfig.IsLoggerOn)
     }
     
+    func testQaEnvironment() {
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.QA
+        
+        assert(GlobalConfig.IsLoggerOn)
+    }
+    
     func testStagingEnvironment() {
         GlobalConfig.CurrentEnvironment = VCLEnvironment.STAGING
         

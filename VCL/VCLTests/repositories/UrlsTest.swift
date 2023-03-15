@@ -43,6 +43,19 @@ final class UrlsTest: XCTestCase {
         assert(Urls.ResolveKid.hasPrefix(expectedUrlPrefix))
         assert(Urls.CredentialTypesFormSchema.hasPrefix(expectedUrlPrefix))
     }
+    
+    func testQaEnvironment() {
+        let expectedUrlPrefix = "https://qaregistrar.velocitynetwork.foundation"
+
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.QA
+
+        assert(Urls.CredentialTypes.hasPrefix(expectedUrlPrefix))
+        assert(Urls.CredentialTypeSchemas.hasPrefix(expectedUrlPrefix))
+        assert(Urls.Countries.hasPrefix(expectedUrlPrefix))
+        assert(Urls.Organizations.hasPrefix(expectedUrlPrefix))
+        assert(Urls.ResolveKid.hasPrefix(expectedUrlPrefix))
+        assert(Urls.CredentialTypesFormSchema.hasPrefix(expectedUrlPrefix))
+    }
 
     func testDevEnvironment() {
         let expectedUrlPrefix = "https://devregistrar.velocitynetwork.foundation"

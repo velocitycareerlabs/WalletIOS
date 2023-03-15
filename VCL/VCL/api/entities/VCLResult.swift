@@ -20,7 +20,7 @@ extension VCLResult {
         case .success(let value):
             return value
         case .failure(let error):
-            throw error
+            throw VCLError(error: error)
         }
     }
 }
