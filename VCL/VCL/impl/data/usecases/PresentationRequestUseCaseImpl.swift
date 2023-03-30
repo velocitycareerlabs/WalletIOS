@@ -98,7 +98,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                 }
             }
         } else {
-            self.onError(VCLError(description: "Empty KeyID"), completionBlock)
+            self.onError(VCLError(message: "Empty KeyID"), completionBlock)
         }
     }
     
@@ -142,7 +142,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                 completionBlock(.success(presentationRequest))
             }
         } else {
-            onError(VCLError(description: "Failed  to verify: \(presentationRequest.jwt.payload ?? [:])"), completionBlock)
+            onError(VCLError(message: "Failed  to verify: \(presentationRequest.jwt.payload ?? [:])"), completionBlock)
         }
     }
     

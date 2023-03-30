@@ -22,7 +22,7 @@ class ResolveKidRepositoryImpl: ResolveKidRepository {
             endpoint: Urls.ResolveKid + keyID + "?format=\(VCLJwkPublic.Format.jwk)",
             contentType: Request.ContentType.ApplicationJson,
             method: .GET,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)]
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
         ) {
             response in
             do{
@@ -30,7 +30,7 @@ class ResolveKidRepositoryImpl: ResolveKidRepository {
                 if let jwkDict = publicKeyResponse.payload.toDictionary() {
                     completionBlock(.success(VCLJwkPublic(valueDict: jwkDict)))
                 } else {
-                    completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: publicKeyResponse.payload, encoding: .utf8) ?? "")")))
+                    completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: publicKeyResponse.payload, encoding: .utf8) ?? "")")))
                 }
             }
             catch {

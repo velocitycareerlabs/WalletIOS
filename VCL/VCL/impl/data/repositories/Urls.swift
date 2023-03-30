@@ -12,6 +12,8 @@ struct Urls {
         switch GlobalConfig.CurrentEnvironment {
         case VCLEnvironment.DEV:
             return VCLEnvironment.DEV.rawValue
+        case VCLEnvironment.QA:
+            return VCLEnvironment.QA.rawValue
         case VCLEnvironment.STAGING:
             return VCLEnvironment.STAGING.rawValue
         default:
@@ -48,6 +50,6 @@ struct HeaderKeys {
     static let XVnfProtocolVersion = "x-vnf-protocol-version"
 }
 
-struct HeaderKValues {
+struct HeaderValues {
     static let XVnfProtocolVersion = "1.0"
 }

@@ -12,5 +12,6 @@ import Foundation
 public enum VCLEnvironment: String {
     case PROD = "prod"
     case STAGING = "staging"
+    case QA = "qa"
     case DEV = "dev"
 }

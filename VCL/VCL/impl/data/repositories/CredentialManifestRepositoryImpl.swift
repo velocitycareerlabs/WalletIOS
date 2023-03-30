@@ -23,7 +23,7 @@ class CredentialManifestRepositoryImpl: CredentialManifestRepository {
                 endpoint: endpoint,
                 contentType: .ApplicationJson,
                 method: .GET,
-                headers: [(HeaderKeys.XVnfProtocolVersion, HeaderKValues.XVnfProtocolVersion)]
+                headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
             ) { response in
                 do {
                     let credentialManifestReposnse = try response.get()
@@ -31,14 +31,14 @@ class CredentialManifestRepositoryImpl: CredentialManifestRepository {
                         completionBlock(.success(jwtStr))
                         
                     } else {
-                        completionBlock(.failure(VCLError(description: "Failed to parse \(String(data: credentialManifestReposnse.payload, encoding: .utf8) ?? "")")))
+                        completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: credentialManifestReposnse.payload, encoding: .utf8) ?? "")")))
                     }
                 } catch {
                     completionBlock(.failure(VCLError(error: error)))
                 }
             }
         } else {
-            completionBlock(.failure(VCLError(description: "credentialManifestDescriptor.endpoint = null")))
+            completionBlock(.failure(VCLError(message: "credentialManifestDescriptor.endpoint = null")))
         }
     }
 }
