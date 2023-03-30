@@ -57,10 +57,9 @@ class NetworkServiceImpl: NetworkService {
                     completionBlock(.success(response))
                 }
                 else {
-                    completionBlock(.failure(VCLError(
-                                                    message:
-                        "Connection failed: \((String(data: data ?? Data(bytes: [] as [UInt8], count: 0), encoding: .utf8)) ?? "")",
-                                                    statusCode: httpResponse.statusCode)))
+                    completionBlock(.failure(
+                        VCLError(payload:"\((String(data: data ?? Data(bytes: [] as [UInt8], count: 0), encoding: .utf8)) ?? "" )")
+                    ))
                 }
             }
         }

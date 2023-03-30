@@ -37,6 +37,37 @@ class VCLErrorTes: XCTestCase {
         assert(error.message == ErrorMocks.Message)
         assert(error.statusCode == ErrorMocks.StatusCode)
     }
+    
+    func testErrorFromError1() {
+        let error = VCLError(
+            error: ErrorMocks.Error,
+            errorCode: ErrorMocks.ErrorCode,
+            message: ErrorMocks.Message,
+            statusCode: ErrorMocks.StatusCode
+        )
+        let errorFromError = VCLError(error: error)
+        
+        assert(error.payload == errorFromError.payload)
+        assert(error.error == errorFromError.error)
+        assert(error.errorCode == errorFromError.errorCode)
+        assert(error.message == errorFromError.message)
+        assert(error.statusCode == errorFromError.statusCode)
+    }
+    
+    func testErrorFromError2() {
+        let error = VCLError(
+            error: ErrorMocks.Error,
+            errorCode: ErrorMocks.ErrorCode,
+            message: ErrorMocks.Message
+        )
+        let errorFromError = VCLError(error: error, code: 1)
+        
+        assert(errorFromError.payload == error.payload)
+        assert(errorFromError.error == error.error)
+        assert(errorFromError.errorCode == error.errorCode)
+        assert(errorFromError.message == error.message)
+        assert(errorFromError.statusCode == 1)
+    }
 
     func testErrorToJsonFromPayload() {
         let error = VCLError(payload: ErrorMocks.Payload)
