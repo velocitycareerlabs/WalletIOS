@@ -38,11 +38,19 @@ public struct VCLError: Error {
     }
     
     public init(error: Error? = nil, code: Int? = nil) {
-        self.payload = nil
-        self.error = nil
-        self.errorCode = nil
-        self.message = "\(String(describing: error))"
-        self.statusCode = code
+        if let vclError = error as? VCLError {
+            self.payload = vclError.payload
+            self.error = vclError.error
+            self.errorCode = vclError.errorCode
+            self.message = vclError.message
+            self.statusCode = vclError.statusCode ?? code
+        } else {
+            self.payload = nil
+            self.error = nil
+            self.errorCode = nil
+            self.message = "\(String(describing: error))"
+            self.statusCode = code
+        }
     }
 
     public func toDictionary() -> [String: Any?] {
