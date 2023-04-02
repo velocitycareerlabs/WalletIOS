@@ -21,7 +21,8 @@ public class VCLCredentialManifestDescriptorByService: VCLCredentialManifestDesc
             uri: service.serviceEndpoint,
             issuingType: issuingType,
             credentialTypes: credentialTypes,
-            pushDelegate: pushDelegate)
+            pushDelegate: pushDelegate
+        )
     }
 ///    TODO: validate credentialTypes by services.credentialTypes
     
