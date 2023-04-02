@@ -14,17 +14,22 @@ public class VCLCredentialManifestDescriptor {
     public let issuingType: VCLIssuingType
     public let credentialTypes: [String]?
     public let pushDelegate: VCLPushDelegate?
-    public var did: String?
+    public let did: String?
+    public let vendorOriginContext: String?
     
-    public init(uri: String?,
-                issuingType: VCLIssuingType = VCLIssuingType.Career,
-                credentialTypes: [String]? = nil,
-                pushDelegate: VCLPushDelegate? = nil) {
+    public init(
+        uri: String?,
+        issuingType: VCLIssuingType = VCLIssuingType.Career,
+        credentialTypes: [String]? = nil,
+        pushDelegate: VCLPushDelegate? = nil,
+        vendorOriginContext: String? = nil
+    ) {
         self.uri = uri
         self.issuingType = issuingType
         self.credentialTypes = credentialTypes
         self.pushDelegate = pushDelegate
         self.did = uri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix)
+        self.vendorOriginContext = vendorOriginContext
     }
     
     public var endpoint: String? { get { uri } }
