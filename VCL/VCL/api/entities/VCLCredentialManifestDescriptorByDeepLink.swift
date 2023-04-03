@@ -17,7 +17,8 @@ public class VCLCredentialManifestDescriptorByDeepLink: VCLCredentialManifestDes
     ) {
         super.init(
             uri: deepLink.requestUri,
-            issuingType: issuingType
+            issuingType: issuingType,
+            vendorOriginContext: deepLink.vendorOriginContext
         )
     }
 }

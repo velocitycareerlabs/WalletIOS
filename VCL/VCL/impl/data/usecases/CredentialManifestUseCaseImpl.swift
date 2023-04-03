@@ -38,11 +38,17 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                     _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
                 }
                 
-                self?.credentialManifestRepository.getCredentialManifest(credentialManifestDescriptor: credentialManifestDescriptor) {
+                self?.credentialManifestRepository.getCredentialManifest(
+                    credentialManifestDescriptor: credentialManifestDescriptor
+                ) {
                     jwtStrResult in
                     do {
                         let jwtStr = try jwtStrResult.get()
-                        _self.onGetJwtSuccess(jwtStr,completionBlock)
+                        _self.onGetJwtSuccess(
+                            jwtStr,
+                            credentialManifestDescriptor,
+                            completionBlock
+                        )
                     } catch {
                         _self.onError(error, completionBlock)
                     }
@@ -57,13 +63,18 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onGetJwtSuccess(
         _ jwtStr: String,
+        _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         self.jwtServiceRepository.decode(encodedJwt: jwtStr) {
             [weak self] jwtResult in
             do {
                 let jwt = try jwtResult.get()
-                self?.onDecodeJwtSuccess(jwt, completionBlock)
+                self?.onDecodeJwtSuccess(
+                    jwt,
+                    credentialManifestDescriptor,
+                    completionBlock
+                )
             } catch {
                 self?.onError(error, completionBlock)
             }
@@ -72,6 +83,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onDecodeJwtSuccess(
         _ jwt: VCLJwt,
+        _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if let keyID = jwt.keyID?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
@@ -79,7 +91,12 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                 [weak self] publicKeyResult in
                 do {
                     let publicKey = try publicKeyResult.get()
-                    self?.onResolvePublicKeySuccess(publicKey, jwt, completionBlock)
+                    self?.onResolvePublicKeySuccess(
+                        publicKey,
+                        jwt,
+                        credentialManifestDescriptor,
+                        completionBlock
+                    )
                 } catch {
                     self?.onError(error, completionBlock)
                 }
@@ -94,13 +111,19 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     private func onResolvePublicKeySuccess(
         _ jwkPublic: VCLJwkPublic,
         _ jwt: VCLJwt,
+        _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         self.jwtServiceRepository.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) {
             [weak self] isVerifiedResult in
             do {
                 let isVerified = try isVerifiedResult.get()
-                self?.onVerificationSuccess(isVerified, jwt, completionBlock)
+                self?.onVerificationSuccess(
+                    isVerified,
+                    jwt,
+                    credentialManifestDescriptor,
+                    completionBlock
+                )
             } catch {
                 self?.onError(error, completionBlock)
             }
@@ -110,10 +133,16 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     private func onVerificationSuccess(
         _ isVerified: Bool,
         _ jwt: VCLJwt,
+        _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if isVerified == true {
-            executor.runOnMainThread { completionBlock(.success(VCLCredentialManifest(jwt: jwt))) }
+            executor.runOnMainThread { completionBlock(.success(
+                VCLCredentialManifest(
+                    jwt: jwt,
+                    vendorOriginContext: credentialManifestDescriptor.vendorOriginContext
+                )))
+            }
         } else {
             executor.runOnMainThread {
                 completionBlock(.failure(VCLError(message: "Failed  to verify: \(jwt)")))
