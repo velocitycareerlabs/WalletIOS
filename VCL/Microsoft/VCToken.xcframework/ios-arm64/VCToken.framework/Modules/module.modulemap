@@ -1,0 +1,11 @@
+framework module VCToken {
+  umbrella header "VCToken.h"
+
+  export *
+  module * { export * }
+}
+
+module VCToken.Swift {
+  header "VCToken-Swift.h"
+  requires objc
+}

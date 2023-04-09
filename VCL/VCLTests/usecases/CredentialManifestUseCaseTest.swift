@@ -20,48 +20,48 @@ final class CredentialManifestUseCaseTest: XCTestCase {
     }
 
     func testGetCredentialManifest() {
-//        // Arrange
-//        subject = CredentialManifestUseCaseImpl(
-//            CredentialManifestRepositoryImpl(
-//                NetworkServiceSuccess(validResponse: CredentialManifestMocks.CredentialManifestJwt)
-//            ),
-//            ResolveKidRepositoryImpl(
-//                NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
-//            ),
-//            JwtServiceRepositoryImpl(
-//                JwtServiceSuccess(
-//                    VclJwt: VCLJwt(
-//                        encodedJwt: CredentialManifestMocks.CredentialManifestJwt
-//                    ),
-//                    VclDidJwk: JwtServiceMocks.didJwk
-//                )
-////                Can't be tested, because of storing exception
-////                JwtServiceMicrosoftImpl()
-//            ),
-//            EmptyExecutor()
-//        )
-//        var result: VCLResult<VCLCredentialManifest>? = nil
-//
-//        // Action
-//        subject.getCredentialManifest(
-//            credentialManifestDescriptor: VCLCredentialManifestDescriptorByDeepLink(
-//                deepLink: DeepLinkMocks.CredentialManifestDeepLinkDevNet,
-//                issuingType: VCLIssuingType.Career
-//            )
-//        ) {
-//            result = $0
-//        }
-//
-//        // Assert
-//        do {
-//            let credentialManifest = try result?.get()
-//            assert((credentialManifest?.jwt.encodedJwt)! == CredentialManifestMocks.CredentialManifestJwt)
-//            assert((credentialManifest?.jwt.header)! == CredentialManifestMocks.Header)
-//            assert((credentialManifest?.jwt.payload)! == CredentialManifestMocks.Payload)
-//            assert((credentialManifest?.jwt.signature)! == CredentialManifestMocks.Signature)
-//        } catch {
-//            XCTFail(error.localizedDescription)
-//        }
+        // Arrange
+        subject = CredentialManifestUseCaseImpl(
+            CredentialManifestRepositoryImpl(
+                NetworkServiceSuccess(validResponse: CredentialManifestMocks.CredentialManifest)
+            ),
+            ResolveKidRepositoryImpl(
+                NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
+            ),
+            JwtServiceRepositoryImpl(
+                JwtServiceSuccess(
+                    VclJwt: VCLJwt(
+                        encodedJwt: CredentialManifestMocks.CredentialManifestJwt
+                    ),
+                    VclDidJwk: JwtServiceMocks.didJwk
+                )
+//                Can't be tested, because of storing exception
+//                JwtServiceMicrosoftImpl()
+            ),
+            EmptyExecutor()
+        )
+        var result: VCLResult<VCLCredentialManifest>? = nil
+
+        // Action
+        subject.getCredentialManifest(
+            credentialManifestDescriptor: VCLCredentialManifestDescriptorByDeepLink(
+                deepLink: DeepLinkMocks.CredentialManifestDeepLinkDevNet,
+                issuingType: VCLIssuingType.Career
+            )
+        ) {
+            result = $0
+        }
+
+        // Assert
+        do {
+            let credentialManifest = try result?.get()
+            assert((credentialManifest?.jwt.encodedJwt)! == CredentialManifestMocks.CredentialManifestJwt)
+            assert((credentialManifest?.jwt.header)! == CredentialManifestMocks.Header)
+            assert((credentialManifest?.jwt.payload)! == CredentialManifestMocks.Payload)
+            assert((credentialManifest?.jwt.signature)! == CredentialManifestMocks.Signature)
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
     }
 
     override func tearDown() {

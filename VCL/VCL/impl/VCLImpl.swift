@@ -39,7 +39,10 @@ public class VCLImpl: VCL {
         
         initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
         
-        initGlobalConfigurations(initializationDescriptor.environment)
+        initGlobalConfigurations(
+            initializationDescriptor.environment,
+            initializationDescriptor.keycahinAccessGroupIdentifier
+        )
         
         printVersion()
         
@@ -96,8 +99,12 @@ public class VCLImpl: VCL {
         }
     }
     
-    private func initGlobalConfigurations(_ environment: VCLEnvironment) {
+    private func initGlobalConfigurations(
+        _ environment: VCLEnvironment,
+        _ keycahinAccessGroupIdentifier: String? = nil
+    ) {
         GlobalConfig.CurrentEnvironment = environment
+        GlobalConfig.KeycahinAccessGroupIdentifier = keycahinAccessGroupIdentifier
     }
     
     public var countries: VCLCountries? { get { return countriesModel.data } }

@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		2801702929DD6DEC00DAB4F1 /* SecretStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2801702829DD6DEC00DAB4F1 /* SecretStoreMock.swift */; };
 		2803AA5529B7302E004E8AC4 /* CodableExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2803AA5429B7302E004E8AC4 /* CodableExtensions.swift */; };
 		280587F826CD3BCC00E89146 /* VCLCredentialManifestDescriptorByServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280587F726CD3BCC00E89146 /* VCLCredentialManifestDescriptorByServiceTest.swift */; };
 		2806600229B5EB6A00433302 /* VCLCredentialManifestTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2806600129B5EB6A00433302 /* VCLCredentialManifestTest.swift */; };
@@ -69,6 +70,7 @@
 		28507A1F2663F9A200F97259 /* ExchangeProgressUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28507A1E2663F9A200F97259 /* ExchangeProgressUseCaseImpl.swift */; };
 		28507A212663FCC700F97259 /* ExchangeProgressUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28507A202663FCC700F97259 /* ExchangeProgressUseCaseTest.swift */; };
 		2857ADE0294A21AB00C23EA2 /* VCLServiceTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2857ADDF294A21AB00C23EA2 /* VCLServiceTypes.swift */; };
+		2859B5AE29DC2759005626DA /* VCSDKConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2859B5AD29DC2759005626DA /* VCSDKConfiguration.swift */; };
 		285D153C26CA90E200532E1C /* GenerateOffersMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285D153B26CA90E200532E1C /* GenerateOffersMocks.swift */; };
 		285D154726CA926F00532E1C /* OrganizationsMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285D154626CA926F00532E1C /* OrganizationsMocks.swift */; };
 		285D154926CA92CE00532E1C /* OrganizationsUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285D154826CA92CE00532E1C /* OrganizationsUseCaseTest.swift */; };
@@ -312,6 +314,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2801702829DD6DEC00DAB4F1 /* SecretStoreMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecretStoreMock.swift; sourceTree = "<group>"; };
 		2803AA5429B7302E004E8AC4 /* CodableExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableExtensions.swift; sourceTree = "<group>"; };
 		280587F726CD3BCC00E89146 /* VCLCredentialManifestDescriptorByServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLCredentialManifestDescriptorByServiceTest.swift; sourceTree = "<group>"; };
 		2806600129B5EB6A00433302 /* VCLCredentialManifestTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLCredentialManifestTest.swift; sourceTree = "<group>"; };
@@ -357,6 +360,7 @@
 		28507A1E2663F9A200F97259 /* ExchangeProgressUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeProgressUseCaseImpl.swift; sourceTree = "<group>"; };
 		28507A202663FCC700F97259 /* ExchangeProgressUseCaseTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeProgressUseCaseTest.swift; sourceTree = "<group>"; };
 		2857ADDF294A21AB00C23EA2 /* VCLServiceTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLServiceTypes.swift; sourceTree = "<group>"; };
+		2859B5AD29DC2759005626DA /* VCSDKConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCSDKConfiguration.swift; sourceTree = "<group>"; };
 		285D153B26CA90E200532E1C /* GenerateOffersMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateOffersMocks.swift; sourceTree = "<group>"; };
 		285D154626CA926F00532E1C /* OrganizationsMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationsMocks.swift; sourceTree = "<group>"; };
 		285D154826CA92CE00532E1C /* OrganizationsUseCaseTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationsUseCaseTest.swift; sourceTree = "<group>"; };
@@ -707,6 +711,7 @@
 			isa = PBXGroup;
 			children = (
 				282F1C822670AFE200887A5C /* JwtServiceImpl.swift */,
+				2859B5AD29DC2759005626DA /* VCSDKConfiguration.swift */,
 			);
 			path = jwt;
 			sourceTree = "<group>";
@@ -1110,6 +1115,7 @@
 				2810CFA526CA9ACF00A3A9B9 /* PresentationRequestMocks.swift */,
 				281E504A26CA9D0200D0FB4F /* PresentationSubmissionMocks.swift */,
 				2825AA0D272B19D40044D7C5 /* VerifiedProfileMocks.swift */,
+				2801702829DD6DEC00DAB4F1 /* SecretStoreMock.swift */,
 			);
 			path = valid;
 			sourceTree = "<group>";
@@ -1419,6 +1425,7 @@
 				28AADD5228AA6D5C005EAF9D /* DsptchQueue.swift in Sources */,
 				286415AF264D65E2006C1AA3 /* DataExtensions.swift in Sources */,
 				286415EF264D65E2006C1AA3 /* GenerateOffersUseCase.swift in Sources */,
+				2859B5AE29DC2759005626DA /* VCSDKConfiguration.swift in Sources */,
 				28641605264D65E2006C1AA3 /* VCLPresentationRequest.swift in Sources */,
 				280EE1A72670B6AD00F192F6 /* ECPublicJwkExtensions.swift in Sources */,
 				288FBDC9276269BC00154BF6 /* VCLCountries.swift in Sources */,
@@ -1487,6 +1494,7 @@
 				289A53AB264D64E500B84389 /* CredentialManifestUseCaseTest.swift in Sources */,
 				28C15C9226CA8AA000E248C3 /* CredentialTypesMocks.swift in Sources */,
 				2806600D29B5EB8700433302 /* VCLFinalizeOffersDescriptorTest.swift in Sources */,
+				2801702929DD6DEC00DAB4F1 /* SecretStoreMock.swift in Sources */,
 				28AADD5F28AA6FC5005EAF9D /* EmptyDsptchQueue.swift in Sources */,
 				28C5280A293DFA7E00D5D7FF /* PresentationRequestDescriptorMocks.swift in Sources */,
 				281E504B26CA9D0200D0FB4F /* PresentationSubmissionMocks.swift in Sources */,
@@ -1629,7 +1637,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = VCL/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.9.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1690,7 +1698,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = VCL/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

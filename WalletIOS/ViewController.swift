@@ -43,34 +43,30 @@ class ViewController: UIViewController {
         generateSignedJwtBtn.addTarget(self, action: #selector(generateSignedJwt), for: .touchUpInside)
         generateDidJwkBtn.addTarget(self, action: #selector(generateDidJwk), for: .touchUpInside)
         
-        vcl.generateDidJwk(
-            jwkDescriptor: VCLDidJwkDescriptor(),
-            successHandler: { [weak self] didJwk in
-                if let _self = self {
-                    _self.didJwk = didJwk
-                    NSLog("VCL DID:JWK base64: \(_self.didJwk.generateDidJwkBase64())")
-                    
-                    _self.vcl.initialize(
-                        initializationDescriptor: VCLInitializationDescriptor(
-                            environment: _self.environment
-                        ),
-                        successHandler: {
-                            NSLog("VCL initialization succeed!")
-                            _self.showControls()
-                        },
-                        errorHandler: { error in
-                            NSLog("VCL initialization failed: \(error)")
-                            
-                            self?.showError()
-                        }
-                    )
-                } else {
-                    NSLog("VCL App was closed.")
-                }
+        vcl.initialize(
+            initializationDescriptor: VCLInitializationDescriptor(
+                environment: environment
+            ),
+            successHandler: { [weak self] in
+                NSLog("VCL initialization succeed!")
+                
+                self?.vcl.generateDidJwk(
+                    jwkDescriptor: VCLDidJwkDescriptor(),
+                    successHandler: { [weak self] didJwk in
+                        self?.didJwk = didJwk
+                        NSLog("VCL DID:JWK base64: \(self?.didJwk.generateDidJwkBase64() ?? "")")
+                        self?.showControls()
+                    },
+                    errorHandler: { [weak self] error in
+                        NSLog("VCL DID:JWK generation failed: \(error)")
+                        self?.showError()
+                    })
             },
-            errorHandler: { error in
-                NSLog("VCL DID:JWK generation failed: \(error)")
-            })
+            errorHandler: { [weak self] error in
+                NSLog("VCL initialization failed: \(error)")
+                self?.showError()
+            }
+        )
     }
         
     

@@ -26,19 +26,22 @@ class JwtServiceImpl: JwtService {
                                  y: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyY] as? String ?? "",
                                  keyId: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyKid] as? String ?? "")
 
-        return try jwt.jwsToken?.verify(using: Secp256k1Verifier(), withPublicKey: pubKey) == true
+        return try jwt.jwsToken?.verify(using: TokenVerifier(), withPublicKey: pubKey) == true
     }
     
     func sign(jwtDescriptor: VCLJwtDescriptor) throws -> VCLJwt {
         do {
-            let privatePublicKeys = try generateJwkSECP256K1FromKid(kid: jwtDescriptor.kid)
             let secp256k1Signer = Secp256k1Signer()
+            let privatePublicKeys = try generateJwkSECP256K1FromKid(
+                kid: jwtDescriptor.kid,
+                secp256k1Signer: secp256k1Signer
+            )
             let secret = jwtDescriptor.didJwk?.privateKey ?? privatePublicKeys.privateKey
             let publicKey = jwtDescriptor.didJwk?.publicKey ?? privatePublicKeys.publicKey
             
             let header = Header(type: GlobalConfig.TypeJwt,
                                 algorithm: GlobalConfig.AlgES256K,
-                                jsonWebKey: publicKey, // try publicKey.getThumbprint(),
+                                jsonWebKey: publicKey.toJson(), // try publicKey.getThumbprint(),
                                 keyId: jwtDescriptor.kid)
             
             let payload = generatePayload(jwtDescriptor)
@@ -92,19 +95,27 @@ class JwtServiceImpl: JwtService {
     }
     
     func generateDidJwk(jwkDescriptor: VCLDidJwkDescriptor) throws -> VCLDidJwk {
-        let publicPrivateKeys = try generateJwkSECP256K1FromKid(kid: jwkDescriptor.kid)
+        let publicPrivateKeys = try generateJwkSECP256K1FromKid(
+            kid: jwkDescriptor.kid,
+            secp256k1Signer: Secp256k1Signer()
+        )
         return VCLDidJwk(
             publicKey: publicPrivateKeys.publicKey,
             privateKey: publicPrivateKeys.privateKey
         )
     }
     
-    private func generateJwkSECP256K1FromKid(kid: String) throws -> (publicKey: ECPublicJwk, privateKey: VCCryptoSecret) {
-        let secp256k1Signer = Secp256k1Signer()
-        let secret = try CryptoOperations().generateKey()
+    private func generateJwkSECP256K1FromKid(
+        kid: String,
+        secp256k1Signer: Secp256k1Signer
+    ) throws -> (publicKey: ECPublicJwk, privateKey: VCCryptoSecret) {
+        let secret = try KeyManagementOperations(
+            sdkConfiguration: VCSDKConfiguration(
+                accessGroupIdentifier: GlobalConfig.KeycahinAccessGroupIdentifier
+            )).generateKey()
         let publicKey = try secp256k1Signer.getPublicJwk(from: secret, withKeyId: kid)
         
-        let pubKey = ECPublicJwk(x: publicKey.x, y: publicKey.y, keyId: kid)
+        let pubKey = ECPublicJwk(x: publicKey.x, y: publicKey.y ?? "", keyId: kid)
         
         return (pubKey, secret)
     }

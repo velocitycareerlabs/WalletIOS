@@ -8,9 +8,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import VCToken
-import VCCrypto
 import XCTest
+@testable import VCToken
+@testable import VCCrypto
 @testable import VCL
 
 /// TODO: Test after updating Micrisoft jwt library
@@ -56,15 +56,12 @@ final class JwtServiceUseCaseTest: XCTestCase {
 //            subject.verifyJwt(jwt: jwt, jwkPublic: VCLJwkPublic(valueDict: jwt.jwsToken!.headers.jsonWebKey!.toDictionary() as! [String: String])) {
 //                resultVerified = $0
 //            }
-//            // Verification actual algorithm
-//            let isVerified = try jwt.jwsToken?.verify(using: Secp256k1Verifier(), withPublicKey: jwt.jwsToken!.headers.jsonWebKey!) == true
-//
 //            // Assert both have the same result
-//            guard let remoteIsVerified = try resultVerified?.get() else {
+//            guard let isVerified = try resultVerified?.get() else {
 //                XCTFail()
 //                return
 //            }
-//            assert(remoteIsVerified == isVerified)
+//            assert(isVerified)
 //        } catch {
 //            XCTFail("\(error)")
 //        }
@@ -83,8 +80,8 @@ final class JwtServiceUseCaseTest: XCTestCase {
 //                XCTFail()
 //                return
 //            }
-//            assert(didJwk.jwkBase64.hasPrefix(VCLDidJwk.DidJwkPrefix))
-//            assert(String(didJwk.jwkBase64.suffix(VCLDidJwk.DidJwkPrefix.count)).decodeBase64()!.isEmpty == false)
+//            assert(didJwk.generateDidJwkBase64().hasPrefix(VCLDidJwk.DidJwkPrefix))
+//            assert(String(didJwk.generateDidJwkBase64().suffix(VCLDidJwk.DidJwkPrefix.count)).decodeBase64()!.isEmpty == false)
 //        } catch {
 //            XCTFail("\(error)")
 //

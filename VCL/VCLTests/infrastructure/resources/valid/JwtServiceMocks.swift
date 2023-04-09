@@ -8,13 +8,18 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Foundation
+@testable import VCToken
+@testable import VCCrypto
 @testable import VCL
 
 class JwtServiceMocks {
     
     static func generateDidJwk() ->VCLDidJwk? {
         do {
-            return try JwtServiceImpl().generateDidJwk(jwkDescriptor: VCLDidJwkDescriptor())
+            return VCLDidJwk(
+                publicKey: ECPublicJwk(x: "0", y: "2", keyId: "3"),
+                privateKey: try Random32BytesSecret(withStore: SecretStoreMock())
+            )
         } catch {
             return nil
         }
