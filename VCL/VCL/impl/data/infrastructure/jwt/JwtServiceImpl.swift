@@ -52,10 +52,11 @@ class JwtServiceImpl: JwtService {
             let secret = try CryptoOperations().generateKey()
             let publicKey = try secp256k1Signer.getPublicJwk(from: secret, withKeyId: keyId)
             
-            let header = Header(type: GlobalConfig.TypeJwt,
-                                algorithm: GlobalConfig.AlgES256K,
-                                jsonWebKey: publicKey, // try publicKey.getThumbprint(),
-                                keyId: keyId)
+            let header = Header(
+                type: GlobalConfig.TypeJwt,
+                algorithm: GlobalConfig.AlgES256K,
+                jsonWebKey: publicKey // try publicKey.getThumbprint()
+            )
             
             let payload = generatePayload(jwtDescriptor)
             
