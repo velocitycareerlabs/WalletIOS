@@ -7,7 +7,7 @@ public struct Header: Codable {
     public let type: String?
     public let algorithm: String?
     public let encryptionMethod: String?
-    public let jsonWebKey: String?
+    public let jsonWebKey: ECPublicJwk?
     public let keyId: String?
     public let contentType: String?
     public let pbes2SaltInput: String?
@@ -16,7 +16,7 @@ public struct Header: Codable {
     public init(type: String? = nil,
                 algorithm: String? = nil,
                 encryptionMethod: String? = nil,
-                jsonWebKey: String? = nil,
+                jsonWebKey: ECPublicJwk? = nil,
                 keyId: String? = nil,
                 contentType: String? = nil,
                 pbes2SaltInput: String? = nil,
@@ -49,7 +49,7 @@ public struct Header: Codable {
         type = try values.decodeIfPresent(String.self, forKey: .type)
         algorithm = try values.decodeIfPresent(String.self, forKey: .algorithm)
         encryptionMethod = try values.decodeIfPresent(String.self, forKey: .encryptionMethod)
-        jsonWebKey = try values.decodeIfPresent(String.self, forKey: .jsonWebKey)
+        jsonWebKey = try values.decodeIfPresent(ECPublicJwk.self, forKey: .jsonWebKey)
         keyId = try values.decodeIfPresent(String.self, forKey: .keyId)
         contentType = try values.decodeIfPresent(String.self, forKey: .contentType)
         pbes2SaltInput = try values.decodeIfPresent(String.self, forKey: .pbes2SaltInput)

@@ -39,10 +39,11 @@ class JwtServiceImpl: JwtService {
             let secret = jwtDescriptor.didJwk?.privateKey ?? privatePublicKeys.privateKey
             let publicKey = jwtDescriptor.didJwk?.publicKey ?? privatePublicKeys.publicKey
             
-            let header = Header(type: GlobalConfig.TypeJwt,
-                                algorithm: GlobalConfig.AlgES256K,
-                                jsonWebKey: publicKey.toJson(), // try publicKey.getThumbprint(),
-                                keyId: jwtDescriptor.kid)
+            let header = Header(
+                type: GlobalConfig.TypeJwt,
+                algorithm: GlobalConfig.AlgES256K,
+                jsonWebKey: publicKey// try publicKey.getThumbprint()
+            )
             
             let payload = generatePayload(jwtDescriptor)
             

@@ -51,5 +51,5 @@ struct HeaderKeys {
 }
 
 struct HeaderValues {
-    static let XVnfProtocolVersion = "2.0"
+    static let XVnfProtocolVersion = "1.0"
 }
