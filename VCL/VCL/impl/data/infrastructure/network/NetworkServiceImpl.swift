@@ -82,8 +82,7 @@ class NetworkServiceImpl: NetworkService {
         if(request.method == Request.HttpMethod.POST && request.body != nil) {
             urlRequest.httpBody = request.body?.data(using: request.encoding)
         }
-        urlRequest.setValue(request.contentType.rawValue, forHTTPHeaderField: "Accept")
-        urlRequest.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        urlRequest.setValue(request.contentType.rawValue, forHTTPHeaderField: "Content-Type")
         guard let headers = request.headers else {
           return urlRequest
         }
