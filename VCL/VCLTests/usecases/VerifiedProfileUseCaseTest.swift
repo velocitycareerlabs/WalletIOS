@@ -40,7 +40,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             assert(verifiedProfile.logo == VerifiedProfileMocks.ExpectedLogo)
             assert(verifiedProfile.name == VerifiedProfileMocks.ExpectedName)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
 
@@ -69,7 +69,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             assert(verifiedProfile.logo == VerifiedProfileMocks.ExpectedLogo)
             assert(verifiedProfile.name == VerifiedProfileMocks.ExpectedName)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
 
@@ -98,7 +98,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             assert(verifiedProfile.logo == VerifiedProfileMocks.ExpectedLogo)
             assert(verifiedProfile.name == VerifiedProfileMocks.ExpectedName)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
 
@@ -127,7 +127,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             assert(verifiedProfile.logo == VerifiedProfileMocks.ExpectedLogo)
             assert(verifiedProfile.name == VerifiedProfileMocks.ExpectedName)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
 
@@ -156,7 +156,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             assert(verifiedProfile.logo == VerifiedProfileMocks.ExpectedLogo)
             assert(verifiedProfile.name == VerifiedProfileMocks.ExpectedName)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
 }

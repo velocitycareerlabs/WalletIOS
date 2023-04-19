@@ -20,6 +20,7 @@ protocol JwtServiceUseCase {
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     )
     func generateDidJwk(
+        jwkDescriptor: VCLDidJwkDescriptor,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     )
 }

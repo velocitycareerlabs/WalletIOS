@@ -28,6 +28,7 @@ class ViewController: UIViewController {
     
     private let environment = VCLEnvironment.DEV
     private let vcl = VCLProvider.vclInstance()
+    private var didJwk: VCLDidJwk!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +42,7 @@ class ViewController: UIViewController {
         verifyJwtBtn.addTarget(self, action: #selector(verifyJwt), for: .touchUpInside)
         generateSignedJwtBtn.addTarget(self, action: #selector(generateSignedJwt), for: .touchUpInside)
         generateDidJwkBtn.addTarget(self, action: #selector(generateDidJwk), for: .touchUpInside)
-
+        
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
                 environment: environment
@@ -49,21 +50,32 @@ class ViewController: UIViewController {
             successHandler: { [weak self] in
                 NSLog("VCL initialization succeed!")
                 
-                self?.showControls()
+                self?.vcl.generateDidJwk(
+                    jwkDescriptor: VCLDidJwkDescriptor(),
+                    successHandler: { [weak self] didJwk in
+                        self?.didJwk = didJwk
+                        NSLog("VCL DID:JWK base64: \(self?.didJwk.generateDidJwkBase64() ?? "")")
+                        self?.showControls()
+                    },
+                    errorHandler: { [weak self] error in
+                        NSLog("VCL DID:JWK generation failed: \(error)")
+                        self?.showError()
+                    })
             },
             errorHandler: { [weak self] error in
                 NSLog("VCL initialization failed: \(error)")
-                
-                self?.showErrorView()
-            })
+                self?.showError()
+            }
+        )
     }
+        
     
     private func showControls() {
         loadingIndicator.stopAnimating()
         controlsView.isHidden = false
     }
     
-    private func showErrorView() {
+    private func showError() {
         loadingIndicator.stopAnimating()
         errorView.isHidden = false
     }
@@ -95,6 +107,7 @@ class ViewController: UIViewController {
     
     private func submitPresentation(presentationRequest: VCLPresentationRequest)  {
         let presentationSubmission = VCLPresentationSubmission(
+            didJwk: self.didJwk,
             presentationRequest: presentationRequest,
             verifiableCredentials: Constants.PresentationSelectionsList
         )
@@ -212,6 +225,7 @@ class ViewController: UIViewController {
     
     private func generateOffers(credentialManifest: VCLCredentialManifest) {
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
+            didJwk: self.didJwk,
             credentialManifest: credentialManifest,
             types: Constants.CredentialTypes,
             identificationVerifiableCredentials: Constants.IdentificationList
@@ -267,6 +281,8 @@ class ViewController: UIViewController {
     ) {
         let approvedRejectedOfferIds = Utils.getApprovedRejectedOfferIdsMock(offers: offers)
         let finalizeOffersDescriptor = VCLFinalizeOffersDescriptor(
+            didJwk: self.didJwk,
+            challenge: offers.challenge,
             credentialManifest: credentialManifest,
             approvedOfferIds: approvedRejectedOfferIds.0,
             rejectedOfferIds: approvedRejectedOfferIds.1
@@ -324,7 +340,12 @@ class ViewController: UIViewController {
     
     @objc private func generateSignedJwt() {
         vcl.generateSignedJwt(
-            jwtDescriptor: VCLJwtDescriptor(payload: Constants.SomePayload, iss: "iss123", jti: "jti123"), successHandler: { jwt in
+            jwtDescriptor: VCLJwtDescriptor(
+                payload: Constants.SomePayload,
+                jti: "jti123",
+                iss: "iss123"
+            ),
+            successHandler: { jwt in
                 NSLog("VCL JWT generated: \(jwt.encodedJwt)")
             },
             errorHandler: { error in
@@ -335,8 +356,9 @@ class ViewController: UIViewController {
     
     @objc private func generateDidJwk() {
         vcl.generateDidJwk(
+            jwkDescriptor: VCLDidJwkDescriptor(),
             successHandler: { didJwk in
-                NSLog("VCL DID:JWK generated: \(didJwk.value)")
+                NSLog("VCL DID:JWK generated: \(didJwk.generateDidJwkBase64())")
             },
             errorHandler: { error in
                 NSLog("VCL DID:JWK generation failed: \(error)")

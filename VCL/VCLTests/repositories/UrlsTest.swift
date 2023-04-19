@@ -71,7 +71,7 @@ final class UrlsTest: XCTestCase {
     }
     
     func testVersion() {
-        assert(HeaderValues.XVnfProtocolVersion == "1.0")
+        assert(HeaderValues.XVnfProtocolVersion == "2.0")
     }
     
     override func tearDown() {

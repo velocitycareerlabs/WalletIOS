@@ -45,7 +45,7 @@ final class OrganizationsUseCaseTest: XCTestCase {
             assert(serviceCredentialAgentIssuer.credentialTypes == (serviceDictMock![VCLService.CodingKeys.KeyCredentialTypes] as! [String]))
             assert(serviceCredentialAgentIssuer.serviceEndpoint == OrganizationsMocks.IssuingServiceEndpoint)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
     

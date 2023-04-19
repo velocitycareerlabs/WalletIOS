@@ -11,6 +11,7 @@ import Foundation
 import XCTest
 @testable import VCL
 
+/// TODO: Test after updating Micrisoft jwt library
 final class PresentationSubmissionUseCaseTest: XCTestCase {
     
     var subject: PresentationSubmissionUseCase!
@@ -22,19 +23,32 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
         // Arrange
         subject = PresentationSubmissionUseCaseImpl(
             PresentationSubmissionRepositoryImpl(
-                NetworkServiceSuccess(validResponse: PresentationSubmissionMocks.PresentationSubmissionResultJson)),
+                NetworkServiceSuccess(
+                    validResponse: PresentationSubmissionMocks.PresentationSubmissionResultJson),
+                JwtServiceRepositoryImpl(
+                    JwtServiceSuccess(
+                        VclJwt: PresentationSubmissionMocks.PresentationSubmissionJwt,
+                        VclDidJwk: JwtServiceMocks.didJwk
+                    )
+                )
+            ),
             JwtServiceRepositoryImpl(
-                JwtServiceSuccess(VclJwt: PresentationSubmissionMocks.PresentationSubmissionJwt)
+                JwtServiceSuccess(
+                    VclJwt: PresentationSubmissionMocks.PresentationSubmissionJwt,
+                    VclDidJwk: JwtServiceMocks.didJwk
+                )
                 //                Can't be tested, because of storing exception
                 //                JwtServiceMicrosoftImpl()
             ),
             EmptyExecutor()
         )
         let presentationSubmission = VCLPresentationSubmission(
+            didJwk: JwtServiceMocks.didJwk,
             presentationRequest: VCLPresentationRequest(
                 jwt: VCLJwt(encodedJwt: ""),
                 jwkPublic: VCLJwkPublic(valueStr: "{}"),
-                deepLink: VCLDeepLink(value: "")),
+                deepLink: VCLDeepLink(value: "")
+            ),
             verifiableCredentials: [VCLVerifiableCredential]()
         )
         var result: VCLResult<VCLSubmissionResult>? = nil
@@ -59,7 +73,7 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
             assert(presentationSubmissionResult!.jti == expectedPresentationSubmissionResult.jti)
             assert(presentationSubmissionResult!.submissionId == expectedPresentationSubmissionResult.submissionId)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
     

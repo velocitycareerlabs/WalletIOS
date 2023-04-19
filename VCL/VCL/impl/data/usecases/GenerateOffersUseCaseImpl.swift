@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 11/05/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import UIKit
@@ -22,9 +22,11 @@ class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
         self.executor = executor
     }
     
-    func generateOffers(token: VCLToken,
-                        generateOffersDescriptor: VCLGenerateOffersDescriptor,
-                        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void) {
+    func generateOffers(
+        token: VCLToken,
+        generateOffersDescriptor: VCLGenerateOffersDescriptor,
+        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
+    ) {
         executor.runOnBackgroundThread { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(GenerateOffersUseCase.self)") {
@@ -39,6 +41,8 @@ class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
                     }
                 UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
                 _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+            } else {
+                completionBlock(.failure(VCLError(message: "self is nil")))
             }
         }
     }

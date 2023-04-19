@@ -15,26 +15,42 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
     
     var subject: FinalizeOffersUseCase!
 
+    var credentialManifest: VCLCredentialManifest!
+    var token: VCLToken!
+    var finalizeOffersDescriptor: VCLFinalizeOffersDescriptor!
+    let vclJwt = VCLJwt(encodedJwt: CredentialManifestMocks.CredentialManifestJwt)
+
     override func setUp() {
+        credentialManifest = VCLCredentialManifest(
+            jwt: vclJwt
+        )
+
+        finalizeOffersDescriptor = VCLFinalizeOffersDescriptor(
+            didJwk: JwtServiceMocks.didJwk,
+            challenge: "some challenge",
+            credentialManifest: credentialManifest,
+            approvedOfferIds: [String](),
+            rejectedOfferIds: [String]()
+        )
     }
-    
-    func testGetCredentialManifest() {
+
+    func testFinalizeOffers() {
         // Arrange
         subject = FinalizeOffersUseCaseImpl(
             FinalizeOffersRepositoryImpl(
-                NetworkServiceSuccess(validResponse: FinalizeOffersMocks.EncodedJwtVerifiableCredentials)
+                NetworkServiceSuccess(validResponse: FinalizeOffersMocks.EncodedJwtVerifiableCredentials),
+                JwtServiceRepositoryImpl(
+                    JwtServiceSuccess(VclJwt: vclJwt, VclDidJwk: JwtServiceMocks.didJwk)
+                )
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceSuccess(VclJwt: FinalizeOffersMocks.JwtFinalizedOffer)
+                JwtServiceImpl()
             ),
             EmptyExecutor(),
-            EmptyDispatcher()
+            DispatcherImpl()
         )
         var result: VCLResult<VCLJwtVerifiableCredentials>? = nil
-        let credentialManifest = VCLCredentialManifest(jwt: VCLJwt(encodedJwt: ""))
-        let finalizeOffersDescriptor = VCLFinalizeOffersDescriptor(
-            credentialManifest: credentialManifest, approvedOfferIds: [String](), rejectedOfferIds: [String]())
-        
+
         // Action
         subject.finalizeOffers(
             token: VCLToken(value: ""),

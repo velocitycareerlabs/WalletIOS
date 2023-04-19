@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 15/06/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import UIKit
@@ -39,6 +39,8 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
                 }
                 UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
                 _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+            } else {
+                completionBlock(.failure(VCLError(message: "self is nil")))
             }
         }
     }
@@ -55,10 +57,13 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
     }
     
     func generateDidJwk(
+        jwkDescriptor: VCLDidJwkDescriptor,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
         executor.runOnBackgroundThread { [weak self] in
-            self?.jwtServiceRepository.generateDidJwk { didJwkResult in
+            self?.jwtServiceRepository.generateDidJwk(
+                jwkDescriptor: jwkDescriptor
+            ) { didJwkResult in
                 self?.executor.runOnMainThread { completionBlock(didJwkResult) }
             }
         }

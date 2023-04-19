@@ -8,8 +8,13 @@ import Foundation
 @testable import VCCrypto
 
 final class SecretMock : Secret {
+    
+    var accessGroup: String? = nil
+    
     static var itemTypeCode: String = "MOCK"
+    
     var id: UUID
+    
     private var value: Data
     
     init(id: UUID, withData value: Data) {
@@ -22,4 +27,8 @@ final class SecretMock : Secret {
             try body(valuePtr)
         }
     }
+    
+    func isValidKey() throws { }
+    
+    func migrateKey(fromAccessGroup oldAccessGroup: String?) throws { }
 }

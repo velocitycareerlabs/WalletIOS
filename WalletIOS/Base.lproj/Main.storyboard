@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,7 +21,10 @@
                                 <rect key="frame" x="0.0" y="37" width="414" height="825"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Initialization Failed..." textAlignment="center" lineBreakMode="wordWrap" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Sz-Pr-YkE">
-                                        <rect key="frame" x="-1" y="388" width="414" height="49.5"/>
+                                        <rect key="frame" x="0.0" y="388" width="414" height="67.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="67.5" id="HIf-XH-Gmn"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -29,10 +32,9 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstItem="1Sz-Pr-YkE" firstAttribute="leading" secondItem="hDP-rV-lDC" secondAttribute="leading" constant="-1.1000000000000001" id="8pg-YX-wk1"/>
-                                    <constraint firstAttribute="trailing" secondItem="1Sz-Pr-YkE" secondAttribute="trailing" constant="1.1000000000000001" id="KeV-bJ-XZR"/>
-                                    <constraint firstAttribute="bottom" secondItem="1Sz-Pr-YkE" secondAttribute="bottom" constant="387.69999999999999" id="gj5-o0-Vkl"/>
-                                    <constraint firstItem="1Sz-Pr-YkE" firstAttribute="top" secondItem="hDP-rV-lDC" secondAttribute="top" constant="387.80000000000001" id="sAF-Bi-UMN"/>
+                                    <constraint firstItem="1Sz-Pr-YkE" firstAttribute="centerX" secondItem="hDP-rV-lDC" secondAttribute="centerX" id="N4t-Mg-ko4"/>
+                                    <constraint firstItem="1Sz-Pr-YkE" firstAttribute="leading" secondItem="hDP-rV-lDC" secondAttribute="leading" id="QcV-fg-Pia"/>
+                                    <constraint firstItem="1Sz-Pr-YkE" firstAttribute="top" secondItem="hDP-rV-lDC" secondAttribute="top" constant="388" id="tyW-AQ-MnH"/>
                                 </constraints>
                             </view>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="QyK-Bi-EZc">

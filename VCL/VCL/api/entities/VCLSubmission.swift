@@ -11,6 +11,7 @@ import Foundation
 
 public class VCLSubmission {
     public let submitUri: String
+    public let didJwk: VCLDidJwk
     public let iss: String
     public let exchangeId: String
     public let presentationDefinitionId: String
@@ -21,14 +22,18 @@ public class VCLSubmission {
     public let jti = UUID().uuidString
     public let submissionId = UUID().uuidString
     
-    public init(submitUri: String,
-                iss: String,
-                exchangeId: String,
-                presentationDefinitionId: String,
-                verifiableCredentials: [VCLVerifiableCredential],
-                pushDelegate: VCLPushDelegate? = nil,
-                vendorOriginContext: String? = nil) {
+    public init(
+        submitUri: String,
+        didJwk: VCLDidJwk,
+        iss: String,
+        exchangeId: String,
+        presentationDefinitionId: String,
+        verifiableCredentials: [VCLVerifiableCredential],
+        pushDelegate: VCLPushDelegate? = nil,
+        vendorOriginContext: String? = nil
+    ) {
         self.submitUri = submitUri
+        self.didJwk = didJwk
         self.iss = iss
         self.exchangeId = exchangeId
         self.presentationDefinitionId = presentationDefinitionId

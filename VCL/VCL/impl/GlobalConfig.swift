@@ -14,6 +14,8 @@ struct GlobalConfig {
     
     static var CurrentEnvironment = VCLEnvironment.PROD
     
+    static var KeycahinAccessGroupIdentifier: String? = nil
+    
     #if DEBUG
         static let IsDebug = false // true
     #else
@@ -26,9 +28,6 @@ struct GlobalConfig {
     static let LogTagPrefix = "VCL "
     // TODO: Will be remotely configurable
     static var IsLoggerOn: Bool { get { CurrentEnvironment != VCLEnvironment.PROD } }
-    
-    // TODO: Will be remotely configurable
-    var IsToLoadFromCacheInitialization = false
     
     static let AlgES256K = "ES256K"
     static let TypeJwt = "JWT"

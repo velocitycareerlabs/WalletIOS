@@ -20,6 +20,7 @@ public struct VCLCredentialManifest {
     
     public var iss: String { get { return jwt.payload?[CodingKeys.KeyIss] as? String ?? "" } }
     public var did: String { get { return (jwt.payload?[CodingKeys.KeyIssuer] as? [String: String])?[CodingKeys.KeyId] ?? "" } }
+    public var issuerId: String { get { return retrieveIssuerId() } }
     public var exchangeId: String { get { return jwt.payload?[CodingKeys.KeyExchangeId] as? String ?? "" } }
     public var presentationDefinitionId: String { get { (jwt.payload?[CodingKeys.KeyPresentationDefinitionId] as? [String: Any])?[CodingKeys.KeyId] as? String ?? "" } }
     
@@ -32,6 +33,14 @@ public struct VCLCredentialManifest {
     public var submitPresentationUri: String { get {
         (jwt.payload?[VCLCredentialManifest.CodingKeys.KeyMetadata] as? [String: Any])?[VCLCredentialManifest.CodingKeys.KeySubmitIdentificationUri] as? String ?? "" } }
 
+    private func retrieveIssuerId() -> String {
+        let url = (jwt.payload?[CodingKeys.KeyMetadata] as? [String: String])?[CodingKeys.KeyFinalizeOffersUri] ?? ""
+        if let range = url.range(of: "/issue/") {
+            return String(url[..<range.lowerBound])
+        }
+        return url
+    }
+    
     public struct CodingKeys {
         public static let KeyIssuingRequest = "issuing_request"
         

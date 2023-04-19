@@ -48,7 +48,7 @@ final class CountriesUseCaseTest: XCTestCase {
             assert(afghanistanRegions!.all[2].name == CountriesMocks.AfghanistanRegion3Name)
             assert(afghanistanRegions?.all[2].code == CountriesMocks.AfghanistanRegion3Code)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
     

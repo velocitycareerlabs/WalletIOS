@@ -11,6 +11,7 @@ import Foundation
 import XCTest
 @testable import VCL
 
+/// TODO: Test after updating Micrisoft jwt library
 final class GenerateOffersUseCaseTest: XCTestCase {
     
     var subject: GenerateOffersUseCase!
@@ -28,6 +29,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         )
         var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
+            didJwk: JwtServiceMocks.didJwk,
             credentialManifest: VCLCredentialManifest(jwt: VCLJwt(encodedJwt: "")),
             identificationVerifiableCredentials: [VCLVerifiableCredential]()
         )
@@ -40,9 +42,10 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         // Assert
         do {
             let offers = try result?.get()
-            assert(offers!.all == GenerateOffersMocks.GeneratedOffers.toListOfDictionaries()!)
+            assert(offers!.all == GenerateOffersMocks.Offers.toListOfDictionaries()!)
+            assert(offers!.challenge == GenerateOffersMocks.Challenge)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
     
@@ -56,7 +59,9 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         )
         var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            credentialManifest: VCLCredentialManifest(jwt: VCLJwt(encodedJwt: "")),
+            didJwk: JwtServiceMocks.didJwk,
+            credentialManifest: VCLCredentialManifest(jwt: VCLJwt(encodedJwt: "")
+                                                     ),
             identificationVerifiableCredentials: [VCLVerifiableCredential]()
         )
 
@@ -70,7 +75,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             let offers = try result?.get()
             assert(offers!.all == "[]".toListOfDictionaries()!)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
     
@@ -84,7 +89,9 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         )
         var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            credentialManifest: VCLCredentialManifest(jwt: VCLJwt(encodedJwt: "")),
+            didJwk: JwtServiceMocks.didJwk,
+            credentialManifest: VCLCredentialManifest(jwt: VCLJwt(encodedJwt: "")
+                                                     ),
             identificationVerifiableCredentials: [VCLVerifiableCredential]()
         )
 
@@ -98,7 +105,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             let offers = try result?.get()
             assert(offers!.all == GenerateOffersMocks.GeneratedOffersEmptyJsonArr.toListOfDictionaries()!)
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
     
