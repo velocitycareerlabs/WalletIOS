@@ -41,7 +41,7 @@ class ViewController: UIViewController {
         verifyJwtBtn.addTarget(self, action: #selector(verifyJwt), for: .touchUpInside)
         generateSignedJwtBtn.addTarget(self, action: #selector(generateSignedJwt), for: .touchUpInside)
         generateDidJwkBtn.addTarget(self, action: #selector(generateDidJwk), for: .touchUpInside)
-
+        
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
                 environment: environment
@@ -53,17 +53,18 @@ class ViewController: UIViewController {
             },
             errorHandler: { [weak self] error in
                 NSLog("VCL initialization failed: \(error)")
-                
-                self?.showErrorView()
-            })
+                self?.showError()
+            }
+        )
     }
+        
     
     private func showControls() {
         loadingIndicator.stopAnimating()
         controlsView.isHidden = false
     }
     
-    private func showErrorView() {
+    private func showError() {
         loadingIndicator.stopAnimating()
         errorView.isHidden = false
     }
@@ -324,7 +325,12 @@ class ViewController: UIViewController {
     
     @objc private func generateSignedJwt() {
         vcl.generateSignedJwt(
-            jwtDescriptor: VCLJwtDescriptor(payload: Constants.SomePayload, iss: "iss123", jti: "jti123"), successHandler: { jwt in
+            jwtDescriptor: VCLJwtDescriptor(
+                payload: Constants.SomePayload,
+                jti: "jti123",
+                iss: "iss123"
+            ),
+            successHandler: { jwt in
                 NSLog("VCL JWT generated: \(jwt.encodedJwt)")
             },
             errorHandler: { error in

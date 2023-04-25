@@ -26,7 +26,7 @@ class OrganizationsRepositoryImpl: OrganizationsRepository {
         networkService.sendRequest(
             endpoint: endpoint,
             contentType: .ApplicationJson,
-            method: Request.HttpMethod.GET,
+            method: .GET,
             headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
         ) {
             [weak self] response in

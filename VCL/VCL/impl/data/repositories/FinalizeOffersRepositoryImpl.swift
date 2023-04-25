@@ -12,9 +12,14 @@ import Foundation
 class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
     
     private let networkService: NetworkService
+    private let jwtServiceRepository: JwtServiceRepository
     
-    init(_ networkService: NetworkService) {
+    init(
+        _ networkService: NetworkService,
+        _ jwtServiceRepository: JwtServiceRepository
+    ) {
         self.networkService = networkService
+        self.jwtServiceRepository = jwtServiceRepository
     }
     
     func finalizeOffers(token: VCLToken,
@@ -29,9 +34,9 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
                 (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(token.value)"),
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
             ]
-        ) { response in
+        ) { result in
             do {
-                let finalizedOffersResponse = try response.get()
+                let finalizedOffersResponse = try result.get()
                 if let encodedJwts = finalizedOffersResponse.payload.toList() as? [String] {
                     completionBlock(.success(encodedJwts))
                 } else {

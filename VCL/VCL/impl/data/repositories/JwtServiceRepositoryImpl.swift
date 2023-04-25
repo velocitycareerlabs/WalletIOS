@@ -21,26 +21,18 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
         encodedJwt: String,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
-        jwtService.decode(encodedJwt: encodedJwt) { decodedJwtResult in
-            do {
-                completionBlock(.success(try decodedJwtResult.get()))
-            } catch {
-                completionBlock(.failure(VCLError(error: error)))
-            }
-        }
+        completionBlock(.success(jwtService.decode(encodedJwt: encodedJwt)))
     }
-
+    
     func verifyJwt(
         jwt: VCLJwt,
         jwkPublic: VCLJwkPublic,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        jwtService.verify(jwt: jwt, jwkPublic: jwkPublic) { isVerifiedResult in
-            do {
-                completionBlock(.success(try isVerifiedResult.get()))
-            } catch {
-                completionBlock(.failure(VCLError(error: error)))
-            }
+        do {
+            completionBlock(.success(try jwtService.verify(jwt: jwt, jwkPublic: jwkPublic)))
+        } catch {
+            completionBlock(.failure(VCLError(error: error)))
         }
     }
     
@@ -48,24 +40,21 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
         jwtDescriptor: VCLJwtDescriptor,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
-        jwtService.sign(jwtDescriptor: jwtDescriptor) { signedJwtResult in
-            do {
-                completionBlock(.success(try signedJwtResult.get()))
-            } catch {
-                completionBlock(.failure(VCLError(error: error)))
-            }
+        do {
+            completionBlock(.success(try jwtService.sign(jwtDescriptor: jwtDescriptor)))
+        } catch {
+            completionBlock(.failure(VCLError(error: error)))
         }
     }
     
     func generateDidJwk(
+        didJwkDescriptor: VCLDidJwkDescriptor? = nil,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
-        jwtService.generateDidJwk { didJwkResult in
-            do {
-                completionBlock(.success(try didJwkResult.get()))
-            } catch {
-                completionBlock(.failure(VCLError(error: error)))
-            }
+        do {
+            completionBlock(.success(try jwtService.generateDidJwk(didJwkDescriptor: didJwkDescriptor)))
+        } catch {
+            completionBlock(.failure(VCLError(error: error)))
         }
     }
 }

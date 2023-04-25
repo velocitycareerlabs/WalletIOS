@@ -10,13 +10,32 @@
 import Foundation
 
 public class VCLJwtDescriptor {
-    let payload: [String: Any]
-    let iss: String
-    let jti:String
+    public let didJwk: VCLDidJwk?
+    ///  The kid of the owner, UUID by default
+    public let kid: String
+    /// Json formatted payload
+    public let payload: [String: Any]
+    /// JWT ID
+    public let jti:String
+    /// The did of the wallet owner
+    public let iss: String
+    /// The issuer DID
+    public let aud: String?
     
-    public init(payload: [String : Any], iss: String, jti: String) {
+    public init(
+        didJwk: VCLDidJwk? = nil,
+        kid: String = UUID().uuidString,
+        payload: [String : Any],
+        jti: String = UUID().uuidString,
+        iss: String,
+        aud: String? = nil,
+        nonce: String? = nil
+    ) {
+        self.didJwk = didJwk
+        self.kid = kid
         self.payload = payload
-        self.iss = iss
         self.jti = jti
+        self.iss = iss
+        self.aud = aud
     }
 }

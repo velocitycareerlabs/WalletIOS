@@ -39,7 +39,10 @@ public class VCLImpl: VCL {
         
         initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
         
-        initGlobalConfigurations(initializationDescriptor.environment)
+        initGlobalConfigurations(
+            initializationDescriptor.environment,
+            initializationDescriptor.keycahinAccessGroupIdentifier
+        )
         
         printVersion()
         
@@ -96,12 +99,16 @@ public class VCLImpl: VCL {
         }
     }
     
-    private func initGlobalConfigurations(_ environment: VCLEnvironment) {
+    private func initGlobalConfigurations(
+        _ environment: VCLEnvironment,
+        _ keycahinAccessGroupIdentifier: String? = nil
+    ) {
         GlobalConfig.CurrentEnvironment = environment
+        GlobalConfig.KeycahinAccessGroupIdentifier = keycahinAccessGroupIdentifier
     }
     
     public var countries: VCLCountries? { get { return countriesModel.data } }
-        
+    
     public var credentialTypes: VCLCredentialTypes? { get { return credentialTypesModel.data } }
     
     public var credentialTypeSchemas: VCLCredentialTypeSchemas? { get { return credentialTypeSchemasModel?.data } }
@@ -161,7 +168,9 @@ public class VCLImpl: VCL {
         successHandler: @escaping (VCLExchange) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        exchangeProgressUseCase.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) {
+        exchangeProgressUseCase.getExchangeProgress(
+            exchangeDescriptor: exchangeDescriptor
+        ) {
             [weak self] exchangeProgressResult in
             do {
                 successHandler(try exchangeProgressResult.get())
@@ -238,14 +247,14 @@ public class VCLImpl: VCL {
                 self?.generateOffersUseCase.generateOffers(
                     token: identificationSubmission.token,
                     generateOffersDescriptor: generateOffersDescriptor) {
-                    vnOffersResult in
-                    do {
-                        successHandler(try vnOffersResult.get())
-                    } catch {
-                        self?.logError(message: "submit identification", error: error)
-                        errorHandler(error as? VCLError ?? VCLError(error: error))
+                        vnOffersResult in
+                        do {
+                            successHandler(try vnOffersResult.get())
+                        } catch {
+                            self?.logError(message: "submit identification", error: error)
+                            errorHandler(error as? VCLError ?? VCLError(error: error))
+                        }
                     }
-                }
                 
             } catch {
                 self?.logError(message: "submit identification", error: error)
@@ -384,15 +393,16 @@ public class VCLImpl: VCL {
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.generateDidJwk {
-            [weak self] didJwkResult in
-            do {
-                successHandler(try didJwkResult.get())
-            } catch {
-                self?.logError(message: "generateDidJwk", error: error)
-                errorHandler(error as? VCLError ?? VCLError(error: error))
-            }
-        }
+        jwtServiceUseCase.generateDidJwk(
+            completionBlock: {
+                [weak self] didJwkResult in
+                do {
+                    successHandler(try didJwkResult.get())
+                } catch {
+                    self?.logError(message: "generateDidJwk", error: error)
+                    errorHandler(error as? VCLError ?? VCLError(error: error))
+                }
+            })
     }
 }
 

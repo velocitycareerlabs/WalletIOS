@@ -45,7 +45,7 @@ final class CredentialTypesUseCaseTest: XCTestCase {
                 credentialTypesArr2: geExpectedRecommendedCredentialTypesArr()
             )
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
     

@@ -12,34 +12,42 @@ import Foundation
 class SubmissionRepositoryImpl: SubmissionRepository {
     
     private let networkService: NetworkService
+    private let jwtServiceRepository: JwtServiceRepository
     
-    init(_ networkService: NetworkService) {
+    init(
+        _ networkService: NetworkService,
+        _ jwtServiceRepository: JwtServiceRepository
+    ) {
         self.networkService = networkService
+        self.jwtServiceRepository = jwtServiceRepository
     }
     
-    func submit(submission: VCLSubmission,
-                jwt: VCLJwt,
-                completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void) {
-        networkService.sendRequest(
+    func submit(
+        submission: VCLSubmission,
+        jwt: VCLJwt,
+        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
+    ) {
+        self.networkService.sendRequest(
             endpoint: submission.submitUri,
             body: submission.generateRequestBody(jwt: jwt).toJsonString(),
             contentType: Request.ContentType.ApplicationJson,
-            method: Request.HttpMethod.POST,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
-        ) { [weak self] _response in
-            do{
-                let submissionResponse = try _response.get()
-                if let submissionResult =
-                    self?.parse(submissionResponse.payload.toDictionary(), submission.jti, submission.submissionId) {
-                    completionBlock(.success(submissionResult))
+            method: .POST,
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)],
+            completionBlock: { [weak self] result in
+                if let _self = self {
+                    do {
+                        let submissionResponse = try result.get()
+                        let jsonDict = submissionResponse.payload.toDictionary()
+                        let submissionResult = _self.parse(jsonDict, submission.jti, submission.submissionId)
+                        completionBlock(.success(submissionResult))
+                    }
+                    catch {
+                        completionBlock(.failure(VCLError(error: error)))
+                    }
                 } else {
-                    completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: submissionResponse.payload, encoding: .utf8) ?? "")")))
+                    completionBlock(.failure(VCLError(message: "self is nil")))
                 }
-            }
-            catch {
-                completionBlock(.failure(VCLError(error: error)))
-            }
-        }
+            })
     }
     
     private func parse(_ jsonDict: [String: Any]?, _ jti: String, _ submissionId: String) -> VCLSubmissionResult {

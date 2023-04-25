@@ -24,6 +24,7 @@ protocol JwtServiceRepository {
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     )
     func generateDidJwk(
+        didJwkDescriptor: VCLDidJwkDescriptor?,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     )
 }

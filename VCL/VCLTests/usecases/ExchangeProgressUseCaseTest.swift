@@ -31,20 +31,21 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
         let exchangeDescriptor = VCLExchangeDescriptor(
             presentationSubmission: VCLPresentationSubmission(
                 presentationRequest: PresentationRequestMocks.PresentationRequest,
-                verifiableCredentials: []), submissionResult: submissionResult
+                verifiableCredentials: []
+            ), submissionResult: submissionResult
         )
-        
+
         // Action
         subject.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) {
             result = $0
         }
-        
+
         // Assert
         do {
             let exchange = try result?.get()
             assert(exchange == expectedExchange(exchangeJsonDict: ExchangeProgressMocks.ExchangeProgressJson.toDictionary()!))
         } catch {
-            XCTFail()
+            XCTFail("\(error)")
         }
     }
     

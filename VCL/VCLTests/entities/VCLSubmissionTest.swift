@@ -11,6 +11,7 @@ import Foundation
 import XCTest
 @testable import VCL
 
+/// TODO: Test after updating Micrisoft jwt library
 final class VCLSubmissionTest: XCTestCase {
     var subject: VCLSubmission!
 
@@ -33,6 +34,7 @@ final class VCLSubmissionTest: XCTestCase {
     func testRequestBody() {
         let requestBodyJsonObj = subject.generateRequestBody(jwt: JwtServiceMocks.JWT)
         assert(requestBodyJsonObj[VCLSubmission.CodingKeys.KeyExchangeId] as! String == subject.exchangeId)
+        assert(requestBodyJsonObj[VCLSubmission.CodingKeys.KeyContext] as! [String] == VCLSubmission.CodingKeys.ValueContextList)
 
         let pushDelegateBodyJsonObj = requestBodyJsonObj[VCLSubmission.CodingKeys.KeyPushDelegate] as! [String: Any]
 

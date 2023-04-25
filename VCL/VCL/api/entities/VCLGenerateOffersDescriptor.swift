@@ -13,12 +13,14 @@ public struct VCLGenerateOffersDescriptor {
     public let credentialManifest: VCLCredentialManifest
     public let types: [String]?
     public let offerHashes: [String]?
-    public let identificationVerifiableCredentials: [VCLVerifiableCredential]
+    public let identificationVerifiableCredentials: [VCLVerifiableCredential]?
     
-    public init(credentialManifest: VCLCredentialManifest,
-                types: [String]? = nil,
-                offerHashes: [String]? = nil,
-                identificationVerifiableCredentials: [VCLVerifiableCredential]) {
+    public init(
+        credentialManifest: VCLCredentialManifest,
+        types: [String]? = nil,
+        offerHashes: [String]? = nil,
+        identificationVerifiableCredentials: [VCLVerifiableCredential]? = nil
+    ) {
         self.credentialManifest = credentialManifest
         self.types = types
         self.offerHashes = offerHashes

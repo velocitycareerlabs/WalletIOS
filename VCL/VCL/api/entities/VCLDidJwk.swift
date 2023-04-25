@@ -14,7 +14,9 @@ public class VCLDidJwk {
     
     public static let DidJwkPrefix = "did:jwk:"
     
-    public init(value: String) {
+    public init(
+        value: String
+    ) {
         self.value = value
     }
 }

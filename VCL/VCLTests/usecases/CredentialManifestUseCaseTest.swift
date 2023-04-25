@@ -22,13 +22,13 @@ final class CredentialManifestUseCaseTest: XCTestCase {
         // Arrange
         subject = CredentialManifestUseCaseImpl(
             CredentialManifestRepositoryImpl(
-                NetworkServiceSuccess(validResponse: CredentialManifestMocks.CredentialManifestEncodedJwtResponse)
+                NetworkServiceSuccess(validResponse: CredentialManifestMocks.CredentialManifest)
             ),
             ResolveKidRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceSuccess(VclJwt: VCLJwt(encodedJwt: CredentialManifestMocks.CredentialManifestEncodedJwt))
+                JwtServiceImpl()
 //                Can't be tested, because of storing exception
 //                JwtServiceMicrosoftImpl()
             ),
@@ -49,12 +49,12 @@ final class CredentialManifestUseCaseTest: XCTestCase {
         // Assert
         do {
             let credentialManifest = try result?.get()
-            assert((credentialManifest?.jwt.encodedJwt)! == CredentialManifestMocks.CredentialManifestEncodedJwt)
-            assert((credentialManifest?.jwt.header)! == CredentialManifestMocks.Header.toDictionary()!)
-            assert((credentialManifest?.jwt.payload)! == CredentialManifestMocks.Payload.toDictionary()!)
+            assert((credentialManifest?.jwt.encodedJwt)! == CredentialManifestMocks.CredentialManifestJwt)
+            assert((credentialManifest?.jwt.header)! == CredentialManifestMocks.Header)
+            assert((credentialManifest?.jwt.payload)! == CredentialManifestMocks.Payload)
             assert((credentialManifest?.jwt.signature)! == CredentialManifestMocks.Signature)
         } catch {
-            XCTFail()
+            XCTFail(error.localizedDescription)
         }
     }
 

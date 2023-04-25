@@ -19,13 +19,14 @@ public class VCLPresentationSubmission: VCLSubmission {
     ) {
         self.progressUri = presentationRequest.progressUri
         
-        super.init(submitUri: presentationRequest.submitPresentationUri,
-                   iss: presentationRequest.iss,
-                   exchangeId: presentationRequest.exchangeId,
-                   presentationDefinitionId: presentationRequest.presentationDefinitionId,
-                   verifiableCredentials: verifiableCredentials,
-                   pushDelegate: presentationRequest.pushDelegate,
-                   vendorOriginContext: presentationRequest.vendorOriginContext)
-        
+        super.init(
+            submitUri: presentationRequest.submitPresentationUri,
+            iss: presentationRequest.iss,
+            exchangeId: presentationRequest.exchangeId,
+            presentationDefinitionId: presentationRequest.presentationDefinitionId,
+            verifiableCredentials: verifiableCredentials,
+            pushDelegate: presentationRequest.pushDelegate,
+            vendorOriginContext: presentationRequest.vendorOriginContext
+        )
     }
 }

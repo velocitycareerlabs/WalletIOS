@@ -11,7 +11,16 @@ enum MockError: Error {
 }
 
 struct MockVCCryptoSecret: VCCryptoSecret {
+    
+    let accessGroup: String? = nil
+    
+    func isValidKey() throws { }
+    
+    func migrateKey(fromAccessGroup oldAccessGroup: String?) throws {}
+    
     let id: UUID
+
+    func withUnsafeBytes(_ body: (UnsafeRawBufferPointer) throws -> Void) throws { }
 }
 
 struct MockAlgorithm: Signing {
@@ -29,15 +38,15 @@ struct MockAlgorithm: Signing {
         self.y = y
     }
     
-    func createPublicKey(forSecret secret: VCCryptoSecret) throws -> Secp256k1PublicKey {
-        return Secp256k1PublicKey(x: self.x, y: self.y)!
+    func sign(message: Data, withSecret secret: VCCryptoSecret) throws -> Data {
+        return message
     }
     
-    func sign(messageHash: Data, withSecret secret: VCCryptoSecret) throws -> Data {
-        return messageHash
-    }
-    
-    func isValidSignature(signature: Data, forMessageHash messageHash: Data, usingPublicKey publicKey: Secp256k1PublicKey) throws -> Bool {
+    func isValidSignature(signature: Data, forMessage message: Data, usingPublicKey publicKey: PublicKey) throws -> Bool {
         true
+    }
+    
+    func createPublicKey(forSecret secret: VCCryptoSecret) throws -> PublicKey {
+        return Secp256k1PublicKey(x: self.x, y: self.y)!
     }
 }

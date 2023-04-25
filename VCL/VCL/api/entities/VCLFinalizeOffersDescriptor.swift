@@ -14,9 +14,11 @@ public struct VCLFinalizeOffersDescriptor {
     public let approvedOfferIds: [String]
     public let rejectedOfferIds: [String]
     
-    public init(credentialManifest: VCLCredentialManifest,
-                approvedOfferIds: [String],
-                rejectedOfferIds: [String]) {
+    public init(
+        credentialManifest: VCLCredentialManifest,
+        approvedOfferIds: [String],
+        rejectedOfferIds: [String]
+    ) {
         self.credentialManifest = credentialManifest
         self.approvedOfferIds = approvedOfferIds
         self.rejectedOfferIds = rejectedOfferIds
@@ -30,14 +32,26 @@ public struct VCLFinalizeOffersDescriptor {
         ]
     } }
     
-    var did: String { get { credentialManifest.did } }
+    var issuerId: String { get { credentialManifest.issuerId } }
     var exchangeId: String { get { credentialManifest.exchangeId } }
-    
     var finalizeOffersUri: String { get { credentialManifest.finalizeOffersUri } }
+    
+    public func generateRequestBody(jwt: VCLJwt) -> [String: Any?] {
+        var retVal = self.payload
+        retVal[CodingKeys.KeyProof] = [
+            CodingKeys.KeyProofType: CodingKeys.KeyJwt,
+            CodingKeys.KeyJwt: jwt.encodedJwt
+        ]
+        return retVal
+    }
     
     public struct CodingKeys {
         public static let KeyExchangeId = "exchangeId"
         public static let KeyApprovedOfferIds = "approvedOfferIds"
         public static let KeyRejectedOfferIds = "rejectedOfferIds"
+        
+        public static let KeyJwt = "jwt"
+        public static let KeyProof = "proof"
+        public static let KeyProofType = "proof_type"
     }
 }

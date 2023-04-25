@@ -14,20 +14,22 @@ public class VCLSubmission {
     public let iss: String
     public let exchangeId: String
     public let presentationDefinitionId: String
-    public let verifiableCredentials: [VCLVerifiableCredential]
+    public let verifiableCredentials: [VCLVerifiableCredential]?
     public let pushDelegate: VCLPushDelegate?
     public let vendorOriginContext: String?
     
     public let jti = UUID().uuidString
     public let submissionId = UUID().uuidString
     
-    public init(submitUri: String,
-                iss: String,
-                exchangeId: String,
-                presentationDefinitionId: String,
-                verifiableCredentials: [VCLVerifiableCredential],
-                pushDelegate: VCLPushDelegate? = nil,
-                vendorOriginContext: String? = nil) {
+    public init(
+        submitUri: String,
+        iss: String,
+        exchangeId: String,
+        presentationDefinitionId: String,
+        verifiableCredentials: [VCLVerifiableCredential]? = nil,
+        pushDelegate: VCLPushDelegate? = nil,
+        vendorOriginContext: String? = nil
+    ) {
         self.submitUri = submitUri
         self.iss = iss
         self.exchangeId = exchangeId
@@ -48,14 +50,14 @@ public class VCLSubmission {
         presentationSubmissionDict[CodingKeys.KeyId] = self.submissionId
         presentationSubmissionDict[CodingKeys.KeyDefinitionId] = presentationDefinitionId
         var descriptorMap = [[String: String]]()
-        for (index, credential) in self.verifiableCredentials.enumerated() {
+        for (index, credential) in (self.verifiableCredentials ?? [VCLVerifiableCredential]()).enumerated() {
             var res = [String: String]()
             res[CodingKeys.KeyId] = credential.inputDescriptor
             res[CodingKeys.KeyPath] = "$.verifiableCredential[\(index)]"
             res[CodingKeys.KeyFormat] = CodingKeys.ValueJwtVcFormat
             descriptorMap.append(res)
         }
-        vp[CodingKeys.KeyVerifiableCredential] = self.verifiableCredentials.map{ credential in credential.jwtVc }
+        vp[CodingKeys.KeyVerifiableCredential] = self.verifiableCredentials?.map{ credential in credential.jwtVc }
         presentationSubmissionDict[CodingKeys.KeyDescriptorMap] = descriptorMap
         vp[CodingKeys.KeyPresentationSubmission] = presentationSubmissionDict
         if let voc = vendorOriginContext { vp[VCLSubmission.CodingKeys.KeyVendorOriginContext] = voc }
@@ -68,6 +70,7 @@ public class VCLSubmission {
         retVal[CodingKeys.KeyExchangeId] = exchangeId
         retVal[CodingKeys.KeyJwtVp] = jwt.encodedJwt
         retVal[CodingKeys.KeyPushDelegate] = pushDelegate?.toDictionary()
+        retVal[CodingKeys.KeyContext] = CodingKeys.ValueContextList
         return retVal
     }
     
@@ -93,5 +96,8 @@ public class VCLSubmission {
         
         public static let ValueVerifiablePresentation = "VerifiablePresentation"
         public static let ValueJwtVcFormat = "jwt_vc"
+        
+        public static let KeyContext = "@context"
+        public static let ValueContextList = ["https://www.w3.org/2018/credentials/v1"]
     }
 }

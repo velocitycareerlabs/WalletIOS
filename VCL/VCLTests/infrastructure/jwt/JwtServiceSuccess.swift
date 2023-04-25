@@ -9,46 +9,38 @@
 
 import Foundation
 @testable import VCL
+@testable import VCToken
+@testable import VCCrypto
 
 class JwtServiceSuccess: JwtService {
-    
     let VclJwt: VCLJwt!
+    let VclDidJwk: VCLDidJwk!
     
-    init(VclJwt: VCLJwt) {
+    init(
+        VclJwt: VCLJwt,
+        VclDidJwk: VCLDidJwk
+    ) {
         self.VclJwt = VclJwt
+        self.VclDidJwk = VclDidJwk
     }
     
-    func decode(
-        encodedJwt: String,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
-    ) {
-        completionBlock(.success(self.VclJwt))
+    func decode(encodedJwt: String) -> VCLJwt {
+        return self.VclJwt
     }
     
-    func encode(
-        jwt: String,
-        completionBlock: @escaping (VCLResult<String>) -> Void
-    ) {
+    func encode(jwt: String) -> VCLJwt {
+        return self.VclJwt
     }
     
-    func verify(
-        jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
-    ) {
-        completionBlock(.success(true))
+    func verify(jwt: VCLJwt, jwkPublic: VCLJwkPublic) -> Bool {
+        return true
     }
     
-    func sign(
-        jwtDescriptor: VCLJwtDescriptor,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
-    ) {
-        completionBlock(.success(VCLJwt(header: nil, payload: nil, signature: nil, encodedJwt: JwtServiceMocks.SignedJwt)))
+    func sign(jwtDescriptor: VCLJwtDescriptor) -> VCLJwt {
+        return VCLJwt(header: nil, payload: nil, signature: nil, encodedJwt: JwtServiceMocks.SignedJwt)
     }
     
-    func generateDidJwk(
-        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
-    ) {
-        completionBlock(.success(VCLDidJwk(value: VCLDidJwk.DidJwkPrefix)))
+    func generateDidJwk(didJwkDescriptor jwkDescriptor: VCLDidJwkDescriptor?) -> VCLDidJwk {
+        return self.VclDidJwk
     }
 }
