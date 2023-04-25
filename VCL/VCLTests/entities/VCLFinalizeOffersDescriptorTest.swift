@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 @testable import VCL
 
-/// TODO: Test after updating Micrisoft jwt library
+/// TODO: Need to mock MS lib storage
 class VCLFinalizeOffersDescriptorTest: XCTestCase {
     
     var credentialManifest: VCLCredentialManifest!
@@ -24,12 +24,9 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     private let rejectedOfferIds = ["rejectedOfferId1", "rejectedOfferId2"]
     
     override func setUp() {
-        
 //        let credentialManifest = VCLCredentialManifest(jwt: VCLJwt(encodedJwt: CredentialManifestMocks.CredentialManifestJwt))
 //
 //        subject = VCLFinalizeOffersDescriptor(
-//            didJwk: JwtServiceMocks.didJwk,
-//            challenge: "some challenge",
 //            credentialManifest: credentialManifest,
 //            approvedOfferIds: approvedOfferIds,
 //            rejectedOfferIds: rejectedOfferIds
@@ -42,9 +39,6 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
 //        let iss = UUID().uuidString
 //        let aud = UUID().uuidString
 //        let payload = "{\"key1\": \"value1\"}".toDictionary()!
-//        let iat = Date().timeIntervalSince1970
-//        let nbf = 7
-//        let nonce = UUID().uuidString
 //        var jwt: VCLJwt? = nil
 //        do {
 //            jwt = try JwtServiceImpl().sign(
@@ -54,10 +48,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
 //                    payload: payload,
 //                    jti: jti,
 //                    iss: iss,
-//                    aud: aud,
-//                    iat: iat,
-//                    nbf: nbf,
-//                    nonce: nonce
+//                    aud: aud
 //                ))
 //        } catch {
 //            XCTFail("\(error)")

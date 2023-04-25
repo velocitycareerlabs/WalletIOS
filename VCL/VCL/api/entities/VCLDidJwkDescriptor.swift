@@ -12,11 +12,7 @@ import Foundation
 public struct VCLDidJwkDescriptor{
     public let kid: String
     
-    public init(kid: String? = nil) {
-        if let kid = kid {
-            self.kid = kid
-        } else {
-            self.kid = UUID().uuidString
-        }
+    public init(kid: String) {
+        self.kid = kid
     }
 }

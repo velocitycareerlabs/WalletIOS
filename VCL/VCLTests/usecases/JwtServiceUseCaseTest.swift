@@ -13,23 +13,18 @@ import XCTest
 @testable import VCCrypto
 @testable import VCL
 
-/// TODO: Test after updating Micrisoft jwt library
+/// TODO: Need to mock MS lib storage
 final class JwtServiceUseCaseTest: XCTestCase {
     
     var subject: JwtServiceUseCase!
 
     override func setUp() {
-//        subject = JwtServiceUseCaseImpl(
-//            JwtServiceRepositoryImpl(
-//                JwtServiceSuccess(
-//                    VclJwt:VCLJwt(
-//                        encodedJwt: JwtServiceMocks.SignedJwt
-//                    ),
-//                    VclDidJwk: JwtServiceMocks.didJwk
-//                )
-//            ),
-//            EmptyExecutor()
-//        )
+        subject = JwtServiceUseCaseImpl(
+            JwtServiceRepositoryImpl(
+                JwtServiceImpl()
+            ),
+            EmptyExecutor()
+        )
     }
     
     func testSignVerify() {
@@ -70,9 +65,7 @@ final class JwtServiceUseCaseTest: XCTestCase {
     func testGenerateDidJwk() {
 //        var resultDidJwk: VCLResult<VCLDidJwk>? = nil
 //
-//        subject.generateDidJwk(
-//            jwkDescriptor: VCLDidJwkDescriptor()
-//        ) {
+//        subject.generateDidJwk {
 //            resultDidJwk = $0
 //        }
 //        do {
@@ -80,8 +73,8 @@ final class JwtServiceUseCaseTest: XCTestCase {
 //                XCTFail()
 //                return
 //            }
-//            assert(didJwk.generateDidJwkBase64().hasPrefix(VCLDidJwk.DidJwkPrefix))
-//            assert(String(didJwk.generateDidJwkBase64().suffix(VCLDidJwk.DidJwkPrefix.count)).decodeBase64()!.isEmpty == false)
+//            assert(didJwk.value.hasPrefix(VCLDidJwk.DidJwkPrefix))
+//            assert(String(didJwk.value.suffix(VCLDidJwk.DidJwkPrefix.count)).decodeBase64()!.isEmpty == false)
 //        } catch {
 //            XCTFail("\(error)")
 //

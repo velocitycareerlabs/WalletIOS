@@ -11,7 +11,6 @@ import Foundation
 import XCTest
 @testable import VCL
 
-/// TODO: Test after updating Micrisoft jwt library
 final class CredentialManifestUseCaseTest: XCTestCase {
     
     var subject: CredentialManifestUseCase!
@@ -29,12 +28,7 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceSuccess(
-                    VclJwt: VCLJwt(
-                        encodedJwt: CredentialManifestMocks.CredentialManifestJwt
-                    ),
-                    VclDidJwk: JwtServiceMocks.didJwk
-                )
+                JwtServiceImpl()
 //                Can't be tested, because of storing exception
 //                JwtServiceMicrosoftImpl()
             ),

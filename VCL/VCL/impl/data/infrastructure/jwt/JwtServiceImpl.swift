@@ -36,8 +36,10 @@ class JwtServiceImpl: JwtService {
                 kid: jwtDescriptor.kid,
                 secp256k1Signer: secp256k1Signer
             )
-            let secret = jwtDescriptor.didJwk?.privateKey ?? privatePublicKeys.privateKey
-            let publicKey = jwtDescriptor.didJwk?.publicKey ?? privatePublicKeys.publicKey
+//            let secret = jwtDescriptor.didJwk?.privateKey ?? privatePublicKeys.privateKey
+//            let publicKey = jwtDescriptor.didJwk?.publicKey ?? privatePublicKeys.publicKey
+            let secret = privatePublicKeys.privateKey
+            let publicKey = privatePublicKeys.publicKey
             
             let header = Header(
                 type: GlobalConfig.TypeJwt,
@@ -50,18 +52,22 @@ class JwtServiceImpl: JwtService {
             let claims = VCLClaims(all: payload)
             
             let protectedMessage = try? createProtectedMessage(headers: header, claims: claims)
-            guard let jwsToken = JwsToken(headers: header,
-                                          content: claims,
-                                          protectedMessage: protectedMessage) else {
+            guard let jwsToken = JwsToken(
+                headers: header,
+                content: claims,
+                protectedMessage: protectedMessage
+            ) else {
                 throw VCLError(message: "Failed to create JwsToken")
             }
             
             let signature = try secp256k1Signer.sign(token: jwsToken, withSecret: secret)
-            guard let jwsTokenSigned = JwsToken(headers: jwsToken.headers,
-                                                content: jwsToken.content,
-                                                protectedMessage: jwsToken.protectedMessage,
-                                                signature: signature,
-                                                rawValue: jwsToken.rawValue) else {
+            guard let jwsTokenSigned = JwsToken(
+                headers: jwsToken.headers,
+                content: jwsToken.content,
+                protectedMessage: jwsToken.protectedMessage,
+                signature: signature,
+                rawValue: jwsToken.rawValue
+            ) else {
                 throw VCLError(message: "Failed to create signed JwsToken")
             }
             return try VCLJwt(encodedJwt: jwsTokenSigned.serialize())
@@ -72,7 +78,7 @@ class JwtServiceImpl: JwtService {
     }
     
     private func generatePayload(_ jwtDescriptor: VCLJwtDescriptor) -> [String: Any] {
-        var retVal = jwtDescriptor.payload ?? [String: Any]()
+        var retVal = jwtDescriptor.payload
         retVal["iss"] = jwtDescriptor.iss
         retVal["aud"] = jwtDescriptor.aud
         retVal["sub"] = randomString(length: 10)
@@ -81,7 +87,6 @@ class JwtServiceImpl: JwtService {
         retVal["iat"] = date.toDouble()
         retVal["nbf"] = date.toDouble()
         retVal["exp"] = date.addDaysToNow(days: 7).toDouble()
-        retVal["nonce"] = jwtDescriptor.nonce ?? ""
         return retVal
     }
     
@@ -95,14 +100,13 @@ class JwtServiceImpl: JwtService {
         }
     }
     
-    func generateDidJwk(jwkDescriptor: VCLDidJwkDescriptor) throws -> VCLDidJwk {
+    func generateDidJwk(didJwkDescriptor: VCLDidJwkDescriptor? = nil) throws -> VCLDidJwk {
         let publicPrivateKeys = try generateJwkSECP256K1FromKid(
-            kid: jwkDescriptor.kid,
+            kid: didJwkDescriptor?.kid ?? UUID().uuidString,
             secp256k1Signer: Secp256k1Signer()
         )
         return VCLDidJwk(
-            publicKey: publicPrivateKeys.publicKey,
-            privateKey: publicPrivateKeys.privateKey
+            value: "\(VCLDidJwk.DidJwkPrefix)\(publicPrivateKeys.publicKey.toJson().encodeToBase64())"
         )
     }
     

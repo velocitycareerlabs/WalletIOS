@@ -26,8 +26,6 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
         )
 
         finalizeOffersDescriptor = VCLFinalizeOffersDescriptor(
-            didJwk: JwtServiceMocks.didJwk,
-            challenge: "some challenge",
             credentialManifest: credentialManifest,
             approvedOfferIds: [String](),
             rejectedOfferIds: [String]()
@@ -40,7 +38,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
             FinalizeOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: FinalizeOffersMocks.EncodedJwtVerifiableCredentials),
                 JwtServiceRepositoryImpl(
-                    JwtServiceSuccess(VclJwt: vclJwt, VclDidJwk: JwtServiceMocks.didJwk)
+                    JwtServiceImpl()
                 )
             ),
             JwtServiceRepositoryImpl(

@@ -22,59 +22,29 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
         self.jwtServiceRepository = jwtServiceRepository
     }
     
-    func finalizeOffers(
-        token: VCLToken,
-        finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        completionBlock: @escaping (VCLResult<[String]>) -> Void
-    ) {
-        jwtServiceRepository.generateSignedJwt(
-            jwtDescriptor: VCLJwtDescriptor(
-                didJwk: finalizeOffersDescriptor.didJwk,
-                kid: "\(finalizeOffersDescriptor.didJwk.generateDidJwkBase64())#0",
-                iss: finalizeOffersDescriptor.didJwk.generateDidJwkBase64(),
-                aud: finalizeOffersDescriptor.issuerId,
-                nonce: finalizeOffersDescriptor.challenge
-            )
-        ) { [weak self] jwtResult in
+    func finalizeOffers(token: VCLToken,
+                        finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+                        completionBlock: @escaping (VCLResult<[String]>) -> Void) {
+        networkService.sendRequest(
+            endpoint: finalizeOffersDescriptor.finalizeOffersUri,
+            body: finalizeOffersDescriptor.payload.toJsonString(),
+            contentType: .ApplicationJson,
+            method: .POST,
+            headers:[
+                (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(token.value)"),
+                (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
+            ]
+        ) { result in
             do {
-                let jwt = try jwtResult.get()
-                self?.networkService.sendRequest(
-                    endpoint: finalizeOffersDescriptor.finalizeOffersUri,
-                    body: finalizeOffersDescriptor.generateRequestBody(jwt: jwt).toJsonString(),
-                    contentType: Request.ContentType.ApplicationJson,
-                    method: .POST,
-                    headers: [
-                        (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(token.value)"),
-                        (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
-                    ])
-                { result in
-                    do {
-                        let finalizedOffersResponse = try result.get()
-                        self?.handleFinalizedOffersResponse(
-                            finalizedOffersResponse: finalizedOffersResponse,
-                            completionBlock: completionBlock
-                        )
-                    } catch {
-                        completionBlock(.failure(VCLError(error: error)))
-                    }
+                let finalizedOffersResponse = try result.get()
+                if let encodedJwts = finalizedOffersResponse.payload.toList() as? [String] {
+                    completionBlock(.success(encodedJwts))
+                } else {
+                    completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: finalizedOffersResponse.payload, encoding: .utf8) ?? "")")))
                 }
-            }
-            catch {
+            } catch {
                 completionBlock(.failure(VCLError(error: error)))
             }
-        }
-    }
-    
-    private func handleFinalizedOffersResponse(
-        finalizedOffersResponse: Response,
-        completionBlock: @escaping (VCLResult<[String]>) -> Void
-    ) {
-        if let encodedJwts = finalizedOffersResponse.payload.toList() as? [String] {
-            completionBlock(.success(encodedJwts))
-        } else {
-            completionBlock(
-                .failure(VCLError(message: "Failed to parse: \(finalizedOffersResponse.payload)"))
-            )
         }
     }
 }

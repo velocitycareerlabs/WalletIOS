@@ -13,7 +13,6 @@ import Foundation
 @testable import VCCrypto
 
 class JwtServiceSuccess: JwtService {
-    
     let VclJwt: VCLJwt!
     let VclDidJwk: VCLDidJwk!
     
@@ -41,7 +40,7 @@ class JwtServiceSuccess: JwtService {
         return VCLJwt(header: nil, payload: nil, signature: nil, encodedJwt: JwtServiceMocks.SignedJwt)
     }
     
-    func generateDidJwk(jwkDescriptor: VCLDidJwkDescriptor) -> VCLDidJwk {
+    func generateDidJwk(didJwkDescriptor jwkDescriptor: VCLDidJwkDescriptor?) -> VCLDidJwk {
         return self.VclDidJwk
     }
 }
