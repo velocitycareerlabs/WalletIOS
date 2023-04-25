@@ -10,21 +10,15 @@
 import Foundation
 
 public struct VCLFinalizeOffersDescriptor {
-    public let didJwk: VCLDidJwk
-    public let challenge: String
     public let credentialManifest: VCLCredentialManifest
     public let approvedOfferIds: [String]
     public let rejectedOfferIds: [String]
     
     public init(
-        didJwk: VCLDidJwk,
-        challenge: String,
         credentialManifest: VCLCredentialManifest,
         approvedOfferIds: [String],
         rejectedOfferIds: [String]
     ) {
-        self.didJwk = didJwk
-        self.challenge = challenge
         self.credentialManifest = credentialManifest
         self.approvedOfferIds = approvedOfferIds
         self.rejectedOfferIds = rejectedOfferIds

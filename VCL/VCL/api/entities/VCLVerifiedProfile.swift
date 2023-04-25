@@ -25,7 +25,7 @@ public struct VCLVerifiedProfile {
     public var serviceTypes: VCLServiceTypes { get { retrieveServiceTypes(serviceCategoriesArr: credentialSubject?[CodingKeys.KeyServiceType] as? [String]) } }
 
     private func retrieveServiceTypes(serviceCategoriesArr: [String]?) -> VCLServiceTypes {
-        var retVal = serviceCategoriesArr?.map{ VCLServiceType.fromString(value: $0) } ?? [VCLServiceType]()
+        let retVal = serviceCategoriesArr?.map{ VCLServiceType.fromString(value: $0) } ?? [VCLServiceType]()
         return VCLServiceTypes(all: retVal)
     }
     

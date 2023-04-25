@@ -108,7 +108,7 @@ public class VCLImpl: VCL {
     }
     
     public var countries: VCLCountries? { get { return countriesModel.data } }
-        
+    
     public var credentialTypes: VCLCredentialTypes? { get { return credentialTypesModel.data } }
     
     public var credentialTypeSchemas: VCLCredentialTypeSchemas? { get { return credentialTypeSchemasModel?.data } }
@@ -237,7 +237,6 @@ public class VCLImpl: VCL {
         errorHandler: @escaping (VCLError) -> Void
     ) {
         let identificationSubmission = VCLIdentificationSubmission(
-            didJwk: generateOffersDescriptor.didJwk,
             credentialManifest: generateOffersDescriptor.credentialManifest,
             verifiableCredentials: generateOffersDescriptor.identificationVerifiableCredentials
         )
@@ -248,14 +247,14 @@ public class VCLImpl: VCL {
                 self?.generateOffersUseCase.generateOffers(
                     token: identificationSubmission.token,
                     generateOffersDescriptor: generateOffersDescriptor) {
-                    vnOffersResult in
-                    do {
-                        successHandler(try vnOffersResult.get())
-                    } catch {
-                        self?.logError(message: "submit identification", error: error)
-                        errorHandler(error as? VCLError ?? VCLError(error: error))
+                        vnOffersResult in
+                        do {
+                            successHandler(try vnOffersResult.get())
+                        } catch {
+                            self?.logError(message: "submit identification", error: error)
+                            errorHandler(error as? VCLError ?? VCLError(error: error))
+                        }
                     }
-                }
                 
             } catch {
                 self?.logError(message: "submit identification", error: error)
@@ -391,21 +390,19 @@ public class VCLImpl: VCL {
     }
     
     public func generateDidJwk(
-        jwkDescriptor: VCLDidJwkDescriptor,
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         jwtServiceUseCase.generateDidJwk(
-            jwkDescriptor: jwkDescriptor
-        ) {
-            [weak self] didJwkResult in
-            do {
-                successHandler(try didJwkResult.get())
-            } catch {
-                self?.logError(message: "generateDidJwk", error: error)
-                errorHandler(error as? VCLError ?? VCLError(error: error))
-            }
-        }
+            completionBlock: {
+                [weak self] didJwkResult in
+                do {
+                    successHandler(try didJwkResult.get())
+                } catch {
+                    self?.logError(message: "generateDidJwk", error: error)
+                    errorHandler(error as? VCLError ?? VCLError(error: error))
+                }
+            })
     }
 }
 

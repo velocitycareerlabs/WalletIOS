@@ -95,7 +95,6 @@ public protocol VCL {
     )
     
     func generateDidJwk(
-        jwkDescriptor: VCLDidJwkDescriptor,
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )

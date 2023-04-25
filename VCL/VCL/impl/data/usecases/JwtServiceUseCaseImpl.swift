@@ -57,12 +57,12 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
     }
     
     func generateDidJwk(
-        jwkDescriptor: VCLDidJwkDescriptor,
+        didJwkDescriptor: VCLDidJwkDescriptor? = nil,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
         executor.runOnBackgroundThread { [weak self] in
             self?.jwtServiceRepository.generateDidJwk(
-                jwkDescriptor: jwkDescriptor
+                didJwkDescriptor: didJwkDescriptor
             ) { didJwkResult in
                 self?.executor.runOnMainThread { completionBlock(didJwkResult) }
             }

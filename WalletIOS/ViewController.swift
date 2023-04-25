@@ -28,7 +28,6 @@ class ViewController: UIViewController {
     
     private let environment = VCLEnvironment.DEV
     private let vcl = VCLProvider.vclInstance()
-    private var didJwk: VCLDidJwk!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,17 +49,7 @@ class ViewController: UIViewController {
             successHandler: { [weak self] in
                 NSLog("VCL initialization succeed!")
                 
-                self?.vcl.generateDidJwk(
-                    jwkDescriptor: VCLDidJwkDescriptor(),
-                    successHandler: { [weak self] didJwk in
-                        self?.didJwk = didJwk
-                        NSLog("VCL DID:JWK base64: \(self?.didJwk.generateDidJwkBase64() ?? "")")
-                        self?.showControls()
-                    },
-                    errorHandler: { [weak self] error in
-                        NSLog("VCL DID:JWK generation failed: \(error)")
-                        self?.showError()
-                    })
+                self?.showControls()
             },
             errorHandler: { [weak self] error in
                 NSLog("VCL initialization failed: \(error)")
@@ -107,7 +96,6 @@ class ViewController: UIViewController {
     
     private func submitPresentation(presentationRequest: VCLPresentationRequest)  {
         let presentationSubmission = VCLPresentationSubmission(
-            didJwk: self.didJwk,
             presentationRequest: presentationRequest,
             verifiableCredentials: Constants.PresentationSelectionsList
         )
@@ -225,7 +213,6 @@ class ViewController: UIViewController {
     
     private func generateOffers(credentialManifest: VCLCredentialManifest) {
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            didJwk: self.didJwk,
             credentialManifest: credentialManifest,
             types: Constants.CredentialTypes,
             identificationVerifiableCredentials: Constants.IdentificationList
@@ -281,8 +268,6 @@ class ViewController: UIViewController {
     ) {
         let approvedRejectedOfferIds = Utils.getApprovedRejectedOfferIdsMock(offers: offers)
         let finalizeOffersDescriptor = VCLFinalizeOffersDescriptor(
-            didJwk: self.didJwk,
-            challenge: offers.challenge,
             credentialManifest: credentialManifest,
             approvedOfferIds: approvedRejectedOfferIds.0,
             rejectedOfferIds: approvedRejectedOfferIds.1
@@ -356,9 +341,8 @@ class ViewController: UIViewController {
     
     @objc private func generateDidJwk() {
         vcl.generateDidJwk(
-            jwkDescriptor: VCLDidJwkDescriptor(),
             successHandler: { didJwk in
-                NSLog("VCL DID:JWK generated: \(didJwk.generateDidJwkBase64())")
+                NSLog("VCL DID:JWK generated: \(didJwk.value)")
             },
             errorHandler: { error in
                 NSLog("VCL DID:JWK generation failed: \(error)")

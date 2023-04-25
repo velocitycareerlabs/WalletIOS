@@ -11,7 +11,6 @@ import Foundation
 import XCTest
 @testable import VCL
 
-/// TODO: Test after updating Micrisoft jwt library
 final class ExchangeProgressUseCaseTest: XCTestCase {
     
     var subject: ExchangeProgressUseCase!
@@ -31,7 +30,6 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
         let submissionResult = VCLSubmissionResult(token: VCLToken(value: ""), exchange: VCLExchange(), jti: "", submissionId: "")
         let exchangeDescriptor = VCLExchangeDescriptor(
             presentationSubmission: VCLPresentationSubmission(
-                didJwk: JwtServiceMocks.didJwk,
                 presentationRequest: PresentationRequestMocks.PresentationRequest,
                 verifiableCredentials: []
             ), submissionResult: submissionResult
