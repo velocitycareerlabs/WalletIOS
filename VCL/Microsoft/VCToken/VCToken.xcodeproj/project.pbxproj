@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		28B6E8F229F951B600761784 /* VCCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B6E8F129F951B600761784 /* VCCrypto.framework */; };
+		28B6E8F329F951B600761784 /* VCCrypto.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 28B6E8F129F951B600761784 /* VCCrypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F848B66282D5236005D3176 /* PbesJwe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B65282D5236005D3176 /* PbesJwe.swift */; };
 		2F848B6B282D5266005D3176 /* JweEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B67282D5266005D3176 /* JweEncoder.swift */; };
 		2F848B6C282D5266005D3176 /* JWK.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B68282D5266005D3176 /* JWK.swift */; };
@@ -52,7 +54,6 @@
 		55ADE29D24F583DB00D9990E /* JwsDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ADE29C24F583DB00D9990E /* JwsDecoderTests.swift */; };
 		55ADE2A124F585B100D9990E /* ClaimsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ADE2A024F585B100D9990E /* ClaimsTest.swift */; };
 		55C6C4A6250816500082BE73 /* TokenVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C6C4A5250816500082BE73 /* TokenVerifier.swift */; };
-		92E2998F252522D000B25BB6 /* VCCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E2998E252522D000B25BB6 /* VCCrypto.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,7 +66,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		28B6E8F429F951B700761784 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				28B6E8F329F951B600761784 /* VCCrypto.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		28B6E8F129F951B600761784 /* VCCrypto.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VCCrypto.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F848B65282D5236005D3176 /* PbesJwe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PbesJwe.swift; sourceTree = "<group>"; };
 		2F848B67282D5266005D3176 /* JweEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JweEncoder.swift; sourceTree = "<group>"; };
 		2F848B68282D5266005D3176 /* JWK.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWK.swift; sourceTree = "<group>"; };
@@ -108,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92E2998F252522D000B25BB6 /* VCCrypto.framework in Frameworks */,
+				28B6E8F229F951B600761784 /* VCCrypto.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +219,7 @@
 		55ADE27324F540E000D9990E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				28B6E8F129F951B600761784 /* VCCrypto.framework */,
 				92E2998E252522D000B25BB6 /* VCCrypto.framework */,
 			);
 			name = Frameworks;
@@ -242,6 +259,7 @@
 				55ADE25324F5406000D9990E /* Sources */,
 				55ADE25424F5406000D9990E /* Frameworks */,
 				55ADE25524F5406000D9990E /* Resources */,
+				28B6E8F429F951B700761784 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

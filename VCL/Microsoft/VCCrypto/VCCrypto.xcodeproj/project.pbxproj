@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		28B6E8EE29F951A800761784 /* Secp256k1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B6E8ED29F951A800761784 /* Secp256k1.framework */; };
+		28B6E8EF29F951A800761784 /* Secp256k1.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 28B6E8ED29F951A800761784 /* Secp256k1.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F848B5B282D50D5005D3176 /* Pbkdf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B57282D50D5005D3176 /* Pbkdf.swift */; };
 		2F848B5C282D50D5005D3176 /* Aes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B58282D50D5005D3176 /* Aes.swift */; };
 		2F848B5D282D50D5005D3176 /* HmacSha2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B59282D50D5005D3176 /* HmacSha2.swift */; };
@@ -80,7 +82,6 @@
 		92CDE80824E1F7AF00F95B5D /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CDE80724E1F7AF00F95B5D /* Secret.swift */; };
 		92CDE80A24E2047900F95B5D /* SecretMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CDE80924E2047900F95B5D /* SecretMock.swift */; };
 		92CDE80C24E213AE00F95B5D /* Random32BytesSecretTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92CDE80B24E213AE00F95B5D /* Random32BytesSecretTests.swift */; };
-		92D8B34E2537A7F400C42E34 /* Secp256k1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92D8B34D2537A7F400C42E34 /* Secp256k1.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,7 +101,22 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		28B6E8F029F951A800761784 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				28B6E8EF29F951A800761784 /* Secp256k1.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		28B6E8ED29F951A800761784 /* Secp256k1.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Secp256k1.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F848B57282D50D5005D3176 /* Pbkdf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pbkdf.swift; sourceTree = "<group>"; };
 		2F848B58282D50D5005D3176 /* Aes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Aes.swift; sourceTree = "<group>"; };
 		2F848B59282D50D5005D3176 /* HmacSha2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HmacSha2.swift; sourceTree = "<group>"; };
@@ -173,7 +189,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92D8B34E2537A7F400C42E34 /* Secp256k1.framework in Frameworks */,
+				28B6E8EE29F951A800761784 /* Secp256k1.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +366,7 @@
 		C817E43043516B933BA2E4E6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				28B6E8ED29F951A800761784 /* Secp256k1.framework */,
 				92D8B34D2537A7F400C42E34 /* Secp256k1.framework */,
 			);
 			name = Frameworks;
@@ -377,6 +394,7 @@
 				92CDE7A624DC78DD00F95B5D /* Sources */,
 				92CDE7A724DC78DD00F95B5D /* Frameworks */,
 				92CDE7A824DC78DD00F95B5D /* Resources */,
+				28B6E8F029F951A800761784 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
