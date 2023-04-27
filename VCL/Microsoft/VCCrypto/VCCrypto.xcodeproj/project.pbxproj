@@ -22,7 +22,6 @@
 
 /* Begin PBXBuildFile section */
 		28B6E8EE29F951A800761784 /* Secp256k1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28B6E8ED29F951A800761784 /* Secp256k1.framework */; };
-		28B6E8EF29F951A800761784 /* Secp256k1.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 28B6E8ED29F951A800761784 /* Secp256k1.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F848B5B282D50D5005D3176 /* Pbkdf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B57282D50D5005D3176 /* Pbkdf.swift */; };
 		2F848B5C282D50D5005D3176 /* Aes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B58282D50D5005D3176 /* Aes.swift */; };
 		2F848B5D282D50D5005D3176 /* HmacSha2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F848B59282D50D5005D3176 /* HmacSha2.swift */; };
@@ -100,20 +99,6 @@
 			remoteInfo = VCCryptoTestApp;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		28B6E8F029F951A800761784 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				28B6E8EF29F951A800761784 /* Secp256k1.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		28B6E8ED29F951A800761784 /* Secp256k1.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Secp256k1.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -394,7 +379,6 @@
 				92CDE7A624DC78DD00F95B5D /* Sources */,
 				92CDE7A724DC78DD00F95B5D /* Frameworks */,
 				92CDE7A824DC78DD00F95B5D /* Resources */,
-				28B6E8F029F951A800761784 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -707,7 +691,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -764,7 +748,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
