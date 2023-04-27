@@ -44,22 +44,32 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
     }
     
     private func parse(offersResponse: Response, token: VCLToken) -> VCLOffers {
-        if let payload = offersResponse.payload.toDictionary() {
+        if let offers = offersResponse.payload.toListOfDictionaries() {
             return VCLOffers(
-                payload: payload,
-                all: (payload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]]) ?? [[String: Any]](),
+                all: offers,
                 responseCode: offersResponse.code,
-                token: token,
-                challenge: (payload[VCLOffers.CodingKeys.KeyChallenge] as? String) ?? ""
+                token: token
             )
+        } else if let offers = offersResponse.payload.toDictionary() {
+            if(offers.isEmpty) {
+                return VCLOffers(
+                        all: [],
+                        responseCode: offersResponse.code,
+                        token: token
+                    )
+            } else {
+                return VCLOffers(
+                    all: [offers],
+                    responseCode: offersResponse.code,
+                    token: token
+                    )
+            }
         } else {
             return VCLOffers(
-                payload: [String: Any](),
-                all: [[String: Any]](),
-                responseCode: offersResponse.code,
-                token: token,
-                challenge: ""
-            )
+                    all: [],
+                    responseCode: offersResponse.code,
+                    token: token
+                )
         }
     }
 }
