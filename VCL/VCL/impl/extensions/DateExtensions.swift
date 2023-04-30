@@ -38,6 +38,10 @@ extension Date {
         return Double(self.timeIntervalSince1970)
     }
     
+    func toInt() -> Int {
+        return Int(self.timeIntervalSince1970)
+    }
+    
     func toString() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ" // ISO 8601 format

@@ -84,9 +84,9 @@ class JwtServiceImpl: JwtService {
         retVal["sub"] = randomString(length: 10)
         retVal["jti"] = jwtDescriptor.jti
         let date = Date()
-        retVal["iat"] = date.toDouble()
-        retVal["nbf"] = date.toDouble()
-        retVal["exp"] = date.addDaysToNow(days: 7).toDouble()
+        retVal["iat"] = date.toInt()
+        retVal["nbf"] = date.toInt()
+        retVal["exp"] = date.addDaysToNow(days: 7).toInt()
         return retVal
     }
     
