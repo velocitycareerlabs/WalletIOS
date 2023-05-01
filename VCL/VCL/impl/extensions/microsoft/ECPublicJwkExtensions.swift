@@ -22,8 +22,7 @@ extension ECPublicJwk {
         ]
     }
     
-    func toJson() -> String {
-//        return "{\"\(CodingKeys.KeyKid)\":\"\(self.keyId ?? "")\",\"\(CodingKeys.KeyKty)\":\"\(self.keyType)\",\"\(CodingKeys.KeyUse)\":\"\(self.use ?? "")\",\"(CodingKeys.KeyCrv)\":\"\(self.curve)\",\"\(CodingKeys.KeyX)\":\"\(self.x)\",\"\(CodingKeys.KeyY)\":\"\(self.y)\""
+    func toJsonString() -> String {
         return self.toDictionary().toJsonString() ?? ""
     }
         
