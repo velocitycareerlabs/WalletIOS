@@ -84,8 +84,8 @@ class JwtServiceImpl: JwtService {
         retVal["sub"] = randomString(length: 10)
         retVal["jti"] = jwtDescriptor.jti
         let date = Date()
-        retVal["iat"] = date.toInt()
-        retVal["nbf"] = date.toInt()
+        retVal["iat"] = date.toDouble()
+        retVal["nbf"] = date.toDouble()
         retVal["exp"] = date.addDaysToNow(days: 7).toInt()
         return retVal
     }
@@ -106,7 +106,7 @@ class JwtServiceImpl: JwtService {
             secp256k1Signer: Secp256k1Signer()
         )
         return VCLDidJwk(
-            value: "\(VCLDidJwk.DidJwkPrefix)\(publicPrivateKeys.publicKey.toJson().encodeToBase64())"
+            value: "\(VCLDidJwk.DidJwkPrefix)\(publicPrivateKeys.publicKey.toJsonString().encodeToBase64())"
         )
     }
     
@@ -114,14 +114,12 @@ class JwtServiceImpl: JwtService {
         kid: String,
         secp256k1Signer: Secp256k1Signer
     ) throws -> (publicKey: ECPublicJwk, privateKey: VCCryptoSecret) {
-        let secret = try KeyManagementOperations(
+        let privateKey = try KeyManagementOperations(
             sdkConfiguration: VCSDKConfiguration(
                 accessGroupIdentifier: GlobalConfig.KeycahinAccessGroupIdentifier
             )).generateKey()
-        let publicKey = try secp256k1Signer.getPublicJwk(from: secret, withKeyId: kid)
+        let publicKey = try secp256k1Signer.getPublicJwk(from: privateKey, withKeyId: kid)
         
-        let pubKey = ECPublicJwk(x: publicKey.x, y: publicKey.y ?? "", keyId: kid)
-        
-        return (pubKey, secret)
+        return (publicKey, privateKey)
     }
 }
