@@ -24,13 +24,20 @@ public struct VCLJwt {
     
     public init(encodedJwt: String) {
         let decodedJwt = encodedJwt.decodeJwtBase64Url()
-        initialize(header: decodedJwt[0].toDictionary(),
-                   payload: decodedJwt[1].toDictionary(),
-                   signature: decodedJwt[2],
-                   encodedJwt: encodedJwt)
+        initialize(
+            header: decodedJwt[0].toDictionary(),
+            payload: decodedJwt[1].toDictionary(),
+            signature: decodedJwt[2],
+            encodedJwt: encodedJwt
+        )
     }
     
-    private mutating func initialize(header: [String: Any]?, payload: [String: Any]?, signature: String?, encodedJwt: String) {
+    private mutating func initialize(
+        header: [String: Any]?,
+        payload: [String: Any]?,
+        signature: String?,
+        encodedJwt: String
+    ) {
         self.header = header
         self.payload = payload
         self.signature = signature

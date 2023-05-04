@@ -10,7 +10,9 @@
 import Foundation
 
 protocol FinalizeOffersUseCase {
-    func finalizeOffers(token: VCLToken,
-                       finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-                       completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void)
+    func finalizeOffers(
+        token: VCLToken,
+        finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+    )
 }
