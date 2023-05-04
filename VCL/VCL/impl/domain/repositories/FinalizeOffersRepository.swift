@@ -10,7 +10,9 @@
 import Foundation
 
 protocol FinalizeOffersRepository {
-    func finalizeOffers(token: VCLToken,
-                        finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-                        completionBlock: @escaping (VCLResult<[String]>) -> Void)
+    func finalizeOffers(
+        token: VCLToken,
+        finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        completionBlock: @escaping (VCLResult<[String]>) -> Void
+    )
 }

@@ -22,7 +22,7 @@ final class CredentialManifestUseCaseTest: XCTestCase {
         // Arrange
         subject = CredentialManifestUseCaseImpl(
             CredentialManifestRepositoryImpl(
-                NetworkServiceSuccess(validResponse: CredentialManifestMocks.CredentialManifest)
+                NetworkServiceSuccess(validResponse: CredentialManifestMocks.CredentialManifest1)
             ),
             ResolveKidRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
@@ -49,7 +49,7 @@ final class CredentialManifestUseCaseTest: XCTestCase {
         // Assert
         do {
             let credentialManifest = try result?.get()
-            assert((credentialManifest?.jwt.encodedJwt)! == CredentialManifestMocks.CredentialManifestJwt)
+            assert((credentialManifest?.jwt.encodedJwt)! == CredentialManifestMocks.CredentialManifestJwt1)
             assert((credentialManifest?.jwt.header)! == CredentialManifestMocks.Header)
             assert((credentialManifest?.jwt.payload)! == CredentialManifestMocks.Payload)
             assert((credentialManifest?.jwt.signature)! == CredentialManifestMocks.Signature)
