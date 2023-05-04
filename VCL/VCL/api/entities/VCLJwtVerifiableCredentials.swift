@@ -10,9 +10,14 @@
 import Foundation
 
 public struct VCLJwtVerifiableCredentials {
-    public let all: [VCLJwt]
+    public let passedCredentials: [VCLJwt]
+    public let failedCredentials: [VCLJwt]
     
-    public init(all: [VCLJwt]) {
-        self.all = all
+    public init(
+        passedCredentials: [VCLJwt],
+        failedCredentials: [VCLJwt]
+    ) {
+        self.passedCredentials = passedCredentials
+        self.failedCredentials = failedCredentials
     }
 }

@@ -1048,7 +1048,6 @@
 		289A5386264D64E500B84389 /* resources */ = {
 			isa = PBXGroup;
 			children = (
-				28BA0ADE26CA637200FF28BB /* invalid */,
 				28BA0AD426CA636900FF28BB /* valid */,
 				2896187029016E5A009B1FC7 /* EmptyCacheService.swift */,
 				289A538F264D64E500B84389 /* EmptyDispatcher.swift */,
@@ -1118,13 +1117,6 @@
 				2801702829DD6DEC00DAB4F1 /* SecretStoreMock.swift */,
 			);
 			path = valid;
-			sourceTree = "<group>";
-		};
-		28BA0ADE26CA637200FF28BB /* invalid */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = invalid;
 			sourceTree = "<group>";
 		};
 		28F1A629299EA6D5001A151F /* utils */ = {
@@ -1715,7 +1707,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 79;
+				CURRENT_PROJECT_VERSION = 80;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1728,7 +1720,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.11.6;
+				MARKETING_VERSION = 1.12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;
@@ -1741,7 +1733,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 79;
+				CURRENT_PROJECT_VERSION = 80;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1754,7 +1746,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.11.6;
+				MARKETING_VERSION = 1.12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;

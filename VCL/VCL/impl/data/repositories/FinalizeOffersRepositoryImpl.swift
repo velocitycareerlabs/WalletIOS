@@ -22,9 +22,11 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
         self.jwtServiceRepository = jwtServiceRepository
     }
     
-    func finalizeOffers(token: VCLToken,
-                        finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-                        completionBlock: @escaping (VCLResult<[String]>) -> Void) {
+    func finalizeOffers(
+        token: VCLToken,
+        finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        completionBlock: @escaping (VCLResult<[String]>) -> Void
+    ) {
         networkService.sendRequest(
             endpoint: finalizeOffersDescriptor.finalizeOffersUri,
             body: finalizeOffersDescriptor.payload.toJsonString(),

@@ -31,7 +31,7 @@ public struct VCLFinalizeOffersDescriptor {
             CodingKeys.KeyRejectedOfferIds: rejectedOfferIds
         ]
     } }
-    
+    var did: String { get { credentialManifest.did } }
     var issuerId: String { get { credentialManifest.issuerId } }
     var exchangeId: String { get { credentialManifest.exchangeId } }
     var finalizeOffersUri: String { get { credentialManifest.finalizeOffersUri } }

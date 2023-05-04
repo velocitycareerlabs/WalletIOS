@@ -43,20 +43,28 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
                     _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
                 }
                 
-                var jwtVerifiableCredentials = [VCLJwt]()
+                var passedCredentials = [VCLJwt]()
+                var failedCredentials = [VCLJwt]()
                 _self.finalizeOffersRepository.finalizeOffers(
                     token: token,
                     finalizeOffersDescriptor: finalizeOffersDescriptor) { encodedJwtOffersListResult in
                         do {
                             let encodedJwts = try encodedJwtOffersListResult.get()
-                            encodedJwts.forEach{ encodedJwtOffer in
+                            encodedJwts.forEach{ [weak self] encodedJwtOffer in
                                 _self.jwtServiceRepository.decode(encodedJwt: encodedJwtOffer) { jwtResult in
                                     do {
-                                        let jwt = try jwtResult.get()
-                                        jwtVerifiableCredentials.append(jwt)
-                                        if(encodedJwts.count == jwtVerifiableCredentials.count) {
+                                        let jwtCredential = try jwtResult.get()
+                                        if (self?.verifyJwtCredential(jwtCredential, finalizeOffersDescriptor) == true) {
+                                            passedCredentials.append(jwtCredential)
+                                        } else {
+                                            failedCredentials.append(jwtCredential)
+                                        }
+                                        if(encodedJwts.count == passedCredentials.count + failedCredentials.count) {
                                             _self.executor.runOnMainThread {
-                                                completionBlock(.success(VCLJwtVerifiableCredentials(all: jwtVerifiableCredentials)))
+                                                completionBlock(.success(VCLJwtVerifiableCredentials(
+                                                    passedCredentials: passedCredentials,
+                                                    failedCredentials: failedCredentials
+                                                )))
                                             }
                                         }
                                     } catch {
@@ -66,7 +74,10 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
                             }
                             
                             if(encodedJwts.isEmpty) {
-                                completionBlock(.success(VCLJwtVerifiableCredentials(all: jwtVerifiableCredentials)))
+                                completionBlock(.success(VCLJwtVerifiableCredentials(
+                                    passedCredentials: passedCredentials,
+                                    failedCredentials: failedCredentials
+                                )))
                             }
                         } catch {
                             _self.onError(VCLError(error: error), completionBlock)
@@ -78,6 +89,13 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
                 completionBlock(.failure(VCLError(message: "self is nil")))
             }
         }
+    }
+    
+    private func verifyJwtCredential(
+            _ jwtCredential: VCLJwt,
+            _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor
+    ) -> Bool {
+        return jwtCredential.payload?["iss"] as? String == finalizeOffersDescriptor.did
     }
     
     private func onError(

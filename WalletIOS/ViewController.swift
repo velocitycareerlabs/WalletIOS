@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 16/03/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import UIKit
 import VCL
@@ -224,7 +224,7 @@ class ViewController: UIViewController {
                 NSLog("VCL Generated Offers Response Code: \(offers.responseCode)")
                 NSLog("VCL Generated Offers Token: \(offers.token)")
                 
-                //                Check offers invoked after the push notification is notified the app that offers are ready:
+//                Check offers invoked after the push notification is notified the app that offers are ready:
                 self?.checkForOffers(
                     credentialManifest: credentialManifest,
                     generateOffersDescriptor: generateOffersDescriptor,
@@ -276,8 +276,9 @@ class ViewController: UIViewController {
             finalizeOffersDescriptor: finalizeOffersDescriptor,
             token: offers.token,
             successHandler: { verifiableCredentials in
-                NSLog("VCL finalized Offers: \(verifiableCredentials.all)")
-                //                NSLog("VCL finalized Offers")
+                NSLog("VCL finalized Offers")
+                NSLog("VCL Passed Credentials: \(verifiableCredentials.passedCredentials)")
+                NSLog("VCL Failed Credentials: \(verifiableCredentials.failedCredentials)")
             },
             errorHandler: { error in
                 NSLog("VCL failed to finalize Offers: \(error)")
