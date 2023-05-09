@@ -390,10 +390,12 @@ public class VCLImpl: VCL {
     }
     
     public func generateDidJwk(
+        didJwkDescriptor: VCLDidJwkDescriptor = VCLDidJwkDescriptor(),
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         jwtServiceUseCase.generateDidJwk(
+            didJwkDescriptor: didJwkDescriptor,
             completionBlock: {
                 [weak self] didJwkResult in
                 do {

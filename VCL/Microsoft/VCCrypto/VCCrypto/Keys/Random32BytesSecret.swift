@@ -16,13 +16,14 @@ final class Random32BytesSecret: Secret {
     private let store: SecretStoring
     let accessGroup: String?
     
-    init(withStore store: SecretStoring, andId id: UUID, inAccessGroup accessGroup: String? = nil) {
-        self.id = id
-        self.store = store
-        self.accessGroup = accessGroup
-    }
+//    init(withStore store: SecretStoring, andId id: UUID, inAccessGroup accessGroup: String? = nil) {
+//        self.id = id
+//        self.store = store
+//        self.accessGroup = accessGroup
+//    }
     
-    init(withStore store: SecretStoring, inAccessGroup accessGroup: String? = nil) throws {
+    init(withStore store: SecretStoring, andId id: UUID, inAccessGroup accessGroup: String? = nil) throws {
+        self.id = id
         self.store = store
         self.accessGroup = accessGroup
         
@@ -42,9 +43,13 @@ final class Random32BytesSecret: Secret {
         guard result == errSecSuccess else {
             throw Random32BytesSecretError.secRandomCopyBytesFailed(status: result)
         }
-        id = UUID()
-
-        try self.store.saveSecret(id: id, itemTypeCode: Random32BytesSecret.itemTypeCode, accessGroup: accessGroup, value: &value)
+//        id = UUID()
+        
+        do {
+            _ = try self.store.getSecret(id: id, itemTypeCode: Random32BytesSecret.itemTypeCode, accessGroup: accessGroup)
+        } catch {
+            try self.store.saveSecret(id: id, itemTypeCode: Random32BytesSecret.itemTypeCode, accessGroup: accessGroup, value: &value)
+        }
     }
     
     func withUnsafeBytes(_ body: (UnsafeRawBufferPointer) throws -> Void) throws {

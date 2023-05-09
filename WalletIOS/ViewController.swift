@@ -342,8 +342,9 @@ class ViewController: UIViewController {
     
     @objc private func generateDidJwk() {
         vcl.generateDidJwk(
+//            didJwkDescriptor: VCLDidJwkDescriptor(kid: UUID().uuidString),
             successHandler: { didJwk in
-                NSLog("VCL DID:JWK generated: \(didJwk.value)")
+                NSLog("VCL DID:JWK generated: \(didJwk.didJwk)")
             },
             errorHandler: { error in
                 NSLog("VCL DID:JWK generation failed: \(error)")

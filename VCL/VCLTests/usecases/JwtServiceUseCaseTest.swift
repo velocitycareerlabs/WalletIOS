@@ -13,7 +13,6 @@ import XCTest
 @testable import VCCrypto
 @testable import VCL
 
-/// TODO: Need to mock MS lib storage
 final class JwtServiceUseCaseTest: XCTestCase {
     
     var subject: JwtServiceUseCase!
@@ -21,64 +20,73 @@ final class JwtServiceUseCaseTest: XCTestCase {
     override func setUp() {
         subject = JwtServiceUseCaseImpl(
             JwtServiceRepositoryImpl(
-                JwtServiceImpl()
+                JwtServiceImpl(secretStore: SecretStoreMock())
             ),
             EmptyExecutor()
         )
     }
     
     func testSignVerify() {
-//        var resultJwt: VCLResult<VCLJwt>? = nil
-//        var resultVerified: VCLResult<Bool>? = nil
-//
-//        // Action
-//        subject.generateSignedJwt(
-//            jwtDescriptor: VCLJwtDescriptor(
-//                payload: JwtServiceMocks.Json.toDictionary() ?? [String: String](),
-//                jti: "",
-//                iss: ""
-//            )
-//        ) {
-//            resultJwt = $0
-//        }
-//
-//        do {
-//            guard let jwt = try resultJwt?.get() else {
-//                XCTFail()
-//                return
-//            }
-//            // Remote API
-//            subject.verifyJwt(jwt: jwt, jwkPublic: VCLJwkPublic(valueDict: jwt.jwsToken!.headers.jsonWebKey!.toDictionary() as! [String: String])) {
-//                resultVerified = $0
-//            }
-//            // Assert both have the same result
-//            guard let isVerified = try resultVerified?.get() else {
-//                XCTFail()
-//                return
-//            }
-//            assert(isVerified)
-//        } catch {
-//            XCTFail("\(error)")
-//        }
+        var resultJwt: VCLResult<VCLJwt>? = nil
+        var resultVerified: VCLResult<Bool>? = nil
+
+        // Action
+        subject.generateSignedJwt(
+            jwtDescriptor: VCLJwtDescriptor(
+                payload: JwtServiceMocks.Json.toDictionary() ?? [String: String](),
+                jti: "",
+                iss: ""
+            )
+        ) {
+            resultJwt = $0
+        }
+
+        do {
+            guard let jwt = try resultJwt?.get() else {
+                XCTFail()
+                return
+            }
+            // Remote API
+            subject.verifyJwt(jwt: jwt, jwkPublic: VCLJwkPublic(valueDict: jwt.jwsToken!.headers.jsonWebKey!.toDictionary() as [String: Any])) {
+                resultVerified = $0
+            }
+            // Assert both have the same result
+            guard let isVerified = try resultVerified?.get() else {
+                XCTFail()
+                return
+            }
+            assert(isVerified)
+        } catch {
+            XCTFail("\(error)")
+        }
     }
     
     func testGenerateDidJwk() {
-//        var resultDidJwk: VCLResult<VCLDidJwk>? = nil
-//
-//        subject.generateDidJwk {
-//            resultDidJwk = $0
-//        }
-//        do {
-//            guard let didJwk = try resultDidJwk?.get() else {
-//                XCTFail()
-//                return
-//            }
-//            assert(didJwk.value.hasPrefix(VCLDidJwk.DidJwkPrefix))
-//            assert(String(didJwk.value.suffix(VCLDidJwk.DidJwkPrefix.count)).decodeBase64()!.isEmpty == false)
-//        } catch {
-//            XCTFail("\(error)")
-//
-//        }
+        var resultDidJwk1: VCLResult<VCLDidJwk>? = nil
+        var resultDidJwk2: VCLResult<VCLDidJwk>? = nil
+
+        subject.generateDidJwk(didJwkDescriptor: VCLDidJwkDescriptor(kid: CommonMocks.UUID1)) {
+            resultDidJwk1 = $0
+        }
+        subject.generateDidJwk(didJwkDescriptor: VCLDidJwkDescriptor(kid: CommonMocks.UUID1)) {
+            resultDidJwk2 = $0
+        }
+        do {
+            guard let didJwk1 = try resultDidJwk1?.get() else {
+                XCTFail()
+                return
+            }
+            guard let didJwk2 = try resultDidJwk2?.get() else {
+                XCTFail()
+                return
+            }
+            assert(didJwk1.didJwk.hasPrefix(VCLDidJwk.DidJwkPrefix))
+            assert(didJwk2.didJwk.hasPrefix(VCLDidJwk.DidJwkPrefix))
+            assert(didJwk1.didJwk == didJwk2.didJwk)
+        } catch {
+            XCTFail("\(error)")
+
+        }
     }
     
     override class func tearDown() {

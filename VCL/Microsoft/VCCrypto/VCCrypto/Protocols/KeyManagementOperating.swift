@@ -10,7 +10,7 @@ public protocol KeyManagementOperating {
     func generateKey() throws -> VCCryptoSecret
     
     /// Retrieve key from storage.
-    func retrieveKeyFromStorage(withId id: UUID) -> VCCryptoSecret
+    func retrieveKeyFromStorage(withId id: UUID) throws -> VCCryptoSecret
     
     /// Save key with uner a particular id.
     func save(key: Data, withId id: UUID) throws

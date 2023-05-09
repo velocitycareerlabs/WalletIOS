@@ -13,6 +13,12 @@ import VCCrypto
 
 class JwtServiceImpl: JwtService {
     
+    private let secretStore: SecretStoring?
+    
+    init(secretStore: SecretStoring? = nil) {
+        self.secretStore = secretStore
+    }
+    
     func decode(encodedJwt: String) -> VCLJwt {
         return VCLJwt(encodedJwt: encodedJwt)
     }
@@ -34,12 +40,11 @@ class JwtServiceImpl: JwtService {
             let secp256k1Signer = Secp256k1Signer()
             let privatePublicKeys = try generateJwkSECP256K1FromKid(
                 kid: jwtDescriptor.kid,
+                keyManagementOperations: createKeyManagementOperations(),
                 secp256k1Signer: secp256k1Signer
             )
-//            let secret = jwtDescriptor.didJwk?.privateKey ?? privatePublicKeys.privateKey
-//            let publicKey = jwtDescriptor.didJwk?.publicKey ?? privatePublicKeys.publicKey
-            let secret = privatePublicKeys.privateKey
-            let publicKey = privatePublicKeys.publicKey
+            let secret = jwtDescriptor.didJwk?.privateKey ?? privatePublicKeys.privateKey
+            let publicKey = jwtDescriptor.didJwk?.publicKey ?? privatePublicKeys.publicKey
             
             let header = Header(
                 type: GlobalConfig.TypeJwt,
@@ -100,26 +105,51 @@ class JwtServiceImpl: JwtService {
         }
     }
     
-    func generateDidJwk(didJwkDescriptor: VCLDidJwkDescriptor? = nil) throws -> VCLDidJwk {
+    func generateDidJwk(didJwkDescriptor: VCLDidJwkDescriptor) throws -> VCLDidJwk {
         let publicPrivateKeys = try generateJwkSECP256K1FromKid(
-            kid: didJwkDescriptor?.kid ?? UUID().uuidString,
+            kid: didJwkDescriptor.kid,
+            keyManagementOperations: createKeyManagementOperations(),
             secp256k1Signer: Secp256k1Signer()
         )
         return VCLDidJwk(
-            value: "\(VCLDidJwk.DidJwkPrefix)\(publicPrivateKeys.publicKey.toJsonString().encodeToBase64())"
+            kid: didJwkDescriptor.kid,
+            publicKey: publicPrivateKeys.publicKey,
+            privateKey: publicPrivateKeys.privateKey
         )
     }
     
     private func generateJwkSECP256K1FromKid(
         kid: String,
+        keyManagementOperations: KeyManagementOperations,
         secp256k1Signer: Secp256k1Signer
     ) throws -> (publicKey: ECPublicJwk, privateKey: VCCryptoSecret) {
-        let privateKey = try KeyManagementOperations(
+        var publicKey: ECPublicJwk? = nil
+        var privateKey = try keyManagementOperations.retrieveKeyFromStorage(withId: UUID(uuidString: kid) ?? UUID())
+        do {
+            publicKey = try secp256k1Signer.getPublicJwk(from: privateKey, withKeyId: kid)
+        } catch {
+            NSLog(kid, "\(error)")
+            privateKey = try keyManagementOperations.generateKey()
+            publicKey = try secp256k1Signer.getPublicJwk(from: privateKey, withKeyId: kid)
+        }
+        if let publicKey = publicKey {
+            return (publicKey, privateKey)
+        }
+        throw VCLError(payload: "Failed to generate private key in generateJwkSECP256K1FromKid")
+    }
+    
+    private func createKeyManagementOperations() -> KeyManagementOperations {
+        var keyManagementOperations = KeyManagementOperations(
             sdkConfiguration: VCSDKConfiguration(
                 accessGroupIdentifier: GlobalConfig.KeycahinAccessGroupIdentifier
-            )).generateKey()
-        let publicKey = try secp256k1Signer.getPublicJwk(from: privateKey, withKeyId: kid)
-        
-        return (publicKey, privateKey)
+            ))
+        if let secretStore = self.secretStore {
+            keyManagementOperations = KeyManagementOperations(
+                secretStore: secretStore,
+                sdkConfiguration: VCSDKConfiguration(
+                    accessGroupIdentifier: GlobalConfig.KeycahinAccessGroupIdentifier
+                ))
+        }
+        return keyManagementOperations
     }
 }

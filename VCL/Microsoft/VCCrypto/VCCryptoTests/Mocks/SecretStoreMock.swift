@@ -11,7 +11,7 @@ enum SecretStoreMockError: Error {
     case noKeyFound
 }
 
-internal class SecretStoreMock: SecretStoring {
+class SecretStoreMock: SecretStoring {
     
     var memoryStore = [UUID: Data]()
     

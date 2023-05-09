@@ -48,7 +48,7 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
     }
     
     func generateDidJwk(
-        didJwkDescriptor: VCLDidJwkDescriptor? = nil,
+        didJwkDescriptor: VCLDidJwkDescriptor,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
         do {

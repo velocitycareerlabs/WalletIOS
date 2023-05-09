@@ -95,12 +95,22 @@ public protocol VCL {
     )
     
     func generateDidJwk(
+        didJwkDescriptor: VCLDidJwkDescriptor,
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
 }
 
 extension VCL {
+    
+    public func generateDidJwk(
+        didJwkDescriptor: VCLDidJwkDescriptor = VCLDidJwkDescriptor(),
+        successHandler: @escaping (VCLDidJwk) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        generateDidJwk(didJwkDescriptor: didJwkDescriptor, successHandler: successHandler, errorHandler: errorHandler)
+    }
+
     func printVersion() {
         VCLLog.d("Version: \(GlobalConfig.Version)")
         VCLLog.d("Build: \(GlobalConfig.Build)")

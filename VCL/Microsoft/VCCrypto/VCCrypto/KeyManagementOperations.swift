@@ -21,13 +21,13 @@ public struct KeyManagementOperations: KeyManagementOperating {
     
     public func generateKey() throws -> VCCryptoSecret {
         let accessGroup = sdkConfiguration.accessGroupIdentifier
-        let key = try Random32BytesSecret(withStore: secretStore, inAccessGroup: accessGroup)
+        let key = try Random32BytesSecret(withStore: secretStore, andId: UUID(), inAccessGroup: accessGroup)
         return key
     }
     
-    public func retrieveKeyFromStorage(withId id: UUID) -> VCCryptoSecret {
+    public func retrieveKeyFromStorage(withId id: UUID) throws -> VCCryptoSecret {
         let accessGroup = sdkConfiguration.accessGroupIdentifier
-        return Random32BytesSecret(withStore: secretStore, andId: id, inAccessGroup: accessGroup)
+        return try Random32BytesSecret(withStore: secretStore, andId: id, inAccessGroup: accessGroup)
     }
     
     public func save(key: Data, withId id: UUID) throws {
