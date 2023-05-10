@@ -18,5 +18,5 @@ protocol JwtService {
     
     func sign(jwtDescriptor: VCLJwtDescriptor) throws -> VCLJwt
     
-    func generateDidJwk(didJwkDescriptor: VCLDidJwkDescriptor?) throws -> VCLDidJwk
+    func generateDidJwk() throws -> VCLDidJwk
 }

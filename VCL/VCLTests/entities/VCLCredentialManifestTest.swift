@@ -18,7 +18,7 @@ class VCLCredentialManifestTest: XCTestCase {
     override func setUp() {
 //        do {
 //            subject = try VCLCredentialManifest(
-//                jwt: JwtServiceImpl().sign(
+//                jwt: JwtServiceImpl(secretStore: SecretStoreMock()).sign(
 //                    jwtDescriptor: VCLJwtDescriptor(
 //                        payload: CredentialManifestMocks.Payload,
 //                        iss: "did:ion:EiAbP9xvCYnUOiLwqgbkV4auH_26Pv7BT2pYYT3masvvhw"

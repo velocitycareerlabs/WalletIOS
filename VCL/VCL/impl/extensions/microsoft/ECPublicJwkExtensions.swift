@@ -11,26 +11,33 @@ import Foundation
 import VCToken
 
 extension ECPublicJwk {
-    func toDictionary() -> [String: String?] {
+
+//    Although ECPublicJwk is Codable, we must use the manual serialization in order to keep the order
+    func toDictionary() -> [String: Any?] {
         return [
             CodingKeys.KeyKid: self.keyId,
             CodingKeys.KeyKty: self.keyType,
             CodingKeys.KeyUse: self.use,
             CodingKeys.KeyCrv: self.curve,
+            CodingKeys.KeyAlgorithm: self.algorithm,
+            CodingKeys.KeyOperations: self.keyOperations,
             CodingKeys.KeyX: self.x,
-            CodingKeys.KeyY: self.y
+            CodingKeys.KeyY: self.y,
         ]
     }
     
     func toJsonString() -> String {
-        return self.toDictionary().toJsonString() ?? ""
+        return "\"\(CodingKeys.KeyKid)\":\"\(self.keyId ?? "")\",\"\(CodingKeys.KeyKty)\":\"\(self.keyType)\",\"\(CodingKeys.KeyUse)\":\"\(self.use ?? "")\",\"\(CodingKeys.KeyCrv)\":\"\(self.curve)\",\"\(CodingKeys.KeyAlgorithm)\":\"\(self.algorithm ?? "")\",\"\(CodingKeys.KeyOperations)\":\"\(self.keyOperations ?? [String]())\",\"\(CodingKeys.KeyX)\":\"\(self.x)\",\"\(CodingKeys.KeyY)\":\"\(self.y ?? "")\""
+//        return self.toDictionary().toJsonString() ?? ""
     }
-        
+
     enum CodingKeys {        
         static let KeyKid = "kid"
         static let KeyKty = "kty"
         static let KeyUse = "use"
         static let KeyCrv = "crv"
+        static let KeyAlgorithm = "alg"
+        static let KeyOperations = "key_ops"
         static let KeyX = "x"
         static let KeyY = "y"
     }

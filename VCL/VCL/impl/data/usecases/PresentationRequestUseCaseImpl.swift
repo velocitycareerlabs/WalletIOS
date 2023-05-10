@@ -83,7 +83,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
-        if let keyID = jwt.keyID?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
+        if let keyID = jwt.keyId?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
             self.resolveKidRepository.getPublicKey(keyID: keyID) {
                 [weak self] publicKeyResult in
                 do {

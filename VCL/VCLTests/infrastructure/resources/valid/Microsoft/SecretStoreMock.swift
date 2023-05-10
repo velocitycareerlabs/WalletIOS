@@ -51,4 +51,5 @@ internal class SecretStoreMock: SecretStoring {
         testInputCallback?(itemTypeCode, accessGroup)
         memoryStore.removeValue(forKey: id)
     }
+    
 }

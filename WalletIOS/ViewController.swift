@@ -84,7 +84,6 @@ class ViewController: UIViewController {
                 )),
             successHandler: { [weak self] presentationRequest in
                 NSLog("VCL Presentation request received: \(presentationRequest.jwt.payload?.toJson() ?? "")")
-                // NSLog("VCL Presentation request received")
                 
                 self?.submitPresentation(presentationRequest: presentationRequest)
             },
@@ -134,7 +133,6 @@ class ViewController: UIViewController {
             organizationsSearchDescriptor: organizationDescriptor,
             successHandler: { [weak self] organizations in
                 NSLog("VCL Organizations received: \(organizations.all)")
-                //                NSLog("VCL Organizations received")
                 
                 // choosing services[0] for testing purposes
                 if organizations.all.count == 0 || organizations.all[0].serviceCredentialAgentIssuers.isEmpty {
@@ -202,7 +200,6 @@ class ViewController: UIViewController {
             credentialManifestDescriptor: credentialManifestDescriptorByDeepLink,
             successHandler: { [weak self] credentialManifest in
                 NSLog("VCL Credential Manifest received: \(credentialManifest.jwt.payload as Optional)")
-                //                NSLog("VCL Credential Manifest received")
                 
                 self?.generateOffers(credentialManifest: credentialManifest)
             },
@@ -343,7 +340,7 @@ class ViewController: UIViewController {
     @objc private func generateDidJwk() {
         vcl.generateDidJwk(
             successHandler: { didJwk in
-                NSLog("VCL DID:JWK generated: \(didJwk.value)")
+                NSLog("VCL DID:JWK generated: \(didJwk.didJwk)")
             },
             errorHandler: { error in
                 NSLog("VCL DID:JWK generation failed: \(error)")

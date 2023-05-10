@@ -86,7 +86,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        if let keyID = jwt.keyID?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
+        if let keyID = jwt.keyId?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
             self.resolveKidRepository.getPublicKey(keyID: keyID) {
                 [weak self] publicKeyResult in
                 do {

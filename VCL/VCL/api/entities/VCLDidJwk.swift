@@ -8,15 +8,23 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
+import VCToken
 
 public class VCLDidJwk {
-    public let value: String
+    public let keyId: String
+    public let didJwk: String
     
     public static let DidJwkPrefix = "did:jwk:"
     
+    static func generateDidJwk(publicKey: ECPublicJwk) -> String {
+        return "\(VCLDidJwk.DidJwkPrefix)\(publicKey.toJsonString().encodeToBase64())"
+    }
+    
     public init(
-        value: String
+        keyId: String,
+        didJwk: String
     ) {
-        self.value = value
+        self.keyId = keyId
+        self.didJwk = didJwk
     }
 }

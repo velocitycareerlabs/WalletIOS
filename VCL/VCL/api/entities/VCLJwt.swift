@@ -72,7 +72,7 @@ public struct VCLJwt {
         public static let KeySignature = "signature"
     }
     
-    var keyID: String? { get {
+    var keyId: String? { get {
         return (header?[CodingKeys.KeyKid] as? String) ?? ((header?[CodingKeys.KeyJwk] as? [String: Any])?[CodingKeys.KeyKid]) as? String
     } }
 }
