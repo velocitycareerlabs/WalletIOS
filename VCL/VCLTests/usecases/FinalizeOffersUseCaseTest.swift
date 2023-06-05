@@ -144,6 +144,39 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
         }
     }
     
+    func testEmprtyCredentials() {
+        // Arrange
+        subject = FinalizeOffersUseCaseImpl(
+            FinalizeOffersRepositoryImpl(
+                NetworkServiceSuccess(validResponse: FinalizeOffersMocks.EmptyVerifiableCredentials)),
+            JwtServiceRepositoryImpl(
+                JwtServiceImpl(keyService)
+            ),
+            EmptyExecutor(),
+            DispatcherImpl()
+        )
+        var result: VCLResult<VCLJwtVerifiableCredentials>? = nil
+
+        // Action
+        subject.finalizeOffers(
+            finalizeOffersDescriptor: finalizeOffersDescriptorPassed,
+            didJwk: didJwk,
+            token: VCLToken(value: "")
+        ) {
+            result = $0
+        }
+
+        // Assert
+        do {
+            let finalizeOffers = try result?.get()
+            
+            assert(finalizeOffers!.failedCredentials.isEmpty)
+            assert(finalizeOffers!.passedCredentials.isEmpty)
+        } catch {
+            XCTFail()
+        }
+    }
+    
     override class func tearDown() {
     }
 }
