@@ -37,22 +37,17 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
     }
     
     func generateSignedJwt(
+        kid: String? = nil,
+        nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         do {
-            completionBlock(.success(try jwtService.sign(jwtDescriptor: jwtDescriptor)))
-        } catch {
-            completionBlock(.failure(VCLError(error: error)))
-        }
-    }
-    
-    func generateDidJwk(
-        didJwkDescriptor: VCLDidJwkDescriptor? = nil,
-        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
-    ) {
-        do {
-            completionBlock(.success(try jwtService.generateDidJwk(didJwkDescriptor: didJwkDescriptor)))
+            completionBlock(.success(try jwtService.sign(
+                kid: kid,
+                nonce: nonce,
+                jwtDescriptor: jwtDescriptor
+            )))
         } catch {
             completionBlock(.failure(VCLError(error: error)))
         }

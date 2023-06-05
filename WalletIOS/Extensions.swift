@@ -20,4 +20,8 @@ public extension String {
         }
         return nil
     }
+    
+    func encode() -> String? {
+        return self.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+    }
 }

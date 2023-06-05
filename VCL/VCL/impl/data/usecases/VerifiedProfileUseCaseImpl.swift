@@ -27,7 +27,7 @@ class VerifiedProfileUseCaseImpl: VerifiedProfileUseCase {
         verifiedProfileDescriptor: VCLVerifiedProfileDescriptor,
         completionBlock: @escaping (VCLResult<VCLVerifiedProfile>) -> Void
     ) {
-        executor.runOnBackgroundThread { [weak self] in
+        executor.runOnBackground { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(SubmissionUseCase.self)") {
                     UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
@@ -37,7 +37,7 @@ class VerifiedProfileUseCaseImpl: VerifiedProfileUseCase {
                 self?.verifiedProfileRepository.getVerifiedProfile(
                     verifiedProfileDescriptor: verifiedProfileDescriptor
                 ) { result in
-                    self?.executor.runOnMainThread {
+                    self?.executor.runOnMain {
                         completionBlock(result)
                     }
                 }

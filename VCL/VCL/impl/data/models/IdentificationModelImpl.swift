@@ -20,9 +20,13 @@ class IdentificationModelImpl: IdentificationModel {
     
     func submit(
         identificationSubmission: VCLIdentificationSubmission,
+        didJwk: VCLDidJwk,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
-        identificationSubmissionUseCase.submit(submission: identificationSubmission) { [weak self] result in
+        identificationSubmissionUseCase.submit(
+            submission: identificationSubmission,
+            didJwk: didJwk
+        ) { [weak self] result in
             do {
                 self?.data = try result.get().token
             } catch {}

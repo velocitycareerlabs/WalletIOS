@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 09/05/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import UIKit
@@ -31,7 +31,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     func getCredentialManifest(credentialManifestDescriptor: VCLCredentialManifestDescriptor,
                                completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void) {
-        executor.runOnBackgroundThread() { [weak self] in
+        executor.runOnBackground { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(CredentialManifestUseCase.self)") {
                     UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
@@ -86,8 +86,8 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        if let keyID = jwt.keyID?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
-            self.resolveKidRepository.getPublicKey(keyID: keyID) {
+        if let kid = jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
+            self.resolveKidRepository.getPublicKey(kid: kid) {
                 [weak self] publicKeyResult in
                 do {
                     let publicKey = try publicKeyResult.get()
@@ -102,7 +102,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                 }
             }
         } else {
-            self.executor.runOnMainThread {
+            self.executor.runOnMain {
                 completionBlock(.failure(VCLError(message: "Empty KeyID")))
             }
         }
@@ -137,14 +137,14 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if isVerified == true {
-            executor.runOnMainThread { completionBlock(.success(
+            executor.runOnMain { completionBlock(.success(
                 VCLCredentialManifest(
                     jwt: jwt,
                     vendorOriginContext: credentialManifestDescriptor.vendorOriginContext
                 )))
             }
         } else {
-            executor.runOnMainThread {
+            executor.runOnMain {
                 completionBlock(.failure(VCLError(message: "Failed  to verify: \(jwt)")))
             }
         }
@@ -154,7 +154,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         _ error: Error,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        executor.runOnMainThread {
+        executor.runOnMain {
             completionBlock(.failure(VCLError(error: error)))
         }
     }

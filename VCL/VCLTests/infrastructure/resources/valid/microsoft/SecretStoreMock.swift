@@ -16,6 +16,8 @@ enum SecretStoreMockError: Error {
 
 internal class SecretStoreMock: SecretStoring {
     
+    public static let Instance = SecretStoreMock()
+    
     var memoryStore = [UUID: Data]()
     
     static var wasGetSecretCalled = false
@@ -26,7 +28,7 @@ internal class SecretStoreMock: SecretStoring {
     
     let testInputCallback: ((String?, String?) -> ())?
     
-    init(testInputCallback: ((String?, String?) -> ())? = nil) {
+    private init(testInputCallback: ((String?, String?) -> ())? = nil) {
         self.testInputCallback = testInputCallback
     }
     
@@ -51,4 +53,5 @@ internal class SecretStoreMock: SecretStoring {
         testInputCallback?(itemTypeCode, accessGroup)
         memoryStore.removeValue(forKey: id)
     }
+    
 }

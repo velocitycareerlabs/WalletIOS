@@ -11,8 +11,9 @@ import Foundation
 
 protocol FinalizeOffersUseCase {
     func finalizeOffers(
-        token: VCLToken,
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        didJwk: VCLDidJwk,
+        token: VCLToken,
         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     )
 }

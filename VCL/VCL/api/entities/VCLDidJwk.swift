@@ -8,15 +8,34 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
+import VCToken
 
 public class VCLDidJwk {
+    /// The id of private key save in secure enclave
+    public let keyId: String
+    /// The did:jwk
     public let value: String
+    /// kid of jwt - did:jwk suffixed with #0
+    public let kid: String
     
     public static let DidJwkPrefix = "did:jwk:"
+    public static let DidJwkSuffix = "#0"
+    
+    static func generateDidJwk(publicKey: ECPublicJwk) -> String {
+        return "\(VCLDidJwk.DidJwkPrefix)\(publicKey.toDictionaryOpt()?.toJsonString()?.encodeToBase64() ?? "")"
+    }
+    
+    static func generateKidFromDidJwk(publicKey: ECPublicJwk) -> String {
+        return "\(VCLDidJwk.generateDidJwk(publicKey: publicKey))\(VCLDidJwk.DidJwkSuffix)"
+    }
     
     public init(
-        value: String
+        keyId: String,
+        value: String,
+        kid: String
     ) {
+        self.keyId = keyId
         self.value = value
+        self.kid = kid
     }
 }

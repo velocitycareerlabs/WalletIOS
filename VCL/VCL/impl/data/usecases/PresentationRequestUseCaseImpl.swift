@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 02/04/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import UIKit
@@ -33,7 +33,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
-        executor.runOnBackgroundThread { [weak self] in
+        executor.runOnBackground { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(PresentationRequestUseCase.self)") {
                     UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
@@ -83,8 +83,8 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
-        if let keyID = jwt.keyID?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
-            self.resolveKidRepository.getPublicKey(keyID: keyID) {
+        if let kid = jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
+            self.resolveKidRepository.getPublicKey(kid: kid) {
                 [weak self] publicKeyResult in
                 do {
                     let publicKey = try publicKeyResult.get()
@@ -140,7 +140,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         if isVerified == true {
-            executor.runOnMainThread {
+            executor.runOnMain {
                 completionBlock(.success(presentationRequest))
             }
         } else {
@@ -152,7 +152,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         _ error: Error,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
-        executor.runOnMainThread {
+        executor.runOnMain {
             completionBlock(.failure(VCLError(error: error)))
         }
     }

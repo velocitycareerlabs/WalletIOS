@@ -10,7 +10,9 @@
 import Foundation
 
 protocol SubmissionRepository {
-    func submit(submission: VCLSubmission,
-                jwt: VCLJwt,
-                completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void)
+    func submit(
+        submission: VCLSubmission,
+        jwt: VCLJwt,
+        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
+    )
 }

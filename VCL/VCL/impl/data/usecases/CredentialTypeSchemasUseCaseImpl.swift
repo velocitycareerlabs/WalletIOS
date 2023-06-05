@@ -13,7 +13,7 @@ import UIKit
 class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
     
     private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
-
+    
     private let credentialTypeSchemasRepository: CredentialTypeSchemaRepository
     private let credenctiialTypes: VCLCredentialTypes
     private let executor: Executor
@@ -39,7 +39,7 @@ class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
         var credentialTypeSchemasMap = [String: VCLCredentialTypeSchema]()
         var credentialTypeSchemasMapIsEmpty = true
         
-        executor.runOnBackgroundThread { [weak self] in
+        executor.runOnBackground { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(CredentialTypeSchemasUseCase.self)") {
                     UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
@@ -68,12 +68,12 @@ class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
                         }
                     )
                 }
-                _self.dispatcher.notify(queue: .main) {
+                _self.dispatcher.notify(queue: DispatchQueue.main, execute: {
                     if(credentialTypeSchemasMapIsEmpty) {
                         VCLLog.e("Failed to fetch credential type schemas")
                     }
                     completionBlock(.success(VCLCredentialTypeSchemas(all: credentialTypeSchemasMap)))
-                }
+                })
                 
                 UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
                 _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid

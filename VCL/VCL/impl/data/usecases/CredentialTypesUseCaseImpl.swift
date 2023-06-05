@@ -26,7 +26,7 @@ class CredentialTypesUseCaseImpl: CredentialTypesUseCase  {
         cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
     ) {
-        executor.runOnBackgroundThread { [weak self] in
+        executor.runOnBackground { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(CredentialTypesUseCase.self)") {
                     UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
@@ -34,7 +34,7 @@ class CredentialTypesUseCaseImpl: CredentialTypesUseCase  {
                 }
                 
                 _self.credentialTypesRepository.getCredentialTypes(cacheSequence: cacheSequence){ result in
-                    _self.executor.runOnMainThread {
+                    _self.executor.runOnMain {
                         completionBlock(result)
                     }
                 }

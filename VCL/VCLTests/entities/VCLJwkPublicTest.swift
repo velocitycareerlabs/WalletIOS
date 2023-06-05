@@ -15,12 +15,12 @@ final class VCLJwkPublicTest: XCTestCase {
     
     var subject: VCLJwkPublic!
     
-    static let jwkDict = JwtServiceMocks.JWK.toDictionary()!
+    static let jwkDict = KeyServiceMocks.JWK.toDictionary()!
     
     func testJwkPublicFromStr() {
-        subject = VCLJwkPublic(valueStr: JwtServiceMocks.JWK)
+        subject = VCLJwkPublic(valueStr: KeyServiceMocks.JWK)
 
-        assert(subject.valueStr == JwtServiceMocks.JWK)
+        assert(subject.valueStr == KeyServiceMocks.JWK)
     }
 
     func testJwkPublicFromJson() {
