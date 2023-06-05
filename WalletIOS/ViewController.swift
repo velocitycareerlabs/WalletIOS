@@ -341,6 +341,7 @@ class ViewController: UIViewController {
     @objc private func generateSignedJwt() {
         vcl.generateSignedJwt(
             jwtDescriptor: VCLJwtDescriptor(
+                keyId: didJwk.keyId,
                 payload: Constants.SomePayload,
                 jti: "jti123",
                 iss: "iss123"
@@ -357,10 +358,10 @@ class ViewController: UIViewController {
     @objc private func generateDidJwk() {
         vcl.generateDidJwk(
             successHandler: { didJwk in
-                NSLog("VCL DID:JWK generated: \(didJwk.value)")
+                NSLog("VCL did:jwk generated: \(didJwk.value)")
             },
             errorHandler: { error in
-                NSLog("VCL DID:JWK generation failed: \(error)")
+                NSLog("VCL did:jwk generation failed: \(error)")
             }
         )
     }
