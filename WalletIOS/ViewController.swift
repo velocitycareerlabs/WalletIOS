@@ -48,7 +48,7 @@ class ViewController: UIViewController {
                 environment: environment
             ),
             successHandler: { [weak self] in
-                NSLog("VCL initialization succeed!")
+                NSLog("VCL Initialization succeed!")
                 
                 self?.vcl.generateDidJwk(
                     successHandler: { didJwk in
@@ -57,13 +57,13 @@ class ViewController: UIViewController {
                         self?.showControls()
                     },
                     errorHandler: { error in
-                        NSLog("VCL failed to generate did:jwk: \(error)")
+                        NSLog("VCL Failed to generate did:jwk with error: \(error)")
                         self?.showError()
                     }
                 )
             },
             errorHandler: { [weak self] error in
-                NSLog("VCL initialization failed: \(error)")
+                NSLog("VCL Initialization failed with error: \(error)")
                 self?.showError()
             }
         )
