@@ -13,6 +13,14 @@ import VCCrypto
 
 class JwtServiceImpl: JwtService {
     
+    private let keyService: KeyService
+    private let tokenSigning: TokenSigning
+    
+    init(_ keyService: KeyService) {
+        self.keyService = keyService
+        self.tokenSigning = Secp256k1Signer() // No need to be injected
+    }
+    
     func decode(encodedJwt: String) -> VCLJwt {
         return VCLJwt(encodedJwt: encodedJwt)
     }
@@ -21,37 +29,51 @@ class JwtServiceImpl: JwtService {
         return VCLJwt(encodedJwt: "not implemented yet")
     }
     
-    func verify(jwt: VCLJwt, jwkPublic: VCLJwkPublic) throws -> Bool {
-        let pubKey = ECPublicJwk(x: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyX] as? String ?? "",
-                                 y: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyY] as? String ?? "",
-                                 keyId: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyKid] as? String ?? "")
-
+    func verify(
+        jwt: VCLJwt,
+        jwkPublic: VCLJwkPublic
+    ) throws -> Bool {
+        let pubKey = ECPublicJwk(
+            x: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyX] as? String ?? "",
+            y: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyY] as? String ?? "",
+            keyId: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyKid] as? String ?? ""
+        )
         return try jwt.jwsToken?.verify(using: TokenVerifier(), withPublicKey: pubKey) == true
     }
     
-    func sign(jwtDescriptor: VCLJwtDescriptor) throws -> VCLJwt {
+    func sign(
+        kid: String? = nil,
+        nonce: String? = nil,
+        jwtDescriptor: VCLJwtDescriptor
+    ) throws -> VCLJwt {
         do {
             let secp256k1Signer = Secp256k1Signer()
-            let privatePublicKeys = try generateJwkSECP256K1FromKid(
-                kid: jwtDescriptor.kid,
-                secp256k1Signer: secp256k1Signer
-            )
-//            let secret = jwtDescriptor.didJwk?.privateKey ?? privatePublicKeys.privateKey
-//            let publicKey = jwtDescriptor.didJwk?.publicKey ?? privatePublicKeys.publicKey
-            let secret = privatePublicKeys.privateKey
-            let publicKey = privatePublicKeys.publicKey
             
-            let header = Header(
+            var secret: VCCryptoSecret
+            if let keyId = jwtDescriptor.keyId {
+                secret = try keyService.retrieveSecretReference(keyId: keyId)
+            } else {
+                secret = try keyService.generateSecret()
+            }
+            let publicJwk = try keyService.retrievePublicJwk(secret: secret)
+            
+            var header = Header(
                 type: GlobalConfig.TypeJwt,
                 algorithm: GlobalConfig.AlgES256K,
-                jsonWebKey: publicKey// try publicKey.getThumbprint()
+                jsonWebKey: publicJwk
             )
-            
-            let payload = generatePayload(jwtDescriptor)
-            
-            let claims = VCLClaims(all: payload)
+            if let kid = kid {
+                header = Header(
+                    type: GlobalConfig.TypeJwt,
+                    algorithm: GlobalConfig.AlgES256K,
+                    jsonWebKey: publicJwk,
+                    keyId: kid
+                )
+            }
+            let claims = VCLClaims(all: generateClaims(nonce: nonce, jwtDescriptor: jwtDescriptor))
             
             let protectedMessage = try? createProtectedMessage(headers: header, claims: claims)
+            
             guard let jwsToken = JwsToken(
                 headers: header,
                 content: claims,
@@ -77,16 +99,22 @@ class JwtServiceImpl: JwtService {
         }
     }
     
-    private func generatePayload(_ jwtDescriptor: VCLJwtDescriptor) -> [String: Any] {
-        var retVal = jwtDescriptor.payload
-        retVal["iss"] = jwtDescriptor.iss
-        retVal["aud"] = jwtDescriptor.aud
-        retVal["sub"] = randomString(length: 10)
-        retVal["jti"] = jwtDescriptor.jti
+    private func generateClaims(
+        nonce: String?,
+        jwtDescriptor: VCLJwtDescriptor
+    ) -> [String: Any] {
+        var retVal = jwtDescriptor.payload ?? [String: Any]()
+        retVal[CodingKeys.KeyIss] = jwtDescriptor.iss
+        retVal[CodingKeys.KeyAud] = jwtDescriptor.aud
+        retVal[CodingKeys.KeySub] = randomString(length: 10)
+        retVal[CodingKeys.KeyJti] = jwtDescriptor.jti
         let date = Date()
-        retVal["iat"] = date.toDouble()
-        retVal["nbf"] = date.toDouble()
-        retVal["exp"] = date.addDaysToNow(days: 7).toInt()
+        retVal[CodingKeys.KeyIat] = date.toDouble()
+        retVal[CodingKeys.KeyNbf] = date.toDouble()
+        retVal[CodingKeys.KeyExp] = date.addDays(days: 7).toDouble()
+        if let nonce = nonce {
+            retVal[CodingKeys.KeyNonce] = nonce
+        }
         return retVal
     }
     
@@ -100,26 +128,14 @@ class JwtServiceImpl: JwtService {
         }
     }
     
-    func generateDidJwk(didJwkDescriptor: VCLDidJwkDescriptor? = nil) throws -> VCLDidJwk {
-        let publicPrivateKeys = try generateJwkSECP256K1FromKid(
-            kid: didJwkDescriptor?.kid ?? UUID().uuidString,
-            secp256k1Signer: Secp256k1Signer()
-        )
-        return VCLDidJwk(
-            value: "\(VCLDidJwk.DidJwkPrefix)\(publicPrivateKeys.publicKey.toJsonString().encodeToBase64())"
-        )
-    }
-    
-    private func generateJwkSECP256K1FromKid(
-        kid: String,
-        secp256k1Signer: Secp256k1Signer
-    ) throws -> (publicKey: ECPublicJwk, privateKey: VCCryptoSecret) {
-        let privateKey = try KeyManagementOperations(
-            sdkConfiguration: VCSDKConfiguration(
-                accessGroupIdentifier: GlobalConfig.KeycahinAccessGroupIdentifier
-            )).generateKey()
-        let publicKey = try secp256k1Signer.getPublicJwk(from: privateKey, withKeyId: kid)
-        
-        return (publicKey, privateKey)
+    public struct CodingKeys {
+        public static let KeyIss = "iss"
+        public static let KeyAud = "aud"
+        public static let KeySub = "sub"
+        public static let KeyJti = "jti"
+        public static let KeyIat = "iat"
+        public static let KeyNbf = "nbf"
+        public static let KeyExp = "exp"
+        public static let KeyNonce = "nonce"
     }
 }

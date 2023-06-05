@@ -24,8 +24,8 @@ class PresentationSubmissionMocks {
     )
 
     static let SelectionsList = [
-        VCLVerifiableCredential(inputDescriptor: "IdDocument", jwtVc: JwtServiceMocks.AdamSmithIdDocumentJwt),
-        VCLVerifiableCredential(inputDescriptor: "Email", jwtVc: JwtServiceMocks.AdamSmithEmailJwt)
+        VCLVerifiableCredential(inputDescriptor: "PhoneV1.0", jwtVc: JwtServiceMocks.AdamSmithPhoneJwt),
+        VCLVerifiableCredential(inputDescriptor: "EmailV1.0", jwtVc: JwtServiceMocks.AdamSmithEmailJwt)
     ]
     
     static let PresentationSubmissionJwt = PresentationRequestMocks.PresentationRequestJwt

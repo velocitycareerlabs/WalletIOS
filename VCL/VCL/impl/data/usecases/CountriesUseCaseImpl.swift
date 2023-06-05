@@ -26,7 +26,7 @@ class CountriesUseCaseImpl: CountriesUseCase  {
         cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
     ) {
-        executor.runOnBackgroundThread { [weak self] in
+        executor.runOnBackground { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(CountriesUseCase.self)") {
                     UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
@@ -34,7 +34,7 @@ class CountriesUseCaseImpl: CountriesUseCase  {
                 }
                 
                 _self.countriesRepository.getCountries(cacheSequence: cacheSequence) { result in
-                    _self.executor.runOnMainThread {
+                    _self.executor.runOnMain {
                         completionBlock(result)
                     }
                 }

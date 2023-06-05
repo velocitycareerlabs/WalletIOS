@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 11/05/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import XCTest
@@ -14,34 +14,27 @@ import XCTest
 final class GenerateOffersUseCaseTest: XCTestCase {
     
     var subject: GenerateOffersUseCase!
-
-    override func setUp() {
-    }
     
     func testGenerateOffers() {
-        // Arrange
         subject = GenerateOffersUseCaseImpl(
             GenerateOffersRepositoryImpl(
-                NetworkServiceSuccess(validResponse: GenerateOffersMocks.Offers)
+                NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffers)
             ),
             EmptyExecutor()
         )
         var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            credentialManifest: VCLCredentialManifest(jwt: VCLJwt(encodedJwt: "")),
-            identificationVerifiableCredentials: [VCLVerifiableCredential]()
+            credentialManifest: VCLCredentialManifest(jwt: CommonMocks.JWT)
         )
 
-        // Action
         subject.generateOffers(token: VCLToken(value: ""), generateOffersDescriptor: generateOffersDescriptor) {
             result = $0
         }
 
-        // Assert
         do {
             let offers = try result?.get()
             assert(offers!.all == GenerateOffersMocks.Offers.toListOfDictionaries()!)
-//            assert(offers!.challenge == GenerateOffersMocks.Challenge)
+            assert(offers!.challenge == GenerateOffersMocks.Challenge)
         } catch {
             XCTFail("\(error)")
         }
@@ -57,9 +50,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         )
         var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            credentialManifest: VCLCredentialManifest(jwt: VCLJwt(encodedJwt: "")
-                                                     ),
-            identificationVerifiableCredentials: [VCLVerifiableCredential]()
+            credentialManifest: VCLCredentialManifest(jwt: CommonMocks.JWT)
         )
 
         // Action
@@ -86,9 +77,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         )
         var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            credentialManifest: VCLCredentialManifest(jwt: VCLJwt(encodedJwt: "")
-                                                     ),
-            identificationVerifiableCredentials: [VCLVerifiableCredential]()
+            credentialManifest: VCLCredentialManifest(jwt: CommonMocks.JWT)
         )
 
         // Action

@@ -26,6 +26,7 @@ public class VCLImpl: VCL {
     private let credentialTypesUIFormSchemaUseCase = VclBlocksProvider.provideCredentialTypesUIFormSchemaUseCase()
     private let verifiedProfileUseCase = VclBlocksProvider.provideVerifiedProfileUseCase()
     private let jwtServiceUseCase = VclBlocksProvider.provideJwtServiceUseCase()
+    private let keyServiceUseCase = VclBlocksProvider.provideKeyServiceUseCase()
     
     private var initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
     private var profileServiceTypeVerifier: ProfileServiceTypeVerifier?
@@ -149,10 +150,14 @@ public class VCLImpl: VCL {
     
     public func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
+        didJwk: VCLDidJwk,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        presentationSubmissionUseCase.submit(submission: presentationSubmission) {
+        presentationSubmissionUseCase.submit(
+            submission: presentationSubmission,
+            didJwk: didJwk
+        ) {
             [weak self] presentationSubmissionResult in
             do {
                 successHandler(try presentationSubmissionResult.get())
@@ -233,6 +238,7 @@ public class VCLImpl: VCL {
     
     public func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
+        didJwk: VCLDidJwk,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
@@ -240,7 +246,10 @@ public class VCLImpl: VCL {
             credentialManifest: generateOffersDescriptor.credentialManifest,
             verifiableCredentials: generateOffersDescriptor.identificationVerifiableCredentials
         )
-        identificationUseCase.submit(submission: identificationSubmission) {
+        identificationUseCase.submit(
+            submission: identificationSubmission,
+            didJwk: didJwk
+        ) {
             [weak self] identificationSubmissionResult in
             do {
                 let identificationSubmission = try identificationSubmissionResult.get()
@@ -287,9 +296,9 @@ public class VCLImpl: VCL {
             token: token,
             generateOffersDescriptor: generateOffersDescriptor
         ) {
-            [weak self] vnOffersResult in
+            [weak self] offersResult in
             do {
-                successHandler(try vnOffersResult.get())
+                successHandler(try offersResult.get())
             } catch {
                 self?.logError(message: "generateOffers", error: error)
                 errorHandler(error as? VCLError ?? VCLError(error: error))
@@ -299,13 +308,16 @@ public class VCLImpl: VCL {
     
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        didJwk: VCLDidJwk,
         token: VCLToken,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         finalizeOffersUseCase.finalizeOffers(
-            token: token,
-            finalizeOffersDescriptor: finalizeOffersDescriptor) {
+            finalizeOffersDescriptor: finalizeOffersDescriptor,
+            didJwk: didJwk,
+            token: token
+        ) {
                 [weak self] jwtVerifiableCredentials in
                 do {
                     successHandler(try jwtVerifiableCredentials.get())
@@ -393,7 +405,7 @@ public class VCLImpl: VCL {
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.generateDidJwk(
+        keyServiceUseCase.generateDidJwk(
             completionBlock: {
                 [weak self] didJwkResult in
                 do {

@@ -12,24 +12,22 @@ import Foundation
 class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
     
     private let networkService: NetworkService
-    private let jwtServiceRepository: JwtServiceRepository
     
     init(
-        _ networkService: NetworkService,
-        _ jwtServiceRepository: JwtServiceRepository
+        _ networkService: NetworkService
     ) {
         self.networkService = networkService
-        self.jwtServiceRepository = jwtServiceRepository
     }
     
     func finalizeOffers(
         token: VCLToken,
+        proof: VCLJwt,
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         completionBlock: @escaping (VCLResult<[String]>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: finalizeOffersDescriptor.finalizeOffersUri,
-            body: finalizeOffersDescriptor.payload.toJsonString(),
+            body: finalizeOffersDescriptor.generateRequestBody(jwt: proof).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
             headers:[

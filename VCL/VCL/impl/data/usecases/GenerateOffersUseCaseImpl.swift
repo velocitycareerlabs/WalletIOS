@@ -27,7 +27,7 @@ class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
         completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
     ) {
-        executor.runOnBackgroundThread { [weak self] in
+        executor.runOnBackground { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(GenerateOffersUseCase.self)") {
                     UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
@@ -37,7 +37,7 @@ class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
                 _self.generateOffersRepository.generateOffers(
                     token:token,
                     generateOffersDescriptor: generateOffersDescriptor) { offersResult in
-                        _self.executor.runOnMainThread { completionBlock(offersResult) }
+                        _self.executor.runOnMain { completionBlock(offersResult) }
                     }
                 UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
                 _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid

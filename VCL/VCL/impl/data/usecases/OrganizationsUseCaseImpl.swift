@@ -24,7 +24,7 @@ class OrganizationsUseCaseImpl: OrganizationsUseCase {
     
     func searchForOrganizations(organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
                                 completionBlock: @escaping (VCLResult<VCLOrganizations>) -> Void) {
-        executor.runOnBackgroundThread() { [weak self] in
+        executor.runOnBackground { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(OrganizationsUseCase.self)") {
                     UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
@@ -33,7 +33,7 @@ class OrganizationsUseCaseImpl: OrganizationsUseCase {
                 
                 _self.organizationsRepository.searchForOrganizations(organizationsSearchDescriptor: organizationsSearchDescriptor) {
                     organizations in
-                    _self.executor.runOnMainThread { completionBlock(organizations) }
+                    _self.executor.runOnMain { completionBlock(organizations) }
                 }
                 
                 UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)

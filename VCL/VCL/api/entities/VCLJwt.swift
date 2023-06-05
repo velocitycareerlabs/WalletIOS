@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 26/04/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import VCToken
@@ -70,9 +70,42 @@ public struct VCLJwt {
         public static let KeyHeader = "header"
         public static let KeyPayload = "payload"
         public static let KeySignature = "signature"
+        
+        public static let KeyIss = "iss"
+        public static let KeyAud = "aud"
+        public static let KeySub = "sub"
+        public static let KeyJti = "jti"
+        public static let KeyIat = "iat"
+        public static let KeyNbf = "nbf"
+        public static let KeyExp = "exp"
+        public static let KeyNonce = "nonce"
     }
     
-    var keyID: String? { get {
+    var kid: String? { get {
         return (header?[CodingKeys.KeyKid] as? String) ?? ((header?[CodingKeys.KeyJwk] as? [String: Any])?[CodingKeys.KeyKid]) as? String
+    } }
+    var iss: String? { get {
+        return self.payload?[CodingKeys.KeyIss] as? String
+    } }
+    var aud: String? { get {
+        return self.payload?[CodingKeys.KeyAud] as? String
+    } }
+    var sub: String? { get {
+        return self.payload?[CodingKeys.KeySub] as? String
+    } }
+    var jti: String? { get {
+        return self.payload?[CodingKeys.KeyJti] as? String
+    } }
+    var iat: String? { get {
+        return self.payload?[CodingKeys.KeyIat] as? String
+    } }
+    var nbf: Double? { get {
+        return self.payload?[CodingKeys.KeyNbf] as? Double
+    } }
+    var exp: Double? { get {
+        return self.payload?[CodingKeys.KeyExp] as? Double
+    } }
+    var nonce: String? { get {
+        return self.payload?[CodingKeys.KeyNonce] as? String
     } }
 }

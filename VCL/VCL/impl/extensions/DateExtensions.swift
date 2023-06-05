@@ -10,8 +10,17 @@
 import Foundation
 
 extension Date {
-    func addDaysToNow(days: Int) -> Date {
+    
+    func addDays(days: Int) -> Date {
         if let futureDate = Calendar.current.date(byAdding: .day, value: days, to: self) {
+            return futureDate
+        } else {
+            return Date()
+        }
+    }
+    
+    func addSeconds(seconds: Int) -> Date {
+        if let futureDate = Calendar.current.date(byAdding: .second, value: seconds, to: self) {
             return futureDate
         } else {
             return Date()
@@ -55,4 +64,20 @@ func - (lhs: Date, rhs: Date) -> TimeInterval {
 
 func + (lhs: Date, rhs: Date) -> TimeInterval {
     return (lhs.timeIntervalSinceReferenceDate + rhs.timeIntervalSinceReferenceDate)
+}
+
+func == (lhs: Date, rhs: Date) -> Bool {
+    return (lhs - rhs) == 0
+}
+
+func != (lhs: Date, rhs: Date) -> Bool {
+    return (lhs - rhs) != 0
+}
+
+func >= (lhs: Date, rhs: Date) -> Bool {
+    return (lhs - rhs) >= 0
+}
+
+func <= (lhs: Date, rhs: Date) -> Bool {
+    return (lhs - rhs) <= 0
 }

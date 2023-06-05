@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 15/09/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import XCTest
@@ -71,7 +71,7 @@ final class UrlsTest: XCTestCase {
     }
     
     func testXVnfProtocolVersion() {
-        assert(HeaderValues.XVnfProtocolVersion == "1.0")
+        assert(HeaderValues.XVnfProtocolVersion == "2.0")
     }
     
     override func tearDown() {

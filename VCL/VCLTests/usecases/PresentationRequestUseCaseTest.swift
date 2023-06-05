@@ -4,20 +4,16 @@
 //
 //  Created by Michael Avoyan on 04/05/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import XCTest
 @testable import VCL
 
-/// TODO: Need to mock MS lib storage
 final class PresentationRequestUseCaseTest: XCTestCase {
     
     var subject: PresentationRequestUseCase!
-    
-    override func setUp() {
-    }
     
     func testCountryCodesSuccess() {
         // Arrange
@@ -28,12 +24,10 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: PresentationRequestMocks.EncodedPresentationRequestResponse)
             ),
             ResolveKidRepositoryImpl(
-                NetworkServiceSuccess(validResponse: JwtServiceMocks.JWK)
+                NetworkServiceSuccess(validResponse: PresentationRequestMocks.JWK)
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl()
-//                Can't be tested, because of storing exception
-//                JwtServiceMicrosoftImpl()
+                JwtServiceImpl(KeyServiceImpl(secretStore: SecretStoreMock.Instance))
             ),
             EmptyExecutor()
         )
@@ -54,17 +48,15 @@ final class PresentationRequestUseCaseTest: XCTestCase {
         do {
             let presentationRequest = try result!.get()
 
+            assert(presentationRequest.jwkPublic.valueStr.sorted() == VCLJwkPublic(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueStr.sorted())
             assert(presentationRequest.jwkPublic.valueDict == VCLJwkPublic(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueDict)
             assert(presentationRequest.jwt.encodedJwt == PresentationRequestMocks.PresentationRequestJwt.encodedJwt)
-//            assert(presentationRequest.jwt.header! == PresentationRequestMocks.PresentationRequestJwt.header!)
-//            assert(presentationRequest.jwt.payload! == PresentationRequestMocks.PresentationRequestJwt.payload!)
+            assert(presentationRequest.jwt.header! == PresentationRequestMocks.PresentationRequestJwt.header!)
+            assert(presentationRequest.jwt.payload! == PresentationRequestMocks.PresentationRequestJwt.payload!)
             assert(presentationRequest.pushDelegate!.pushUrl == pushUrl)
             assert(presentationRequest.pushDelegate!.pushToken == pushToken)
         } catch {
             XCTFail("\(error)")
         }
-    }
-    
-    override func tearDown() {
     }
 }

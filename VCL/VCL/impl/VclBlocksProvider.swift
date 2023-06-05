@@ -64,7 +64,7 @@ class VclBlocksProvider {
 //                JwtServiceVCLImpl(
 //                    NetworkServiceImpl()
 //                )
-                JwtServiceImpl() // ok
+                JwtServiceImpl(KeyServiceImpl()) // ok
             ),
             ExecutorImpl()
         )
@@ -73,13 +73,10 @@ class VclBlocksProvider {
     static func providePresentationSubmissionUseCase() -> PresentationSubmissionUseCase {
         return PresentationSubmissionUseCaseImpl(
             PresentationSubmissionRepositoryImpl(
-                NetworkServiceImpl(),
-                JwtServiceRepositoryImpl(
-                    JwtServiceImpl()
-                )
+                NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl()
+                JwtServiceImpl(KeyServiceImpl())
             ),
             ExecutorImpl()
         )
@@ -103,7 +100,7 @@ class VclBlocksProvider {
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl()
+                JwtServiceImpl(KeyServiceImpl())
             ),
             ExecutorImpl()
         )
@@ -112,13 +109,10 @@ class VclBlocksProvider {
     static func provideIdentificationUseCase() -> IdentificationSubmissionUseCase {
         return IdentificationSubmissionUseCaseImpl(
             IdentificationSubmissionRepositoryImpl(
-                NetworkServiceImpl(),
-                JwtServiceRepositoryImpl(
-                    JwtServiceImpl()
-                )
+                NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl()
+                JwtServiceImpl(KeyServiceImpl())
             ),
             ExecutorImpl()
         )
@@ -145,13 +139,9 @@ class VclBlocksProvider {
     static func provideFinalizeOffersUseCase() -> FinalizeOffersUseCase {
         return FinalizeOffersUseCaseImpl(
             FinalizeOffersRepositoryImpl(
-                NetworkServiceImpl(),
-                JwtServiceRepositoryImpl(
-                    JwtServiceImpl()
-                )
-            ),
+                NetworkServiceImpl()),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl()
+                JwtServiceImpl(KeyServiceImpl())
             ),
             ExecutorImpl(),
             DispatcherImpl()
@@ -180,7 +170,16 @@ class VclBlocksProvider {
     static func provideJwtServiceUseCase() -> JwtServiceUseCase {
         return JwtServiceUseCaseImpl(
             JwtServiceRepositoryImpl(
-                JwtServiceImpl()
+                JwtServiceImpl(KeyServiceImpl())
+            ),
+            ExecutorImpl()
+        )
+    }
+    
+    static func provideKeyServiceUseCase() -> KeyServiceUseCase {
+        return KeyServiceUseCaseImpl(
+            KeyServiceRepositoryImpl(
+                KeyServiceImpl()
             ),
             ExecutorImpl()
         )

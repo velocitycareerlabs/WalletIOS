@@ -27,6 +27,7 @@ public protocol VCL {
     
     func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
+        didJwk: VCLDidJwk,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -51,6 +52,7 @@ public protocol VCL {
     
     func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
+        didJwk: VCLDidJwk,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -64,6 +66,7 @@ public protocol VCL {
     
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        didJwk: VCLDidJwk,
         token: VCLToken,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void

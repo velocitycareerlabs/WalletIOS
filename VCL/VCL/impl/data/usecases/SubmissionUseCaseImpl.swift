@@ -28,9 +28,10 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
     
     func submit(
         submission: VCLSubmission,
+        didJwk: VCLDidJwk,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
-        executor.runOnBackgroundThread  { [weak self] in
+        executor.runOnBackground  { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(SubmissionUseCase.self)") {
                     UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
@@ -38,7 +39,9 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
                 }
                 
                 _self.jwtServiceRepository.generateSignedJwt(
+                    kid: didJwk.kid,
                     jwtDescriptor: VCLJwtDescriptor(
+                        keyId: didJwk.keyId,
                         payload: submission.payload,
                         jti: submission.jti,
                         iss: submission.iss
@@ -49,10 +52,10 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
                                 submission: submission,
                                 jwt: jwt
                             ) { submissionResult in
-                                _self.executor.runOnMainThread { completionBlock(submissionResult) }
+                                _self.executor.runOnMain { completionBlock(submissionResult) }
                             }
                         } catch {
-                            _self.executor.runOnMainThread { completionBlock(VCLResult.failure(VCLError(error: error))) }
+                            _self.executor.runOnMain { completionBlock(VCLResult.failure(VCLError(error: error))) }
                         }
                     }
                 UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)

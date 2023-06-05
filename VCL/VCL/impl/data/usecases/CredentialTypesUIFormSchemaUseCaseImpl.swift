@@ -31,7 +31,7 @@ class CredentialTypesUIFormSchemaUseCaseImpl: CredentialTypesUIFormSchemaUseCase
         countries: VCLCountries,
         completionBlock: @escaping (VCLResult<VCLCredentialTypesUIFormSchema>) -> Void
     ) {
-        executor.runOnBackgroundThread { [weak self] in
+        executor.runOnBackground { [weak self] in
             if let _self = self {
                 _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(CredentialTypesUIFormSchemaUseCase.self)") {
                     UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
@@ -42,7 +42,7 @@ class CredentialTypesUIFormSchemaUseCaseImpl: CredentialTypesUIFormSchemaUseCase
                     credentialTypesUIFormSchemaDescriptor: credentialTypesUIFormSchemaDescriptor,
                     countries: countries) {
                         result in
-                        _self.executor.runOnMainThread {
+                        _self.executor.runOnMain {
                             completionBlock(result)
                         }
                     }

@@ -12,15 +12,11 @@ import Foundation
 
 class EmptyExecutor: Executor {
     
-    func runOn(_ callinghQueue: DispatchQueue, _ block: @escaping () -> Void) {
+    func runOnMain(_ block: @escaping () -> Void) {
         block()
     }
     
-    func runOnMainThread(_ block: @escaping () -> Void) {
-        block()
-    }
-    
-    func runOnBackgroundThread(_ block: @escaping () -> Void) {
+    func runOnBackground(_ block: @escaping () -> Void) {
         block()
     }
 }

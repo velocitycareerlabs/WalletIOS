@@ -10,6 +10,9 @@
 import Foundation
 
 protocol SubmissionUseCase {
-    func submit(submission: VCLSubmission,
-               completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void)
+    func submit(
+        submission: VCLSubmission,
+        didJwk: VCLDidJwk,
+        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
+    )
 }

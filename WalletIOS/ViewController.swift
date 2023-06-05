@@ -28,6 +28,7 @@ class ViewController: UIViewController {
     
     private let environment = VCLEnvironment.DEV
     private let vcl = VCLProvider.vclInstance()
+    private var didJwk: VCLDidJwk!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +50,17 @@ class ViewController: UIViewController {
             successHandler: { [weak self] in
                 NSLog("VCL initialization succeed!")
                 
-                self?.showControls()
+                self?.vcl.generateDidJwk(
+                    successHandler: { didJwk in
+                        self?.didJwk = didJwk
+                        NSLog("VCL did:jwk is \(self?.didJwk.value ?? "")")
+                        self?.showControls()
+                    },
+                    errorHandler: { error in
+                        NSLog("VCL failed to generate did:jwk: \(error)")
+                        self?.showError()
+                    }
+                )
             },
             errorHandler: { [weak self] error in
                 NSLog("VCL initialization failed: \(error)")
@@ -57,8 +68,7 @@ class ViewController: UIViewController {
             }
         )
     }
-        
-    
+
     private func showControls() {
         loadingIndicator.stopAnimating()
         controlsView.isHidden = false
@@ -84,7 +94,6 @@ class ViewController: UIViewController {
                 )),
             successHandler: { [weak self] presentationRequest in
                 NSLog("VCL Presentation request received: \(presentationRequest.jwt.payload?.toJson() ?? "")")
-                // NSLog("VCL Presentation request received")
                 
                 self?.submitPresentation(presentationRequest: presentationRequest)
             },
@@ -105,6 +114,7 @@ class ViewController: UIViewController {
     private func submitPresentation(presentationSubmission: VCLPresentationSubmission)  {
         vcl.submitPresentation(
             presentationSubmission: presentationSubmission,
+            didJwk: self.didJwk,
             successHandler: { [weak self] presentationSubmissionResult in
                 NSLog("VCL Presentation Submission result: \(presentationSubmissionResult)")
                 self?.vcl.getExchangeProgress(
@@ -129,12 +139,13 @@ class ViewController: UIViewController {
     @objc private func getOrganizationsThenCredentialManifestByService() {
         let organizationDescriptor =
         environment == VCLEnvironment.DEV ?
-        Constants.OrganizationsSearchDescriptorByDidDev : Constants.OrganizationsSearchDescriptorByDidStaging
+        Constants.OrganizationsSearchDescriptorByDidDev :
+        Constants.OrganizationsSearchDescriptorByDidStaging
+        
         vcl.searchForOrganizations(
             organizationsSearchDescriptor: organizationDescriptor,
             successHandler: { [weak self] organizations in
                 NSLog("VCL Organizations received: \(organizations.all)")
-                //                NSLog("VCL Organizations received")
                 
                 // choosing services[0] for testing purposes
                 if organizations.all.count == 0 || organizations.all[0].serviceCredentialAgentIssuers.isEmpty {
@@ -155,7 +166,7 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorRefresh =
         VCLCredentialManifestDescriptorRefresh(
             service: service,
-            credentialIds: Constants.CredentialIds
+            credentialIds: Constants.CredentialIdsToRefresh
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorRefresh,
@@ -194,6 +205,7 @@ class ViewController: UIViewController {
         let deepLink = environment == VCLEnvironment.DEV ?
         VCLDeepLink(value: Constants.CredentialManifestDeepLinkStrDev) :
         VCLDeepLink(value: Constants.CredentialManifestDeepLinkStrStaging)
+        
         let credentialManifestDescriptorByDeepLink =
         VCLCredentialManifestDescriptorByDeepLink(
             deepLink: deepLink
@@ -202,7 +214,6 @@ class ViewController: UIViewController {
             credentialManifestDescriptor: credentialManifestDescriptorByDeepLink,
             successHandler: { [weak self] credentialManifest in
                 NSLog("VCL Credential Manifest received: \(credentialManifest.jwt.payload as Optional)")
-                //                NSLog("VCL Credential Manifest received")
                 
                 self?.generateOffers(credentialManifest: credentialManifest)
             },
@@ -219,6 +230,7 @@ class ViewController: UIViewController {
         )
         vcl.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
+            didJwk: self.didJwk,
             successHandler: { [weak self] offers in
                 NSLog("VCL Generated Offers: \(offers.all)")
                 NSLog("VCL Generated Offers Response Code: \(offers.responseCode)")
@@ -269,11 +281,13 @@ class ViewController: UIViewController {
         let approvedRejectedOfferIds = Utils.getApprovedRejectedOfferIdsMock(offers: offers)
         let finalizeOffersDescriptor = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifest,
+            offers: offers,
             approvedOfferIds: approvedRejectedOfferIds.0,
             rejectedOfferIds: approvedRejectedOfferIds.1
         )
         vcl.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
+            didJwk: self.didJwk,
             token: offers.token,
             successHandler: { verifiableCredentials in
                 NSLog("VCL finalized Offers")
