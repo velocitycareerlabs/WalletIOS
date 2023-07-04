@@ -12,10 +12,20 @@ import VCToken
 import VCCrypto
 
 protocol KeyService {
-    func generateDidJwk() throws -> VCLDidJwk
-    func generateSecret() throws -> VCCryptoSecret
-    func retrieveSecretReference(keyId: String) throws ->  VCCryptoSecret
-    func retrievePublicJwk(secret: VCCryptoSecret) throws -> ECPublicJwk
+    func generateDidJwk(
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+    )
+    func generateSecret(
+        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+    )
+    func retrieveSecretReference(
+        keyId: String,
+        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+    )
+    func retrievePublicJwk(
+        secret: VCCrypto.VCCryptoSecret,
+        completionBlock: @escaping (VCLResult<VCToken.ECPublicJwk>) -> Void
+    )
 }
 
 extension KeyService {

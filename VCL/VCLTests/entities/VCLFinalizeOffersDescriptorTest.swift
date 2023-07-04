@@ -33,7 +33,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     override func setUp() {
         
         let credentialManifest = VCLCredentialManifest(jwt: VCLJwt(encodedJwt: CredentialManifestMocks.CredentialManifestJwt1))
-
+        
         subject = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifest,
             offers: offers,
@@ -44,30 +44,31 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     
     func testGenerateRequestBody() {
         let payload = "{\"key1\": \"value1\"}".toDictionary()!
-        var jwt: VCLJwt? = nil
-        do {
-            jwt = try JwtServiceImpl(KeyServiceImpl(secretStore: SecretStoreMock.Instance)).sign(
-                nonce: nonceMock,
-                jwtDescriptor: VCLJwtDescriptor(
-                    payload: payload,
-                    jti: jtiMock,
-                    iss: issMock,
-                    aud: audMock
-                ))
-        } catch {
-            XCTFail("\(error)")
-        }
-
-        let requestBody = subject.generateRequestBody(jwt: jwt!)
-
-        assert((requestBody["exchangeId"] as! String) == "645e315309237c760ac022b1")
-        assert(requestBody["approvedOfferIds"] as? [String] == approvedOfferIds)
-        assert(requestBody["rejectedOfferIds"] as? [String] == rejectedOfferIds)
         
-        let proof = requestBody["proof"] as? [String: Any]
-        assert((proof?["proof_type"] as? String) == "jwt")
-        assert((proof?["jwt"] as? String) == jwt?.encodedJwt)
-//        equivalent to checking nonce in proof jwt
-        assert(jwt?.payload?["nonce"] as? String == nonceMock)
+        JwtServiceImpl(KeyServiceImpl(secretStore: SecretStoreMock.Instance)).sign(
+            nonce: nonceMock,
+            jwtDescriptor: VCLJwtDescriptor(
+                payload: payload,
+                jti: jtiMock,
+                iss: issMock,
+                aud: audMock
+            )) { [weak self] jwtResult in
+                do {
+                    let jwt = try jwtResult.get()
+                    let requestBody = self!.subject.generateRequestBody(jwt: jwt)
+                    
+                    assert((requestBody["exchangeId"] as! String) == "645e315309237c760ac022b1")
+                    assert(requestBody["approvedOfferIds"] as? [String] == self!.approvedOfferIds)
+                    assert(requestBody["rejectedOfferIds"] as? [String] == self!.rejectedOfferIds)
+                    
+                    let proof = requestBody["proof"] as? [String: Any]
+                    assert((proof?["proof_type"] as? String) == "jwt")
+                    assert((proof?["jwt"] as? String) == jwt.encodedJwt)
+                    //        equivalent to checking nonce in proof jwt
+                    assert(jwt.payload?["nonce"] as? String == self!.nonceMock)
+                } catch {
+                    XCTFail("\(error)")
+                }
+            }
     }
 }

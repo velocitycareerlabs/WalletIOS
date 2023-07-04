@@ -10,28 +10,41 @@
 import Foundation
 
 protocol JwtService {
-    func decode(encodedJwt: String) -> VCLJwt
-    
-    func encode(jwt: String) -> VCLJwt
-    
     func verify(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic
-    ) throws -> Bool
-    
+        jwkPublic: VCLJwkPublic,
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
+    )
     func sign(
         kid: String?,
         nonce: String?,
-        jwtDescriptor: VCLJwtDescriptor
-    ) throws -> VCLJwt
+        jwtDescriptor: VCLJwtDescriptor,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    )
 }
 
 extension JwtService {
     func sign(
         kid: String? = nil,
         nonce: String? = nil,
-        jwtDescriptor: VCLJwtDescriptor
-    ) throws -> VCLJwt {
-        return try sign(kid: kid, nonce: nonce, jwtDescriptor: jwtDescriptor)
+        jwtDescriptor: VCLJwtDescriptor,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    ) {
+        sign(kid: kid, nonce: nonce, jwtDescriptor: jwtDescriptor, completionBlock: completionBlock)
     }
+}
+
+public struct JwtServiceCodingKeys {
+    public static let KeyIss = "iss"
+    public static let KeyAud = "aud"
+    public static let KeySub = "sub"
+    public static let KeyJti = "jti"
+    public static let KeyIat = "iat"
+    public static let KeyNbf = "nbf"
+    public static let KeyExp = "exp"
+    public static let KeyNonce = "nonce"
+    
+    public static let KeyPayload = "payload"
+    public static let KeyJwt = "jwt"
+    public static let KeyPublicKey = "publicKey"
 }

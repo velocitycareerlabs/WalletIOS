@@ -18,24 +18,35 @@ public struct VCLJwt {
     
     public private(set) var jwsToken: JwsToken<VCLClaims>? = nil
     
-    public init(header: [String: Any]?, payload: [String: Any]?, signature: String?, encodedJwt: String) {
+    public init(
+        header: [String: Any]?,
+        payload: [String: Any]?,
+        signature: String?,
+        encodedJwt: String
+    ) {
         initialize(header: header, payload: payload, signature: signature, encodedJwt: encodedJwt)
     }
     
     public init(encodedJwt: String) {
         let decodedJwt = encodedJwt.decodeJwtBase64Url()
-        initialize(
-            header: decodedJwt[0].toDictionary(),
-            payload: decodedJwt[1].toDictionary(),
-            signature: decodedJwt[2],
-            encodedJwt: encodedJwt
-        )
+        if decodedJwt.count == 3 {
+            initialize(
+                header: decodedJwt[0].toDictionary(),
+                payload: decodedJwt[1].toDictionary(),
+                signature: decodedJwt[2],
+                encodedJwt: encodedJwt
+            )
+        } else {
+            initialize(
+                encodedJwt: encodedJwt
+            )
+        }
     }
     
     private mutating func initialize(
-        header: [String: Any]?,
-        payload: [String: Any]?,
-        signature: String?,
+        header: [String: Any]? = nil,
+        payload: [String: Any]? = nil,
+        signature: String? = nil,
         encodedJwt: String
     ) {
         self.header = header

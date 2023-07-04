@@ -4,14 +4,32 @@
 //
 //  Created by Michael Avoyan on 19/03/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
 class VclBlocksProvider {
     
     private init(){}
+    
+    private static func chooseJwtService(
+        _ keyServiceType: VCLKeyServiceType
+    ) -> JwtService {
+        if keyServiceType == .REMOTE {
+            return JwtServiceRemoteImpl(NetworkServiceImpl())
+        }
+        return JwtServiceImpl(KeyServiceImpl())
+    }
+    
+    private static func chooseKeyService(
+        _ keyServiceType: VCLKeyServiceType
+    ) -> KeyService {
+        if keyServiceType == .REMOTE {
+            return KeyServiceRemoteImpl(NetworkServiceImpl())
+        }
+        return KeyServiceImpl()
+    }
     
     static func provideCountriesModel() -> CountriesModel {
         return CountriesModelImpl(
@@ -52,7 +70,9 @@ class VclBlocksProvider {
         )
     }
     
-    static func providePresentationRequestUseCase() -> PresentationRequestUseCase {
+    static func providePresentationRequestUseCase(
+        _ keyServiceType: VCLKeyServiceType
+    ) -> PresentationRequestUseCase {
         return PresentationRequestUseCaseImpl(
             PresentationRequestRepositoryImpl(
                 NetworkServiceImpl()
@@ -61,22 +81,21 @@ class VclBlocksProvider {
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
-//                JwtServiceVCLImpl(
-//                    NetworkServiceImpl()
-//                )
-                JwtServiceImpl(KeyServiceImpl()) // ok
+                chooseJwtService(keyServiceType)
             ),
             ExecutorImpl()
         )
     }
     
-    static func providePresentationSubmissionUseCase() -> PresentationSubmissionUseCase {
+    static func providePresentationSubmissionUseCase(
+        _ keyServiceType: VCLKeyServiceType
+) -> PresentationSubmissionUseCase {
         return PresentationSubmissionUseCaseImpl(
             PresentationSubmissionRepositoryImpl(
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl(KeyServiceImpl())
+                chooseJwtService(keyServiceType)
             ),
             ExecutorImpl()
         )
@@ -91,7 +110,9 @@ class VclBlocksProvider {
         )
     }
     
-    static func provideCredentialManifestUseCase() -> CredentialManifestUseCase {
+    static func provideCredentialManifestUseCase(
+        _ keyServiceType: VCLKeyServiceType
+    ) -> CredentialManifestUseCase {
         return CredentialManifestUseCaseImpl(
             CredentialManifestRepositoryImpl(
                 NetworkServiceImpl()
@@ -100,19 +121,21 @@ class VclBlocksProvider {
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl(KeyServiceImpl())
+                chooseJwtService(keyServiceType)
             ),
             ExecutorImpl()
         )
     }
     
-    static func provideIdentificationUseCase() -> IdentificationSubmissionUseCase {
+    static func provideIdentificationSubmissionUseCase(
+        _ keyServiceType: VCLKeyServiceType
+    ) -> IdentificationSubmissionUseCase {
         return IdentificationSubmissionUseCaseImpl(
             IdentificationSubmissionRepositoryImpl(
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl(KeyServiceImpl())
+                chooseJwtService(keyServiceType)
             ),
             ExecutorImpl()
         )
@@ -136,12 +159,14 @@ class VclBlocksProvider {
         )
     }
     
-    static func provideFinalizeOffersUseCase() -> FinalizeOffersUseCase {
+    static func provideFinalizeOffersUseCase(
+        _ keyServiceType: VCLKeyServiceType
+    ) -> FinalizeOffersUseCase {
         return FinalizeOffersUseCaseImpl(
             FinalizeOffersRepositoryImpl(
                 NetworkServiceImpl()),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl(KeyServiceImpl())
+                chooseJwtService(keyServiceType)
             ),
             ExecutorImpl(),
             DispatcherImpl()
@@ -167,19 +192,23 @@ class VclBlocksProvider {
         )
     }
     
-    static func provideJwtServiceUseCase() -> JwtServiceUseCase {
+    static func provideJwtServiceUseCase(
+        _ keyServiceType: VCLKeyServiceType
+    ) -> JwtServiceUseCase {
         return JwtServiceUseCaseImpl(
             JwtServiceRepositoryImpl(
-                JwtServiceImpl(KeyServiceImpl())
+                chooseJwtService(keyServiceType)
             ),
             ExecutorImpl()
         )
     }
     
-    static func provideKeyServiceUseCase() -> KeyServiceUseCase {
+    static func provideKeyServiceUseCase(
+        _ keyServiceType: VCLKeyServiceType
+    ) -> KeyServiceUseCase {
         return KeyServiceUseCaseImpl(
             KeyServiceRepositoryImpl(
-                KeyServiceImpl()
+                chooseKeyService(keyServiceType)
             ),
             ExecutorImpl()
         )

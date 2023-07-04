@@ -20,10 +20,6 @@ class KeyServiceRepositoryImpl: KeyServiceRepository {
     func generateDidJwk(
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
-        do {
-            completionBlock(.success(try keyService.generateDidJwk()))
-        } catch {
-            completionBlock(.failure(VCLError(error: error)))
-        }
+        keyService.generateDidJwk(completionBlock: completionBlock)
     }
 }

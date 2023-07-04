@@ -20,24 +20,26 @@ class KeyServiceTest: XCTestCase {
     }
     
     func testGenerateDidJwk() {
-        do {
-            let didJwk = try subject.generateDidJwk()
-            
-            let jwkDict = didJwk.value.removePrefix(VCLDidJwk.DidJwkPrefix).decodeBase64()?.toDictionary()
-            
-            assert(didJwk.value.hasPrefix(VCLDidJwk.DidJwkPrefix))
-            assert(didJwk.kid.hasPrefix(VCLDidJwk.DidJwkPrefix))
-            assert(didJwk.kid.hasSuffix(VCLDidJwk.DidJwkSuffix))
-            
-            assert(jwkDict?["kty"] as? String == "EC")
-            assert(jwkDict?["use"] as? String == "sig")
-            assert(jwkDict?["crv"] as? String == "secp256k1")
-            assert(jwkDict?["alg"] as? String == "ES256K")
-            assert(jwkDict?["use"] as? String == "sig")
-            assert(jwkDict?["x"] as? String != nil)
-            assert(jwkDict?["y"] as? String != nil)
-        } catch {
-            XCTFail("\(error)")
+        subject.generateDidJwk() { didJwkResult in
+            do {
+                let didJwk = try didJwkResult.get()
+                
+                let jwkDict = didJwk.value.removePrefix(VCLDidJwk.DidJwkPrefix).decodeBase64()?.toDictionary()
+                
+                assert(didJwk.value.hasPrefix(VCLDidJwk.DidJwkPrefix))
+                assert(didJwk.kid.hasPrefix(VCLDidJwk.DidJwkPrefix))
+                assert(didJwk.kid.hasSuffix(VCLDidJwk.DidJwkSuffix))
+                
+                assert(jwkDict?["kty"] as? String == "EC")
+                assert(jwkDict?["use"] as? String == "sig")
+                assert(jwkDict?["crv"] as? String == "secp256k1")
+                assert(jwkDict?["alg"] as? String == "ES256K")
+                assert(jwkDict?["use"] as? String == "sig")
+                assert(jwkDict?["x"] as? String != nil)
+                assert(jwkDict?["y"] as? String != nil)
+            } catch {
+                XCTFail("\(error)")
+            }
         }
     }
 }

@@ -89,24 +89,19 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
         var passedCredentials = [VCLJwt]()
         var failedCredentials = [VCLJwt]()
         encodedJwts.forEach{ [weak self] encodedJwtOffer in
-            self?.jwtServiceRepository.decode(encodedJwt: encodedJwtOffer) { jwtResult in
-                do {
-                    let jwtCredential = try jwtResult.get()
-                    if (self?.verifyJwtCredential(jwtCredential, finalizeOffersDescriptor) == true) {
-                        passedCredentials.append(jwtCredential)
-                    } else {
-                        failedCredentials.append(jwtCredential)
-                    }
-                    if(encodedJwts.count == passedCredentials.count + failedCredentials.count) {
-                        self?.executor.runOnMain {
-                            completionBlock(.success(VCLJwtVerifiableCredentials(
-                                passedCredentials: passedCredentials,
-                                failedCredentials: failedCredentials
-                            )))
-                        }
-                    }
-                } catch {
-                    self?.onError(VCLError(error: error), completionBlock)
+            
+            let jwtCredential = VCLJwt(encodedJwt: encodedJwtOffer)
+            if (self?.verifyJwtCredential(jwtCredential, finalizeOffersDescriptor) == true) {
+                passedCredentials.append(jwtCredential)
+            } else {
+                failedCredentials.append(jwtCredential)
+            }
+            if(encodedJwts.count == passedCredentials.count + failedCredentials.count) {
+                self?.executor.runOnMain {
+                    completionBlock(.success(VCLJwtVerifiableCredentials(
+                        passedCredentials: passedCredentials,
+                        failedCredentials: failedCredentials
+                    )))
                 }
             }
         }
@@ -117,6 +112,7 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
             )))
         }
     }
+    
     private func verifyJwtCredential(
         _ jwtCredential: VCLJwt,
         _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor

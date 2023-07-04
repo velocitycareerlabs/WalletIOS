@@ -19,10 +19,12 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
     let keyService = KeyServiceImpl(secretStore: SecretStoreMock.Instance)
     
     override func setUp() {
-        do {
-            didJwk = try keyService.generateDidJwk()
-        } catch {
-            XCTFail("\(error)")
+        keyService.generateDidJwk() { [weak self] didJwkResult in
+            do {
+                self!.didJwk = try didJwkResult.get()
+            } catch {
+                XCTFail("\(error)")
+            }
         }
     }
     

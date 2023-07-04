@@ -27,10 +27,12 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
     let vclJwtPassed = VCLJwt(encodedJwt: CredentialManifestMocks.CredentialManifestJwt2)
 
     override func setUp() {
-        do {
-            didJwk = try keyService.generateDidJwk()
-        } catch {
-            XCTFail("\(error)")
+        keyService.generateDidJwk() { [weak self] didJwkResult in
+            do {
+                self!.didJwk = try didJwkResult.get()
+            } catch {
+                XCTFail("\(error)")
+            }
         }
         
         var result: VCLResult<VCLOffers>? = nil

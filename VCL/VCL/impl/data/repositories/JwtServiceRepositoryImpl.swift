@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 08/04/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
@@ -17,23 +17,16 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
         self.jwtService = jwtService
     }
     
-    func decode(
-        encodedJwt: String,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
-    ) {
-        completionBlock(.success(jwtService.decode(encodedJwt: encodedJwt)))
-    }
-    
     func verifyJwt(
         jwt: VCLJwt,
         jwkPublic: VCLJwkPublic,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        do {
-            completionBlock(.success(try jwtService.verify(jwt: jwt, jwkPublic: jwkPublic)))
-        } catch {
-            completionBlock(.failure(VCLError(error: error)))
-        }
+        jwtService.verify(
+            jwt: jwt,
+            jwkPublic: jwkPublic,
+            completionBlock: { verificationResult in completionBlock(verificationResult) }
+        )
     }
     
     func generateSignedJwt(
@@ -42,14 +35,11 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
         jwtDescriptor: VCLJwtDescriptor,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
-        do {
-            completionBlock(.success(try jwtService.sign(
-                kid: kid,
-                nonce: nonce,
-                jwtDescriptor: jwtDescriptor
-            )))
-        } catch {
-            completionBlock(.failure(VCLError(error: error)))
-        }
+        jwtService.sign(
+            kid: kid,
+            nonce: nonce,
+            jwtDescriptor: jwtDescriptor,
+            completionBlock: { jwtResult in completionBlock(jwtResult) }
+        )
     }
 }

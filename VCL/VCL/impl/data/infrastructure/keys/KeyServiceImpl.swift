@@ -25,28 +25,59 @@ class KeyServiceImpl: KeyService {
         self.keyManagementOperations = KeyServiceImpl.createKeyManagementOperations(secretStore: secretStore)
     }
 
-    func generateDidJwk() throws -> VCLDidJwk {
-        let secret = try generateSecret()
-        let publicJwk = try retrievePublicJwk(secret: secret)
-        return VCLDidJwk(
-            keyId: secret.id.uuidString,
-            value: VCLDidJwk.generateDidJwk(publicKey: publicJwk),
-            kid: VCLDidJwk.generateKidFromDidJwk(publicKey: publicJwk)
-        )
-    }
-    
-    func generateSecret() throws -> VCCryptoSecret {
-        return try keyManagementOperations.generateKey()
-    }
-    
-    func retrieveSecretReference(keyId: String) throws ->  VCCryptoSecret {
-        if let keyId = UUID(uuidString: keyId) {
-            return keyManagementOperations.retrieveKeyFromStorage(withId: keyId)
+    func generateDidJwk(
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+    ) {
+        generateSecret { [weak self] secretResult in
+            do {
+                let secret = try secretResult.get()
+                self?.retrievePublicJwk(secret: secret) { publicJwkResult in
+                    do {
+                        let publicJwk = try publicJwkResult.get()
+                        completionBlock(.success(VCLDidJwk(
+                            keyId: secret.id.uuidString,
+                            value: VCLDidJwk.generateDidJwk(publicKey: publicJwk),
+                            kid: VCLDidJwk.generateKidFromDidJwk(publicKey: publicJwk)
+                        )))
+                    } catch {
+                        completionBlock(.failure(VCLError(error: error)))
+                    }
+                }
+            } catch {
+                completionBlock(.failure(VCLError(error: error)))
+            }
         }
-        throw VCLError(payload: "Invalid UUID format of keyID: \(keyId)")
     }
     
-    func retrievePublicJwk(secret: VCCryptoSecret) throws -> ECPublicJwk {
-        return try tokenSigning.getPublicJwk(from: secret, withKeyId: secret.id.uuidString)
+    func generateSecret(
+        completionBlock: @escaping (VCLResult<VCCryptoSecret>) -> Void
+    ) {
+        do {
+            completionBlock(.success(try keyManagementOperations.generateKey()))
+        } catch {
+            completionBlock(.failure(VCLError(error: error)))
+        }
+    }
+    
+    func retrieveSecretReference(
+        keyId: String,
+        completionBlock: @escaping (VCLResult<VCCryptoSecret>) -> Void
+    ) {
+        if let keyId = UUID(uuidString: keyId) {
+            completionBlock(.success(keyManagementOperations.retrieveKeyFromStorage(withId: keyId)))
+        } else {
+            completionBlock(.failure(VCLError(payload: "Invalid UUID format of keyID: \(keyId)")))
+        }
+    }
+    
+    func retrievePublicJwk(
+        secret: VCCryptoSecret,
+        completionBlock: @escaping (VCLResult<ECPublicJwk>) -> Void
+    ) {
+        do {
+            completionBlock(.success(try tokenSigning.getPublicJwk(from: secret, withKeyId: secret.id.uuidString)))
+        } catch {
+            completionBlock(.failure(VCLError(error: error)))
+        }
     }
 }

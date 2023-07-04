@@ -10,10 +10,6 @@
 import Foundation
 
 protocol JwtServiceRepository {
-    func decode(
-        encodedJwt: String,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
-    )
     func verifyJwt(
         jwt: VCLJwt,
         jwkPublic: VCLJwkPublic,

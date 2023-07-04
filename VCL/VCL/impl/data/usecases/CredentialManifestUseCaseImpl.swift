@@ -41,11 +41,10 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                 self?.credentialManifestRepository.getCredentialManifest(
                     credentialManifestDescriptor: credentialManifestDescriptor
                 ) {
-                    jwtStrResult in
+                    credentialManifestResult in
                     do {
-                        let jwtStr = try jwtStrResult.get()
-                        _self.onGetJwtSuccess(
-                            jwtStr,
+                        _self.ongetCredentialManifestSuccess(
+                            VCLJwt(encodedJwt: try credentialManifestResult.get()),
                             credentialManifestDescriptor,
                             completionBlock
                         )
@@ -61,27 +60,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         }
     }
     
-    private func onGetJwtSuccess(
-        _ jwtStr: String,
-        _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
-    ) {
-        self.jwtServiceRepository.decode(encodedJwt: jwtStr) {
-            [weak self] jwtResult in
-            do {
-                let jwt = try jwtResult.get()
-                self?.onDecodeJwtSuccess(
-                    jwt,
-                    credentialManifestDescriptor,
-                    completionBlock
-                )
-            } catch {
-                self?.onError(error, completionBlock)
-            }
-        }
-    }
-    
-    private func onDecodeJwtSuccess(
+    private func ongetCredentialManifestSuccess(
         _ jwt: VCLJwt,
         _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void

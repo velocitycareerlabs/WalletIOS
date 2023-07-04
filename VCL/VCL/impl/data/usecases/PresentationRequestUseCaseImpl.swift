@@ -44,8 +44,11 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                     presentationRequestDescriptor: presentationRequestDescriptor
                 ) { encodedJwtStrResult in
                     do {
-                        let encodedJwtStr = try encodedJwtStrResult.get()
-                        _self.onGetJwtSuccess(encodedJwtStr, presentationRequestDescriptor, completionBlock)
+                        _self.onPresentationRequestSuccess(
+                            VCLJwt(encodedJwt: try encodedJwtStrResult.get()),
+                            presentationRequestDescriptor,
+                            completionBlock
+                        )
                     } catch {
                         _self.onError(VCLError(error: error), completionBlock)
                     }
@@ -59,26 +62,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         }
     }
     
-    private func onGetJwtSuccess(
-        _ encodedJwtStr: String,
-        _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
-    ) {
-        self.jwtServiceRepository.decode(encodedJwt: encodedJwtStr) { [weak self] signedJwtResult in
-            do {
-                let jwt = try signedJwtResult.get()
-                self?.onDecodeJwtSuccess(
-                    jwt,
-                    presentationRequestDescriptor,
-                    completionBlock
-                )
-            } catch {
-                self?.onError(VCLError(error: error), completionBlock)
-            }
-        }
-    }
-    
-    private func onDecodeJwtSuccess(
+    private func onPresentationRequestSuccess(
         _ jwt: VCLJwt,
         _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void

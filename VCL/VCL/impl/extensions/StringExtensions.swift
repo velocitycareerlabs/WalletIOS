@@ -39,7 +39,7 @@ extension String {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [Any]
             } catch {
-//                VCLLog.error(error)
+                //                VCLLog.error(error)
             }
         }
         return nil
@@ -50,7 +50,7 @@ extension String {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
             } catch {
-//                VCLLog.error(error)
+                //                VCLLog.error(error)
             }
         }
         return nil
@@ -72,8 +72,8 @@ extension String {
             .path.split(separator: "/")
             .filter{ $0.hasPrefix(subPathPrefix) }
             .first) {
-                return String(urlSubPath)
-            }
+            return String(urlSubPath)
+        }
         return nil
     }
     
@@ -88,7 +88,7 @@ extension String {
     func decodeBase64() -> String? {
         guard let data =
                 Data(base64Encoded: self)
-//                Data(base64Encoded: self, options: Data.Base64DecodingOptions(rawValue: 0))
+                //                Data(base64Encoded: self, options: Data.Base64DecodingOptions(rawValue: 0))
         else { return nil }
         return String(data: data, encoding: .utf8)
     }
@@ -105,7 +105,7 @@ extension String {
         }
         return String(data: data, encoding: .utf8)
     }
-
+    
     
     func decodeJwtBase64Url() -> [String] {
         var retVal = [String]()
@@ -156,10 +156,10 @@ extension String {
         guard self.contains(suffixStart) else { return self }
         var components = self.components(separatedBy: suffixStart)
         if components.count > 0 {
-          components.removeLast()
-          return components[0]
+            components.removeLast()
+            return components[0]
         } else {
-          return self
+            return self
         }
     }
 }
