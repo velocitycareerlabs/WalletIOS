@@ -65,7 +65,6 @@ class JwtServiceImpl: JwtService {
                                         header = Header(
                                             type: GlobalConfig.TypeJwt,
                                             algorithm: GlobalConfig.AlgES256K,
-                                            jsonWebKey: publicJwk,
                                             keyId: kid
                                         )
                                     }

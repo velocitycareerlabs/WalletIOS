@@ -28,7 +28,7 @@ class ViewController: UIViewController {
     
     private let environment = VCLEnvironment.DEV
     private let vcl = VCLProvider.vclInstance()
-    private var didJwk: VCLDidJwk!
+    private var didJwk: VCLDidJwk? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,23 +45,23 @@ class ViewController: UIViewController {
         
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
-                environment: environment,
-                keyServiceType: .LOCAL
+                environment: environment
             ),
             successHandler: { [weak self] in
                 NSLog("VCL Initialization succeed!")
+                self?.showControls()
                 
-                self?.vcl.generateDidJwk(
-                    successHandler: { didJwk in
-                        self?.didJwk = didJwk
-                        NSLog("VCL did:jwk is \(self?.didJwk.value ?? "")")
-                        self?.showControls()
-                    },
-                    errorHandler: { error in
-                        NSLog("VCL Failed to generate did:jwk with error: \(error)")
-                        self?.showError()
-                    }
-                )
+//                self?.vcl.generateDidJwk(
+//                    successHandler: { didJwk in
+//                        self?.didJwk = didJwk
+//                        NSLog("VCL did:jwk is \(self?.didJwk?.toString() ?? "")")
+//                        self?.showControls()
+//                    },
+//                    errorHandler: { error in
+//                        NSLog("VCL Failed to generate did:jwk with error: \(error)")
+//                        self?.showError()
+//                    }
+//                )
             },
             errorHandler: { [weak self] error in
                 NSLog("VCL Initialization failed with error: \(error)")
@@ -342,7 +342,7 @@ class ViewController: UIViewController {
     @objc private func generateSignedJwt() {
         vcl.generateSignedJwt(
             jwtDescriptor: VCLJwtDescriptor(
-                keyId: didJwk.keyId,
+                keyId: didJwk?.keyId,
                 payload: Constants.SomePayload,
                 jti: "jti123",
                 iss: "iss123"

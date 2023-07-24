@@ -19,7 +19,6 @@ final class CredentialManifestUseCaseTest: XCTestCase {
     }
 
     func testGetCredentialManifest() {
-        // Arrange
         subject = CredentialManifestUseCaseImpl(
             CredentialManifestRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialManifestMocks.CredentialManifest1)
@@ -32,35 +31,32 @@ final class CredentialManifestUseCaseTest: XCTestCase {
             ),
             EmptyExecutor()
         )
-        var result: VCLResult<VCLCredentialManifest>? = nil
 
-        // Action
         subject.getCredentialManifest(
             credentialManifestDescriptor: VCLCredentialManifestDescriptorByDeepLink(
                 deepLink: DeepLinkMocks.CredentialManifestDeepLinkDevNet,
                 issuingType: VCLIssuingType.Career
-            )
+            ),
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
         ) {
-            result = $0
+            do {
+                let credentialManifest = try $0.get()
+                assert(credentialManifest.jwt.encodedJwt == CredentialManifestMocks.JwtCredentialManifest1)
+                assert(credentialManifest.jwt.header! == CredentialManifestMocks.Header)
+                assert(
+                    credentialManifest.jwt.payload!.toJsonString()?
+                        .replacingOccurrences(of: "$", with: "", options: NSString.CompareOptions.literal)
+                        .sorted() ==
+                    CredentialManifestMocks.Payload.toJsonString()?
+                        .replacingOccurrences(of: "$", with: "", options: NSString.CompareOptions.literal)
+                        .sorted()
+                ) // removed $ to compare
+                assert(credentialManifest.jwt.signature == CredentialManifestMocks.Signature)
+            } catch {
+                XCTFail("\(error)")
+            }
         }
 
-        // Assert
-        do {
-            let credentialManifest = try result?.get()
-            assert(credentialManifest!.jwt.encodedJwt == CredentialManifestMocks.CredentialManifestJwt1)
-            assert(credentialManifest!.jwt.header! == CredentialManifestMocks.Header)
-            assert(
-                credentialManifest!.jwt.payload!.toJsonString()?
-                    .replacingOccurrences(of: "$", with: "", options: NSString.CompareOptions.literal)
-                    .sorted() ==
-                CredentialManifestMocks.Payload.toJsonString()?
-                    .replacingOccurrences(of: "$", with: "", options: NSString.CompareOptions.literal)
-                    .sorted()
-            ) // removed $ to compare
-            assert(credentialManifest!.jwt.signature == CredentialManifestMocks.Signature)
-        } catch {
-            XCTFail(error.localizedDescription)
-        }
     }
 
     override func tearDown() {

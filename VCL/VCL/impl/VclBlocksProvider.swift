@@ -160,7 +160,8 @@ class VclBlocksProvider {
     }
     
     static func provideFinalizeOffersUseCase(
-        _ keyServiceType: VCLKeyServiceType
+        _ keyServiceType: VCLKeyServiceType,
+        _ credentialTypesModel: CredentialTypesModel
     ) -> FinalizeOffersUseCase {
         return FinalizeOffersUseCaseImpl(
             FinalizeOffersRepositoryImpl(
@@ -168,8 +169,13 @@ class VclBlocksProvider {
             JwtServiceRepositoryImpl(
                 chooseJwtService(keyServiceType)
             ),
-            ExecutorImpl(),
-            DispatcherImpl()
+            CredentialIssuerVerifierImpl(
+                credentialTypesModel,
+                NetworkServiceImpl(),
+                DispatcherImpl()
+            ),
+            CredentialDidVerifierImpl(DispatcherImpl()),
+            ExecutorImpl()
         )
     }
     

@@ -43,5 +43,5 @@ struct HeaderKeys {
 }
 
 struct HeaderValues {
-    static let XVnfProtocolVersion = "2.0"
+    static var XVnfProtocolVersion: String { get { GlobalConfig.XVnfProtocolVersion.rawValue } }
 }

@@ -10,6 +10,9 @@
 import Foundation
 
 protocol CredentialManifestUseCase {
-    func getCredentialManifest(credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-                              completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void)
+    func getCredentialManifest(
+        credentialManifestDescriptor: VCLCredentialManifestDescriptor,
+        verifiedProfile: VCLVerifiedProfile,
+        completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+    )
 }

@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 16/02/2023.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import XCTest
@@ -15,7 +15,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
 
     var subject: ProfileServiceTypeVerifier!
 
-    func verificationSuccess1() {
+    func testVerificationSuccess1() {
         subject = ProfileServiceTypeVerifier(
             verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
                 VerifiedProfileRepositoryImpl(
@@ -28,7 +28,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
         subject.verifyServiceTypeOfVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
             expectedServiceTypes: VCLServiceTypes(issuingType: VCLIssuingType.Career),
-            successHandler: {
+            successHandler: {_ in
                 assert(true)
             },
             errorHandler: {_ in
@@ -37,7 +37,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
         )
     }
 
-    func verificationSuccess2() {
+    func testVerificationSuccess2() {
         subject = ProfileServiceTypeVerifier(
             verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
                 VerifiedProfileRepositoryImpl(
@@ -50,7 +50,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
         subject.verifyServiceTypeOfVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
             expectedServiceTypes: VCLServiceTypes(serviceType: VCLServiceType.Inspector),
-            successHandler: {
+            successHandler: {_ in
                 assert(true)
             },
             errorHandler: {_ in
@@ -59,7 +59,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
         )
     }
 
-    func verificationSuccess3() {
+    func testVerificationSuccess3() {
         subject = ProfileServiceTypeVerifier(
             verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
                 VerifiedProfileRepositoryImpl(
@@ -72,7 +72,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
         subject.verifyServiceTypeOfVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
             expectedServiceTypes: VCLServiceTypes(issuingType: VCLIssuingType.Career),
-            successHandler: {
+            successHandler: {_ in
                 assert(true)
             },
             errorHandler: {_ in
@@ -81,7 +81,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
         )
     }
 
-    func verificationFailure1() {
+    func testVerificationFailure1() {
         subject = ProfileServiceTypeVerifier(
             verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
                 VerifiedProfileRepositoryImpl(
@@ -94,7 +94,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
         subject.verifyServiceTypeOfVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
             expectedServiceTypes: VCLServiceTypes(issuingType: VCLIssuingType.Identity),
-            successHandler: {
+            successHandler: {_ in
                 assert(false)
             },
             errorHandler: { error in
@@ -104,11 +104,11 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
         )
     }
 
-    func verificationFailure2() {
+    func testVerificationFailure2() {
         subject = ProfileServiceTypeVerifier(
             verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
                 VerifiedProfileRepositoryImpl(
-                    NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr)
+                    NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1)
                 ),
                 EmptyExecutor()
             )
@@ -117,7 +117,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
         subject.verifyServiceTypeOfVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
             expectedServiceTypes: VCLServiceTypes(issuingType: VCLIssuingType.Identity),
-            successHandler: {
+            successHandler: {_ in
                 assert(false)
             },
             errorHandler: { error in
@@ -127,7 +127,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
         )
     }
 
-    func verificationFailure3() {
+    func testVerificationFailure3() {
         subject = ProfileServiceTypeVerifier(
             verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
                 VerifiedProfileRepositoryImpl(
@@ -140,7 +140,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
         subject.verifyServiceTypeOfVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
             expectedServiceTypes: VCLServiceTypes(serviceType: VCLServiceType.Undefined),
-            successHandler: {
+            successHandler: {_ in
                 assert(false)
             },
             errorHandler: { error in

@@ -12,10 +12,16 @@ import Foundation
 public struct VCLCredentialManifest {
     public let jwt: VCLJwt
     public let vendorOriginContext: String?
+    public let verifiedProfile: VCLVerifiedProfile
     
-    public init(jwt: VCLJwt, vendorOriginContext: String? = nil) {
+    public init(
+        jwt: VCLJwt,
+        vendorOriginContext: String? = nil,
+        verifiedProfile: VCLVerifiedProfile
+    ) {
         self.jwt = jwt
         self.vendorOriginContext = vendorOriginContext
+        self.verifiedProfile = verifiedProfile
     }
     
     public var iss: String { get { return jwt.payload?[CodingKeys.KeyIss] as? String ?? "" } }

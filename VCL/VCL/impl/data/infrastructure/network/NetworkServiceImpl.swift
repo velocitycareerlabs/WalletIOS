@@ -93,11 +93,11 @@ class NetworkServiceImpl: NetworkService {
     }
     
     private func logRequest(_ request: Request) {
-        let logMethod = "Method: \(request.method)"
-        let endpointLog = "\nEndpoint: \(request.endpoint)"
-        var bodyLog = ""
+        let logMethod = "Request Method: \(request.method)"
+        let endpointLog = " Request Endpoint: \(request.endpoint)"
+        var bodyLog = "\n"
         if let body = request.body {
-            bodyLog = "\nBody: \(body)"
+            bodyLog = " Request Body: \(body)"
         }
         VCLLog.d("\(logMethod)\(endpointLog)\(bodyLog)")
     }

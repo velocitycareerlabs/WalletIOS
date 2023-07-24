@@ -71,6 +71,10 @@ final class UrlsTest: XCTestCase {
     }
     
     func testXVnfProtocolVersion() {
+        GlobalConfig.XVnfProtocolVersion = .XVnfProtocolVersion1
+        assert(HeaderValues.XVnfProtocolVersion == "1.0")
+        
+        GlobalConfig.XVnfProtocolVersion = .XVnfProtocolVersion2
         assert(HeaderValues.XVnfProtocolVersion == "2.0")
     }
     

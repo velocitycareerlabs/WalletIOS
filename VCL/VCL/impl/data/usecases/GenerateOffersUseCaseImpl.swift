@@ -8,12 +8,9 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import UIKit
 
 class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
-    
-    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
-    
+        
     private let generateOffersRepository: GenerateOffersRepository
     private let executor: Executor
     
@@ -28,22 +25,11 @@ class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
         completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            if let _self = self {
-                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(GenerateOffersUseCase.self)") {
-                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+            self?.generateOffersRepository.generateOffers(
+                token:token,
+                generateOffersDescriptor: generateOffersDescriptor) { offersResult in
+                    self?.executor.runOnMain { completionBlock(offersResult) }
                 }
-                
-                _self.generateOffersRepository.generateOffers(
-                    token:token,
-                    generateOffersDescriptor: generateOffersDescriptor) { offersResult in
-                        _self.executor.runOnMain { completionBlock(offersResult) }
-                    }
-                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-            } else {
-                completionBlock(.failure(VCLError(message: "self is nil")))
-            }
         }
     }
 }

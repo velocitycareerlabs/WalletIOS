@@ -8,21 +8,20 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import UIKit
 
 class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
-    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
-
     private let presentationRequestRepository: PresentationRequestRepository
     private let resolveKidRepository: ResolveKidRepository
     private let jwtServiceRepository: JwtServiceRepository
     private let executor: Executor
     
-    init(_ presentationRequestRepository: PresentationRequestRepository,
-         _ resolveKidRepository: ResolveKidRepository,
-         _ verifyRepository: JwtServiceRepository,
-         _ executor: Executor) {
+    init(
+        _ presentationRequestRepository: PresentationRequestRepository,
+        _ resolveKidRepository: ResolveKidRepository,
+        _ verifyRepository: JwtServiceRepository,
+        _ executor: Executor
+    ) {
         self.presentationRequestRepository = presentationRequestRepository
         self.resolveKidRepository = resolveKidRepository
         self.jwtServiceRepository = verifyRepository
@@ -34,30 +33,18 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            if let _self = self {
-                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(PresentationRequestUseCase.self)") {
-                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+            self?.presentationRequestRepository.getPresentationRequest(
+                presentationRequestDescriptor: presentationRequestDescriptor
+            ) { encodedJwtStrResult in
+                do {
+                    self?.onPresentationRequestSuccess(
+                        VCLJwt(encodedJwt: try encodedJwtStrResult.get()),
+                        presentationRequestDescriptor,
+                        completionBlock
+                    )
+                } catch {
+                    self?.onError(VCLError(error: error), completionBlock)
                 }
-                
-                _self.presentationRequestRepository.getPresentationRequest(
-                    presentationRequestDescriptor: presentationRequestDescriptor
-                ) { encodedJwtStrResult in
-                    do {
-                        _self.onPresentationRequestSuccess(
-                            VCLJwt(encodedJwt: try encodedJwtStrResult.get()),
-                            presentationRequestDescriptor,
-                            completionBlock
-                        )
-                    } catch {
-                        _self.onError(VCLError(error: error), completionBlock)
-                    }
-                }
-                
-                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-            } else {
-                completionBlock(.failure(VCLError(message: "self is nil")))
             }
         }
     }

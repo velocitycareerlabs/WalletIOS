@@ -14,7 +14,10 @@ class KeyServiceUseCaseImpl: KeyServiceUseCase {
     private let keyServiceRepository: KeyServiceRepository
     private let executor: Executor
     
-    init(_ keyServiceRepository: KeyServiceRepository, _ executor: Executor) {
+    init(
+        _ keyServiceRepository: KeyServiceRepository,
+        _ executor: Executor
+    ) {
         self.keyServiceRepository = keyServiceRepository
         self.executor = executor
     }

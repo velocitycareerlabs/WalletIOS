@@ -22,21 +22,19 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             ),
             EmptyExecutor()
         )
-        var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            credentialManifest: VCLCredentialManifest(jwt: CommonMocks.JWT)
-        )
-
+            credentialManifest: VCLCredentialManifest(
+                jwt: CommonMocks.JWT,
+                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+        ))
         subject.generateOffers(token: VCLToken(value: ""), generateOffersDescriptor: generateOffersDescriptor) {
-            result = $0
-        }
-
-        do {
-            let offers = try result?.get()
-            assert(offers!.all == GenerateOffersMocks.Offers.toListOfDictionaries()!)
-            assert(offers!.challenge == GenerateOffersMocks.Challenge)
-        } catch {
-            XCTFail("\(error)")
+            do {
+                let offers = try $0.get()
+                assert(offers.all == GenerateOffersMocks.Offers.toListOfDictionaries()!)
+                assert(offers.challenge == GenerateOffersMocks.Challenge)
+            } catch {
+                XCTFail("\(error)")
+            }
         }
     }
     
@@ -48,23 +46,22 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             ),
             EmptyExecutor()
         )
-        var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            credentialManifest: VCLCredentialManifest(jwt: CommonMocks.JWT)
-        )
+            credentialManifest: VCLCredentialManifest(
+                jwt: CommonMocks.JWT,
+                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+            ))
 
         // Action
         subject.generateOffers(token: VCLToken(value: ""), generateOffersDescriptor: generateOffersDescriptor) {
-            result = $0
+            do {
+                let offers = try $0.get()
+                assert(offers.all == "[]".toListOfDictionaries()!)
+            } catch {
+                XCTFail("\(error)")
+            }
         }
 
-        // Assert
-        do {
-            let offers = try result?.get()
-            assert(offers!.all == "[]".toListOfDictionaries()!)
-        } catch {
-            XCTFail("\(error)")
-        }
     }
     
     func testGenerateOffersEmptyJsonArr() {
@@ -75,22 +72,20 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             ),
             EmptyExecutor()
         )
-        var result: VCLResult<VCLOffers>? = nil
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
-            credentialManifest: VCLCredentialManifest(jwt: CommonMocks.JWT)
-        )
+            credentialManifest: VCLCredentialManifest(
+                jwt: CommonMocks.JWT,
+                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+            ))
 
         // Action
         subject.generateOffers(token: VCLToken(value: ""), generateOffersDescriptor: generateOffersDescriptor) {
-            result = $0
-        }
-
-        // Assert
-        do {
-            let offers = try result?.get()
-            assert(offers!.all == GenerateOffersMocks.GeneratedOffersEmptyJsonArr.toListOfDictionaries()!)
-        } catch {
-            XCTFail("\(error)")
+            do {
+                let offers = try $0.get()
+                assert(offers.all == GenerateOffersMocks.GeneratedOffersEmptyJsonArr.toListOfDictionaries()!)
+            } catch {
+                XCTFail("\(error)")
+            }
         }
     }
     

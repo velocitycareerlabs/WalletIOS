@@ -20,7 +20,7 @@ class ProfileServiceTypeVerifier {
     func verifyServiceTypeOfVerifiedProfile(
         verifiedProfileDescriptor: VCLVerifiedProfileDescriptor,
         expectedServiceTypes: VCLServiceTypes,
-        successHandler: @escaping () -> Void,
+        successHandler: @escaping (VCLVerifiedProfile) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         verifiedProfileUseCase.getVerifiedProfile(verifiedProfileDescriptor: verifiedProfileDescriptor) {
@@ -31,7 +31,7 @@ class ProfileServiceTypeVerifier {
                     verifiedProfile: verifiedProfile,
                     expectedServiceTypes: expectedServiceTypes,
                     successHandler: {
-                        successHandler()
+                        successHandler(verifiedProfile)
                     },
                     errorHandler: {
                         errorHandler($0)

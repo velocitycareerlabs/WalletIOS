@@ -18,11 +18,15 @@ public class VCLDidJwk {
     /// kid of jwt - did:jwk suffixed with #0
     public let kid: String
     
+    func toPublicJwkStr() -> String? {
+        value.removePrefix(VCLDidJwk.DidJwkPrefix).decodeBase64()
+    }
+    
     public static let DidJwkPrefix = "did:jwk:"
     public static let DidJwkSuffix = "#0"
     
     static func generateDidJwk(publicKey: ECPublicJwk) -> String {
-        return "\(VCLDidJwk.DidJwkPrefix)\(publicKey.toDictionaryOpt()?.toJsonString()?.encodeToBase64() ?? "")"
+        return "\(VCLDidJwk.DidJwkPrefix)\(publicKey.toDictionary().toJsonString()?.encodeToBase64() ?? "")"
     }
     
     static func generateKidFromDidJwk(publicKey: ECPublicJwk) -> String {
@@ -37,5 +41,19 @@ public class VCLDidJwk {
         self.keyId = keyId
         self.value = value
         self.kid = kid
+    }
+    
+    public struct CodingKeys {
+        public static let KeyKeyId = "keyId"
+        public static let KeyValue = "value"
+        public static let KeyKid = "kid"
+    }
+    
+    public func toString() -> String? {
+        return [
+            CodingKeys.KeyKeyId: keyId,
+            CodingKeys.KeyValue: value,
+            CodingKeys.KeyKid: kid
+        ].toJsonString()
     }
 }

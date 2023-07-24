@@ -32,7 +32,10 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     
     override func setUp() {
         
-        let credentialManifest = VCLCredentialManifest(jwt: VCLJwt(encodedJwt: CredentialManifestMocks.CredentialManifestJwt1))
+        let credentialManifest = VCLCredentialManifest(
+            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+        )
         
         subject = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifest,

@@ -15,7 +15,7 @@ final class JwtServiceUseCaseTest: XCTestCase {
     
     var subject: JwtServiceUseCase!
     var keyService: KeyService!
-
+    
     override func setUp() {
         subject = JwtServiceUseCaseImpl(
             JwtServiceRepositoryImpl(
@@ -27,8 +27,6 @@ final class JwtServiceUseCaseTest: XCTestCase {
     }
     
     func testSign() {
-        var resultJwt: VCLResult<VCLJwt>? = nil
-
         subject.generateSignedJwt(
             jwtDescriptor: VCLJwtDescriptor(
                 payload: JwtServiceMocks.Json.toDictionary()!,
@@ -36,26 +34,18 @@ final class JwtServiceUseCaseTest: XCTestCase {
                 iss: "some iss"
             )
         ) {
-            resultJwt = $0
-        }
-
-        do {
-            guard let jwt = try resultJwt?.get() else {
-                XCTFail()
-                return
+            do {
+                let jwt = try $0.get()
+                assert(jwt.header?["alg"] as? String == "ES256K")
+                assert(((jwt.header?["jwk"] as? [String: Any])?["crv"] as? String) == "secp256k1")
+                assert(jwt.header?["typ"] as? String == "JWT")
+            } catch {
+                XCTFail("\(error)")
             }
-            assert(jwt.header?["alg"] as? String == "ES256K")
-            assert(((jwt.header?["jwk"] as? [String: Any])?["crv"] as? String) == "secp256k1")
-            assert(jwt.header?["typ"] as? String == "JWT")
-        } catch {
-            XCTFail("\(error)")
         }
     }
     
     func testSignVerify() {
-        var resultJwt: VCLResult<VCLJwt>? = nil
-        var resultVerified: VCLResult<Bool>? = nil
-
         subject.generateSignedJwt(
             jwtDescriptor: VCLJwtDescriptor(
                 payload: JwtServiceMocks.Json.toDictionary()!,
@@ -63,24 +53,19 @@ final class JwtServiceUseCaseTest: XCTestCase {
                 iss: "some iss"
             )
         ) {
-            resultJwt = $0
-        }
-
-        do {
-            guard let jwt = try resultJwt?.get() else {
-                XCTFail()
-                return
+            do {
+                let jwt = try $0.get()
+                self.subject.verifyJwt(jwt: jwt, jwkPublic: VCLJwkPublic(valueDict: (jwt.jwsToken!.headers.jsonWebKey?.toDictionary())!)) {
+                    do {
+                        let isVerivied = try $0.get()
+                        assert(isVerivied)
+                    } catch {
+                        XCTFail("\(error)")
+                    }
+                }
+            } catch {
+                XCTFail("\(error)")
             }
-            subject.verifyJwt(jwt: jwt, jwkPublic: VCLJwkPublic(valueDict: (jwt.jwsToken!.headers.jsonWebKey?.toDictionaryOpt())!)) {
-                resultVerified = $0
-            }
-            guard let isVerified = try resultVerified?.get() else {
-                XCTFail()
-                return
-            }
-            assert(isVerified)
-        } catch {
-            XCTFail("\(error)")
         }
     }
     
@@ -88,9 +73,6 @@ final class JwtServiceUseCaseTest: XCTestCase {
         keyService.generateDidJwk() { [weak self] didJwkResult in
             do {
                 let didJwk = try didJwkResult.get()
-                
-                var resultJwt: VCLResult<VCLJwt>? = nil
-                var resultVerified: VCLResult<Bool>? = nil
                 
                 self!.subject.generateSignedJwt(
                     jwtDescriptor: VCLJwtDescriptor(
@@ -100,23 +82,23 @@ final class JwtServiceUseCaseTest: XCTestCase {
                         iss: "some iss"
                     )
                 ) {
-                    resultJwt = $0
+                    do {
+                        let jwt = try $0.get()
+                        self!.subject.verifyJwt(jwt: jwt, jwkPublic: VCLJwkPublic(valueDict: (jwt.jwsToken!.headers.jsonWebKey?.toDictionary())!)) {
+                            do {
+                                let isVerified = try $0.get()
+                                assert(isVerified)
+                            } catch {
+                                XCTFail("\(error)")
+                            }
+                        }
+                    } catch {
+                        XCTFail("\(error)")
+                        
+                    }
                 }
-                guard let jwt = try resultJwt?.get() else {
-                    XCTFail()
-                    return
-                }
-                self!.subject.verifyJwt(jwt: jwt, jwkPublic: VCLJwkPublic(valueDict: (jwt.jwsToken!.headers.jsonWebKey?.toDictionaryOpt())!)) {
-                    resultVerified = $0
-                }
-                guard let isVerified = try resultVerified?.get() else {
-                    XCTFail()
-                    return
-                }
-                assert(isVerified)
             } catch {
-                XCTFail("\(error)")
-                
+                XCTFail("\(error)")                
             }
         }
     }
