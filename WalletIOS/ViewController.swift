@@ -45,23 +45,24 @@ class ViewController: UIViewController {
         
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
-                environment: environment
+                environment: environment,
+                xVnfProtocolVersion: .XVnfProtocolVersion2
             ),
             successHandler: { [weak self] in
                 NSLog("VCL Initialization succeed!")
                 self?.showControls()
                 
-//                self?.vcl.generateDidJwk(
-//                    successHandler: { didJwk in
-//                        self?.didJwk = didJwk
-//                        NSLog("VCL did:jwk is \(self?.didJwk?.toString() ?? "")")
-//                        self?.showControls()
-//                    },
-//                    errorHandler: { error in
-//                        NSLog("VCL Failed to generate did:jwk with error: \(error)")
-//                        self?.showError()
-//                    }
-//                )
+                self?.vcl.generateDidJwk(
+                    successHandler: { didJwk in
+                        self?.didJwk = didJwk
+                        NSLog("VCL did:jwk is \(self?.didJwk?.toString() ?? "")")
+                        self?.showControls()
+                    },
+                    errorHandler: { error in
+                        NSLog("VCL Failed to generate did:jwk with error: \(error)")
+                        self?.showError()
+                    }
+                )
             },
             errorHandler: { [weak self] error in
                 NSLog("VCL Initialization failed with error: \(error)")

@@ -11,20 +11,24 @@ import Foundation
 import UIKit
 
 class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
-    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
 
     private let credentialTypesModel: CredentialTypesModel
     private let networkService: NetworkService
-    private let dispatcher: Dispatcher
+    
+    private var mainBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
+    private var resolveConetxBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
+    private var completeConetxBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
+
+    private let mainDispatcher = DispatchGroup()
+    private let resolveConetxDispatcher = DispatchGroup()
+    private let completeConetxDispatcher = DispatchGroup()
     
     init(
         _ credentialTypesModel: CredentialTypesModel,
-        _ networkService: NetworkService,
-        _ dispatcher: Dispatcher
+        _ networkService: NetworkService
     ) {
         self.credentialTypesModel = credentialTypesModel
         self.networkService = networkService
-        self.dispatcher = dispatcher
     }
     
     func verifyCredentials(
@@ -38,29 +42,56 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         else if (finalizeOffersDescriptor.serviceTypes.all.isEmpty) {
             completionBlock(VCLResult.failure(VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue)))
         } else {
+            var globalError: VCLError? = nil
+            
+            self.mainBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish mainBackgroundTaskIdentifier") {
+                UIApplication.shared.endBackgroundTask(self.mainBackgroundTaskIdentifier!)
+                self.mainBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+            }
             jwtEncodedCredentials.forEach { encodedJwtCredential in
+                mainDispatcher.enter()
                 let jwtCredential = VCLJwt(encodedJwt: encodedJwtCredential)
                 if let credentialTypeName = Utils.getCredentialType(jwtCredential) {
                     if let credentialType = credentialTypesModel.credentialTypeByTypeName(type: credentialTypeName) {
                         verifyCredential(
-                                jwtCredential,
-                                credentialType,
-                                finalizeOffersDescriptor.serviceTypes,
-                                completionBlock
-                            )
-                        } else {
-                        onError(
-                            VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue),
-                            completionBlock
-                        )
+                            jwtCredential,
+                            credentialType,
+                            finalizeOffersDescriptor.serviceTypes
+                        ) { [weak self] result in
+                            do {
+                                let isVerified = try result.get()
+//                                do nothing
+                            } catch {
+                                if let e = error as? VCLError {
+                                    globalError = e
+                                } else {
+                                    globalError = VCLError(
+                                        payload: "\(error)",
+                                        errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure.rawValue
+                                    )
+                                }
+                            }
+                            self?.mainDispatcher.leave()
+                        }
+                    } else {
+                        globalError = VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue)
+                        mainDispatcher.leave()
                     }
                 } else {
-                    onError(
-                        VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue),
-                        completionBlock
-                    )
+                    globalError = VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue)
+                    mainDispatcher.leave()
                 }
             }
+            mainDispatcher.notify(queue: DispatchQueue.global(), execute: {
+                if let e = globalError {
+                    completionBlock(.failure(e))
+                } else {
+                    completionBlock(.success(true))
+                }
+            })
+            
+            UIApplication.shared.endBackgroundTask(mainBackgroundTaskIdentifier)
+            mainBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
         }
     }
     
@@ -158,18 +189,21 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ completionBlock: @escaping (VCLResult<[[String: Any]]>) -> Void
     ) {
         var completeContexts = [[String: Any]]()
-        self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(CredentialIssuerVerifierImpl.self)") {
-            UIApplication.shared.endBackgroundTask(self.backgroundTaskIdentifier!)
-            self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+
+        self.resolveConetxBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish resolveConetxBackgroundTaskIdentifier") {
+            UIApplication.shared.endBackgroundTask(self.resolveConetxBackgroundTaskIdentifier!)
+            self.resolveConetxBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
         }
         
         credentialSubjectContexts.forEach { [weak self] credentialSubjectContext in
-            self?.dispatcher.enter()
+            
+            self?.resolveConetxDispatcher.enter()
+            
             self?.networkService.sendRequest(
                 endpoint: credentialSubjectContext,
                 method: Request.HttpMethod.GET,
                 headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
-            ) { result in
+            ) { [weak self] result in
                 do {
                     if let ldContextResponse = try result.get().payload.toDictionary() {
                         completeContexts.append(ldContextResponse)
@@ -179,11 +213,11 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                 } catch {
                     VCLLog.e("Error fetching \(credentialSubjectContext)")
                 }
-                self?.dispatcher.leave()
+                self?.resolveConetxDispatcher.leave()
             }
         }
         
-        self.dispatcher.notify(queue: DispatchQueue.global(), execute: {
+        resolveConetxDispatcher.notify(queue: DispatchQueue.global(), execute: {
             if(completeContexts.isEmpty) {
                 self.onError(
                     VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
@@ -194,8 +228,8 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             }
         })
         
-        UIApplication.shared.endBackgroundTask(backgroundTaskIdentifier)
-        backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+        UIApplication.shared.endBackgroundTask(resolveConetxBackgroundTaskIdentifier)
+        resolveConetxBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     }
     
     private func onResolveCredentialSubjectContexts(
@@ -206,37 +240,51 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if let credentialSubjectType = (credentialSubject[CodingKeys.KeyType] as? String) {
+            
+            var globalError: VCLError? = nil
+            self.completeConetxBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish completeConetxBackgroundTaskIdentifier") {
+                UIApplication.shared.endBackgroundTask(self.completeConetxBackgroundTaskIdentifier!)
+                self.completeConetxBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+            }
+            
             completeContexts.forEach { completeContext in
+                
+                completeConetxDispatcher.enter()
+                
                 if let context = (((completeContext[CodingKeys.KeyContext] as? [String: Any])?[credentialSubjectType] as? [String: Any])?[CodingKeys.KeyContext] as? [String: Any]) {
                     if let K = _self.findKeyForPrimaryOrganizationValue(context) {
-                            if let did = ((credentialSubject[K] as? [String: Any])?[CodingKeys.KeyIdentifier] as? String) {
-                                if (jwtCredential.iss == did) {
-                                    completionBlock(VCLResult.success(true))
-                                } else {
-                                    _self.onError(
-                                        VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue),
-                                        completionBlock
-                                    )
-                                }
+                        if let did = ((credentialSubject[K] as? [String: Any])?[CodingKeys.KeyIdentifier] as? String) {
+                            if (jwtCredential.iss == did) {
+//                                do nothing
+                                completeConetxDispatcher.leave()
                             } else {
-                                _self.onError(
-                                    VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue),
-                                    completionBlock
-                                )
+                                globalError = VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
+                                completeConetxDispatcher.leave()
                             }
                         } else {
-                            _self.onError(
-                                VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectType.rawValue),
-                                completionBlock
-                            )
+                            globalError = VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
+                            completeConetxDispatcher.leave()
                         }
                     } else {
-                        _self.onError(
-                            VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
-                            completionBlock
-                    )
+                        globalError = VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectType.rawValue)
+                        completeConetxDispatcher.leave()
+                    }
+                } else {
+                    globalError = VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue)
+                    completeConetxDispatcher.leave()
                 }
             }
+            completeConetxDispatcher.notify(queue: DispatchQueue.global(), execute: {
+                if let e = globalError {
+                    completionBlock(.failure(e))
+                } else {
+                    completionBlock(.success(true))
+                }
+            })
+            
+            UIApplication.shared.endBackgroundTask(mainBackgroundTaskIdentifier)
+            mainBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+            
         } else {
             _self.onError(
                 VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectType.rawValue),
@@ -271,7 +319,6 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         static let KeyId = "@id"
         static let KeyIdentifier = "identifier"
         
-        static let ValPrimaryOrganization =
-        "https://velocitynetwork.foundation/contexts#primaryOrganization"
+        static let ValPrimaryOrganization = "https://velocitynetwork.foundation/contexts#primaryOrganization"
     }
 }

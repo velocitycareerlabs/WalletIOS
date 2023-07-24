@@ -171,10 +171,9 @@ class VclBlocksProvider {
             ),
             CredentialIssuerVerifierImpl(
                 credentialTypesModel,
-                NetworkServiceImpl(),
-                DispatcherImpl()
+                NetworkServiceImpl()
             ),
-            CredentialDidVerifierImpl(DispatcherImpl()),
+            CredentialDidVerifierImpl(),
             ExecutorImpl()
         )
     }

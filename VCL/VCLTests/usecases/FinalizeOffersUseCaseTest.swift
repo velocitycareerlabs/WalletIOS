@@ -96,10 +96,9 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
-                DispatcherImpl()
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
             ),
-            CredentialDidVerifierImpl(DispatcherImpl()),
+            CredentialDidVerifierImpl(),
             EmptyExecutor()
         )
         
@@ -140,10 +139,9 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
-                DispatcherImpl()
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
             ),
-            CredentialDidVerifierImpl(DispatcherImpl()),
+            CredentialDidVerifierImpl(),
             EmptyExecutor()
         )
         
@@ -185,10 +183,9 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
-                DispatcherImpl()
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
             ),
-            CredentialDidVerifierImpl(DispatcherImpl()),
+            CredentialDidVerifierImpl(),
             EmptyExecutor()
         )
         

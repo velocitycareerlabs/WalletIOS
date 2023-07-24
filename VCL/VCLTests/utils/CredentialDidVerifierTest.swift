@@ -12,7 +12,7 @@ import XCTest
 @testable import VCL
 
 class CredentialDidVerifierTest: XCTestCase {
-    private let subject = CredentialDidVerifierImpl(DispatcherImpl())
+    private let subject = CredentialDidVerifierImpl()
         private let credentialsFromNotaryIssuerAmount =
     CredentialMocks.JwtCredentialsFromNotaryIssuer.toList()?.count ?? 0
         private let credentialsFromRegularIssuerAmount =

@@ -10,11 +10,8 @@
 import Foundation
 
 class CredentialDidVerifierImpl: CredentialDidVerifier {
-    private let dispatcher: Dispatcher
     
-    init(_ dispatcher: Dispatcher) {
-        self.dispatcher = dispatcher
-    }
+    let dispatcher = DispatcherImpl()
     
     func verifyCredentials(
         jwtEncodedCredentials: [String],
@@ -23,7 +20,6 @@ class CredentialDidVerifierImpl: CredentialDidVerifier {
     ) {
         var passedCredentials = [VCLJwt]()
         var failedCredentials = [VCLJwt]()
-                
         jwtEncodedCredentials.forEach{ [weak self] jwtCredential in
             self?.dispatcher.enter()
             let jwtCredential = VCLJwt(encodedJwt: jwtCredential)
