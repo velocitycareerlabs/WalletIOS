@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
-    private let environment = VCLEnvironment.DEV
+    private let environment = VCLEnvironment.Dev
     private let vcl = VCLProvider.vclInstance()
     private var didJwk: VCLDidJwk? = nil
     
@@ -83,7 +83,7 @@ class ViewController: UIViewController {
     
     @objc private func getPresentationRequest() {
         let deepLink =
-        environment == VCLEnvironment.DEV ?
+        environment == VCLEnvironment.Dev ?
         VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrDev) :
         VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrStaging)
         
@@ -140,7 +140,7 @@ class ViewController: UIViewController {
     
     @objc private func getOrganizationsThenCredentialManifestByService() {
         let organizationDescriptor =
-        environment == VCLEnvironment.DEV ?
+        environment == VCLEnvironment.Dev ?
         Constants.OrganizationsSearchDescriptorByDidDev :
         Constants.OrganizationsSearchDescriptorByDidStaging
         
@@ -204,7 +204,7 @@ class ViewController: UIViewController {
     }
     
     @objc private func getCredentialManifestByDeepLink() {
-        let deepLink = environment == VCLEnvironment.DEV ?
+        let deepLink = environment == VCLEnvironment.Dev ?
         VCLDeepLink(value: Constants.CredentialManifestDeepLinkStrDev) :
         VCLDeepLink(value: Constants.CredentialManifestDeepLinkStrStaging)
         

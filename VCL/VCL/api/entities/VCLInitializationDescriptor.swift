@@ -17,8 +17,8 @@ public struct VCLInitializationDescriptor {
     public let keycahinAccessGroupIdentifier: String?
     
     public init(
-        environment: VCLEnvironment = .PROD,
-        keyServiceType: VCLKeyServiceType = .LOCAL,
+        environment: VCLEnvironment = .Prod,
+        keyServiceType: VCLKeyServiceType = .Local,
         xVnfProtocolVersion: VCLXVnfProtocolVersion = .XVnfProtocolVersion1,
         cacheSequence: Int = 0,
         keycahinAccessGroupIdentifier: String? = nil

@@ -16,7 +16,7 @@ class VclBlocksProvider {
     private static func chooseJwtService(
         _ keyServiceType: VCLKeyServiceType
     ) -> JwtService {
-        if keyServiceType == .REMOTE {
+        if keyServiceType == .Remote {
             return JwtServiceRemoteImpl(NetworkServiceImpl())
         }
         return JwtServiceImpl(KeyServiceImpl())
@@ -25,7 +25,7 @@ class VclBlocksProvider {
     private static func chooseKeyService(
         _ keyServiceType: VCLKeyServiceType
     ) -> KeyService {
-        if keyServiceType == .REMOTE {
+        if keyServiceType == .Remote {
             return KeyServiceRemoteImpl(NetworkServiceImpl())
         }
         return KeyServiceImpl()

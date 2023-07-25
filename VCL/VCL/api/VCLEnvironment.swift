@@ -10,8 +10,8 @@
 import Foundation
 
 public enum VCLEnvironment: String {
-    case PROD = "prod"
-    case STAGING = "staging"
-    case QA = "qa"
-    case DEV = "dev"
+    case Prod = "prod"
+    case Staging = "staging"
+    case Qa = "qa"
+    case Dev = "dev"
 }
