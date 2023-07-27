@@ -14,4 +14,8 @@ public struct VCLCredentialTypes {
     public init(all: [VCLCredentialType]?) {
         self.all = all
     }
+    
+    public func credentialTypeByTypeName(type: String) -> VCLCredentialType? {
+        return all?.first { type == $0.credentialType }
+    }
 }

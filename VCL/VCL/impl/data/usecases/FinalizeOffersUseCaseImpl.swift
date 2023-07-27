@@ -8,124 +8,120 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import UIKit
 
 class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     
-    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
-
     private let finalizeOffersRepository: FinalizeOffersRepository
     private let jwtServiceRepository: JwtServiceRepository
+    private let credentialIssuerVerifier: CredentialIssuerVerifier
+    private let credentialDidVerifier: CredentialDidVerifier
     private let executor: Executor
-    private let dispatcher: Dispatcher
     
     init(
         _ finalizeOffersRepository: FinalizeOffersRepository,
         _ jwtServiceRepository: JwtServiceRepository,
-        _ executor: Executor,
-        _ dispatcher: Dispatcher
+        _ credentialIssuerVerifier: CredentialIssuerVerifier,
+        _ credentialDidVerifier: CredentialDidVerifier,
+        _ executor: Executor
     ) {
         self.finalizeOffersRepository = finalizeOffersRepository
         self.jwtServiceRepository = jwtServiceRepository
+        self.credentialDidVerifier = credentialDidVerifier
+        self.credentialIssuerVerifier = credentialIssuerVerifier
         self.executor = executor
-        self.dispatcher = dispatcher
     }
-    
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        didJwk: VCLDidJwk,
+        didJwk: VCLDidJwk? = nil,
         token: VCLToken,
         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
-        executor.runOnBackground { [weak self] in
-            if let _self = self {
-                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(FinalizeOffersUseCase.self)") {
-                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-                }
-                _self.jwtServiceRepository.generateSignedJwt(
-                    kid: didJwk.kid,
-                    nonce: finalizeOffersDescriptor.offers.challenge,
-                    jwtDescriptor: VCLJwtDescriptor(
-                        iss: didJwk.value,
-                        aud: finalizeOffersDescriptor.issuerId
-                    )
-                ) { proofJwtResult in
-                    do {
-                        let proof = try proofJwtResult.get()
-                        
-                        _self.finalizeOffersRepository.finalizeOffers(
-                            token: token,
-                            proof: proof,
-                            finalizeOffersDescriptor: finalizeOffersDescriptor) { encodedJwtOffersListResult in
+        executor.runOnBackground {
+            self.jwtServiceRepository.generateSignedJwt(
+                kid: didJwk?.kid,
+                nonce: finalizeOffersDescriptor.offers.challenge,
+                jwtDescriptor: VCLJwtDescriptor(
+                    keyId: didJwk?.keyId,
+                    iss: didJwk?.value ?? UUID().uuidString,
+                    aud: finalizeOffersDescriptor.issuerId
+                )
+            ) { [weak self] proofJwtResult in
+                do {
+                    let proof = try proofJwtResult.get()
+                    self?.finalizeOffersRepository.finalizeOffers(
+                        token: token,
+                        proof: proof,
+                        finalizeOffersDescriptor: finalizeOffersDescriptor
+                    ) { encodedJwtCredentialsListResult in
+                        do {
+                            let encodedJwtCredentialsList = try encodedJwtCredentialsListResult.get()
+                            self?.verifyCredentialsByIssuer(
+                                encodedJwtCredentialsList,
+                                finalizeOffersDescriptor
+                            ) {
                                 do {
-                                    let encodedJwtOffersList = try encodedJwtOffersListResult.get()
-                                    _self.verifyCredentials(
-                                        encodedJwtOffersList,
-                                        finalizeOffersDescriptor,
-                                        completionBlock
-                                    )
+                                    let _ = try $0.get()
+                                    self?.verifyCredentialByDid(
+                                        encodedJwtCredentialsList,
+                                        finalizeOffersDescriptor
+                                    ) { jwtVerifiableCredentialsResult in
+                                        self?.executor.runOnMain {
+                                            completionBlock(jwtVerifiableCredentialsResult)
+                                        }
+                                    }
                                 } catch {
-                                    completionBlock(.failure(VCLError(error: error)))
+                                    self?.onError(VCLError(error: error), completionBlock)
                                 }
                             }
-                        UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                        _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-                    } catch {
-                        completionBlock(.failure(VCLError(error: error)))
+                        } catch {
+                            self?.onError(VCLError(error: error), completionBlock)
+                        }
                     }
+                } catch {
+                    self?.onError(VCLError(error: error), completionBlock)
                 }
-            } else {
-                completionBlock(.failure(VCLError(message: "self is nil")))
             }
         }
     }
-    
-    private func verifyCredentials(
-        _ encodedJwts: [String],
+
+    private func verifyCredentialsByIssuer(
+        _ encodedJwtCredentialsList: [String],
+        _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        _ completionBlock: @escaping (VCLResult<Bool>) -> Void
+    ) {
+        credentialIssuerVerifier.verifyCredentials(
+            jwtEncodedCredentials: encodedJwtCredentialsList,
+            finalizeOffersDescriptor: finalizeOffersDescriptor
+        ) { credentialIssuerVerifierResult in
+            do {
+                completionBlock(VCLResult.success(try credentialIssuerVerifierResult.get()))
+            } catch {
+                completionBlock(VCLResult.failure(VCLError(error: error)))
+            }
+        }
+    }
+
+    private func verifyCredentialByDid(
+        _ encodedJwtCredentialsList: [String],
         _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
-        var passedCredentials = [VCLJwt]()
-        var failedCredentials = [VCLJwt]()
-        encodedJwts.forEach{ [weak self] encodedJwtOffer in
-            
-            let jwtCredential = VCLJwt(encodedJwt: encodedJwtOffer)
-            if (self?.verifyJwtCredential(jwtCredential, finalizeOffersDescriptor) == true) {
-                passedCredentials.append(jwtCredential)
-            } else {
-                failedCredentials.append(jwtCredential)
-            }
-            if(encodedJwts.count == passedCredentials.count + failedCredentials.count) {
-                self?.executor.runOnMain {
-                    completionBlock(.success(VCLJwtVerifiableCredentials(
-                        passedCredentials: passedCredentials,
-                        failedCredentials: failedCredentials
-                    )))
-                }
+        self.credentialDidVerifier.verifyCredentials(
+            jwtEncodedCredentials: encodedJwtCredentialsList,
+            finalizeOffersDescriptor: finalizeOffersDescriptor
+        ) { jwtVerifiableCredentialsResult in
+            do {
+                completionBlock(VCLResult.success(try jwtVerifiableCredentialsResult.get()))
+            } catch {
+                completionBlock(VCLResult.failure(VCLError(error: error)))
             }
         }
-        if(encodedJwts.isEmpty) {
-            completionBlock(.success(VCLJwtVerifiableCredentials(
-                passedCredentials: passedCredentials,
-                failedCredentials: failedCredentials
-            )))
-        }
     }
-    
-    private func verifyJwtCredential(
-        _ jwtCredential: VCLJwt,
-        _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor
-    ) -> Bool {
-        return jwtCredential.payload?["iss"] as? String == finalizeOffersDescriptor.did
-    }
-    
-    private func onError(
-        _ error: Error,
-        _ completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+
+    private func onError<T>(
+        _ error: VCLError,
+        _ completionBlock: @escaping (VCLResult<T>) -> Void
     ) {
-        executor.runOnMain {
-            completionBlock(.failure(VCLError(error: error)))
-        }
+        executor.runOnMain { completionBlock(VCLResult.failure(error)) }
     }
 }

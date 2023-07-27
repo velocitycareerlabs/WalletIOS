@@ -27,4 +27,8 @@ class CredentialTypesModelImpl: CredentialTypesModel {
             completionBlock(response)
         }
     }
+    
+    func credentialTypeByTypeName(type: String) -> VCLCredentialType? {
+        return data?.credentialTypeByTypeName(type: type)
+    }
 }

@@ -8,16 +8,16 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import UIKit
 
 class JwtServiceUseCaseImpl: JwtServiceUseCase {
     
-    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
-
     private let jwtServiceRepository: JwtServiceRepository
     private let executor: Executor
     
-    init(_ jwtServiceRepository: JwtServiceRepository, _ executor: Executor) {
+    init(
+        _ jwtServiceRepository: JwtServiceRepository,
+        _ executor: Executor
+    ) {
         self.jwtServiceRepository = jwtServiceRepository
         self.executor = executor
     }
@@ -28,19 +28,8 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            if let _self = self {
-                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(JwtServiceUseCase.self)") {
-                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-                }
-                
-                _self.jwtServiceRepository.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) { isVeriviedResult in
-                    _self.executor.runOnMain { completionBlock(isVeriviedResult) }
-                }
-                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-            } else {
-                completionBlock(.failure(VCLError(message: "self is nil")))
+            self?.jwtServiceRepository.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) { isVeriviedResult in
+                self?.executor.runOnMain { completionBlock(isVeriviedResult) }
             }
         }
     }

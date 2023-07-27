@@ -10,12 +10,12 @@
 struct Urls {
     private static var EnvironmentPrefix: String { get {
         switch GlobalConfig.CurrentEnvironment {
-        case VCLEnvironment.DEV:
-            return VCLEnvironment.DEV.rawValue
-        case VCLEnvironment.QA:
-            return VCLEnvironment.QA.rawValue
-        case VCLEnvironment.STAGING:
-            return VCLEnvironment.STAGING.rawValue
+        case VCLEnvironment.Dev:
+            return VCLEnvironment.Dev.rawValue
+        case VCLEnvironment.Qa:
+            return VCLEnvironment.Qa.rawValue
+        case VCLEnvironment.Staging:
+            return VCLEnvironment.Staging.rawValue
         default:
             return "" // prod is a default, doesn't has a prefix
         }
@@ -43,5 +43,5 @@ struct HeaderKeys {
 }
 
 struct HeaderValues {
-    static let XVnfProtocolVersion = "2.0"
+    static var XVnfProtocolVersion: String { get { GlobalConfig.XVnfProtocolVersion.rawValue } }
 }

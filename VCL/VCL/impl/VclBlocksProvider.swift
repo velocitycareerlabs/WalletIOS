@@ -16,7 +16,7 @@ class VclBlocksProvider {
     private static func chooseJwtService(
         _ keyServiceType: VCLKeyServiceType
     ) -> JwtService {
-        if keyServiceType == .REMOTE {
+        if keyServiceType == .Remote {
             return JwtServiceRemoteImpl(NetworkServiceImpl())
         }
         return JwtServiceImpl(KeyServiceImpl())
@@ -25,7 +25,7 @@ class VclBlocksProvider {
     private static func chooseKeyService(
         _ keyServiceType: VCLKeyServiceType
     ) -> KeyService {
-        if keyServiceType == .REMOTE {
+        if keyServiceType == .Remote {
             return KeyServiceRemoteImpl(NetworkServiceImpl())
         }
         return KeyServiceImpl()
@@ -160,7 +160,8 @@ class VclBlocksProvider {
     }
     
     static func provideFinalizeOffersUseCase(
-        _ keyServiceType: VCLKeyServiceType
+        _ keyServiceType: VCLKeyServiceType,
+        _ credentialTypesModel: CredentialTypesModel
     ) -> FinalizeOffersUseCase {
         return FinalizeOffersUseCaseImpl(
             FinalizeOffersRepositoryImpl(
@@ -168,8 +169,12 @@ class VclBlocksProvider {
             JwtServiceRepositoryImpl(
                 chooseJwtService(keyServiceType)
             ),
-            ExecutorImpl(),
-            DispatcherImpl()
+            CredentialIssuerVerifierImpl(
+                credentialTypesModel,
+                NetworkServiceImpl()
+            ),
+            CredentialDidVerifierImpl(),
+            ExecutorImpl()
         )
     }
     

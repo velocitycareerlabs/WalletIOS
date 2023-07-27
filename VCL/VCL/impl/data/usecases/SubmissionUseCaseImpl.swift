@@ -4,23 +4,22 @@
 //
 //  Created by Michael Avoyan on 10/08/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import UIKit
 
 class SubmissionUseCaseImpl: SubmissionUseCase {
-    
-    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
     
     private let submissionRepository: SubmissionRepository
     private let jwtServiceRepository: JwtServiceRepository
     private let executor: Executor
     
-    init(_ submissionRepository: SubmissionRepository,
-         _ jwtServiceRepository: JwtServiceRepository,
-         _ executor: Executor) {
+    init(
+        _ submissionRepository: SubmissionRepository,
+        _ jwtServiceRepository: JwtServiceRepository,
+        _ executor: Executor
+    ) {
         self.submissionRepository = submissionRepository
         self.jwtServiceRepository = jwtServiceRepository
         self.executor = executor
@@ -28,41 +27,30 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
     
     func submit(
         submission: VCLSubmission,
-        didJwk: VCLDidJwk,
+        didJwk: VCLDidJwk? = nil,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         executor.runOnBackground  { [weak self] in
-            if let _self = self {
-                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(SubmissionUseCase.self)") {
-                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-                }
-                
-                _self.jwtServiceRepository.generateSignedJwt(
-                    kid: didJwk.kid,
-                    jwtDescriptor: VCLJwtDescriptor(
-                        keyId: didJwk.keyId,
-                        payload: submission.payload,
-                        jti: submission.jti,
-                        iss: submission.iss
-                    )) { signedJwtResult in
-                        do {
-                            let jwt = try signedJwtResult.get()
-                            _self.submissionRepository.submit(
-                                submission: submission,
-                                jwt: jwt
-                            ) { submissionResult in
-                                _self.executor.runOnMain { completionBlock(submissionResult) }
-                            }
-                        } catch {
-                            _self.executor.runOnMain { completionBlock(VCLResult.failure(VCLError(error: error))) }
+            self?.jwtServiceRepository.generateSignedJwt(
+                kid: didJwk?.kid,
+                jwtDescriptor: VCLJwtDescriptor(
+                    keyId: didJwk?.keyId,
+                    payload: submission.payload,
+                    jti: submission.jti,
+                    iss: submission.iss
+                )) { signedJwtResult in
+                    do {
+                        let jwt = try signedJwtResult.get()
+                        self?.submissionRepository.submit(
+                            submission: submission,
+                            jwt: jwt
+                        ) { submissionResult in
+                            self?.executor.runOnMain { completionBlock(submissionResult) }
                         }
+                    } catch {
+                        self?.executor.runOnMain { completionBlock(VCLResult.failure(VCLError(error: error))) }
                     }
-                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-            } else {
-                completionBlock(.failure(VCLError(message: "self is nil")))
-            }
+                }
         }
     }
 }

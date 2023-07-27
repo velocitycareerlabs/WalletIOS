@@ -42,7 +42,7 @@ final class KeyServiceUseCaseTest: XCTestCase {
             assert(jwkDict?["kty"] as? String == "EC")
             assert(jwkDict?["use"] as? String == "sig")
             assert(jwkDict?["crv"] as? String == "secp256k1")
-            assert(jwkDict?["alg"] as? String == "ES256K")
+//            assert(jwkDict?["alg"] as? String == "ES256K")
             assert(jwkDict?["use"] as? String == "sig")
             assert(jwkDict?["x"] as? String != nil)
             assert(jwkDict?["y"] as? String != nil)

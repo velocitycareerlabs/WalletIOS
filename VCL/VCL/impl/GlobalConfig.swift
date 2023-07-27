@@ -12,7 +12,8 @@ import UIKit
 struct GlobalConfig {
     static let VclPackage = "io.velocitycareerlabs"
     
-    static var CurrentEnvironment = VCLEnvironment.PROD
+    static var CurrentEnvironment = VCLEnvironment.Prod
+    static var XVnfProtocolVersion = VCLXVnfProtocolVersion.XVnfProtocolVersion1
     
     static var KeycahinAccessGroupIdentifier: String? = nil
     
@@ -27,7 +28,7 @@ struct GlobalConfig {
     
     static let LogTagPrefix = "VCL "
     // TODO: Will be remotely configurable
-    static var IsLoggerOn: Bool { get { CurrentEnvironment != VCLEnvironment.PROD } }
+    static var IsLoggerOn: Bool { get { CurrentEnvironment != VCLEnvironment.Prod } }
     
     static let AlgES256K = "ES256K"
     static let TypeJwt = "JWT"

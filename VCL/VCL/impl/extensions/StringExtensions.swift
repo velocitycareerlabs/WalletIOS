@@ -107,23 +107,23 @@ extension String {
     }
     
     
-    func decodeJwtBase64Url() -> [String] {
-        var retVal = [String]()
+    func decodeJwtBase64Url() -> [String?] {
+        var retVal = [String?]()
         let base64Parts = self.split(separator: ".").map{ String($0) }
         if base64Parts.count >= 1, let decoded = base64Parts[0].decodeBase64URL() {
             retVal.append(decoded)
         } else {
-            retVal.append("")
+            retVal.append(nil)
         }
         if base64Parts.count >= 2, let decoded = base64Parts[1].decodeBase64URL() {
             retVal.append(decoded)
         } else {
-            retVal.append("")
+            retVal.append(nil)
         }
         if base64Parts.count >= 3 {
             retVal.append(base64Parts[2]) // sha256
         } else {
-            retVal.append("")
+            retVal.append(nil)
         }
         return retVal
     }

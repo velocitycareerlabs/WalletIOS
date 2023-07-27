@@ -28,8 +28,8 @@ public struct VCLError: Error {
         self.statusCode = statusCode
     }
 
-    public init(payload: String) {
-        let payloadJson = payload.toDictionary()
+    public init(payload: String?, errorCode: String? = nil) {
+        let payloadJson = payload?.toDictionary()
         self.payload = payload
         self.error = payloadJson?[CodingKeys.KeyError] as? String
         self.errorCode = payloadJson?[CodingKeys.KeyErrorCode] as? String

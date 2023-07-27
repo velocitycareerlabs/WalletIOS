@@ -10,6 +10,6 @@
 import Foundation
 
 public enum VCLKeyServiceType: String {
-    case LOCAL = "local"
-    case REMOTE = "remote"
+    case Local = "local"
+    case Remote = "remote"
 }

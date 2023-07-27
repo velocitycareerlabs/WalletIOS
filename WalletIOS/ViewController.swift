@@ -26,9 +26,9 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
-    private let environment = VCLEnvironment.DEV
+    private let environment = VCLEnvironment.Dev
     private let vcl = VCLProvider.vclInstance()
-    private var didJwk: VCLDidJwk!
+    private var didJwk: VCLDidJwk? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,23 +45,24 @@ class ViewController: UIViewController {
         
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
-                environment: environment,
-                keyServiceType: .LOCAL
+                environment: environment//,
+//                xVnfProtocolVersion: .XVnfProtocolVersion2
             ),
             successHandler: { [weak self] in
                 NSLog("VCL Initialization succeed!")
+                self?.showControls()
                 
-                self?.vcl.generateDidJwk(
-                    successHandler: { didJwk in
-                        self?.didJwk = didJwk
-                        NSLog("VCL did:jwk is \(self?.didJwk.value ?? "")")
-                        self?.showControls()
-                    },
-                    errorHandler: { error in
-                        NSLog("VCL Failed to generate did:jwk with error: \(error)")
-                        self?.showError()
-                    }
-                )
+//                self?.vcl.generateDidJwk(
+//                    successHandler: { didJwk in
+//                        self?.didJwk = didJwk
+//                        NSLog("VCL did:jwk is \(self?.didJwk?.toString() ?? "")")
+//                        self?.showControls()
+//                    },
+//                    errorHandler: { error in
+//                        NSLog("VCL Failed to generate did:jwk with error: \(error)")
+//                        self?.showError()
+//                    }
+//                )
             },
             errorHandler: { [weak self] error in
                 NSLog("VCL Initialization failed with error: \(error)")
@@ -82,7 +83,7 @@ class ViewController: UIViewController {
     
     @objc private func getPresentationRequest() {
         let deepLink =
-        environment == VCLEnvironment.DEV ?
+        environment == VCLEnvironment.Dev ?
         VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrDev) :
         VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrStaging)
         
@@ -139,7 +140,7 @@ class ViewController: UIViewController {
     
     @objc private func getOrganizationsThenCredentialManifestByService() {
         let organizationDescriptor =
-        environment == VCLEnvironment.DEV ?
+        environment == VCLEnvironment.Dev ?
         Constants.OrganizationsSearchDescriptorByDidDev :
         Constants.OrganizationsSearchDescriptorByDidStaging
         
@@ -203,7 +204,7 @@ class ViewController: UIViewController {
     }
     
     @objc private func getCredentialManifestByDeepLink() {
-        let deepLink = environment == VCLEnvironment.DEV ?
+        let deepLink = environment == VCLEnvironment.Dev ?
         VCLDeepLink(value: Constants.CredentialManifestDeepLinkStrDev) :
         VCLDeepLink(value: Constants.CredentialManifestDeepLinkStrStaging)
         
@@ -342,7 +343,7 @@ class ViewController: UIViewController {
     @objc private func generateSignedJwt() {
         vcl.generateSignedJwt(
             jwtDescriptor: VCLJwtDescriptor(
-                keyId: didJwk.keyId,
+                keyId: didJwk?.keyId,
                 payload: Constants.SomePayload,
                 jti: "jti123",
                 iss: "iss123"

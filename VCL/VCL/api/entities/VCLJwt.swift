@@ -31,8 +31,8 @@ public struct VCLJwt {
         let decodedJwt = encodedJwt.decodeJwtBase64Url()
         if decodedJwt.count == 3 {
             initialize(
-                header: decodedJwt[0].toDictionary(),
-                payload: decodedJwt[1].toDictionary(),
+                header: decodedJwt[0]?.toDictionary(),
+                payload: decodedJwt[1]?.toDictionary(),
                 signature: decodedJwt[2],
                 encodedJwt: encodedJwt
             )
@@ -55,18 +55,6 @@ public struct VCLJwt {
         self.encodedJwt = encodedJwt
         
         self.jwsToken = JwsToken<VCLClaims>(from: encodedJwt)
-        
-        
-//        "typ": "JWT",
-//        "kid": "did:velocity:0x6c0d8bcce17652ff5af352129415dca5637bb20e",
-//        "alg": "ES256K"
-//        let jwsHeader = Header(type: header?[CodingKeys.KeyTyp] as? String,
-//                               algorithm: header?[CodingKeys.KeyAlg] as? String,
-//                               keyId: header?[CodingKeys.KeyKid] as? String)
-        
-//        self.jwsToken = JwsToken<VCLClaims>(headers: jwsHeader,
-//                                            content: VCLFClaims(jwtMap: payload ?? [:]),
-//                                            signature: Data(base64URLEncoded: self.signature ?? ""))
     }
     
     public struct CodingKeys {

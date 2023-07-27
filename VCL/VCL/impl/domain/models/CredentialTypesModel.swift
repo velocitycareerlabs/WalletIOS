@@ -15,4 +15,5 @@ protocol CredentialTypesModel: Model {
         cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
     )
+    func credentialTypeByTypeName(type: String) -> VCLCredentialType?
 }

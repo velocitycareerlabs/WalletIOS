@@ -38,6 +38,7 @@ public struct VCLFinalizeOffersDescriptor {
     var issuerId: String { get { credentialManifest.issuerId } }
     var exchangeId: String { get { credentialManifest.exchangeId } }
     var finalizeOffersUri: String { get { credentialManifest.finalizeOffersUri } }
+    var serviceTypes: VCLServiceTypes { get { credentialManifest.verifiedProfile.serviceTypes } }
     
     public func generateRequestBody(jwt: VCLJwt) -> [String: Any?] {
         var retVal = self.payload

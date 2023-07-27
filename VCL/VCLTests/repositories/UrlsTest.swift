@@ -21,7 +21,7 @@ final class UrlsTest: XCTestCase {
     func testProdEnvironment() {
         let expectedUrlPrefix = "https://registrar.velocitynetwork.foundation"
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.PROD
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Prod
 
         assert(Urls.CredentialTypes.hasPrefix(expectedUrlPrefix))
         assert(Urls.CredentialTypeSchemas.hasPrefix(expectedUrlPrefix))
@@ -34,7 +34,7 @@ final class UrlsTest: XCTestCase {
     func testStagingEnvironment() {
         let expectedUrlPrefix = "https://stagingregistrar.velocitynetwork.foundation"
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.STAGING
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Staging
 
         assert(Urls.CredentialTypes.hasPrefix(expectedUrlPrefix))
         assert(Urls.CredentialTypeSchemas.hasPrefix(expectedUrlPrefix))
@@ -47,7 +47,7 @@ final class UrlsTest: XCTestCase {
     func testQaEnvironment() {
         let expectedUrlPrefix = "https://qaregistrar.velocitynetwork.foundation"
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.QA
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Qa
 
         assert(Urls.CredentialTypes.hasPrefix(expectedUrlPrefix))
         assert(Urls.CredentialTypeSchemas.hasPrefix(expectedUrlPrefix))
@@ -60,7 +60,7 @@ final class UrlsTest: XCTestCase {
     func testDevEnvironment() {
         let expectedUrlPrefix = "https://devregistrar.velocitynetwork.foundation"
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.DEV
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Dev
 
         assert(Urls.CredentialTypes.hasPrefix(expectedUrlPrefix))
         assert(Urls.CredentialTypeSchemas.hasPrefix(expectedUrlPrefix))
@@ -71,6 +71,10 @@ final class UrlsTest: XCTestCase {
     }
     
     func testXVnfProtocolVersion() {
+        GlobalConfig.XVnfProtocolVersion = .XVnfProtocolVersion1
+        assert(HeaderValues.XVnfProtocolVersion == "1.0")
+        
+        GlobalConfig.XVnfProtocolVersion = .XVnfProtocolVersion2
         assert(HeaderValues.XVnfProtocolVersion == "2.0")
     }
     
