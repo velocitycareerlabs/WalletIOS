@@ -78,22 +78,6 @@ struct Constants  {
         )
     )
     
-    static let OrganizationJson = "   {\n" +
-    "      \"name\":\"Association of Chartered Certified Accountants\",\n" +
-    "      \"location\":{\n" +
-    "         \"countryCode\":\"UK\",\n" +
-    "         \"regionCode\":\"ENG\"\n" +
-    "      },\n" +
-    "      \"logo\":\"https:\\/\\/docs.velocitycareerlabs.io\\/Logos\\/ACCA.png\",\n" +
-    "      \"website\":\"https:\\/\\/example.com\",\n" +
-    "      \"founded\":\"1904\",\n" +
-    "      \"permittedVelocityServiceCategories\":[\n" +
-    "         \"\",\n" +
-    "         \"Issuer\"\n" +
-    "      ],\n" +
-    "      \"did\":\"did:velocity:0x5b4a5d2fdfdbd34e73904a0c8022ed4c22136add\"\n" +
-    "   }"
-    
     static let CredentialTypes = [
         "EducationDegreeRegistrationV1.0",
         "EducationDegreeStudyV1.0",
