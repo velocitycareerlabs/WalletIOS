@@ -46,22 +46,33 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
     }
     
     private func parse(offersResponse: Response, token: VCLToken) -> VCLOffers {
-            if let payload = offersResponse.payload.toDictionary() {
-                return VCLOffers(
-                    payload: payload,
-                    all: (payload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]]) ?? [[String: Any]](),
-                    responseCode: offersResponse.code,
-                    token: token,
-                    challenge: (payload[VCLOffers.CodingKeys.KeyChallenge] as? String) ?? ""
-                )
-            } else {
-                return VCLOffers(
-                    payload: [String: Any](),
-                    all: [[String: Any]](),
-                    responseCode: offersResponse.code,
-                    token: token,
-                    challenge: ""
-                )
-            }
+        // VCLXVnfProtocolVersion.XVnfProtocolVersion2
+        if let payload = offersResponse.payload.toDictionary() {
+            return VCLOffers(
+                payload: payload,
+                all:  (payload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]]) ?? [],
+                responseCode: offersResponse.code,
+                token: token,
+                challenge: (payload[VCLOffers.CodingKeys.KeyChallenge] as? String) ?? ""
+            )
+        } // VCLXVnfProtocolVersion.XVnfProtocolVersion1
+        else if let allOffers = offersResponse.payload.toList() as? [[String: Any]] {
+            return VCLOffers(
+                payload: [:],
+                all: allOffers,
+                responseCode: offersResponse.code,
+                token: token,
+                challenge: ""
+            )
+        } // No offers
+        else {
+            return VCLOffers(
+                payload: [:],
+                all: [],
+                responseCode: offersResponse.code,
+                token: token,
+                challenge: ""
+            )
         }
+    }
 }

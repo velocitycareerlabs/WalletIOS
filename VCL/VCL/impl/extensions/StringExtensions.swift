@@ -28,7 +28,7 @@ extension String {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
-                VCLLog.e(error)
+//                VCLLog.e(error)
             }
         }
         return nil
@@ -39,7 +39,7 @@ extension String {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [Any]
             } catch {
-                //                VCLLog.error(error)
+//                VCLLog.error(error)
             }
         }
         return nil
@@ -50,7 +50,7 @@ extension String {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
             } catch {
-                //                VCLLog.error(error)
+//                VCLLog.error(error)
             }
         }
         return nil
@@ -88,7 +88,7 @@ extension String {
     func decodeBase64() -> String? {
         guard let data =
                 Data(base64Encoded: self)
-                //                Data(base64Encoded: self, options: Data.Base64DecodingOptions(rawValue: 0))
+//                Data(base64Encoded: self, options: Data.Base64DecodingOptions(rawValue: 0))
         else { return nil }
         return String(data: data, encoding: .utf8)
     }
