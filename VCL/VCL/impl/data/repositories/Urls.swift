@@ -21,14 +21,16 @@ struct Urls {
         }
     } }
     
-    private static var BaseUrlServices: String { get { "https://\(EnvironmentPrefix)registrar.velocitynetwork.foundation" } }
-    static var CredentialTypes: String { get { "\(BaseUrlServices)/api/v0.6/credential-types" } }
-    static var CredentialTypeSchemas: String { get { "\(BaseUrlServices)/schemas/" } }
-    static var Countries: String { get { "\(BaseUrlServices)/reference/countries" } }
-    static var Organizations: String { get { "\(BaseUrlServices)/api/v0.6/organizations/search-profiles" } }
-    static var ResolveKid: String { get { "\(BaseUrlServices)/api/v0.6/resolve-kid/" } }
-    static var CredentialTypesFormSchema: String { get { "\(BaseUrlServices)/api/v0.6/form-schemas?credentialType=\(Params.CredentialType)" } }
-    static var VerifiedProfile: String { get { "\(BaseUrlServices)/api/v0.6/organizations/\(Params.Did)/verified-profile" } }
+    private static var BaseUrlRegistrar: String { get { "https://\(EnvironmentPrefix)registrar.velocitynetwork.foundation" } }
+    private static var BaseUrlWalletApi: String { get { "https://\(EnvironmentPrefix)walletapi.velocitycareerlabs.io" } }
+    
+    static var CredentialTypes: String { get { "\(BaseUrlRegistrar)/api/v0.6/credential-types" } }
+    static var CredentialTypeSchemas: String { get { "\(BaseUrlRegistrar)/schemas/" } }
+    static var Countries: String { get { "\(BaseUrlWalletApi)/reference/countries" } }
+    static var Organizations: String { get { "\(BaseUrlRegistrar)/api/v0.6/organizations/search-profiles" } }
+    static var ResolveKid: String { get { "\(BaseUrlRegistrar)/api/v0.6/resolve-kid/" } }
+    static var CredentialTypesFormSchema: String { get { "\(BaseUrlRegistrar)/api/v0.6/form-schemas?credentialType=\(Params.CredentialType)" } }
+    static var VerifiedProfile: String { get { "\(BaseUrlRegistrar)/api/v0.6/organizations/\(Params.Did)/verified-profile" } }
 }
 
 struct Params {
