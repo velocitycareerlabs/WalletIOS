@@ -20,44 +20,40 @@ final class UrlsTest: XCTestCase {
     
     func testProdEnvironment() {
         let registrarPrefix = "https://registrar.velocitynetwork.foundation"
-        let walletApiPrefix = "https://walletapi.velocitycareerlabs.io"
         
         GlobalConfig.CurrentEnvironment = VCLEnvironment.Prod
 
-        verifyUrlsPrefix(registrarPrefix, walletApiPrefix)
+        verifyUrlsPrefix(registrarPrefix)
     }
 
     func testStagingEnvironment() {
         let registrarPrefix = "https://stagingregistrar.velocitynetwork.foundation"
-        let walletApiPrefix = "https://stagingwalletapi.velocitycareerlabs.io"
         
         GlobalConfig.CurrentEnvironment = VCLEnvironment.Staging
 
-        verifyUrlsPrefix(registrarPrefix, walletApiPrefix)
+        verifyUrlsPrefix(registrarPrefix)
     }
     
     func testQaEnvironment() {
         let registrarPrefix = "https://qaregistrar.velocitynetwork.foundation"
-        let walletApiPrefix = "https://qawalletapi.velocitycareerlabs.io"
         
         GlobalConfig.CurrentEnvironment = VCLEnvironment.Qa
 
-        verifyUrlsPrefix(registrarPrefix, walletApiPrefix)
+        verifyUrlsPrefix(registrarPrefix)
     }
 
     func testDevEnvironment() {
         let registrarPrefix = "https://devregistrar.velocitynetwork.foundation"
-        let walletApiPrefix = "https://devwalletapi.velocitycareerlabs.io"
 
         GlobalConfig.CurrentEnvironment = VCLEnvironment.Dev
 
-        verifyUrlsPrefix(registrarPrefix, walletApiPrefix)
+        verifyUrlsPrefix(registrarPrefix)
     }
     
-    private func verifyUrlsPrefix(_ registrarPrefix: String, _ walletApiPrefix: String) {
+    private func verifyUrlsPrefix(_ registrarPrefix: String) {
         assert(Urls.CredentialTypes.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.CredentialTypes)")
         assert(Urls.CredentialTypeSchemas.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.CredentialTypeSchemas)")
-        assert(Urls.Countries.hasPrefix(walletApiPrefix), "expected: \(walletApiPrefix), actual: \(Urls.Countries)")
+        assert(Urls.Countries.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.Countries)")
         assert(Urls.Organizations.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.Organizations)")
         assert(Urls.ResolveKid.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.ResolveKid)")
         assert(Urls.CredentialTypesFormSchema.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.CredentialTypesFormSchema)")

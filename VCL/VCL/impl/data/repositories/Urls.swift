@@ -22,11 +22,11 @@ struct Urls {
     } }
     
     private static var BaseUrlRegistrar: String { get { "https://\(EnvironmentPrefix)registrar.velocitynetwork.foundation" } }
-    private static var BaseUrlWalletApi: String { get { "https://\(EnvironmentPrefix)walletapi.velocitycareerlabs.io" } }
+//    private static var BaseUrlWalletApi: String { get { "https://\(EnvironmentPrefix)walletapi.velocitycareerlabs.io" } }
     
     static var CredentialTypes: String { get { "\(BaseUrlRegistrar)/api/v0.6/credential-types" } }
     static var CredentialTypeSchemas: String { get { "\(BaseUrlRegistrar)/schemas/" } }
-    static var Countries: String { get { "\(BaseUrlWalletApi)/reference/countries" } }
+    static var Countries: String { get { "\(BaseUrlRegistrar)/reference/countries" } }
     static var Organizations: String { get { "\(BaseUrlRegistrar)/api/v0.6/organizations/search-profiles" } }
     static var ResolveKid: String { get { "\(BaseUrlRegistrar)/api/v0.6/resolve-kid/" } }
     static var CredentialTypesFormSchema: String { get { "\(BaseUrlRegistrar)/api/v0.6/form-schemas?credentialType=\(Params.CredentialType)" } }
