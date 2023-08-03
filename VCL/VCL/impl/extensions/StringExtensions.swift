@@ -10,6 +10,29 @@
 import Foundation
 
 extension String {
+    
+    func isUrlEquivalentTo(url: String) -> Bool {
+            var retVal = true
+            
+            guard let thisQueryParams = self.getUrlQueryParams(), let urlQueryParams = url.getUrlQueryParams() else {
+                return false
+            }
+            
+            thisQueryParams.forEach { key, value in
+                retVal = retVal && urlQueryParams[key] == value
+            }
+            
+            let thisHost = URL(string: self)?.host
+            let urlHost = URL(string: url)?.host
+            let thisPath = URL(string: self)?.path
+            let urlPath = URL(string: url)?.path
+            
+            retVal = retVal && thisHost == urlHost
+            retVal = retVal && thisPath == urlPath
+            
+            return retVal
+        }
+    
     func toQueryString() -> String? {
         var urlVars:[String] = []
         guard let parameters = self.toDictionary() else {return nil}
@@ -136,16 +159,36 @@ extension String {
         return self.data(using: .utf8) ?? Data()
     }
     
+//    func getUrlQueryParams() -> [String: String]? {
+//        var dict: [String: String]? = nil
+//        if let queryItems = URLComponents(string: self)?.queryItems {
+//            dict = [String: String]()
+//            for (queryItem) in queryItems {
+//                dict?[queryItem.name] = queryItem.value
+//            }
+//        }
+//        return dict
+//    }
     func getUrlQueryParams() -> [String: String]? {
-        var dict: [String: String]? = nil
-        if let queryItems = URLComponents(string: self)?.queryItems {
-            dict = [String: String]()
-            for (queryItem) in queryItems {
-                dict?[queryItem.name] = queryItem.value
+            var map: [String: String]? = nil
+            do {
+                let params = self.split(whereSeparator: { (char) -> Bool in
+                    return char == "?" || char == "&"
+                })
+                map = [String: String]()
+                for param in params {
+                    let pair = param.split(separator: "=")
+                    if pair.count == 2 {
+                        let key = String(pair[0])
+                        let value = String(pair[1])
+                        map?[key] = value
+                    }
+                }
+            } catch {
+//                VCLLog.error(error)
             }
+            return map
         }
-        return dict
-    }
     
     func removePrefix(_ prefix: String) -> String {
         guard self.hasPrefix(prefix) else { return self }
