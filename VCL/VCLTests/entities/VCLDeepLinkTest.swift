@@ -66,7 +66,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.CredentialManifestDeepLinkDevNetStr)
         assert(subject.value.decode() == DeepLinkMocks.CredentialManifestDeepLinkDevNetStr.decode())
-        assert(subject.requestUri!.decode() == DeepLinkMocks.CredentialManifestRequestDecodedUriStr)
+        assert(subject.requestUri!.isUrlEquivalentTo(url: DeepLinkMocks.CredentialManifestRequestDecodedUriStr))
         assert(subject.issuer == nil)
         assert(subject.vendorOriginContext == nil)
         assert(subject.did == DeepLinkMocks.IssuerDid)
@@ -77,7 +77,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.CredentialManifestDeepLinkTestNetStr)
         assert(subject.value.decode() == DeepLinkMocks.CredentialManifestDeepLinkTestNetStr.decode())
-        assert(subject.requestUri!.decode() == DeepLinkMocks.CredentialManifestRequestDecodedUriStr)
+        assert(subject.requestUri!.isUrlEquivalentTo(url: DeepLinkMocks.CredentialManifestRequestDecodedUriStr))
         assert(subject.issuer == nil)
         assert(subject.vendorOriginContext == nil)
         assert(subject.did == DeepLinkMocks.IssuerDid)
@@ -88,7 +88,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.CredentialManifestDeepLinkMainNetStr)
         assert(subject.value.decode() == DeepLinkMocks.CredentialManifestDeepLinkMainNetStr.decode())
-        assert(subject.requestUri!.decode() == DeepLinkMocks.CredentialManifestRequestDecodedUriStr)
+        assert(subject.requestUri!.isUrlEquivalentTo(url: DeepLinkMocks.CredentialManifestRequestDecodedUriStr))
         assert(subject.issuer == nil)
         assert(subject.vendorOriginContext == nil)
         assert(subject.did == DeepLinkMocks.IssuerDid)

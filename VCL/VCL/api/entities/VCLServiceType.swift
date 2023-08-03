@@ -18,20 +18,20 @@ public enum VCLServiceType: String {
     case Undefined = "Undefined"
     
     public static func fromString(value: String) -> VCLServiceType {
+        if(value.contains(VCLServiceType.Inspector.rawValue)) {
+            return VCLServiceType.Inspector
+        }
         if(value.contains(VCLServiceType.NotaryIssuer.rawValue)) {
             return VCLServiceType.NotaryIssuer
-        }
-        if(value.contains(VCLServiceType.CareerIssuer.rawValue)) {
-            return VCLServiceType.CareerIssuer
         }
         if(value.contains(VCLServiceType.IdentityIssuer.rawValue)) {
             return VCLServiceType.IdentityIssuer
         }
+        if(value.contains(VCLServiceType.CareerIssuer.rawValue)) {
+            return VCLServiceType.CareerIssuer
+        }
         if(value.contains(VCLServiceType.Issuer.rawValue)) {
             return VCLServiceType.Issuer
-        }
-        if(value.contains(VCLServiceType.Inspector.rawValue)) {
-            return VCLServiceType.Inspector
         }
         return VCLServiceType.Undefined
     }
