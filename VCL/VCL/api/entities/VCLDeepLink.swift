@@ -23,7 +23,7 @@ public struct VCLDeepLink {
         return issuer?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix)
     } }
     public var issuer: String? { get {
-        return generateUri(uriKey: CodingKeys.KeyIssuer, asSubParams: true)
+        return generateUri(uriKey: CodingKeys.KeyIssuer)
     } }
 
     public var requestUri: String? { get {
@@ -31,11 +31,11 @@ public struct VCLDeepLink {
     } }
     
     public var vendorOriginContext: String? { get {
-        self.value.getUrlQueryParams()?[CodingKeys.KeyVendorOriginContext]?.decode()
+        self.value.decode()?.getUrlQueryParams()?[CodingKeys.KeyVendorOriginContext]
     }}
     
     private func generateUri(uriKey: String, asSubParams: Bool = false) -> String? {
-        if let queryParams = self.value.getUrlQueryParams() {
+        if let queryParams = self.value.decode()?.getUrlQueryParams() {
             if let uri = queryParams[uriKey] {
                 let queryItems = queryParams
                     .filter { (key, value) in key != uriKey && value.isEmpty == false }
