@@ -83,7 +83,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                 }
             }
             mainDispatcher.notify(queue: DispatchQueue.global(), execute: {
-                if let e = globalError {
+                if let e = globalError { // if at least one credential verification failed => the whole process fails
                     completionBlock(.failure(e))
                 } else {
                     completionBlock(.success(true))
@@ -242,6 +242,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         if let credentialSubjectType = (credentialSubject[CodingKeys.KeyType] as? String) {
             
             var globalError: VCLError? = nil
+            var isCredentialVerified = false
             self.completeConetxBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish completeConetxBackgroundTaskIdentifier") {
                 UIApplication.shared.endBackgroundTask(self.completeConetxBackgroundTaskIdentifier!)
                 self.completeConetxBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
@@ -255,7 +256,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                     if let K = _self.findKeyForPrimaryOrganizationValue(context) {
                         if let did = ((credentialSubject[K] as? [String: Any])?[CodingKeys.KeyIdentifier] as? String) {
                             if (jwtCredential.iss == did) {
-//                                do nothing
+                                isCredentialVerified = true
                                 completeConetxDispatcher.leave()
                             } else {
                                 globalError = VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
@@ -275,10 +276,10 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                 }
             }
             completeConetxDispatcher.notify(queue: DispatchQueue.global(), execute: {
-                if let e = globalError {
-                    completionBlock(.failure(e))
-                } else {
+                if isCredentialVerified {
                     completionBlock(.success(true))
+                } else {
+                    completionBlock(.failure(globalError ?? VCLError(errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure.rawValue)))
                 }
             })
             
