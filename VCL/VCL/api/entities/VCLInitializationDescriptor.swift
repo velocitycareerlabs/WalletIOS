@@ -13,14 +13,17 @@ public struct VCLInitializationDescriptor {
     public let environment: VCLEnvironment
     public let cacheSequence: Int
     public let keycahinAccessGroupIdentifier: String?
+    public let isDebugOn: Bool
     
     public init(
         environment: VCLEnvironment = VCLEnvironment.PROD,
         cacheSequence: Int = 0,
-        keycahinAccessGroupIdentifier: String? = nil
+        keycahinAccessGroupIdentifier: String? = nil,
+        isDebugOn: Bool = false
     ) {
         self.environment = environment
         self.cacheSequence = cacheSequence
         self.keycahinAccessGroupIdentifier = keycahinAccessGroupIdentifier
+        self.isDebugOn = isDebugOn
     }
 }
