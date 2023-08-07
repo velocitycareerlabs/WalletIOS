@@ -30,6 +30,13 @@ public struct VCLPushDelegate {
         return retVal
     }
     
+    func toPropsString() -> String {
+        var propsString = ""
+        propsString += "\npushUrl: \(pushUrl)"
+        propsString += "\npushToken: \(pushToken)"
+        return propsString
+    }
+    
     public struct CodingKeys {
         public static let KeyPushUrl = "pushUrl"
         public static let KeyPushToken = "pushToken"

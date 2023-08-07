@@ -34,6 +34,17 @@ public class VCLCredentialManifestDescriptor {
     
     public var endpoint: String? { get { uri } }
     
+    open func toPropsString() -> String {
+        var propsString = ""
+        propsString += "\nuri: \(uri ?? "")"
+        propsString += "\ndid: \(did ?? "")"
+        propsString += "\nissuingType: \(issuingType)"
+        propsString += "\ncredentialTypes: \(String(describing: credentialTypes))"
+        propsString += "\npushDelegate: \(pushDelegate?.toPropsString() ?? "")"
+        propsString += "\nvendorOriginContext: \(vendorOriginContext ?? "")"
+        return propsString
+    }
+    
     public struct CodingKeys {
         public static let KeyDidPrefix = "did:"
         public static let KeyCredentialTypes = "credential_types"

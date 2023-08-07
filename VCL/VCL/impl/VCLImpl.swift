@@ -38,11 +38,7 @@ public class VCLImpl: VCL {
         successHandler: @escaping () -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        initGlobalConfigurations(
-            initializationDescriptor.environment,
-            initializationDescriptor.xVnfProtocolVersion,
-            initializationDescriptor.keycahinAccessGroupIdentifier
-        )
+        initGlobalConfigurations(initializationDescriptor)
         
         printVersion()
 
@@ -160,13 +156,12 @@ public class VCLImpl: VCL {
     }
     
     private func initGlobalConfigurations(
-        _ environment: VCLEnvironment,
-        _ xVnfProtocolVersion: VCLXVnfProtocolVersion,
-        _ keycahinAccessGroupIdentifier: String? = nil
+        _ initializationDescriptor: VCLInitializationDescriptor
     ) {
-        GlobalConfig.CurrentEnvironment = environment
-        GlobalConfig.XVnfProtocolVersion = xVnfProtocolVersion
-        GlobalConfig.KeycahinAccessGroupIdentifier = keycahinAccessGroupIdentifier
+        GlobalConfig.CurrentEnvironment = initializationDescriptor.environment
+        GlobalConfig.XVnfProtocolVersion = initializationDescriptor.xVnfProtocolVersion
+        GlobalConfig.KeycahinAccessGroupIdentifier = initializationDescriptor.keycahinAccessGroupIdentifier
+        GlobalConfig.IsDebug = initializationDescriptor.isDebugOn
     }
     
     public var countries: VCLCountries? { get { return countriesModel.data } }
@@ -268,6 +263,7 @@ public class VCLImpl: VCL {
         successHandler: @escaping (VCLCredentialManifest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
+        VCLLog.d("credentialManifestDescriptor: \(credentialManifestDescriptor.toPropsString())")
         if let did = credentialManifestDescriptor.did {
             profileServiceTypeVerifier?.verifyServiceTypeOfVerifiedProfile(
                 verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: did),

@@ -15,18 +15,21 @@ public struct VCLInitializationDescriptor {
     public let xVnfProtocolVersion: VCLXVnfProtocolVersion
     public let cacheSequence: Int
     public let keycahinAccessGroupIdentifier: String?
+    public let isDebugOn: Bool
     
     public init(
         environment: VCLEnvironment = .Prod,
         keyServiceType: VCLKeyServiceType = .Local,
         xVnfProtocolVersion: VCLXVnfProtocolVersion = .XVnfProtocolVersion1,
         cacheSequence: Int = 0,
-        keycahinAccessGroupIdentifier: String? = nil
+        keycahinAccessGroupIdentifier: String? = nil,
+        isDebugOn: Bool = false
     ) {
         self.environment = environment
         self.keyServiceType = keyServiceType
         self.xVnfProtocolVersion = xVnfProtocolVersion
         self.cacheSequence = cacheSequence
         self.keycahinAccessGroupIdentifier = keycahinAccessGroupIdentifier
+        self.isDebugOn = isDebugOn
     }
 }

@@ -16,4 +16,10 @@ public class VCLServiceCredentialAgentIssuer: VCLService {
     }
     
     public var credentialTypes: [String]? { get { payload[CodingKeys.KeyCredentialTypes] as? [String] } }
+    
+    public override func toPropsString() -> String {
+        var propsString = super.toPropsString()
+        propsString += "\ncredentialTypes: \(String(describing: credentialTypes))"
+        return propsString
+    }
 }

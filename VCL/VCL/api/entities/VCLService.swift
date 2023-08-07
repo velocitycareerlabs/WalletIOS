@@ -20,6 +20,15 @@ public class VCLService {
     public var type: String { get { payload[CodingKeys.KeyType] as? String ?? "" } }
     public var serviceEndpoint: String { get { payload[CodingKeys.KeyServiceEndpoint] as? String ?? "" } }
     
+    open func toPropsString() -> String {
+        var propsString = ""
+        propsString += "\npayload: \(payload)"
+        propsString += "\nid: \(id)"
+        propsString += "\ntype: \(type)"
+        propsString += "\nserviceEndpoint: \(serviceEndpoint)"
+        return propsString
+    }
+    
     enum CodingKeys {
         static let KeyId = "id"
         static let KeyType = "type"
