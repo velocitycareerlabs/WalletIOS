@@ -64,8 +64,9 @@ struct Constants  {
         query: "Bank"
     )
     
-    static let DidDev = "did:ion:EiAbP9xvCYnUOiLwqgbkV4auH_26Pv7BT2pYYT3masvvhw"
-    static let DidStaging = "did:ion:EiDaeg3OofbDCdaQi5-zOLGfhZ9-boS0-w5URDfVwrI7BQ"
+    // University of Massachusetts Amherst
+    static let DidDev = "did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA"
+    static let DidStaging = "did:ion:EiC8GZpBYJXt5UhqxZJbixJyMjrGw0yw8yFN6HjaM1ogSw"
     
     static let OrganizationsSearchDescriptorByDidDev = VCLOrganizationsSearchDescriptor(
         filter: VCLFilter(
