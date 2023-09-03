@@ -170,25 +170,25 @@ extension String {
 //        return dict
 //    }
     func getUrlQueryParams() -> [String: String]? {
-            var map: [String: String]? = nil
-            do {
-                let params = self.split(whereSeparator: { (char) -> Bool in
-                    return char == "?" || char == "&"
-                })
-                map = [String: String]()
-                for param in params {
-                    let pair = param.split(separator: "=")
-                    if pair.count == 2 {
-                        let key = String(pair[0])
-                        let value = String(pair[1])
-                        map?[key] = value
-                    }
+        var map: [String: String]? = nil
+        do {
+            let params = self.split(whereSeparator: { (char) -> Bool in
+                return char == "?" || char == "&"
+            })
+            map = [String: String]()
+            for param in params {
+                let pair = param.split(separator: "=")
+                if pair.count == 2 {
+                    let key = String(pair[0])
+                    let value = String(pair[1])
+                    map?[key] = value
                 }
-            } catch {
-//                VCLLog.error(error)
             }
-            return map
+        } catch {
+//            VCLLog.error(error)
         }
+        return map
+    }
     
     func removePrefix(_ prefix: String) -> String {
         guard self.hasPrefix(prefix) else { return self }
