@@ -1078,12 +1078,12 @@
 			isa = PBXGroup;
 			children = (
 				288405FA26C925F10030E967 /* entities */,
-				284BF89C270EDE8700030401 /* GlobalConfigTest.swift */,
 				289A5370264D647200B84389 /* Info.plist */,
 				289A5383264D64E500B84389 /* infrastructure */,
 				2840148726F23CA200BD2C93 /* repositories */,
 				289A5391264D64E500B84389 /* usecases */,
 				28F1A629299EA6D5001A151F /* utils */,
+				284BF89C270EDE8700030401 /* GlobalConfigTest.swift */,
 				289A536E264D647200B84389 /* VCLTests.swift */,
 				289A539B264D64E500B84389 /* XCTestManifests.swift */,
 			);
@@ -1839,7 +1839,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 97;
+				CURRENT_PROJECT_VERSION = 98;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1852,7 +1852,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14.7;
+				MARKETING_VERSION = 1.14.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;
@@ -1865,7 +1865,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 97;
+				CURRENT_PROJECT_VERSION = 98;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1878,7 +1878,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14.7;
+				MARKETING_VERSION = 1.14.8;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;

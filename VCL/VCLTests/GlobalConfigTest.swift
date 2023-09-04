@@ -18,25 +18,45 @@ class GlobalConfigTest: XCTestCase {
     
     func testDevEnvironment() {
         GlobalConfig.CurrentEnvironment = VCLEnvironment.Dev
+        assert(GlobalConfig.IsLoggerOn)
         
+        GlobalConfig.IsDebugOn = true
+        assert(GlobalConfig.IsLoggerOn)
+
+        GlobalConfig.IsDebugOn = false
         assert(GlobalConfig.IsLoggerOn)
     }
     
     func testQaEnvironment() {
         GlobalConfig.CurrentEnvironment = VCLEnvironment.Qa
+        assert(GlobalConfig.IsLoggerOn)
         
+        GlobalConfig.IsDebugOn = true
+        assert(GlobalConfig.IsLoggerOn)
+
+        GlobalConfig.IsDebugOn = false
         assert(GlobalConfig.IsLoggerOn)
     }
     
     func testStagingEnvironment() {
         GlobalConfig.CurrentEnvironment = VCLEnvironment.Staging
+        assert(!GlobalConfig.IsLoggerOn)
         
+        GlobalConfig.IsDebugOn = true
         assert(GlobalConfig.IsLoggerOn)
+
+        GlobalConfig.IsDebugOn = false
+        assert(!GlobalConfig.IsLoggerOn)
     }
     
     func testProdEnvironment() {
         GlobalConfig.CurrentEnvironment = VCLEnvironment.Prod
+        assert(!GlobalConfig.IsLoggerOn)
         
+        GlobalConfig.IsDebugOn = true
+        assert(GlobalConfig.IsLoggerOn)
+
+        GlobalConfig.IsDebugOn = false
         assert(!GlobalConfig.IsLoggerOn)
     }
     

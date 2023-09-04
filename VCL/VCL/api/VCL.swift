@@ -102,10 +102,3 @@ public protocol VCL {
         errorHandler: @escaping (VCLError) -> Void
     )
 }
-
-extension VCL {
-    func printVersion() {
-        VCLLog.d("Version: \(GlobalConfig.Version)")
-        VCLLog.d("Build: \(GlobalConfig.Build)")
-    }
-}

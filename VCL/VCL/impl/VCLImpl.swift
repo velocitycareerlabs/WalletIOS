@@ -38,11 +38,12 @@ public class VCLImpl: VCL {
         successHandler: @escaping () -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        initGlobalConfigurations(initializationDescriptor)
-        
-        printVersion()
 
         self.initializationDescriptor = initializationDescriptor
+        
+        initGlobalConfigurations()
+        
+        printVersion()
 
         self.initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
 
@@ -155,13 +156,11 @@ public class VCLImpl: VCL {
         }
     }
     
-    private func initGlobalConfigurations(
-        _ initializationDescriptor: VCLInitializationDescriptor
-    ) {
+    private func initGlobalConfigurations() {
         GlobalConfig.CurrentEnvironment = initializationDescriptor.environment
         GlobalConfig.XVnfProtocolVersion = initializationDescriptor.xVnfProtocolVersion
         GlobalConfig.KeycahinAccessGroupIdentifier = initializationDescriptor.keycahinAccessGroupIdentifier
-        GlobalConfig.IsDebug = initializationDescriptor.isDebugOn
+        GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
     }
     
     public var countries: VCLCountries? { get { return countriesModel.data } }
@@ -479,5 +478,10 @@ public class VCLImpl: VCL {
 extension VCLImpl {
     func logError(message: String = "", error: Error) {
         VCLLog.e("\(message): \(error)")
+    }
+    
+    func printVersion() {
+        VCLLog.d("Version: \(GlobalConfig.Version)")
+        VCLLog.d("Build: \(GlobalConfig.Build)")
     }
 }
