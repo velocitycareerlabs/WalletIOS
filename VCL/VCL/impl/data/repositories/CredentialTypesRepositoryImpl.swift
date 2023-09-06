@@ -87,7 +87,9 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
                         createdAt: createdAt,
                         schemaName: schemaName,
                         credentialType: credentialType,
-                        recommended: recommended
+                        recommended: recommended,
+                        jsonldContext: jsonldContext,
+                        issuerCategory: issuerCategory
                     )
                 )
             }

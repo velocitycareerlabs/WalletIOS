@@ -193,7 +193,7 @@ class ViewController: UIViewController {
             credentialManifestDescriptor: credentialManifestDescriptorByOrganization,
             successHandler: { [weak self] credentialManifest in
                 NSLog("VCL Credential Manifest received: \(credentialManifest.jwt.payload?.toJson() ?? "")")
-                //                 NSLog("VCL Credential Manifest received")
+//                NSLog("VCL Credential Manifest received")
                 
                 self?.generateOffers(credentialManifest: credentialManifest)
             },
@@ -210,7 +210,8 @@ class ViewController: UIViewController {
         
         let credentialManifestDescriptorByDeepLink =
         VCLCredentialManifestDescriptorByDeepLink(
-            deepLink: deepLink
+            deepLink: deepLink//,
+//            issuingType: VCLIssuingType.Identity
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorByDeepLink,
