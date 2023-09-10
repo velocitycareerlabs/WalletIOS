@@ -13,22 +13,55 @@ class VclBlocksProvider {
     
     private init(){}
     
-    private static func chooseJwtService(
-        _ keyServiceType: VCLKeyServiceType
-    ) -> JwtService {
-        if keyServiceType == .Remote {
-            return JwtServiceRemoteImpl(NetworkServiceImpl())
+    internal static func chooseKeyService(
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+    ) throws -> VCLKeyService {
+        switch(cryptoServicesDescriptor.cryptoServiceType) {
+        case VCLCryptoServiceType.Local:
+            return VCLKeyServiceImpl()
+            
+        case VCLCryptoServiceType.Remote:
+            if let keyServiceUrls = cryptoServicesDescriptor.remoteCryptoServicesUrlsDescriptor?.keyServiceUrls {
+                return VCLKeyServiceRemoteImpl(
+                    NetworkServiceImpl(),
+                    keyServiceUrls
+                )
+            } else {
+                throw VCLError(errorCode: VCLErrorCode.RemoteServicesUrlsNotFount.rawValue)
+            }
+            
+        case VCLCryptoServiceType.Injected:
+            if let keyService = cryptoServicesDescriptor.injectedCryptoServicesDescriptor?.keyService {
+                return keyService
+            } else {
+                throw VCLError(errorCode: VCLErrorCode.InjectedServicesNotFount.rawValue)
+            }
         }
-        return JwtServiceImpl(KeyServiceImpl())
     }
     
-    private static func chooseKeyService(
-        _ keyServiceType: VCLKeyServiceType
-    ) -> KeyService {
-        if keyServiceType == .Remote {
-            return KeyServiceRemoteImpl(NetworkServiceImpl())
+    internal static func chooseJwtService(
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+    ) throws -> VCLJwtService {
+        switch(cryptoServicesDescriptor.cryptoServiceType) {
+        case VCLCryptoServiceType.Local:
+            return VCLJwtServiceImpl(try chooseKeyService(cryptoServicesDescriptor))
+            
+        case VCLCryptoServiceType.Remote:
+            if let jwtServiceUrls = cryptoServicesDescriptor.remoteCryptoServicesUrlsDescriptor?.jwtServiceUrls {
+                return VCLJwtServiceRemoteImpl(
+                    NetworkServiceImpl(),
+                    jwtServiceUrls
+                )
+            } else {
+                throw VCLError(errorCode: VCLErrorCode.RemoteServicesUrlsNotFount.rawValue)
+            }
+        case VCLCryptoServiceType.Injected:
+            if let jwtService = cryptoServicesDescriptor.injectedCryptoServicesDescriptor?.jwtService {
+                return jwtService
+            } else {
+                throw VCLError(errorCode: VCLErrorCode.InjectedServicesNotFount.rawValue)
+            }
         }
-        return KeyServiceImpl()
     }
     
     static func provideCountriesModel() -> CountriesModel {
@@ -71,8 +104,8 @@ class VclBlocksProvider {
     }
     
     static func providePresentationRequestUseCase(
-        _ keyServiceType: VCLKeyServiceType
-    ) -> PresentationRequestUseCase {
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+    ) throws -> PresentationRequestUseCase {
         return PresentationRequestUseCaseImpl(
             PresentationRequestRepositoryImpl(
                 NetworkServiceImpl()
@@ -81,21 +114,21 @@ class VclBlocksProvider {
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
-                chooseJwtService(keyServiceType)
+                try chooseJwtService(cryptoServicesDescriptor)
             ),
             ExecutorImpl()
         )
     }
     
     static func providePresentationSubmissionUseCase(
-        _ keyServiceType: VCLKeyServiceType
-) -> PresentationSubmissionUseCase {
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+    ) throws -> PresentationSubmissionUseCase {
         return PresentationSubmissionUseCaseImpl(
             PresentationSubmissionRepositoryImpl(
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
-                chooseJwtService(keyServiceType)
+                try chooseJwtService(cryptoServicesDescriptor)
             ),
             ExecutorImpl()
         )
@@ -111,8 +144,8 @@ class VclBlocksProvider {
     }
     
     static func provideCredentialManifestUseCase(
-        _ keyServiceType: VCLKeyServiceType
-    ) -> CredentialManifestUseCase {
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+    ) throws -> CredentialManifestUseCase {
         return CredentialManifestUseCaseImpl(
             CredentialManifestRepositoryImpl(
                 NetworkServiceImpl()
@@ -121,21 +154,21 @@ class VclBlocksProvider {
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
-                chooseJwtService(keyServiceType)
+                try chooseJwtService(cryptoServicesDescriptor)
             ),
             ExecutorImpl()
         )
     }
     
     static func provideIdentificationSubmissionUseCase(
-        _ keyServiceType: VCLKeyServiceType
-    ) -> IdentificationSubmissionUseCase {
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+    ) throws -> IdentificationSubmissionUseCase {
         return IdentificationSubmissionUseCaseImpl(
             IdentificationSubmissionRepositoryImpl(
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
-                chooseJwtService(keyServiceType)
+                try chooseJwtService(cryptoServicesDescriptor)
             ),
             ExecutorImpl()
         )
@@ -160,14 +193,14 @@ class VclBlocksProvider {
     }
     
     static func provideFinalizeOffersUseCase(
-        _ keyServiceType: VCLKeyServiceType,
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
         _ credentialTypesModel: CredentialTypesModel
-    ) -> FinalizeOffersUseCase {
+    ) throws -> FinalizeOffersUseCase {
         return FinalizeOffersUseCaseImpl(
             FinalizeOffersRepositoryImpl(
                 NetworkServiceImpl()),
             JwtServiceRepositoryImpl(
-                chooseJwtService(keyServiceType)
+                try chooseJwtService(cryptoServicesDescriptor)
             ),
             CredentialIssuerVerifierImpl(
                 credentialTypesModel,
@@ -198,22 +231,22 @@ class VclBlocksProvider {
     }
     
     static func provideJwtServiceUseCase(
-        _ keyServiceType: VCLKeyServiceType
-    ) -> JwtServiceUseCase {
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+    ) throws -> JwtServiceUseCase {
         return JwtServiceUseCaseImpl(
             JwtServiceRepositoryImpl(
-                chooseJwtService(keyServiceType)
+                try chooseJwtService(cryptoServicesDescriptor)
             ),
             ExecutorImpl()
         )
     }
     
     static func provideKeyServiceUseCase(
-        _ keyServiceType: VCLKeyServiceType
-    ) -> KeyServiceUseCase {
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+    ) throws -> KeyServiceUseCase {
         return KeyServiceUseCaseImpl(
             KeyServiceRepositoryImpl(
-                chooseKeyService(keyServiceType)
+                try chooseKeyService(cryptoServicesDescriptor)
             ),
             ExecutorImpl()
         )

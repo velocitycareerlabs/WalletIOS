@@ -1,5 +1,5 @@
 //
-//  KeyService.swift
+//  VCLKeyService.swift
 //  VCL
 //
 //  Created by Michael Avoyan on 11/05/2023.
@@ -11,7 +11,7 @@ import Foundation
 import VCToken
 import VCCrypto
 
-protocol KeyService {
+public protocol VCLKeyService {
     func generateDidJwk(
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     )
@@ -28,7 +28,7 @@ protocol KeyService {
     )
 }
 
-extension KeyService {
+extension VCLKeyService {
     static func createKeyManagementOperations(secretStore: SecretStoring? = nil) -> KeyManagementOperations {
         var keyManagementOperations = KeyManagementOperations(
             sdkConfiguration: VCSDKConfiguration(

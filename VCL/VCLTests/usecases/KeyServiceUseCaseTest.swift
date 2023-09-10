@@ -18,7 +18,7 @@ final class KeyServiceUseCaseTest: XCTestCase {
     override func setUp() {
         subject = KeyServiceUseCaseImpl(
             KeyServiceRepositoryImpl(
-                KeyServiceImpl(secretStore: SecretStoreMock.Instance)
+                VCLKeyServiceImpl(secretStore: SecretStoreMock.Instance)
             ),
             EmptyExecutor()
         )

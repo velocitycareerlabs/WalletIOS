@@ -13,10 +13,10 @@ import XCTest
 
 class KeyServiceTest: XCTestCase {
     
-    var subject: KeyServiceImpl!
+    var subject: VCLKeyServiceImpl!
     
     override func setUp() {
-        subject = KeyServiceImpl(secretStore: SecretStoreMock.Instance)
+        subject = VCLKeyServiceImpl(secretStore: SecretStoreMock.Instance)
     }
     
     func testGenerateDidJwk() {

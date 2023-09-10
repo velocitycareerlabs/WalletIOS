@@ -16,7 +16,7 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
     var subject: PresentationSubmissionUseCase!
     
     var didJwk: VCLDidJwk!
-    let keyService = KeyServiceImpl(secretStore: SecretStoreMock.Instance)
+    let keyService = VCLKeyServiceImpl(secretStore: SecretStoreMock.Instance)
     
     override func setUp() {
         keyService.generateDidJwk() { [weak self] didJwkResult in
@@ -35,7 +35,7 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: PresentationSubmissionMocks.PresentationSubmissionResultJson)
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl(keyService)
+                VCLJwtServiceImpl(keyService)
             ),
             EmptyExecutor()
         )

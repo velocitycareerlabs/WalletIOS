@@ -1,5 +1,5 @@
 //
-//  JwtServiceRemoteImpl.swift
+//  VCLJwtServiceRemoteImpl.swift
 //  VCL
 //
 //  Created by Michael Avoyan on 08/06/2023.
@@ -9,16 +9,14 @@
 
 import Foundation
 
-class JwtServiceRemoteImpl: JwtService {
-    
-    private static let JwtBaseUrl = "https://devcareerwallet.velocitycareerlabs.io/api/v0.6"
-    private static let SignJwtUrl = "\(JwtBaseUrl)/jwt/sign"
-    private static let VerifyJwtUrl = "\(JwtBaseUrl)/jwt/verify"
+class VCLJwtServiceRemoteImpl: VCLJwtService {
     
     private let networkService: NetworkService
+    private let jwtServiceUrls: VCLJwtServiceUrls
     
-    init(_ networkService: NetworkService) {
+    init(_ networkService: NetworkService, _ jwtServiceUrls: VCLJwtServiceUrls) {
         self.networkService = networkService
+        self.jwtServiceUrls = jwtServiceUrls
     }
     
     func verify(
@@ -27,17 +25,17 @@ class JwtServiceRemoteImpl: JwtService {
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         networkService.sendRequest(
-            endpoint: JwtServiceRemoteImpl.SignJwtUrl,
+            endpoint: jwtServiceUrls.jwtSignServiceUrl,
             body: generatePayloadToVerify(jwt: jwt, jwkPublic: jwkPublic).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
             headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
-        ) { isVerifiedJwtResult in
+        ) { [weak self] isVerifiedJwtResult in
             do {
                 if let isVerified = try isVerifiedJwtResult.get().payload.toBool() {
                     completionBlock(.success(isVerified))
                 } else {
-                    completionBlock(.failure(VCLError(error: "Failed to parse data from \(JwtServiceRemoteImpl.SignJwtUrl)")))
+                    completionBlock(.failure(VCLError(error: "Failed to parse data from \(self?.jwtServiceUrls.jwtSignServiceUrl ?? "")")))
                 }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))
@@ -52,17 +50,17 @@ class JwtServiceRemoteImpl: JwtService {
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         networkService.sendRequest(
-            endpoint: JwtServiceRemoteImpl.SignJwtUrl,
+            endpoint: jwtServiceUrls.jwtVerifyServiceUrl,
             body: generateJwtPayloadToSign(kid: kid, nonce: nonce, jwtDescriptor: jwtDescriptor).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
             headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
-        ) { seignedJwtResult in
+        ) { [weak self] seignedJwtResult in
             do {
                 if let jwtStr = String(data: try seignedJwtResult.get().payload, encoding: .utf8) {
                     completionBlock(.success(VCLJwt(encodedJwt: jwtStr)))
                 } else {
-                        completionBlock(.failure(VCLError(error: "Failed to parse data from \(JwtServiceRemoteImpl.SignJwtUrl)")))
+                    completionBlock(.failure(VCLError(error: "Failed to parse data from \(self?.jwtServiceUrls.jwtVerifyServiceUrl ?? "")")))
                     }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))

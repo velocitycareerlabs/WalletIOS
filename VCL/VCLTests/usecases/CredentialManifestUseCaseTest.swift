@@ -27,7 +27,7 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl(KeyServiceImpl(secretStore: SecretStoreMock.Instance))
+                VCLJwtServiceImpl(VCLKeyServiceImpl(secretStore: SecretStoreMock.Instance))
             ),
             EmptyExecutor()
         )

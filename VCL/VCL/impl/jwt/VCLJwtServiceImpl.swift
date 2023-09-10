@@ -1,5 +1,5 @@
 //
-//  JwtServiceImpl.swift
+//  VCLJwtServiceImpl.swift
 //  VCL
 //
 //  Created by Michael Avoyan on 03/06/2021.
@@ -11,12 +11,12 @@ import Foundation
 import VCToken
 import VCCrypto
 
-class JwtServiceImpl: JwtService {
+class VCLJwtServiceImpl: VCLJwtService {
     
-    private let keyService: KeyService
+    private let keyService: VCLKeyService
     private let tokenSigning: TokenSigning
     
-    init(_ keyService: KeyService) {
+    init(_ keyService: VCLKeyService) {
         self.keyService = keyService
         self.tokenSigning = Secp256k1Signer() // No need to be injected
     }

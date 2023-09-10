@@ -11,9 +11,9 @@ import Foundation
 
 class JwtServiceRepositoryImpl: JwtServiceRepository {
     
-    private let jwtService: JwtService
+    private let jwtService: VCLJwtService
     
-    init(_ jwtService: JwtService) {
+    init(_ jwtService: VCLJwtService) {
         self.jwtService = jwtService
     }
     

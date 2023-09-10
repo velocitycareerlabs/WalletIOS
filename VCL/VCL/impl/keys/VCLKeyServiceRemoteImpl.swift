@@ -1,5 +1,5 @@
 //
-//  KeyServiceRemoteImpl.swift
+//  VCLKeyServiceRemoteImpl.swift
 //  VCL
 //
 //  Created by Michael Avoyan on 08/06/2023.
@@ -11,12 +11,14 @@ import Foundation
 import VCToken
 import VCCrypto
 
-class KeyServiceRemoteImpl: KeyService {
+class VCLKeyServiceRemoteImpl: VCLKeyService {
     
     private let networkService: NetworkService
+    private let keyServiceUrls: VCLKeyServiceUrls
     
-    init(_ networkService: NetworkService) {
+    init(_ networkService: NetworkService, _ keyServiceUrls: VCLKeyServiceUrls) {
         self.networkService = networkService
+        self.keyServiceUrls = keyServiceUrls
     }
     
     func generateDidJwk(

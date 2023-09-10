@@ -1,5 +1,5 @@
 //
-//  JwtService.swift
+//  VCLJwtService.swift
 //  
 //
 //  Created by Michael Avoyan on 28/04/2021.
@@ -9,7 +9,7 @@
 
 import Foundation
 
-protocol JwtService {
+public protocol VCLJwtService {
     func verify(
         jwt: VCLJwt,
         jwkPublic: VCLJwkPublic,
@@ -23,7 +23,7 @@ protocol JwtService {
     )
 }
 
-extension JwtService {
+extension VCLJwtService {
     func sign(
         kid: String? = nil,
         nonce: String? = nil,
