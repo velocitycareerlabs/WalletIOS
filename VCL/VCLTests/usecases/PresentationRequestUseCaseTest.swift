@@ -27,7 +27,7 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: PresentationRequestMocks.JWK)
             ),
             JwtServiceRepositoryImpl(
-                VCLJwtServiceImpl(VCLKeyServiceImpl(secretStore: SecretStoreMock.Instance))
+                VCLJwtServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance))
             ),
             EmptyExecutor()
         )

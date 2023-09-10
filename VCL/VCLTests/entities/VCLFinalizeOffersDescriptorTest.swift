@@ -48,7 +48,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     func testGenerateRequestBody() {
         let payload = "{\"key1\": \"value1\"}".toDictionary()!
         
-        VCLJwtServiceImpl(VCLKeyServiceImpl(secretStore: SecretStoreMock.Instance)).sign(
+        VCLJwtServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)).sign(
             nonce: nonceMock,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payload,

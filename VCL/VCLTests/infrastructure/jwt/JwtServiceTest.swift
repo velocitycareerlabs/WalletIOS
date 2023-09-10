@@ -13,10 +13,10 @@ import XCTest
 
 class JwtServiceTest: XCTestCase {
     
-    var subject: VCLJwtServiceImpl!
+    var subject: VCLJwtServiceLocalImpl!
     
     var didJwk: VCLDidJwk!
-    let keyService = VCLKeyServiceImpl(secretStore: SecretStoreMock.Instance)
+    let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     
     let payloadMock = "{\"key1\":\"value1\",\"key2\":\"value2\"}".toDictionary()!
     private let jtiMock = "some jti"
@@ -34,7 +34,7 @@ class JwtServiceTest: XCTestCase {
                 XCTFail("\(error)")
             }
         }
-        subject = VCLJwtServiceImpl(keyService)
+        subject = VCLJwtServiceLocalImpl(keyService)
     }
     
     func testSignAndVerify() {

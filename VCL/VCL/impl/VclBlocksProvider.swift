@@ -18,7 +18,7 @@ class VclBlocksProvider {
     ) throws -> VCLKeyService {
         switch(cryptoServicesDescriptor.cryptoServiceType) {
         case VCLCryptoServiceType.Local:
-            return VCLKeyServiceImpl()
+            return VCLKeyServiceLocalImpl()
             
         case VCLCryptoServiceType.Remote:
             if let keyServiceUrls = cryptoServicesDescriptor.remoteCryptoServicesUrlsDescriptor?.keyServiceUrls {
@@ -44,7 +44,7 @@ class VclBlocksProvider {
     ) throws -> VCLJwtService {
         switch(cryptoServicesDescriptor.cryptoServiceType) {
         case VCLCryptoServiceType.Local:
-            return VCLJwtServiceImpl(try chooseKeyService(cryptoServicesDescriptor))
+            return VCLJwtServiceLocalImpl(try chooseKeyService(cryptoServicesDescriptor))
             
         case VCLCryptoServiceType.Remote:
             if let jwtServiceUrls = cryptoServicesDescriptor.remoteCryptoServicesUrlsDescriptor?.jwtServiceUrls {

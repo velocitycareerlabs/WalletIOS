@@ -19,13 +19,13 @@ class VclBlocksProviderTest: XCTestCase {
             let keyService = try subject.chooseKeyService(
                 VCLCryptoServicesDescriptor()
             )
-            assert(keyService is VCLKeyServiceImpl)
+            assert(keyService is VCLKeyServiceLocalImpl)
             
             let jwtService = try subject.chooseJwtService(
                 VCLCryptoServicesDescriptor()
             )
-            assert(keyService is VCLKeyServiceImpl)
-            assert(jwtService is VCLJwtServiceImpl)
+            assert(keyService is VCLKeyServiceLocalImpl)
+            assert(jwtService is VCLJwtServiceLocalImpl)
         } catch {
             XCTFail("\(error)")
         }

@@ -1,5 +1,5 @@
 //
-//  VCLJwtServiceImpl.swift
+//  VCLJwtServiceLocalImpl.swift
 //  VCL
 //
 //  Created by Michael Avoyan on 03/06/2021.
@@ -11,7 +11,7 @@ import Foundation
 import VCToken
 import VCCrypto
 
-class VCLJwtServiceImpl: VCLJwtService {
+class VCLJwtServiceLocalImpl: VCLJwtService {
     
     private let keyService: VCLKeyService
     private let tokenSigning: TokenSigning

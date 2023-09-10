@@ -1,5 +1,5 @@
 //
-//  VCLKeyServiceImpl.swift
+//  VCLKeyServiceLocalImpl.swift
 //  VCL
 //
 //  Created by Michael Avoyan on 11/05/2023.
@@ -11,7 +11,7 @@ import Foundation
 import VCToken
 import VCCrypto
 
-class VCLKeyServiceImpl: VCLKeyService {
+class VCLKeyServiceLocalImpl: VCLKeyService {
 
     private let secretStore: SecretStoring?
     private let tokenSigning: TokenSigning
@@ -22,7 +22,7 @@ class VCLKeyServiceImpl: VCLKeyService {
     ) {
         self.secretStore = secretStore
         self.tokenSigning = Secp256k1Signer() // No need to be injected
-        self.keyManagementOperations = VCLKeyServiceImpl.createKeyManagementOperations(secretStore: secretStore)
+        self.keyManagementOperations = VCLKeyServiceLocalImpl.createKeyManagementOperations(secretStore: secretStore)
     }
 
     func generateDidJwk(

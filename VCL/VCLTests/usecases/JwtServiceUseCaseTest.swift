@@ -19,11 +19,11 @@ final class JwtServiceUseCaseTest: XCTestCase {
     override func setUp() {
         subject = JwtServiceUseCaseImpl(
             JwtServiceRepositoryImpl(
-                VCLJwtServiceImpl(VCLKeyServiceImpl(secretStore: SecretStoreMock.Instance))
+                VCLJwtServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance))
             ),
             EmptyExecutor()
         )
-        keyService = VCLKeyServiceImpl(secretStore: SecretStoreMock.Instance)
+        keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     }
     
     func testSign() {
