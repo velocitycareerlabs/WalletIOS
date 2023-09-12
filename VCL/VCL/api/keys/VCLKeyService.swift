@@ -43,4 +43,25 @@ extension VCLKeyService {
         }
         return keyManagementOperations
     }
+
+    /// implemented for local crypto services only
+    func generateSecret(
+        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+    ) {
+        completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
+    }
+    /// implemented for local crypto services only
+    func retrieveSecretReference(
+        keyId: String,
+        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+    ) {
+        completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
+    }
+    /// implemented for local crypto services only
+    func retrievePublicJwk(
+        secret: VCCrypto.VCCryptoSecret,
+        completionBlock: @escaping (VCLResult<VCToken.ECPublicJwk>) -> Void
+    ) {
+        completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
+    }
 }

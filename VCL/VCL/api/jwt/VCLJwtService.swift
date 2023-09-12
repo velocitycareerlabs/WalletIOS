@@ -33,18 +33,3 @@ extension VCLJwtService {
         sign(kid: kid, nonce: nonce, jwtDescriptor: jwtDescriptor, completionBlock: completionBlock)
     }
 }
-
-public struct JwtServiceCodingKeys {
-    public static let KeyIss = "iss"
-    public static let KeyAud = "aud"
-    public static let KeySub = "sub"
-    public static let KeyJti = "jti"
-    public static let KeyIat = "iat"
-    public static let KeyNbf = "nbf"
-    public static let KeyExp = "exp"
-    public static let KeyNonce = "nonce"
-    
-    public static let KeyPayload = "payload"
-    public static let KeyJwt = "jwt"
-    public static let KeyPublicKey = "publicKey"
-}

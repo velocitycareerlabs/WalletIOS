@@ -45,8 +45,19 @@ class ViewController: UIViewController {
         
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
-                environment: environment//,
+                environment: environment,
 //                xVnfProtocolVersion: .XVnfProtocolVersion2
+                cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
+                    cryptoServiceType: .Remote,
+                    remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
+                        keyServiceUrls: VCLKeyServiceUrls(
+                            createDidKeyServiceUrl: Constants.getCreateDidKeyServiceUrl(environment: environment)
+                        ),
+                        jwtServiceUrls: VCLJwtServiceUrls(
+                            jwtSignServiceUrl: Constants.getJwtSignServiceUrl(environment: environment),
+                            jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment: environment))
+                    )
+                )
             ),
             successHandler: { [weak self] in
                 NSLog("VCL Initialization succeed!")

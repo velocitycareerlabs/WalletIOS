@@ -25,18 +25,16 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         networkService.sendRequest(
-            endpoint: jwtServiceUrls.jwtSignServiceUrl,
+            endpoint: jwtServiceUrls.jwtVerifyServiceUrl,
             body: generatePayloadToVerify(jwt: jwt, jwkPublic: jwkPublic).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
             headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
-        ) { [weak self] isVerifiedJwtResult in
+        ) { verifiedJwtResult in
             do {
-                if let isVerified = try isVerifiedJwtResult.get().payload.toBool() {
-                    completionBlock(.success(isVerified))
-                } else {
-                    completionBlock(.failure(VCLError(error: "Failed to parse data from \(self?.jwtServiceUrls.jwtSignServiceUrl ?? "")")))
-                }
+                let payloadDict = try verifiedJwtResult.get().payload.toDictionary()
+                let isVerified = (payloadDict?[CodingKeys.KeyVerified] as? Int) == 1
+                completionBlock(.success(isVerified))
             } catch {
                 completionBlock(.failure(VCLError(error: error)))
             }
@@ -44,24 +42,24 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
     }
     
     func sign(
-        kid: String?,
-        nonce: String?,
+        kid: String? = nil,
+        nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         networkService.sendRequest(
-            endpoint: jwtServiceUrls.jwtVerifyServiceUrl,
-            body: generateJwtPayloadToSign(kid: kid, nonce: nonce, jwtDescriptor: jwtDescriptor).toJsonString(),
+            endpoint: jwtServiceUrls.jwtSignServiceUrl,
+            body: generateJwtPayloadToSign(nonce: nonce, jwtDescriptor: jwtDescriptor).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
-        ) { [weak self] seignedJwtResult in
+            headers: generateHeader(kid: kid)
+        ) { [weak self] signedJwtResult in
             do {
-                if let jwtStr = String(data: try seignedJwtResult.get().payload, encoding: .utf8) {
+                if let jwtStr = try signedJwtResult.get().payload.toDictionary()?[CodingKeys.KeyJwt] as? String {
                     completionBlock(.success(VCLJwt(encodedJwt: jwtStr)))
                 } else {
-                    completionBlock(.failure(VCLError(error: "Failed to parse data from \(self?.jwtServiceUrls.jwtVerifyServiceUrl ?? "")")))
-                    }
+                    completionBlock(.failure(VCLError(payload: "Failed to parse data from \(self?.jwtServiceUrls.jwtVerifyServiceUrl ?? "")")))
+                }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))
             }
@@ -71,31 +69,71 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
     private func generatePayloadToVerify(
         jwt: VCLJwt,
         jwkPublic: VCLJwkPublic
-    ) -> [String: String] {
+    ) -> [String: Any] {
         return [
-            JwtServiceCodingKeys.KeyJwt: jwt.encodedJwt,
-            JwtServiceCodingKeys.KeyPublicKey: jwkPublic.valueStr
+            CodingKeys.KeyJwt: jwt.encodedJwt,
+            CodingKeys.KeyPublicKey: jwkPublic.valueDict
         ]
     }
     
+    private func generateHeader(kid: String? = nil) -> [(String, String)] {
+        let protocolTuple = (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
+        if let kid = kid {
+            return [protocolTuple, (CodingKeys.KeyKid, kid)]
+        }
+        return [protocolTuple]
+    }
+    
     private func generateJwtPayloadToSign(
-        kid: String?,
-        nonce: String?,
+        nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor
     ) -> [String: Any] {
         var retVal = [String: Any]()
-        retVal[JwtServiceCodingKeys.KeyPayload] = jwtDescriptor.payload
-        retVal[JwtServiceCodingKeys.KeyIss] = jwtDescriptor.iss
-        retVal[JwtServiceCodingKeys.KeyAud] = jwtDescriptor.aud
-        retVal[JwtServiceCodingKeys.KeySub] = randomString(length: 10)
-        retVal[JwtServiceCodingKeys.KeyJti] = jwtDescriptor.jti
-        let date = Date()
-        retVal[JwtServiceCodingKeys.KeyIat] = date.toDouble()
-        retVal[JwtServiceCodingKeys.KeyNbf] = date.toDouble()
-        retVal[JwtServiceCodingKeys.KeyExp] = date.addDays(days: 7).toDouble()
-        if let nonce = nonce {
-            retVal[JwtServiceCodingKeys.KeyNonce] = nonce
+        var options = [String: Any]()
+//        var required = [String: Any]()
+        
+        if let aud = jwtDescriptor.aud {
+            options[CodingKeys.KeyAudience] = aud
         }
+        options[CodingKeys.KeyJti] = jwtDescriptor.jti
+        let date = Date()
+//        options[JwtServiceCodingKeys.KeyIssuedAt] = date.toDouble()
+//        options[JwtServiceCodingKeys.KeyNotBefore] = date.toDouble()
+//        options[JwtServiceCodingKeys.KeyExpiresIn] = date.addDays(days: 7).toDouble()
+        if let nonce = nonce {
+            options[CodingKeys.KeyNonce] = nonce
+        }
+        options[CodingKeys.KeyIssuer] = jwtDescriptor.iss
+        options[CodingKeys.KeySubject] = randomString(length: 10)
+        
+        if let payload = jwtDescriptor.payload {
+            retVal[CodingKeys.KeyPayload] = payload
+        }
+        retVal[CodingKeys.KeyOptions] = options
+//        retVal[JwtServiceCodingKeys.KeyRequired] = required
+        
         return retVal
+    }
+    
+    public struct CodingKeys {
+        public static let KeyKid = "kid"
+        
+        public static let KeyIssuer = "issuer"
+        public static let KeyAudience = "audience"
+        public static let KeySubject = "subject"
+        public static let KeyJti = "jti"
+//        public static let KeyIssuedAt = "issuedAt"
+//        public static let KeyNotBefore = "notBefore"
+//        public static let KeyExpiresIn = "expiresIn"
+        public static let KeyNonce = "nonce"
+        
+        public static let KeyPayload = "payload"
+        public static let KeyJwt = "jwt"
+        public static let KeyPublicKey = "publicKey"
+        
+        public static let KeyOptions = "options"
+        public static let KeyRequired = "required"
+        
+        public static let KeyVerified = "verified"
     }
 }

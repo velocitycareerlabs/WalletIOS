@@ -24,26 +24,40 @@ class VCLKeyServiceRemoteImpl: VCLKeyService {
     func generateDidJwk(
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     )  {
-        completionBlock(.failure(VCLError(payload: "not implemented for remote")))
+        networkService.sendRequest(
+            endpoint: keyServiceUrls.createDidKeyServiceUrl,
+            body: generateRequestBody(),
+            contentType: .ApplicationJson,
+            method: .POST,
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
+        ) { [weak self] isVerifiedJwtResult in
+            do {
+                if let didKey = try isVerifiedJwtResult.get().payload.toDictionary() {
+                    VCLLog.d(didKey.toJsonString() ?? "")
+//                        completionBlock(.success(isVerified))
+                } else {
+                    completionBlock(.failure(VCLError(error: "Failed to parse data from \(self?.keyServiceUrls.createDidKeyServiceUrl ?? "")")))
+                }
+            } catch {
+                completionBlock(.failure(VCLError(error: error)))
+            }
+        }
     }
     
-    func generateSecret(
-        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
-    ) {
-        completionBlock(.failure(VCLError(payload: "not implemented for remote")))
+    private func generateRequestBody() -> String {
+        return [
+            CodingKeys.KeyCrv: "secp256k1",
+            CodingKeys.KeyDidMethod: "did:jwk"
+        ].toJsonString() ?? ""
     }
     
-    func retrieveSecretReference(
-        keyId: String,
-        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
-    ) {
-        completionBlock(.failure(VCLError(payload: "not implemented for remote")))
-    }
-    
-    func retrievePublicJwk(
-        secret: VCCrypto.VCCryptoSecret,
-        completionBlock: @escaping (VCLResult<VCToken.ECPublicJwk>) -> Void
-    ) {
-        completionBlock(.failure(VCLError(payload: "not implemented for remote")))
+    enum CodingKeys {
+        static let KeyCrv = "crv"
+        static let KeyDidMethod = "didMethod"
+        
+        static let KeyDid = "did"
+        static let KeyPublicJwk = "publicJwk"
+        static let KeyKid = "kid"
+        static let KeyKeyId = "keyId"
     }
 }

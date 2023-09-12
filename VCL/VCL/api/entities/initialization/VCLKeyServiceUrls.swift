@@ -10,9 +10,9 @@
 import Foundation
 
 public struct VCLKeyServiceUrls {
-    public let keyServiceUrl: String
+    public let createDidKeyServiceUrl: String
     
-    public init(keyServiceUrl: String) {
-        self.keyServiceUrl = keyServiceUrl
+    public init(createDidKeyServiceUrl: String) {
+        self.createDidKeyServiceUrl = createDidKeyServiceUrl
     }
 }
