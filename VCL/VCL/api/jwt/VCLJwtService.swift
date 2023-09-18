@@ -12,7 +12,7 @@ import Foundation
 public protocol VCLJwtService {
     func verify(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
     func sign(

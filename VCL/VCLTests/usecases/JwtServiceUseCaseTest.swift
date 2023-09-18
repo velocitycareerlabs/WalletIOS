@@ -55,7 +55,7 @@ final class JwtServiceUseCaseTest: XCTestCase {
         ) {
             do {
                 let jwt = try $0.get()
-                self.subject.verifyJwt(jwt: jwt, jwkPublic: VCLJwkPublic(valueDict: (jwt.jwsToken!.headers.jsonWebKey?.toDictionary())!)) {
+                self.subject.verifyJwt(jwt: jwt, publicJwk: VCLPublicJwk(valueDict: (jwt.jwsToken!.headers.jsonWebKey?.toDictionary())!)) {
                     do {
                         let isVerivied = try $0.get()
                         assert(isVerivied)
@@ -84,7 +84,7 @@ final class JwtServiceUseCaseTest: XCTestCase {
                 ) {
                     do {
                         let jwt = try $0.get()
-                        self!.subject.verifyJwt(jwt: jwt, jwkPublic: VCLJwkPublic(valueDict: (jwt.jwsToken!.headers.jsonWebKey?.toDictionary())!)) {
+                        self!.subject.verifyJwt(jwt: jwt, publicJwk: VCLPublicJwk(valueDict: (jwt.jwsToken!.headers.jsonWebKey?.toDictionary())!)) {
                             do {
                                 let isVerified = try $0.get()
                                 assert(isVerified)

@@ -19,12 +19,12 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
     
     func verifyJwt(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         jwtService.verify(
             jwt: jwt,
-            jwkPublic: jwkPublic,
+            publicJwk: publicJwk,
             completionBlock: { verificationResult in completionBlock(verificationResult) }
         )
     }

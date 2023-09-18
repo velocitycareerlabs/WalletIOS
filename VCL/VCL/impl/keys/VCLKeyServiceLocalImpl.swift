@@ -35,9 +35,10 @@ class VCLKeyServiceLocalImpl: VCLKeyService {
                     do {
                         let publicJwk = try publicJwkResult.get()
                         completionBlock(.success(VCLDidJwk(
-                            keyId: secret.id.uuidString,
-                            value: VCLDidJwk.generateDidJwk(publicKey: publicJwk),
-                            kid: VCLDidJwk.generateKidFromDidJwk(publicKey: publicJwk)
+                            did: VCLDidJwk.generateDidJwk(publicKey: publicJwk),
+                            publicJwk: VCLPublicJwk(valueDict: publicJwk.toDictionary()),
+                            kid: VCLDidJwk.generateKidFromDidJwk(publicKey: publicJwk),
+                            keyId: secret.id.uuidString
                         )))
                     } catch {
                         completionBlock(.failure(VCLError(error: error)))

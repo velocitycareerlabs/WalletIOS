@@ -80,13 +80,13 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     }
     
     private func onResolvePublicKeySuccess(
-        _ jwkPublic: VCLJwkPublic,
+        _ publicJwk: VCLPublicJwk,
         _ jwt: VCLJwt,
         _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         _ verifiedProfile: VCLVerifiedProfile,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        self.jwtServiceRepository.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) {
+        self.jwtServiceRepository.verifyJwt(jwt: jwt, publicJwk: publicJwk) {
             [weak self] isVerifiedResult in
             do {
                 let isVerified = try isVerifiedResult.get()

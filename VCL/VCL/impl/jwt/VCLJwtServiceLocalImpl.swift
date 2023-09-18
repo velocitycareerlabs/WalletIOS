@@ -23,14 +23,14 @@ class VCLJwtServiceLocalImpl: VCLJwtService {
     
     func verify(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         do {
             let pubKey = ECPublicJwk(
-                x: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyX] as? String ?? "",
-                y: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyY] as? String ?? "",
-                keyId: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyKid] as? String ?? ""
+                x: publicJwk.valueDict[VCLJwt.CodingKeys.KeyX] as? String ?? "",
+                y: publicJwk.valueDict[VCLJwt.CodingKeys.KeyY] as? String ?? "",
+                keyId: publicJwk.valueDict[VCLJwt.CodingKeys.KeyKid] as? String ?? ""
             )
             completionBlock(.success(try jwt.jwsToken?.verify(using: TokenVerifier(), withPublicKey: pubKey) == true))
         } catch {

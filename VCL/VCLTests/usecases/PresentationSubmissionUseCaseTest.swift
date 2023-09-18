@@ -42,7 +42,7 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
         let presentationSubmission = VCLPresentationSubmission(
             presentationRequest: VCLPresentationRequest(
                 jwt: CommonMocks.JWT,
-                jwkPublic: VCLJwkPublic(valueStr: "{}"),
+                publicJwk: VCLPublicJwk(valueStr: "{}"),
                 deepLink: VCLDeepLink(value: "")
             ),
             verifiableCredentials: [VCLVerifiableCredential]()

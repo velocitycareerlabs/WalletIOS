@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 @testable import VCL
 
-class KeyServiceTest: XCTestCase {
+class KeyServiceLocalTest: XCTestCase {
     
     var subject: VCLKeyServiceLocalImpl!
     
@@ -24,19 +24,18 @@ class KeyServiceTest: XCTestCase {
             do {
                 let didJwk = try didJwkResult.get()
                 
-                let jwkDict = didJwk.value.removePrefix(VCLDidJwk.DidJwkPrefix).decodeBase64()?.toDictionary()
+                let jwkDict = didJwk.publicJwk.valueDict
                 
-                assert(didJwk.value.hasPrefix(VCLDidJwk.DidJwkPrefix))
+                assert(didJwk.did.hasPrefix(VCLDidJwk.DidJwkPrefix))
                 assert(didJwk.kid.hasPrefix(VCLDidJwk.DidJwkPrefix))
                 assert(didJwk.kid.hasSuffix(VCLDidJwk.DidJwkSuffix))
                 
-                assert(jwkDict?["kty"] as? String == "EC")
-                assert(jwkDict?["use"] as? String == "sig")
-                assert(jwkDict?["crv"] as? String == "secp256k1")
-//                assert(jwkDict?["alg"] as? String == "ES256K")
-                assert(jwkDict?["use"] as? String == "sig")
-                assert(jwkDict?["x"] as? String != nil)
-                assert(jwkDict?["y"] as? String != nil)
+                assert(jwkDict["kty"] as? String == "EC")
+                assert(jwkDict["use"] as? String == "sig")
+                assert(jwkDict["crv"] as? String == "secp256k1")
+                assert(jwkDict["use"] as? String == "sig")
+                assert(jwkDict["x"] as? String != nil)
+                assert(jwkDict["y"] as? String != nil)
             } catch {
                 XCTFail("\(error)")
             }

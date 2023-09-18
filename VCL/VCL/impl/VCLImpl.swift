@@ -430,11 +430,11 @@ public class VCLImpl: VCL {
     
     public func verifyJwt(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         successHandler: @escaping (Bool) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) {
+        jwtServiceUseCase.verifyJwt(jwt: jwt, publicJwk: publicJwk) {
             [weak self] isVerifiedResult in
             do {
                 successHandler(try isVerifiedResult.get())

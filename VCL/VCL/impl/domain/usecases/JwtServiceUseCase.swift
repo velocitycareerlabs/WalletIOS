@@ -12,7 +12,7 @@ import Foundation
 protocol JwtServiceUseCase {
     func verifyJwt(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
     func generateSignedJwt(

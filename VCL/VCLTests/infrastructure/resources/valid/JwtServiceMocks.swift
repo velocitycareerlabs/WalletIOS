@@ -27,7 +27,7 @@ class JwtServiceMocks {
     
     static let Json = "{ \"name\": { \"ui.title\": \"Issued by\" }, \"identifer\": { \"ui.widget\": \"hidden\" }, \"place\": { \"name\": { \"ui.widget\": \"hidden\" }, \"addressCountry\": { \"ui.title\": \"Country\", \"ui:enum\": [ \"TARGET_COUNTRIES_ENUM\" ], \"ui:enumNames\": [ \"TARGET_COUNTRIES_ENUM_NAMES\" ], \"ui:widget\": \"select\" }, \"addressRegion\": { \"ui.title\": \"State or region\", \"ui:enum\": [\"TARGET_REGIONS_ENUM\"], \"ui:enumNames\": [\"TARGET_REGIONS_ENUM_NAMES\"], \"ui:widget\": \"select\" }, \"addressLocality\": { \"ui.widget\": \"hidden\" } }, \"ui:order\": [ \"name\", \"place\" ] }"
 
-    static let JwkPublic = VCLJwkPublic(valueStr: KeyServiceMocks.JWK)
+    static let PublicJwk = VCLPublicJwk(valueStr: KeyServiceMocks.JWK)
 
     static let JWT = VCLJwt(encodedJwt: SignedJwt)
 }

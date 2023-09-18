@@ -21,12 +21,12 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
     
     func verify(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: jwtServiceUrls.jwtVerifyServiceUrl,
-            body: generatePayloadToVerify(jwt: jwt, jwkPublic: jwkPublic).toJsonString(),
+            body: generatePayloadToVerify(jwt: jwt, publicJwk: publicJwk).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
             headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
@@ -68,11 +68,11 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
     
     private func generatePayloadToVerify(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic
+        publicJwk: VCLPublicJwk
     ) -> [String: Any] {
         return [
             CodingKeys.KeyJwt: jwt.encodedJwt,
-            CodingKeys.KeyPublicKey: jwkPublic.valueDict
+            CodingKeys.KeyPublicKey: publicJwk.valueDict
         ]
     }
     

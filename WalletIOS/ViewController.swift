@@ -343,7 +343,7 @@ class ViewController: UIViewController {
     
     @objc private func verifyJwt() {
         vcl.verifyJwt(
-            jwt: Constants.SomeJwt, jwkPublic: Constants.SomeJwkPublic, successHandler: { isVerified in
+            jwt: Constants.SomeJwt, publicJwk: Constants.SomePublicJwk, successHandler: { isVerified in
                 NSLog("VCL JWT verified: \(isVerified)")
             },
             errorHandler: { error in
@@ -372,7 +372,7 @@ class ViewController: UIViewController {
     @objc private func generateDidJwk() {
         vcl.generateDidJwk(
             successHandler: { didJwk in
-                NSLog("VCL did:jwk generated: \(didJwk.value)")
+                NSLog("VCL did:jwk generated: \(didJwk.did)")
             },
             errorHandler: { error in
                 NSLog("VCL did:jwk generation failed: \(error)")

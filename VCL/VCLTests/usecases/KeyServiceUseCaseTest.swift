@@ -35,17 +35,16 @@ final class KeyServiceUseCaseTest: XCTestCase {
                 XCTFail()
                 return
             }
-            let jwkDict = didJwk.value.removePrefix(VCLDidJwk.DidJwkPrefix).decodeBase64()?.toDictionary()
+            let jwkDict = didJwk.publicJwk.valueDict
+
+            assert(didJwk.did.hasPrefix(VCLDidJwk.DidJwkPrefix))
             
-            assert(didJwk.value.hasPrefix(VCLDidJwk.DidJwkPrefix))
-            
-            assert(jwkDict?["kty"] as? String == "EC")
-            assert(jwkDict?["use"] as? String == "sig")
-            assert(jwkDict?["crv"] as? String == "secp256k1")
-//            assert(jwkDict?["alg"] as? String == "ES256K")
-            assert(jwkDict?["use"] as? String == "sig")
-            assert(jwkDict?["x"] as? String != nil)
-            assert(jwkDict?["y"] as? String != nil)
+            assert(jwkDict["kty"] as? String == "EC")
+            assert(jwkDict["use"] as? String == "sig")
+            assert(jwkDict["crv"] as? String == "secp256k1")
+            assert(jwkDict["use"] as? String == "sig")
+            assert(jwkDict["x"] as? String != nil)
+            assert(jwkDict["y"] as? String != nil)
         } catch {
             XCTFail("\(error)")
 
@@ -71,7 +70,7 @@ final class KeyServiceUseCaseTest: XCTestCase {
                 XCTFail()
                 return
             }
-            assert(didJwk1.value != didJwk2.value)
+            assert(didJwk1.did != didJwk2.did)
             assert(didJwk1.keyId != didJwk2.keyId)
         } catch {
             XCTFail("\(error)")

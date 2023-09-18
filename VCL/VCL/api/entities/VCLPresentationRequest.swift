@@ -11,18 +11,18 @@ import Foundation
 
 public struct VCLPresentationRequest {
     public let jwt: VCLJwt
-    public let jwkPublic: VCLJwkPublic
+    public let publicJwk: VCLPublicJwk
     public let deepLink: VCLDeepLink
     public let pushDelegate: VCLPushDelegate?
     
     public init(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         deepLink: VCLDeepLink,
         pushDelegate: VCLPushDelegate? = nil
     ) {
         self.jwt = jwt
-        self.jwkPublic = jwkPublic
+        self.publicJwk = publicJwk
         self.deepLink = deepLink
         self.pushDelegate = pushDelegate
     }

@@ -37,7 +37,7 @@ class VclBlocksProviderTest: XCTestCase {
                 VCLCryptoServicesDescriptor(
                     cryptoServiceType: VCLCryptoServiceType.Remote,
                     remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
-                        keyServiceUrls: VCLKeyServiceUrls(keyServiceUrl: ""),
+                        keyServiceUrls: VCLKeyServiceUrls(createDidKeyServiceUrl: ""),
                         jwtServiceUrls: VCLJwtServiceUrls(jwtSignServiceUrl: "", jwtVerifyServiceUrl: "")
                     )
                 )
@@ -48,7 +48,7 @@ class VclBlocksProviderTest: XCTestCase {
                 VCLCryptoServicesDescriptor(
                     cryptoServiceType: VCLCryptoServiceType.Remote,
                     remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
-                        keyServiceUrls: VCLKeyServiceUrls(keyServiceUrl: ""),
+                        keyServiceUrls: VCLKeyServiceUrls(createDidKeyServiceUrl: ""),
                         jwtServiceUrls: VCLJwtServiceUrls(jwtSignServiceUrl: "", jwtVerifyServiceUrl: "")
                     )
                 )
@@ -159,7 +159,7 @@ class VclBlocksProviderTest: XCTestCase {
                 VCLCryptoServicesDescriptor(
                     cryptoServiceType: VCLCryptoServiceType.Injected,
                     remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
-                        keyServiceUrls: VCLKeyServiceUrls(keyServiceUrl: ""),
+                        keyServiceUrls: VCLKeyServiceUrls(createDidKeyServiceUrl: ""),
                         jwtServiceUrls: VCLJwtServiceUrls(jwtSignServiceUrl: "", jwtVerifyServiceUrl: "")
                     )
                 )
@@ -173,7 +173,7 @@ class VclBlocksProviderTest: XCTestCase {
                 VCLCryptoServicesDescriptor(
                     cryptoServiceType: VCLCryptoServiceType.Injected,
                     remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
-                        keyServiceUrls: VCLKeyServiceUrls(keyServiceUrl: ""),
+                        keyServiceUrls: VCLKeyServiceUrls(createDidKeyServiceUrl: ""),
                         jwtServiceUrls: VCLJwtServiceUrls(jwtSignServiceUrl: "", jwtVerifyServiceUrl: "")
                     )
                 )
