@@ -33,7 +33,7 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
         ) { verifiedJwtResult in
             do {
                 let payloadDict = try verifiedJwtResult.get().payload.toDictionary()
-                let isVerified = (payloadDict?[CodingKeys.KeyVerified] as? Int) == 1
+                let isVerified = (payloadDict?[CodingKeys.KeyVerified] as? Bool) == true
                 completionBlock(.success(isVerified))
             } catch {
                 completionBlock(.failure(VCLError(error: error)))
@@ -51,11 +51,10 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
             endpoint: jwtServiceUrls.jwtSignServiceUrl,
             body: generateJwtPayloadToSign(nonce: nonce, jwtDescriptor: jwtDescriptor).toJsonString(),
             contentType: .ApplicationJson,
-            method: .POST,
-            headers: generateHeader(kid: kid)
+            method: .POST
         ) { [weak self] signedJwtResult in
             do {
-                if let jwtStr = try signedJwtResult.get().payload.toDictionary()?[CodingKeys.KeyJwt] as? String {
+                if let jwtStr = try signedJwtResult.get().payload.toDictionary()?[CodingKeys.KeyCompactJwt] as? String {
                     completionBlock(.success(VCLJwt(encodedJwt: jwtStr)))
                 } else {
                     completionBlock(.failure(VCLError(payload: "Failed to parse data from \(self?.jwtServiceUrls.jwtVerifyServiceUrl ?? "")")))
@@ -76,64 +75,42 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
         ]
     }
     
-    private func generateHeader(kid: String? = nil) -> [(String, String)] {
-        let protocolTuple = (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
-        if let kid = kid {
-            return [protocolTuple, (CodingKeys.KeyKid, kid)]
-        }
-        return [protocolTuple]
-    }
-    
     private func generateJwtPayloadToSign(
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor
     ) -> [String: Any] {
         var retVal = [String: Any]()
         var options = [String: Any]()
-//        var required = [String: Any]()
-        
-        if let aud = jwtDescriptor.aud {
-            options[CodingKeys.KeyAudience] = aud
-        }
+        var payload = jwtDescriptor.payload
+
+        options[CodingKeys.KeyKeyId] = jwtDescriptor.keyId
+        options[CodingKeys.KeyAud] = jwtDescriptor.aud
         options[CodingKeys.KeyJti] = jwtDescriptor.jti
-        let date = Date()
-//        options[JwtServiceCodingKeys.KeyIssuedAt] = date.toDouble()
-//        options[JwtServiceCodingKeys.KeyNotBefore] = date.toDouble()
-//        options[JwtServiceCodingKeys.KeyExpiresIn] = date.addDays(days: 7).toDouble()
-        if let nonce = nonce {
-            options[CodingKeys.KeyNonce] = nonce
-        }
-        options[CodingKeys.KeyIssuer] = jwtDescriptor.iss
-        options[CodingKeys.KeySubject] = randomString(length: 10)
+        options[CodingKeys.KeyIss] = jwtDescriptor.iss
+        options[CodingKeys.KeyIss] = jwtDescriptor.iss
         
-        if let payload = jwtDescriptor.payload {
-            retVal[CodingKeys.KeyPayload] = payload
-        }
+        payload?[CodingKeys.KeyNonce] = nonce
+
         retVal[CodingKeys.KeyOptions] = options
-//        retVal[JwtServiceCodingKeys.KeyRequired] = required
-        
+        retVal[CodingKeys.KeyPayload] = payload
+
         return retVal
     }
-    
+
     public struct CodingKeys {
-        public static let KeyKid = "kid"
-        
-        public static let KeyIssuer = "issuer"
-        public static let KeyAudience = "audience"
-        public static let KeySubject = "subject"
+        public static let KeyKeyId = "keyId"
+        public static let KeyIss = "iss"
+        public static let KeyAud = "aud"
         public static let KeyJti = "jti"
-//        public static let KeyIssuedAt = "issuedAt"
-//        public static let KeyNotBefore = "notBefore"
-//        public static let KeyExpiresIn = "expiresIn"
         public static let KeyNonce = "nonce"
-        
-        public static let KeyPayload = "payload"
-        public static let KeyJwt = "jwt"
-        public static let KeyPublicKey = "publicKey"
-        
+
         public static let KeyOptions = "options"
-        public static let KeyRequired = "required"
-        
+        public static let KeyPayload = "payload"
+
+        public static let KeyJwt = "jwt"
+        public static let KeyCompactJwt = "compactJwt"
         public static let KeyVerified = "verified"
+
+        public static let KeyPublicKey = "publicKey"
     }
 }

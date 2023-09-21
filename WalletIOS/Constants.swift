@@ -105,28 +105,26 @@ struct Constants  {
     )
     static let SomePayload = "{\"p1\":\"v1\", \"p2\":\"v12\"}".toDictionary() ?? [String: Any]()
     
+    private static let BaseUrl = "mockvendor.velocitycareerlabs.io"
     private static func getServiceBaseUrl(environment: VCLEnvironment) -> String {
         switch environment {
         case VCLEnvironment.Dev:
-            return "https://\(VCLEnvironment.Dev.rawValue)walletapi.velocitycareerlabs.io"
+            return "https://\(VCLEnvironment.Dev.rawValue)\(BaseUrl)"
         case VCLEnvironment.Qa:
-            return "https://\(VCLEnvironment.Qa.rawValue)walletapi.velocitycareerlabs.io"
+            return "https://\(VCLEnvironment.Qa.rawValue)\(BaseUrl)"
         case VCLEnvironment.Staging:
-            return "https://\(VCLEnvironment.Staging.rawValue)walletapi.velocitycareerlabs.io"
+            return "https://\(VCLEnvironment.Staging.rawValue)\(BaseUrl)"
         default: // prod
-            return "https://walletapi.velocitycareerlabs.io"
+            return "https://\(BaseUrl)"
         }
     }
     static func getJwtSignServiceUrl(environment: VCLEnvironment) -> String {
-        return  "\(getServiceBaseUrl(environment: environment))/jwt/sign"
+        return  "\(getServiceBaseUrl(environment: environment))/api/jwt/sign"
     }
     static func getJwtVerifyServiceUrl(environment: VCLEnvironment) -> String {
-        return  "\(getServiceBaseUrl(environment: environment))/jwt/verify"
-    }
-    static func getJwtDecodeServiceUrl(environment: VCLEnvironment) -> String {
-        return  "\(getServiceBaseUrl(environment: environment))/jwt/decode"
+        return  "\(getServiceBaseUrl(environment: environment))/api/jwt/verify"
     }
     static func getCreateDidKeyServiceUrl(environment: VCLEnvironment) -> String {
-        return  "\(getServiceBaseUrl(environment: environment))/create_did_key"
+        return  "\(getServiceBaseUrl(environment: environment))/api/create_did_key"
     }
 }

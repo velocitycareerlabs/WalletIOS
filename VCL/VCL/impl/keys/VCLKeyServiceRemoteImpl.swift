@@ -26,17 +26,29 @@ class VCLKeyServiceRemoteImpl: VCLKeyService {
     )  {
         networkService.sendRequest(
             endpoint: keyServiceUrls.createDidKeyServiceUrl,
-            body: generateRequestBody(),
+            body: generatePayloadToCreateDidJwk(),
             contentType: .ApplicationJson,
             method: .POST,
             headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
-        ) { [weak self] isVerifiedJwtResult in
+        ) { [weak self] didJwkResult in
             do {
-                if let didKey = try isVerifiedJwtResult.get().payload.toDictionary() {
-                    VCLLog.d(didKey.toJsonString() ?? "")
-//                        completionBlock(.success(isVerified))
+                if let didJwkJson = try didJwkResult.get().payload.toDictionary() {
+                    completionBlock(
+                        .success(
+                            VCLDidJwk(
+                                did: didJwkJson[CodingKeys.KeyDid] as? String ?? "",
+                                publicJwk: VCLPublicJwk(valueDict: didJwkJson[CodingKeys.KeyPublicJwk]as? [String: Any] ?? [:]),
+                                kid: didJwkJson[CodingKeys.KeyKid] as? String ?? "",
+                                keyId: didJwkJson[CodingKeys.KeyKeyId] as? String ?? ""
+                            )
+                        )
+                    )
                 } else {
-                    completionBlock(.failure(VCLError(error: "Failed to parse data from \(self?.keyServiceUrls.createDidKeyServiceUrl ?? "")")))
+                    completionBlock(
+                        .failure(
+                            VCLError(payload: "Failed to create did:jwk from the provided URL: \(self?.keyServiceUrls.createDidKeyServiceUrl ?? "")")
+                        )
+                    )
                 }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))
@@ -44,20 +56,19 @@ class VCLKeyServiceRemoteImpl: VCLKeyService {
         }
     }
     
-    private func generateRequestBody() -> String {
+    private func generatePayloadToCreateDidJwk() -> String {
         return [
             CodingKeys.KeyCrv: "secp256k1",
-            CodingKeys.KeyDidMethod: "did:jwk"
         ].toJsonString() ?? ""
     }
     
-    enum CodingKeys {
-        static let KeyCrv = "crv"
-        static let KeyDidMethod = "didMethod"
-        
-        static let KeyDid = "did"
-        static let KeyPublicJwk = "publicJwk"
-        static let KeyKid = "kid"
-        static let KeyKeyId = "keyId"
+    public struct CodingKeys {
+        public static let KeyCrv = "crv"
+        public static let ValueCrv = "secp256k1"
+
+        public static let KeyDid = "did"
+        public static let KeyKid = "kid"
+        public static let KeyKeyId = "keyId"
+        public static let KeyPublicJwk = "publicJwk"
     }
 }

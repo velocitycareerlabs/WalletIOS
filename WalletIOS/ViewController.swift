@@ -61,19 +61,20 @@ class ViewController: UIViewController {
             ),
             successHandler: { [weak self] in
                 NSLog("VCL Initialization succeed!")
-                self?.showControls()
                 
-//                self?.vcl.generateDidJwk(
-//                    successHandler: { didJwk in
-//                        self?.didJwk = didJwk
-//                        NSLog("VCL did:jwk is \(self?.didJwk?.toString() ?? "")")
-//                        self?.showControls()
-//                    },
-//                    errorHandler: { error in
-//                        NSLog("VCL Failed to generate did:jwk with error: \(error)")
-//                        self?.showError()
-//                    }
-//                )
+                self?.vcl.generateDidJwk(
+                    successHandler: { didJwk in
+                        self?.didJwk = didJwk
+                        NSLog(
+                            "VCL DID:JWK generated: \ndid: \(didJwk.did)\nkid: \(didJwk.kid)\nkeyId: \(didJwk.keyId)\npublicJwk: \(didJwk.publicJwk.valueStr)"
+                        )
+                        self?.showControls()
+                    },
+                    errorHandler: { error in
+                        NSLog("VCL Failed to generate did:jwk with error: \(error)")
+                        self?.showError()
+                    }
+                )
             },
             errorHandler: { [weak self] error in
                 NSLog("VCL Initialization failed with error: \(error)")
@@ -371,8 +372,11 @@ class ViewController: UIViewController {
     
     @objc private func generateDidJwk() {
         vcl.generateDidJwk(
-            successHandler: { didJwk in
-                NSLog("VCL did:jwk generated: \(didJwk.did)")
+            successHandler: { [weak self] didJwk in
+                self?.didJwk = didJwk
+                NSLog(
+                    "VCL DID:JWK generated: \ndid: \(didJwk.did)\nkid: \(didJwk.kid)\nkeyId: \(didJwk.keyId)\npublicJwk: \(didJwk.publicJwk.valueStr)"
+                )
             },
             errorHandler: { error in
                 NSLog("VCL did:jwk generation failed: \(error)")
