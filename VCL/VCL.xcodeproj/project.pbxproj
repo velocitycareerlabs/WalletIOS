@@ -1022,7 +1022,6 @@
 				2885C85C26D6864600FCAB99 /* VCLServiceCredentialAgentIssuer.swift */,
 				28641595264D65E2006C1AA3 /* VCLServiceType.swift */,
 				2857ADDF294A21AB00C23EA2 /* VCLServiceTypes.swift */,
-				2812ACF2294A284600390A06 /* VCLStatusCode.swift */,
 				2842BB5A26C15B4C00B07F2E /* VCLSubmission.swift */,
 				28C7585A26C1798500269A09 /* VCLSubmissionResult.swift */,
 				2892BA1426A45F91002673A6 /* VCLToken.swift */,
@@ -1051,6 +1050,7 @@
 			children = (
 				28648A602AA8736C002FD0E2 /* VCLError.swift */,
 				28648A612AA8736C002FD0E2 /* VCLErrorCode.swift */,
+				2812ACF2294A284600390A06 /* VCLStatusCode.swift */,
 			);
 			path = error;
 			sourceTree = "<group>";
@@ -1887,7 +1887,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 101;
+				CURRENT_PROJECT_VERSION = 102;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1900,7 +1900,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.16.1;
+				MARKETING_VERSION = 1.16.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;
@@ -1913,7 +1913,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 101;
+				CURRENT_PROJECT_VERSION = 102;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1926,7 +1926,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.16.1;
+				MARKETING_VERSION = 1.16.2;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;
