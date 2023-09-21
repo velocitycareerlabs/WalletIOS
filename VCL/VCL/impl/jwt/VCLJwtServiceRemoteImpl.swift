@@ -81,7 +81,7 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
     ) -> [String: Any] {
         var retVal = [String: Any]()
         var options = [String: Any]()
-        var payload = jwtDescriptor.payload
+        var payload = jwtDescriptor.payload ?? [:]
 
         options[CodingKeys.KeyKeyId] = jwtDescriptor.keyId
         options[CodingKeys.KeyAud] = jwtDescriptor.aud
@@ -89,7 +89,7 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
         options[CodingKeys.KeyIss] = jwtDescriptor.iss
         options[CodingKeys.KeyIss] = jwtDescriptor.iss
         
-        payload?[CodingKeys.KeyNonce] = nonce
+        payload[CodingKeys.KeyNonce] = nonce
 
         retVal[CodingKeys.KeyOptions] = options
         retVal[CodingKeys.KeyPayload] = payload
