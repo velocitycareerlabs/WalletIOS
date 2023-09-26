@@ -13,4 +13,17 @@ public enum VCLCryptoServiceType: String {
     case Local = "local"
     case Remote = "remote"
     case Injected = "injected"
+    
+    public static func fromString(value: String) -> VCLCryptoServiceType {
+        switch(value) {
+        case VCLCryptoServiceType.Local.rawValue:
+            return .Local
+        case VCLCryptoServiceType.Remote.rawValue:
+            return .Remote
+        case VCLCryptoServiceType.Injected.rawValue:
+            return .Injected
+        default:
+            return .Local
+        }
+    }
 }

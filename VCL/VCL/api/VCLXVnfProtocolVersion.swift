@@ -12,4 +12,15 @@ import Foundation
 public enum VCLXVnfProtocolVersion: String {
     case XVnfProtocolVersion1 = "1.0"
     case XVnfProtocolVersion2 = "2.0"
+    
+    public static func fromString(value: String) -> VCLXVnfProtocolVersion {
+        switch(value) {
+        case VCLXVnfProtocolVersion.XVnfProtocolVersion1.rawValue:
+            return .XVnfProtocolVersion1
+        case VCLXVnfProtocolVersion.XVnfProtocolVersion2.rawValue:
+            return .XVnfProtocolVersion2
+        default:
+            return .XVnfProtocolVersion1
+        }
+    }
 }
