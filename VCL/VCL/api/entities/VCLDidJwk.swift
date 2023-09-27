@@ -11,16 +11,14 @@ import Foundation
 import VCToken
 
 public class VCLDidJwk {
-    /// The id of private key save in secure enclave
-    public let keyId: String
     /// The did:jwk
-    public let value: String
+    public let did: String
+    /// public JWK
+    public let publicJwk: VCLPublicJwk
     /// kid of jwt - did:jwk suffixed with #0
     public let kid: String
-    
-    func toPublicJwkStr() -> String? {
-        value.removePrefix(VCLDidJwk.DidJwkPrefix).decodeBase64()
-    }
+    /// The id of private key save in secure enclave
+    public let keyId: String
     
     public static let DidJwkPrefix = "did:jwk:"
     public static let DidJwkSuffix = "#0"
@@ -34,26 +32,20 @@ public class VCLDidJwk {
     }
     
     public init(
-        keyId: String,
-        value: String,
-        kid: String
+        did: String,
+        publicJwk: VCLPublicJwk,
+        kid: String,
+        keyId: String
     ) {
-        self.keyId = keyId
-        self.value = value
+        self.did = did
+        self.publicJwk = publicJwk
         self.kid = kid
+        self.keyId = keyId
     }
     
     public struct CodingKeys {
-        public static let KeyKeyId = "keyId"
-        public static let KeyValue = "value"
+        public static let KeyDid = "did"
         public static let KeyKid = "kid"
-    }
-    
-    public func toString() -> String? {
-        return [
-            CodingKeys.KeyKeyId: keyId,
-            CodingKeys.KeyValue: value,
-            CodingKeys.KeyKid: kid
-        ].toJsonString()
+        public static let KeyKeyId = "keyId"
     }
 }

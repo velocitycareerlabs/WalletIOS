@@ -17,9 +17,9 @@ class ResolveKidRepositoryImpl: ResolveKidRepository {
         self.networkService = networkService
     }
     
-    func getPublicKey(kid: String, completionBlock: @escaping (VCLResult<VCLJwkPublic>) -> Void) {
+    func getPublicKey(kid: String, completionBlock: @escaping (VCLResult<VCLPublicJwk>) -> Void) {
         networkService.sendRequest(
-            endpoint: Urls.ResolveKid + kid + "?format=\(VCLJwkPublic.Format.jwk)",
+            endpoint: Urls.ResolveKid + kid + "?format=\(VCLPublicJwk.Format.jwk)",
             contentType: Request.ContentType.ApplicationJson,
             method: .GET,
             headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
@@ -28,7 +28,7 @@ class ResolveKidRepositoryImpl: ResolveKidRepository {
             do{
                 let publicKeyResponse = try response.get()
                 if let jwkDict = publicKeyResponse.payload.toDictionary() {
-                    completionBlock(.success(VCLJwkPublic(valueDict: jwkDict)))
+                    completionBlock(.success(VCLPublicJwk(valueDict: jwkDict)))
                 } else {
                     completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: publicKeyResponse.payload, encoding: .utf8) ?? "")")))
                 }

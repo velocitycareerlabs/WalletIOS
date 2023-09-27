@@ -45,24 +45,36 @@ class ViewController: UIViewController {
         
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
-                environment: environment//,
-//                xVnfProtocolVersion: .XVnfProtocolVersion2
+                environment: environment,
+                xVnfProtocolVersion: .XVnfProtocolVersion2//,
+//                cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
+//                    cryptoServiceType: .Remote,
+//                    remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
+//                        keyServiceUrls: VCLKeyServiceUrls(
+//                            createDidKeyServiceUrl: Constants.getCreateDidKeyServiceUrl(environment: environment)
+//                        ),
+//                        jwtServiceUrls: VCLJwtServiceUrls(
+//                            jwtSignServiceUrl: Constants.getJwtSignServiceUrl(environment: environment),
+//                            jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment: environment))
+//                    )
+//                )
             ),
             successHandler: { [weak self] in
                 NSLog("VCL Initialization succeed!")
-                self?.showControls()
                 
-//                self?.vcl.generateDidJwk(
-//                    successHandler: { didJwk in
-//                        self?.didJwk = didJwk
-//                        NSLog("VCL did:jwk is \(self?.didJwk?.toString() ?? "")")
-//                        self?.showControls()
-//                    },
-//                    errorHandler: { error in
-//                        NSLog("VCL Failed to generate did:jwk with error: \(error)")
-//                        self?.showError()
-//                    }
-//                )
+                self?.vcl.generateDidJwk(
+                    successHandler: { didJwk in
+                        self?.didJwk = didJwk
+                        NSLog(
+                            "VCL DID:JWK generated: \ndid: \(didJwk.did)\nkid: \(didJwk.kid)\nkeyId: \(didJwk.keyId)\npublicJwk: \(didJwk.publicJwk.valueStr)"
+                        )
+                        self?.showControls()
+                    },
+                    errorHandler: { error in
+                        NSLog("VCL Failed to generate did:jwk with error: \(error)")
+                        self?.showError()
+                    }
+                )
             },
             errorHandler: { [weak self] error in
                 NSLog("VCL Initialization failed with error: \(error)")
@@ -332,7 +344,7 @@ class ViewController: UIViewController {
     
     @objc private func verifyJwt() {
         vcl.verifyJwt(
-            jwt: Constants.SomeJwt, jwkPublic: Constants.SomeJwkPublic, successHandler: { isVerified in
+            jwt: Constants.SomeJwt, publicJwk: Constants.SomePublicJwk, successHandler: { isVerified in
                 NSLog("VCL JWT verified: \(isVerified)")
             },
             errorHandler: { error in
@@ -360,8 +372,11 @@ class ViewController: UIViewController {
     
     @objc private func generateDidJwk() {
         vcl.generateDidJwk(
-            successHandler: { didJwk in
-                NSLog("VCL did:jwk generated: \(didJwk.value)")
+            successHandler: { [weak self] didJwk in
+                self?.didJwk = didJwk
+                NSLog(
+                    "VCL DID:JWK generated: \ndid: \(didJwk.did)\nkid: \(didJwk.kid)\nkeyId: \(didJwk.keyId)\npublicJwk: \(didJwk.publicJwk.valueStr)"
+                )
             },
             errorHandler: { error in
                 NSLog("VCL did:jwk generation failed: \(error)")

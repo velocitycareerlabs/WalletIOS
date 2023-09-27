@@ -1,5 +1,5 @@
 //
-//  JwtService.swift
+//  VCLJwtService.swift
 //  
 //
 //  Created by Michael Avoyan on 28/04/2021.
@@ -9,10 +9,10 @@
 
 import Foundation
 
-protocol JwtService {
+public protocol VCLJwtService {
     func verify(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
     func sign(
@@ -23,7 +23,7 @@ protocol JwtService {
     )
 }
 
-extension JwtService {
+extension VCLJwtService {
     func sign(
         kid: String? = nil,
         nonce: String? = nil,
@@ -32,19 +32,4 @@ extension JwtService {
     ) {
         sign(kid: kid, nonce: nonce, jwtDescriptor: jwtDescriptor, completionBlock: completionBlock)
     }
-}
-
-public struct JwtServiceCodingKeys {
-    public static let KeyIss = "iss"
-    public static let KeyAud = "aud"
-    public static let KeySub = "sub"
-    public static let KeyJti = "jti"
-    public static let KeyIat = "iat"
-    public static let KeyNbf = "nbf"
-    public static let KeyExp = "exp"
-    public static let KeyNonce = "nonce"
-    
-    public static let KeyPayload = "payload"
-    public static let KeyJwt = "jwt"
-    public static let KeyPublicKey = "publicKey"
 }

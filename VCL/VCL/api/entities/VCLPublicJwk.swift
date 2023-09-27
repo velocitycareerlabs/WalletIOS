@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLJwkPublic {
+public struct VCLPublicJwk {
     public let valueStr: String
     public let valueDict: [String: Any]
 

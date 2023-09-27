@@ -10,6 +10,9 @@
 import Foundation
 
 public enum VCLErrorCode: String {
+    // Initialization
+    case RemoteServicesUrlsNotFount = "remote_services_urls_not_found"
+    case InjectedServicesNotFount = "injected_services_not_found"
     // Credential issuer verification error codes:
     case CredentialTypeNotRegistered = "credential_type_not_registered"
     case IssuerRequiresIdentityPermission = "issuer_requires_identity_permission"

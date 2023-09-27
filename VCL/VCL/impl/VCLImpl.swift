@@ -54,36 +54,34 @@ public class VCLImpl: VCL {
         )
     }
     
-    private func initializeUsecases(keyServiceType: VCLKeyServiceType) {
+    private func initializeUseCases() throws {
         presentationRequestUseCase =
-        VclBlocksProvider.providePresentationRequestUseCase(
-            keyServiceType
+        try VclBlocksProvider.providePresentationRequestUseCase(
+            initializationDescriptor.cryptoServicesDescriptor
         )
-        presentationSubmissionUseCase = VclBlocksProvider.providePresentationSubmissionUseCase(
-            keyServiceType
+        presentationSubmissionUseCase = try VclBlocksProvider.providePresentationSubmissionUseCase(
+            initializationDescriptor.cryptoServicesDescriptor
         )
         exchangeProgressUseCase = VclBlocksProvider.provideExchangeProgressUseCase()
         organizationsUseCase = VclBlocksProvider.provideOrganizationsUseCase()
         credentialManifestUseCase =
-        VclBlocksProvider.provideCredentialManifestUseCase(
-            keyServiceType
+        try VclBlocksProvider.provideCredentialManifestUseCase(
+            initializationDescriptor.cryptoServicesDescriptor
         )
-        identificationSubmissionUseCase = VclBlocksProvider.provideIdentificationSubmissionUseCase(
-            keyServiceType
+        identificationSubmissionUseCase = try VclBlocksProvider.provideIdentificationSubmissionUseCase(
+            initializationDescriptor.cryptoServicesDescriptor
         )
         generateOffersUseCase = VclBlocksProvider.provideGenerateOffersUseCase()
         finalizeOffersUseCase =
-        VclBlocksProvider.provideFinalizeOffersUseCase(
-            keyServiceType,
+        try VclBlocksProvider.provideFinalizeOffersUseCase(
+            initializationDescriptor.cryptoServicesDescriptor,
             credentialTypesModel
         )
         credentialTypesUIFormSchemaUseCase =
         VclBlocksProvider.provideCredentialTypesUIFormSchemaUseCase()
         verifiedProfileUseCase = VclBlocksProvider.provideVerifiedProfileUseCase()
-        jwtServiceUseCase =
-        VclBlocksProvider.provideJwtServiceUseCase(keyServiceType)
-        keyServiceUseCase =
-        VclBlocksProvider.provideKeyServiceUseCase(keyServiceType)
+        jwtServiceUseCase = try VclBlocksProvider.provideJwtServiceUseCase(initializationDescriptor.cryptoServicesDescriptor)
+        keyServiceUseCase = try VclBlocksProvider.provideKeyServiceUseCase(initializationDescriptor.cryptoServicesDescriptor)
     }
     
     private func completionHandler(
@@ -93,12 +91,17 @@ public class VCLImpl: VCL {
         if let error = self.initializationWatcher.firstError() {
             errorHandler(error)
         } else {
-            self.initializeUsecases(
-                keyServiceType: self.initializationDescriptor.keyServiceType
-            )
-            self.profileServiceTypeVerifier = ProfileServiceTypeVerifier(verifiedProfileUseCase: self.verifiedProfileUseCase)
-            
-            successHandler()
+            do {
+                try self.initializeUseCases()
+                
+                self.profileServiceTypeVerifier = ProfileServiceTypeVerifier(verifiedProfileUseCase: self.verifiedProfileUseCase)
+                
+                successHandler()
+            } catch where error is VCLError {
+                errorHandler(error as! VCLError)
+            } catch {
+                errorHandler(VCLError(error: error))
+            }
         }
     }
     
@@ -427,11 +430,11 @@ public class VCLImpl: VCL {
     
     public func verifyJwt(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         successHandler: @escaping (Bool) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) {
+        jwtServiceUseCase.verifyJwt(jwt: jwt, publicJwk: publicJwk) {
             [weak self] isVerifiedResult in
             do {
                 successHandler(try isVerifiedResult.get())

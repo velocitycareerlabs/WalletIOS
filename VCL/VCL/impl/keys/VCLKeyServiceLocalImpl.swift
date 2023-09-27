@@ -1,5 +1,5 @@
 //
-//  KeyServiceImpl.swift
+//  VCLKeyServiceLocalImpl.swift
 //  VCL
 //
 //  Created by Michael Avoyan on 11/05/2023.
@@ -11,7 +11,7 @@ import Foundation
 import VCToken
 import VCCrypto
 
-class KeyServiceImpl: KeyService {
+class VCLKeyServiceLocalImpl: VCLKeyService {
 
     private let secretStore: SecretStoring?
     private let tokenSigning: TokenSigning
@@ -22,7 +22,7 @@ class KeyServiceImpl: KeyService {
     ) {
         self.secretStore = secretStore
         self.tokenSigning = Secp256k1Signer() // No need to be injected
-        self.keyManagementOperations = KeyServiceImpl.createKeyManagementOperations(secretStore: secretStore)
+        self.keyManagementOperations = VCLKeyServiceLocalImpl.createKeyManagementOperations(secretStore: secretStore)
     }
 
     func generateDidJwk(
@@ -35,9 +35,10 @@ class KeyServiceImpl: KeyService {
                     do {
                         let publicJwk = try publicJwkResult.get()
                         completionBlock(.success(VCLDidJwk(
-                            keyId: secret.id.uuidString,
-                            value: VCLDidJwk.generateDidJwk(publicKey: publicJwk),
-                            kid: VCLDidJwk.generateKidFromDidJwk(publicKey: publicJwk)
+                            did: VCLDidJwk.generateDidJwk(publicKey: publicJwk),
+                            publicJwk: VCLPublicJwk(valueDict: publicJwk.toDictionary()),
+                            kid: VCLDidJwk.generateKidFromDidJwk(publicKey: publicJwk),
+                            keyId: secret.id.uuidString
                         )))
                     } catch {
                         completionBlock(.failure(VCLError(error: error)))

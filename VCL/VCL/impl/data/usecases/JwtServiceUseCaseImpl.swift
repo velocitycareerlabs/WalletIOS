@@ -24,11 +24,11 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
     
     func verifyJwt(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            self?.jwtServiceRepository.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) { isVeriviedResult in
+            self?.jwtServiceRepository.verifyJwt(jwt: jwt, publicJwk: publicJwk) { isVeriviedResult in
                 self?.executor.runOnMain { completionBlock(isVeriviedResult) }
             }
         }

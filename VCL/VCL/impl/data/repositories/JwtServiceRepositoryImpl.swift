@@ -11,20 +11,20 @@ import Foundation
 
 class JwtServiceRepositoryImpl: JwtServiceRepository {
     
-    private let jwtService: JwtService
+    private let jwtService: VCLJwtService
     
-    init(_ jwtService: JwtService) {
+    init(_ jwtService: VCLJwtService) {
         self.jwtService = jwtService
     }
     
     func verifyJwt(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         jwtService.verify(
             jwt: jwt,
-            jwkPublic: jwkPublic,
+            publicJwk: publicJwk,
             completionBlock: { verificationResult in completionBlock(verificationResult) }
         )
     }

@@ -1,5 +1,5 @@
 //
-//  JwtServiceImpl.swift
+//  VCLJwtServiceLocalImpl.swift
 //  VCL
 //
 //  Created by Michael Avoyan on 03/06/2021.
@@ -11,26 +11,26 @@ import Foundation
 import VCToken
 import VCCrypto
 
-class JwtServiceImpl: JwtService {
+class VCLJwtServiceLocalImpl: VCLJwtService {
     
-    private let keyService: KeyService
+    private let keyService: VCLKeyService
     private let tokenSigning: TokenSigning
     
-    init(_ keyService: KeyService) {
+    init(_ keyService: VCLKeyService) {
         self.keyService = keyService
         self.tokenSigning = Secp256k1Signer() // No need to be injected
     }
     
     func verify(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         do {
             let pubKey = ECPublicJwk(
-                x: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyX] as? String ?? "",
-                y: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyY] as? String ?? "",
-                keyId: jwkPublic.valueDict[VCLJwt.CodingKeys.KeyKid] as? String ?? ""
+                x: publicJwk.valueDict[VCLJwt.CodingKeys.KeyX] as? String ?? "",
+                y: publicJwk.valueDict[VCLJwt.CodingKeys.KeyY] as? String ?? "",
+                keyId: publicJwk.valueDict[VCLJwt.CodingKeys.KeyKid] as? String ?? ""
             )
             completionBlock(.success(try jwt.jwsToken?.verify(using: TokenVerifier(), withPublicKey: pubKey) == true))
         } catch {
@@ -119,16 +119,16 @@ class JwtServiceImpl: JwtService {
         jwtDescriptor: VCLJwtDescriptor
     ) -> [String: Any] {
         var retVal = jwtDescriptor.payload ?? [String: Any]()
-        retVal[JwtServiceCodingKeys.KeyIss] = jwtDescriptor.iss
-        retVal[JwtServiceCodingKeys.KeyAud] = jwtDescriptor.aud
-        retVal[JwtServiceCodingKeys.KeySub] = randomString(length: 10)
-        retVal[JwtServiceCodingKeys.KeyJti] = jwtDescriptor.jti
+        retVal[CodingKeys.KeyIss] = jwtDescriptor.iss
+        retVal[CodingKeys.KeyAud] = jwtDescriptor.aud
+        retVal[CodingKeys.KeySub] = randomString(length: 10)
+        retVal[CodingKeys.KeyJti] = jwtDescriptor.jti
         let date = Date()
-        retVal[JwtServiceCodingKeys.KeyIat] = date.toDouble()
-        retVal[JwtServiceCodingKeys.KeyNbf] = date.toDouble()
-        retVal[JwtServiceCodingKeys.KeyExp] = date.addDays(days: 7).toDouble()
+        retVal[CodingKeys.KeyIat] = date.toDouble()
+        retVal[CodingKeys.KeyNbf] = date.toDouble()
+        retVal[CodingKeys.KeyExp] = date.addDays(days: 7).toDouble()
         if let nonce = nonce {
-            retVal[JwtServiceCodingKeys.KeyNonce] = nonce
+            retVal[CodingKeys.KeyNonce] = nonce
         }
         return retVal
     }
@@ -142,4 +142,25 @@ class JwtServiceImpl: JwtService {
             return encodedHeader
         }
     }
+    
+    public struct CodingKeys {
+        public static let KeyKid = "kid"
+        
+        public static let KeyIss = "iss"
+        public static let KeyAud = "aud"
+        public static let KeySub = "sub"
+        public static let KeyJti = "jti"
+        public static let KeyIat = "iat"
+        public static let KeyNbf = "nbf"
+        public static let KeyExp = "exp"
+        public static let KeyNonce = "nonce"
+        
+        public static let KeyPayload = "payload"
+        public static let KeyJwt = "jwt"
+        public static let KeyPublicKey = "publicKey"
+        
+        public static let KeyOptions = "options"
+        public static let KeyRequired = "required"
+    }
+
 }

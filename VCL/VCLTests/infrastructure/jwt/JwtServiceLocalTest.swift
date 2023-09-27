@@ -1,5 +1,5 @@
 //
-//  JwtServiceTest.swift
+//  JwtServiceLocalTest.swift
 //  VCLTests
 //
 //  Created by Michael Avoyan on 14/05/2023.
@@ -11,12 +11,12 @@ import Foundation
 import XCTest
 @testable import VCL
 
-class JwtServiceTest: XCTestCase {
+class JwtServiceLocalTest: XCTestCase {
     
-    var subject: JwtServiceImpl!
+    var subject: VCLJwtServiceLocalImpl!
     
     var didJwk: VCLDidJwk!
-    let keyService = KeyServiceImpl(secretStore: SecretStoreMock.Instance)
+    let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     
     let payloadMock = "{\"key1\":\"value1\",\"key2\":\"value2\"}".toDictionary()!
     private let jtiMock = "some jti"
@@ -34,7 +34,7 @@ class JwtServiceTest: XCTestCase {
                 XCTFail("\(error)")
             }
         }
-        subject = JwtServiceImpl(keyService)
+        subject = VCLJwtServiceLocalImpl(keyService)
     }
     
     func testSignAndVerify() {
@@ -53,7 +53,7 @@ class JwtServiceTest: XCTestCase {
                 let jwt = try jwtResult.get()
                 assert(jwt.kid == self.didJwk.kid)
                 
-                self.subject.verify(jwt: jwt, jwkPublic: VCLJwkPublic(valueStr: self.didJwk.toPublicJwkStr()!)) { verifiedResult in
+                self.subject.verify(jwt: jwt, publicJwk: self.didJwk.publicJwk) { verifiedResult in
                     do {
                         let verified = try verifiedResult.get()
                         assert(verified, "failed to verify jwt: \(verified)")
@@ -83,15 +83,15 @@ class JwtServiceTest: XCTestCase {
                 let jwt = try jwtResult.get()
                 assert(jwt.kid == self!.didJwk.kid)
                 
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyIss] as? String == self!.issMock)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyAud] as? String == self!.audMock)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyJti] as? String == self!.jtiMock)
-                let iat = jwt.payload?[JwtServiceCodingKeys.KeyIat] as! Double
-                let nbf = jwt.payload?[JwtServiceCodingKeys.KeyNbf] as! Double
-                let exp = jwt.payload?[JwtServiceCodingKeys.KeyExp] as! Double
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIss] as? String == self!.issMock)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyAud] as? String == self!.audMock)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyJti] as? String == self!.jtiMock)
+                let iat = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIat] as! Double
+                let nbf = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNbf] as! Double
+                let exp = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyExp] as! Double
                 assert(iat == nbf)
                 assert(exp - iat == self!.sevenDaysInSeconds)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyNonce] as? String == self!.nonceMock)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNonce] as? String == self!.nonceMock)
             } catch {
                 XCTFail("\(error)")
             }
@@ -113,15 +113,15 @@ class JwtServiceTest: XCTestCase {
                 let jwt = try jwtResult.get()
                 assert(jwt.kid?.isEmpty == false)
                 
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyIss] as? String == self!.issMock)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyAud] as? String == self!.audMock)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyJti] as? String == self!.jtiMock)
-                let iat = jwt.payload?[JwtServiceCodingKeys.KeyIat] as! Double
-                let nbf = jwt.payload?[JwtServiceCodingKeys.KeyNbf] as! Double
-                let exp = jwt.payload?[JwtServiceCodingKeys.KeyExp] as! Double
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIss] as? String == self!.issMock)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyAud] as? String == self!.audMock)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyJti] as? String == self!.jtiMock)
+                let iat = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIat] as! Double
+                let nbf = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNbf] as! Double
+                let exp = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyExp] as! Double
                 assert(iat == nbf)
                 assert(exp - iat == self!.sevenDaysInSeconds)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyNonce] as? String == self!.nonceMock)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNonce] as? String == self!.nonceMock)
             } catch {
                 XCTFail("\(error)")
             }
@@ -142,15 +142,15 @@ class JwtServiceTest: XCTestCase {
                 let jwt = try jwtResult.get()
                 assert(jwt.kid?.isEmpty == false)
                 
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyIss] as? String == self!.issMock)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyAud] as? String == self!.audMock)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyJti] as? String == self!.jtiMock)
-                let iat = jwt.payload?[JwtServiceCodingKeys.KeyIat] as! Double
-                let nbf = jwt.payload?[JwtServiceCodingKeys.KeyNbf] as! Double
-                let exp = jwt.payload?[JwtServiceCodingKeys.KeyExp] as! Double
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIss] as? String == self!.issMock)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyAud] as? String == self!.audMock)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyJti] as? String == self!.jtiMock)
+                let iat = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIat] as! Double
+                let nbf = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNbf] as! Double
+                let exp = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyExp] as! Double
                 assert(iat == nbf)
                 assert(exp - iat == self!.sevenDaysInSeconds)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyNonce] as? String == nil)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNonce] as? String == nil)
             } catch {
                 XCTFail("\(error)")
             }
@@ -169,15 +169,15 @@ class JwtServiceTest: XCTestCase {
                 let jwt = try jwtResult.get()
                 assert(jwt.kid?.isEmpty == false)
                 
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyIss] as? String == self!.issMock)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyAud] as? String == self!.audMock)
-                assert((jwt.payload?[JwtServiceCodingKeys.KeyJti] as? String)?.isEmpty == false)
-                let iat = jwt.payload?[JwtServiceCodingKeys.KeyIat] as! Double
-                let nbf = jwt.payload?[JwtServiceCodingKeys.KeyNbf] as! Double
-                let exp = jwt.payload?[JwtServiceCodingKeys.KeyExp] as! Double
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIss] as? String == self!.issMock)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyAud] as? String == self!.audMock)
+                assert((jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyJti] as? String)?.isEmpty == false)
+                let iat = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIat] as! Double
+                let nbf = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNbf] as! Double
+                let exp = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyExp] as! Double
                 assert(iat == nbf)
                 assert(exp - iat == self!.sevenDaysInSeconds)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyNonce] as? String == nil)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNonce] as? String == nil)
             } catch {
                 XCTFail("\(error)")
             }
@@ -195,15 +195,15 @@ class JwtServiceTest: XCTestCase {
                 let jwt = try jwtResult.get()
                 assert(jwt.kid?.isEmpty == false)
                 
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyIss] as? String == self!.issMock)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyAud] as? String == nil)
-                assert((jwt.payload?[JwtServiceCodingKeys.KeyJti] as? String)?.isEmpty == false)
-                let iat = jwt.payload?[JwtServiceCodingKeys.KeyIat] as! Double
-                let nbf = jwt.payload?[JwtServiceCodingKeys.KeyNbf] as! Double
-                let exp = jwt.payload?[JwtServiceCodingKeys.KeyExp] as! Double
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIss] as? String == self!.issMock)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyAud] as? String == nil)
+                assert((jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyJti] as? String)?.isEmpty == false)
+                let iat = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIat] as! Double
+                let nbf = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNbf] as! Double
+                let exp = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyExp] as! Double
                 assert(iat == nbf)
                 assert(exp - iat == self!.sevenDaysInSeconds)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyNonce] as? String == nil)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNonce] as? String == nil)
             } catch {
                 XCTFail("\(error)")
             }
@@ -220,15 +220,15 @@ class JwtServiceTest: XCTestCase {
                 let jwt = try jwtResult.get()
                 assert(jwt.kid?.isEmpty == false)
                 
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyIss] as? String == self!.issMock)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyAud] as? String == nil)
-                assert((jwt.payload?[JwtServiceCodingKeys.KeyJti] as? String)?.isEmpty == false)
-                let iat = jwt.payload?[JwtServiceCodingKeys.KeyIat] as! Double
-                let nbf = jwt.payload?[JwtServiceCodingKeys.KeyNbf] as! Double
-                let exp = jwt.payload?[JwtServiceCodingKeys.KeyExp] as! Double
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIss] as? String == self!.issMock)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyAud] as? String == nil)
+                assert((jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyJti] as? String)?.isEmpty == false)
+                let iat = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyIat] as! Double
+                let nbf = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNbf] as! Double
+                let exp = jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyExp] as! Double
                 assert(iat == nbf)
                 assert(exp - iat == self!.sevenDaysInSeconds)
-                assert(jwt.payload?[JwtServiceCodingKeys.KeyNonce] as? String == nil)
+                assert(jwt.payload?[VCLJwtServiceLocalImpl.CodingKeys.KeyNonce] as? String == nil)
             } catch {
                 XCTFail("\(error)")
             }

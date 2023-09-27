@@ -17,7 +17,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
     
     var token: VCLToken!
     var didJwk: VCLDidJwk!
-    let keyService = KeyServiceImpl(secretStore: SecretStoreMock.Instance)
+    let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     var credentialManifestFailed: VCLCredentialManifest!
     var credentialManifestPassed: VCLCredentialManifest!
     var finalizeOffersDescriptorFailed: VCLFinalizeOffersDescriptor!
@@ -90,7 +90,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialMocks.JwtCredentialsFromRegularIssuer)
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl(keyService)
+                VCLJwtServiceLocalImpl(keyService)
             ),
             CredentialIssuerVerifierImpl(
                 CredentialTypesModelMock(
@@ -133,7 +133,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialMocks.JwtCredentialsFromRegularIssuer)
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl(keyService)
+                VCLJwtServiceLocalImpl(keyService)
             ),
             CredentialIssuerVerifierImpl(
                 CredentialTypesModelMock(
@@ -177,7 +177,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialMocks.JwtEmptyCredentials)
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl(keyService)
+                VCLJwtServiceLocalImpl(keyService)
             ),
             CredentialIssuerVerifierImpl(
                 CredentialTypesModelMock(

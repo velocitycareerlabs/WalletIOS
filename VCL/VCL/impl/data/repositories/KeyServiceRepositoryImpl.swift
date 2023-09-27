@@ -11,9 +11,9 @@ import Foundation
 
 class KeyServiceRepositoryImpl: KeyServiceRepository {
     
-    private let keyService: KeyService
+    private let keyService: VCLKeyService
     
-    init(_ keyService: KeyService) {
+    init(_ keyService: VCLKeyService) {
         self.keyService = keyService
     }
     

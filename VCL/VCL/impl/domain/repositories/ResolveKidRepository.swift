@@ -10,5 +10,5 @@
 import Foundation
 
 protocol ResolveKidRepository {
-    func getPublicKey(kid: String, completionBlock: @escaping (VCLResult<VCLJwkPublic>) -> Void)
+    func getPublicKey(kid: String, completionBlock: @escaping (VCLResult<VCLPublicJwk>) -> Void)
 }

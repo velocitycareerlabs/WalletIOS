@@ -27,7 +27,7 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: PresentationRequestMocks.JWK)
             ),
             JwtServiceRepositoryImpl(
-                JwtServiceImpl(KeyServiceImpl(secretStore: SecretStoreMock.Instance))
+                VCLJwtServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance))
             ),
             EmptyExecutor()
         )
@@ -48,8 +48,8 @@ final class PresentationRequestUseCaseTest: XCTestCase {
         do {
             let presentationRequest = try result!.get()
 
-            assert(presentationRequest.jwkPublic.valueStr.sorted() == VCLJwkPublic(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueStr.sorted())
-            assert(presentationRequest.jwkPublic.valueDict == VCLJwkPublic(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueDict)
+            assert(presentationRequest.publicJwk.valueStr.sorted() == VCLPublicJwk(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueStr.sorted())
+            assert(presentationRequest.publicJwk.valueDict == VCLPublicJwk(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueDict)
             assert(presentationRequest.jwt.encodedJwt == PresentationRequestMocks.PresentationRequestJwt.encodedJwt)
             assert(presentationRequest.jwt.header! == PresentationRequestMocks.PresentationRequestJwt.header!)
             assert(presentationRequest.jwt.payload! == PresentationRequestMocks.PresentationRequestJwt.payload!)
