@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 16/03/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 public protocol VCL {
     
@@ -27,6 +27,7 @@ public protocol VCL {
     
     func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
+        didJwk: VCLDidJwk?,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -51,6 +52,7 @@ public protocol VCL {
     
     func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
+        didJwk: VCLDidJwk?,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -64,6 +66,7 @@ public protocol VCL {
     
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        didJwk: VCLDidJwk?,
         token: VCLToken,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
@@ -83,7 +86,7 @@ public protocol VCL {
     
     func verifyJwt(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         successHandler: @escaping (Bool) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -98,11 +101,4 @@ public protocol VCL {
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
-}
-
-extension VCL {
-    func printVersion() {
-        VCLLog.d("Version: \(GlobalConfig.Version)")
-        VCLLog.d("Build: \(GlobalConfig.Build)")
-    }
 }

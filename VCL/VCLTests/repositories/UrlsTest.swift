@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 15/09/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import XCTest
@@ -19,59 +19,52 @@ final class UrlsTest: XCTestCase {
     }
     
     func testProdEnvironment() {
-        let expectedUrlPrefix = "https://registrar.velocitynetwork.foundation"
+        let registrarPrefix = "https://registrar.velocitynetwork.foundation"
+        
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Prod
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.PROD
-
-        assert(Urls.CredentialTypes.hasPrefix(expectedUrlPrefix))
-        assert(Urls.CredentialTypeSchemas.hasPrefix(expectedUrlPrefix))
-        assert(Urls.Countries.hasPrefix(expectedUrlPrefix))
-        assert(Urls.Organizations.hasPrefix(expectedUrlPrefix))
-        assert(Urls.ResolveKid.hasPrefix(expectedUrlPrefix))
-        assert(Urls.CredentialTypesFormSchema.hasPrefix(expectedUrlPrefix))
+        verifyUrlsPrefix(registrarPrefix)
     }
 
     func testStagingEnvironment() {
-        let expectedUrlPrefix = "https://stagingregistrar.velocitynetwork.foundation"
+        let registrarPrefix = "https://stagingregistrar.velocitynetwork.foundation"
+        
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Staging
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.STAGING
-
-        assert(Urls.CredentialTypes.hasPrefix(expectedUrlPrefix))
-        assert(Urls.CredentialTypeSchemas.hasPrefix(expectedUrlPrefix))
-        assert(Urls.Countries.hasPrefix(expectedUrlPrefix))
-        assert(Urls.Organizations.hasPrefix(expectedUrlPrefix))
-        assert(Urls.ResolveKid.hasPrefix(expectedUrlPrefix))
-        assert(Urls.CredentialTypesFormSchema.hasPrefix(expectedUrlPrefix))
+        verifyUrlsPrefix(registrarPrefix)
     }
     
     func testQaEnvironment() {
-        let expectedUrlPrefix = "https://qaregistrar.velocitynetwork.foundation"
+        let registrarPrefix = "https://qaregistrar.velocitynetwork.foundation"
+        
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Qa
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.QA
-
-        assert(Urls.CredentialTypes.hasPrefix(expectedUrlPrefix))
-        assert(Urls.CredentialTypeSchemas.hasPrefix(expectedUrlPrefix))
-        assert(Urls.Countries.hasPrefix(expectedUrlPrefix))
-        assert(Urls.Organizations.hasPrefix(expectedUrlPrefix))
-        assert(Urls.ResolveKid.hasPrefix(expectedUrlPrefix))
-        assert(Urls.CredentialTypesFormSchema.hasPrefix(expectedUrlPrefix))
+        verifyUrlsPrefix(registrarPrefix)
     }
 
     func testDevEnvironment() {
-        let expectedUrlPrefix = "https://devregistrar.velocitynetwork.foundation"
+        let registrarPrefix = "https://devregistrar.velocitynetwork.foundation"
 
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.DEV
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Dev
 
-        assert(Urls.CredentialTypes.hasPrefix(expectedUrlPrefix))
-        assert(Urls.CredentialTypeSchemas.hasPrefix(expectedUrlPrefix))
-        assert(Urls.Countries.hasPrefix(expectedUrlPrefix))
-        assert(Urls.Organizations.hasPrefix(expectedUrlPrefix))
-        assert(Urls.ResolveKid.hasPrefix(expectedUrlPrefix))
-        assert(Urls.CredentialTypesFormSchema.hasPrefix(expectedUrlPrefix))
+        verifyUrlsPrefix(registrarPrefix)
+    }
+    
+    private func verifyUrlsPrefix(_ registrarPrefix: String) {
+        assert(Urls.CredentialTypes.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.CredentialTypes)")
+        assert(Urls.CredentialTypeSchemas.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.CredentialTypeSchemas)")
+        assert(Urls.Countries.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.Countries)")
+        assert(Urls.Organizations.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.Organizations)")
+        assert(Urls.ResolveKid.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.ResolveKid)")
+        assert(Urls.CredentialTypesFormSchema.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.CredentialTypesFormSchema)")
     }
     
     func testXVnfProtocolVersion() {
+        GlobalConfig.XVnfProtocolVersion = .XVnfProtocolVersion1
         assert(HeaderValues.XVnfProtocolVersion == "1.0")
+        
+        GlobalConfig.XVnfProtocolVersion = .XVnfProtocolVersion2
+        assert(HeaderValues.XVnfProtocolVersion == "2.0")
     }
     
     override func tearDown() {

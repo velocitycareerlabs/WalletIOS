@@ -12,22 +12,23 @@ import UIKit
 struct GlobalConfig {
     static let VclPackage = "io.velocitycareerlabs"
     
-    static var CurrentEnvironment = VCLEnvironment.PROD
+    static var CurrentEnvironment = VCLEnvironment.Prod
+    static var XVnfProtocolVersion = VCLXVnfProtocolVersion.XVnfProtocolVersion1
     
     static var KeycahinAccessGroupIdentifier: String? = nil
     
     #if DEBUG
-        static var IsDebug = false // true
+        static var IsDebugOn = false
     #else
-        static var IsDebug = false
+        static var IsDebugOn = false
     #endif
     
     static let Build = Bundle(for: VCLImpl.self).infoDictionary?["CFBundleVersion"] ?? ""
     static let Version = Bundle(for: VCLImpl.self).infoDictionary?["CFBundleShortVersionString" ] ?? ""
     
     static let LogTagPrefix = "VCL "
-    // TODO: Will be remotely configurable
-    static var IsLoggerOn: Bool { get { CurrentEnvironment != VCLEnvironment.PROD || GlobalConfig.IsDebug } }
+
+    static var IsLoggerOn: Bool { get { (CurrentEnvironment != VCLEnvironment.Staging && CurrentEnvironment != VCLEnvironment.Prod) || IsDebugOn } }
     
     static let AlgES256K = "ES256K"
     static let TypeJwt = "JWT"

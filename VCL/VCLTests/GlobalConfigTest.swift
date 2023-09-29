@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 07/10/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 import XCTest
@@ -17,26 +17,46 @@ class GlobalConfigTest: XCTestCase {
     }
     
     func testDevEnvironment() {
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.DEV
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Dev
+        assert(GlobalConfig.IsLoggerOn)
         
+        GlobalConfig.IsDebugOn = true
+        assert(GlobalConfig.IsLoggerOn)
+
+        GlobalConfig.IsDebugOn = false
         assert(GlobalConfig.IsLoggerOn)
     }
     
     func testQaEnvironment() {
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.QA
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Qa
+        assert(GlobalConfig.IsLoggerOn)
         
+        GlobalConfig.IsDebugOn = true
+        assert(GlobalConfig.IsLoggerOn)
+
+        GlobalConfig.IsDebugOn = false
         assert(GlobalConfig.IsLoggerOn)
     }
     
     func testStagingEnvironment() {
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.STAGING
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Staging
+        assert(!GlobalConfig.IsLoggerOn)
         
+        GlobalConfig.IsDebugOn = true
         assert(GlobalConfig.IsLoggerOn)
+
+        GlobalConfig.IsDebugOn = false
+        assert(!GlobalConfig.IsLoggerOn)
     }
     
     func testProdEnvironment() {
-        GlobalConfig.CurrentEnvironment = VCLEnvironment.PROD
+        GlobalConfig.CurrentEnvironment = VCLEnvironment.Prod
+        assert(!GlobalConfig.IsLoggerOn)
         
+        GlobalConfig.IsDebugOn = true
+        assert(GlobalConfig.IsLoggerOn)
+
+        GlobalConfig.IsDebugOn = false
         assert(!GlobalConfig.IsLoggerOn)
     }
     

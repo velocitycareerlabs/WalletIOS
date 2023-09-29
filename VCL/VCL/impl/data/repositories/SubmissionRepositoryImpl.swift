@@ -12,14 +12,11 @@ import Foundation
 class SubmissionRepositoryImpl: SubmissionRepository {
     
     private let networkService: NetworkService
-    private let jwtServiceRepository: JwtServiceRepository
     
     init(
-        _ networkService: NetworkService,
-        _ jwtServiceRepository: JwtServiceRepository
+        _ networkService: NetworkService
     ) {
         self.networkService = networkService
-        self.jwtServiceRepository = jwtServiceRepository
     }
     
     func submit(

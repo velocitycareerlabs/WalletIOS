@@ -11,32 +11,24 @@ import Foundation
 import XCTest
 @testable import VCL
 
-/// TODO: Need to mock MS lib storage
 class VCLCredentialManifestTest: XCTestCase {
     var subject: VCLCredentialManifest!
 
     override func setUp() {
-//        do {
-//            subject = try VCLCredentialManifest(
-//                jwt: JwtServiceImpl().sign(
-//                    jwtDescriptor: VCLJwtDescriptor(
-//                        payload: CredentialManifestMocks.Payload,
-//                        iss: "did:ion:EiAbP9xvCYnUOiLwqgbkV4auH_26Pv7BT2pYYT3masvvhw"
-//                    )
-//                )
-//            )
-//        } catch {
-//            XCTFail("\(error)")
-//        }
+        subject = VCLCredentialManifest(
+            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+        )
     }
+                                        
     func testProps() {
-//        assert(subject.iss == "did:ion:EiAbP9xvCYnUOiLwqgbkV4auH_26Pv7BT2pYYT3masvvhw")
-//        assert(subject.did == "did:ion:EiAbP9xvCYnUOiLwqgbkV4auH_26Pv7BT2pYYT3masvvhw")
-//        assert(subject.issuerId == "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiAbP9xvCYnUOiLwqgbkV4auH_26Pv7BT2pYYT3masvvhw")
-//        assert(subject.exchangeId == "64006b95e348b5f886942e31")
-//        assert(subject.presentationDefinitionId == "64006b95e348b5f886942e31.621c9beec8fa34b8e72d5fc7")
-//        assert(subject.finalizeOffersUri == "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiAbP9xvCYnUOiLwqgbkV4auH_26Pv7BT2pYYT3masvvhw/issue/finalize-offers")
-//        assert(subject.checkOffersUri == "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiAbP9xvCYnUOiLwqgbkV4auH_26Pv7BT2pYYT3masvvhw/issue/credential-offers")
-//        assert(subject.submitPresentationUri == "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiAbP9xvCYnUOiLwqgbkV4auH_26Pv7BT2pYYT3masvvhw/issue/submit-identification")
+        assert(subject.iss == "did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA")
+        assert(subject.did == "did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA")
+        assert(subject.issuerId == "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA")
+        assert(subject.exchangeId == "645e315309237c760ac022b1")
+        assert(subject.presentationDefinitionId == "645e315309237c760ac022b1.6384a3ad148b1991687f67c9")
+        assert(subject.finalizeOffersUri == "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA/issue/finalize-offers")
+        assert(subject.checkOffersUri == "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA/issue/credential-offers")
+        assert(subject.submitPresentationUri == "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA/issue/submit-identification")
     }
 }

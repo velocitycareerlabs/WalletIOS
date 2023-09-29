@@ -16,9 +16,11 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
         self.networkService = networkService
     }
     
-    func generateOffers(token: VCLToken,
-                        generateOffersDescriptor: VCLGenerateOffersDescriptor,
-                        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void) {
+    func generateOffers(
+        token: VCLToken,
+        generateOffersDescriptor: VCLGenerateOffersDescriptor,
+        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
+    ) {
         networkService.sendRequest(
             endpoint: generateOffersDescriptor.checkOffersUri,
             body: generateOffersDescriptor.payload.toJsonString(),
@@ -44,32 +46,33 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
     }
     
     private func parse(offersResponse: Response, token: VCLToken) -> VCLOffers {
-        if let offers = offersResponse.payload.toListOfDictionaries() {
+        // VCLXVnfProtocolVersion.XVnfProtocolVersion2
+        if let payload = offersResponse.payload.toDictionary() {
             return VCLOffers(
-                all: offers,
+                payload: payload,
+                all:  (payload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]]) ?? [],
                 responseCode: offersResponse.code,
-                token: token
+                token: token,
+                challenge: (payload[VCLOffers.CodingKeys.KeyChallenge] as? String) ?? ""
             )
-        } else if let offers = offersResponse.payload.toDictionary() {
-            if(offers.isEmpty) {
-                return VCLOffers(
-                        all: [],
-                        responseCode: offersResponse.code,
-                        token: token
-                    )
-            } else {
-                return VCLOffers(
-                    all: [offers],
-                    responseCode: offersResponse.code,
-                    token: token
-                    )
-            }
-        } else {
+        } // VCLXVnfProtocolVersion.XVnfProtocolVersion1
+        else if let allOffers = offersResponse.payload.toList() as? [[String: Any]] {
             return VCLOffers(
-                    all: [],
-                    responseCode: offersResponse.code,
-                    token: token
-                )
+                payload: [:],
+                all: allOffers,
+                responseCode: offersResponse.code,
+                token: token,
+                challenge: ""
+            )
+        } // No offers
+        else {
+            return VCLOffers(
+                payload: [:],
+                all: [],
+                responseCode: offersResponse.code,
+                token: token,
+                challenge: ""
+            )
         }
     }
 }

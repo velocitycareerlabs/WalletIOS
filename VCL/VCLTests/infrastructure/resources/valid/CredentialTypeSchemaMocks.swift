@@ -68,7 +68,9 @@ class CredentialTypeSchemaMocks {
             schema: "???",
             createdAt: "2021-04-13T13:36:40.832Z",
             schemaName: "vaccination-certificate-apr-2021",
-            credentialType: "VaccinationCertificate-Apr2021"
+            credentialType: "VaccinationCertificate-Apr2021",
+            jsonldContext: [],
+            issuerCategory: "RegularIssuer"
         )
 
         static let CredentialTypes = VCLCredentialTypes(

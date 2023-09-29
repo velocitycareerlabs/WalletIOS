@@ -4,16 +4,13 @@
 //
 //  Created by Michael Avoyan on 18/03/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import UIKit
 
 class CredentialTypesUseCaseImpl: CredentialTypesUseCase  {
-    
-    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
-    
+        
     private let credentialTypesRepository: CredentialTypesRepository
     private let executor: Executor
     
@@ -26,23 +23,11 @@ class CredentialTypesUseCaseImpl: CredentialTypesUseCase  {
         cacheSequence: Int,
         completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
     ) {
-        executor.runOnBackgroundThread { [weak self] in
-            if let _self = self {
-                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(CredentialTypesUseCase.self)") {
-                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+        executor.runOnBackground { [weak self] in
+            self?.credentialTypesRepository.getCredentialTypes(cacheSequence: cacheSequence){ result in
+                self?.executor.runOnMain {
+                    completionBlock(result)
                 }
-                
-                _self.credentialTypesRepository.getCredentialTypes(cacheSequence: cacheSequence){ result in
-                    _self.executor.runOnMainThread {
-                        completionBlock(result)
-                    }
-                }
-                
-                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-            } else {
-                completionBlock(.failure(VCLError(message: "self is nil")))
             }
         }
     }

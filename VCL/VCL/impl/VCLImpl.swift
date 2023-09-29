@@ -4,28 +4,31 @@
 //
 //  Created by Michael Avoyan on 20/03/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 public class VCLImpl: VCL {
     
     private static let ModelsToInitializeAmount = 3
     
-    private let countriesModel = VclBlocksProvider.provideCountriesModel()
-    private let credentialTypesModel =  VclBlocksProvider.provideCredentialTypesModel()
-    private var credentialTypeSchemasModel: CredentialTypeSchemasModel?
+    private var initializationDescriptor: VCLInitializationDescriptor!
+
+    private var credentialTypesModel: CredentialTypesModel!
+    private var credentialTypeSchemasModel: CredentialTypeSchemasModel!
+    private var countriesModel: CountriesModel!
     
-    private let presentationRequestUseCase = VclBlocksProvider.providePresentationRequestUseCase()
-    private let presentationSubmissionUseCase = VclBlocksProvider.providePresentationSubmissionUseCase()
-    private let exchangeProgressUseCase = VclBlocksProvider.provideExchangeProgressUseCase()
-    private let organizationsUseCase = VclBlocksProvider.provideOrganizationsUseCase()
-    private let credentialManifestUseCase = VclBlocksProvider.provideCredentialManifestUseCase()
-    private let identificationUseCase = VclBlocksProvider.provideIdentificationUseCase()
-    private let generateOffersUseCase = VclBlocksProvider.provideGenerateOffersUseCase()
-    private let finalizeOffersUseCase = VclBlocksProvider.provideFinalizeOffersUseCase()
-    private let credentialTypesUIFormSchemaUseCase = VclBlocksProvider.provideCredentialTypesUIFormSchemaUseCase()
-    private let verifiedProfileUseCase = VclBlocksProvider.provideVerifiedProfileUseCase()
-    private let jwtServiceUseCase = VclBlocksProvider.provideJwtServiceUseCase()
+    private var presentationRequestUseCase: PresentationRequestUseCase!
+    private var presentationSubmissionUseCase: PresentationSubmissionUseCase!
+    private var exchangeProgressUseCase: ExchangeProgressUseCase!
+    private var organizationsUseCase: OrganizationsUseCase!
+    private var credentialManifestUseCase: CredentialManifestUseCase!
+    private var identificationSubmissionUseCase: IdentificationSubmissionUseCase!
+    private var generateOffersUseCase: GenerateOffersUseCase!
+    private var finalizeOffersUseCase: FinalizeOffersUseCase!
+    private var credentialTypesUIFormSchemaUseCase: CredentialTypesUIFormSchemaUseCase!
+    private var verifiedProfileUseCase: VerifiedProfileUseCase!
+    private var jwtServiceUseCase: JwtServiceUseCase!
+    private var keyServiceUseCase: KeyServiceUseCase!
     
     private var initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
     private var profileServiceTypeVerifier: ProfileServiceTypeVerifier?
@@ -35,52 +38,112 @@ public class VCLImpl: VCL {
         successHandler: @escaping () -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        profileServiceTypeVerifier = ProfileServiceTypeVerifier(verifiedProfileUseCase: verifiedProfileUseCase)
+
+        self.initializationDescriptor = initializationDescriptor
         
-        initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
-        
-        initGlobalConfigurations(initializationDescriptor)
+        initGlobalConfigurations()
         
         printVersion()
-        
-        let completionHandler = {
-            if let error = self.initializationWatcher.firstError() {
-                errorHandler(error)
-            }
-            else {
+
+        self.initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
+
+        cacheRemoteData(
+            cacheSequence: initializationDescriptor.cacheSequence,
+            successHandler: successHandler,
+            errorHandler: errorHandler
+        )
+    }
+    
+    private func initializeUseCases() throws {
+        presentationRequestUseCase =
+        try VclBlocksProvider.providePresentationRequestUseCase(
+            initializationDescriptor.cryptoServicesDescriptor
+        )
+        presentationSubmissionUseCase = try VclBlocksProvider.providePresentationSubmissionUseCase(
+            initializationDescriptor.cryptoServicesDescriptor
+        )
+        exchangeProgressUseCase = VclBlocksProvider.provideExchangeProgressUseCase()
+        organizationsUseCase = VclBlocksProvider.provideOrganizationsUseCase()
+        credentialManifestUseCase =
+        try VclBlocksProvider.provideCredentialManifestUseCase(
+            initializationDescriptor.cryptoServicesDescriptor
+        )
+        identificationSubmissionUseCase = try VclBlocksProvider.provideIdentificationSubmissionUseCase(
+            initializationDescriptor.cryptoServicesDescriptor
+        )
+        generateOffersUseCase = VclBlocksProvider.provideGenerateOffersUseCase()
+        finalizeOffersUseCase =
+        try VclBlocksProvider.provideFinalizeOffersUseCase(
+            initializationDescriptor.cryptoServicesDescriptor,
+            credentialTypesModel
+        )
+        credentialTypesUIFormSchemaUseCase =
+        VclBlocksProvider.provideCredentialTypesUIFormSchemaUseCase()
+        verifiedProfileUseCase = VclBlocksProvider.provideVerifiedProfileUseCase()
+        jwtServiceUseCase = try VclBlocksProvider.provideJwtServiceUseCase(initializationDescriptor.cryptoServicesDescriptor)
+        keyServiceUseCase = try VclBlocksProvider.provideKeyServiceUseCase(initializationDescriptor.cryptoServicesDescriptor)
+    }
+    
+    private func completionHandler(
+        _ successHandler: @escaping () -> Void,
+        _ errorHandler: @escaping (VCLError) -> Void
+    ) {
+        if let error = self.initializationWatcher.firstError() {
+            errorHandler(error)
+        } else {
+            do {
+                try self.initializeUseCases()
+                
+                self.profileServiceTypeVerifier = ProfileServiceTypeVerifier(verifiedProfileUseCase: self.verifiedProfileUseCase)
+                
                 successHandler()
+            } catch where error is VCLError {
+                errorHandler(error as! VCLError)
+            } catch {
+                errorHandler(VCLError(error: error))
             }
         }
-        countriesModel.initialize(cacheSequence: initializationDescriptor.cacheSequence) { [weak self] result in
+    }
+    
+    private func cacheRemoteData(
+        cacheSequence: Int,
+        successHandler: @escaping () -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        credentialTypesModel = VclBlocksProvider.provideCredentialTypesModel()
+        
+        countriesModel = VclBlocksProvider.provideCountriesModel()
+        
+        countriesModel.initialize(cacheSequence: cacheSequence) { [weak self] result in
             do {
                 _ = try result.get()
                 if self?.initializationWatcher.onInitializedModel(error: nil) == true {
-                    completionHandler()
+                    self?.completionHandler(successHandler, errorHandler)
                 }
             } catch {
                 if self?.initializationWatcher.onInitializedModel(error: error as? VCLError) == true {
-                    completionHandler()
+                    self?.completionHandler(successHandler, errorHandler)
                 }
             }
         }
-        credentialTypesModel.initialize(cacheSequence: initializationDescriptor.cacheSequence) { [weak self] result in
+        credentialTypesModel.initialize(cacheSequence: cacheSequence) { [weak self] result in
             do {
                 _ = try result.get()
                 if self?.initializationWatcher.onInitializedModel(error: nil) == true {
-                    completionHandler()
+                    self?.completionHandler(successHandler, errorHandler)
                 }
                 else {
                     if let credentialTypes = self?.credentialTypesModel.data {
                         self?.credentialTypeSchemasModel = VclBlocksProvider.provideCredentialTypeSchemasModel(credenctiialTypes: credentialTypes)
-                        self?.credentialTypeSchemasModel?.initialize(cacheSequence: initializationDescriptor.cacheSequence) { result in
+                        self?.credentialTypeSchemasModel?.initialize(cacheSequence: cacheSequence) { result in
                             do {
                                 _ = try result.get()
                                 if self?.initializationWatcher.onInitializedModel(error: nil) == true {
-                                    completionHandler()
+                                    self?.completionHandler(successHandler, errorHandler)
                                 }
                             } catch {
                                 if self?.initializationWatcher.onInitializedModel(error: error as? VCLError) == true {
-                                    completionHandler()
+                                    self?.completionHandler(successHandler, errorHandler)
                                 }
                             }
                         }
@@ -90,18 +153,17 @@ public class VCLImpl: VCL {
                 }
             } catch {
                 if self?.initializationWatcher.onInitializedModel(error: error as? VCLError, enforceFailure: true) == true {
-                    completionHandler()
+                    self?.completionHandler(successHandler, errorHandler)
                 }
             }
         }
     }
     
-    private func initGlobalConfigurations(
-        _ initializationDescriptor: VCLInitializationDescriptor
-    ) {
+    private func initGlobalConfigurations() {
         GlobalConfig.CurrentEnvironment = initializationDescriptor.environment
+        GlobalConfig.XVnfProtocolVersion = initializationDescriptor.xVnfProtocolVersion
         GlobalConfig.KeycahinAccessGroupIdentifier = initializationDescriptor.keycahinAccessGroupIdentifier
-        GlobalConfig.IsDebug = initializationDescriptor.isDebugOn
+        GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
     }
     
     public var countries: VCLCountries? { get { return countriesModel.data } }
@@ -119,7 +181,7 @@ public class VCLImpl: VCL {
             profileServiceTypeVerifier?.verifyServiceTypeOfVerifiedProfile(
                 verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: did),
                 expectedServiceTypes: VCLServiceTypes(serviceType: VCLServiceType.Inspector),
-                successHandler: { [weak self] in
+                successHandler: { [weak self] _ in
                     self?.presentationRequestUseCase.getPresentationRequest(
                         presentationRequestDescriptor: presentationRequestDescriptor
                     ) { presentationRequestResult in
@@ -146,10 +208,14 @@ public class VCLImpl: VCL {
     
     public func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
+        didJwk: VCLDidJwk? = nil,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        presentationSubmissionUseCase.submit(submission: presentationSubmission) {
+        presentationSubmissionUseCase.submit(
+            submission: presentationSubmission,
+            didJwk: didJwk
+        ) {
             [weak self] presentationSubmissionResult in
             do {
                 successHandler(try presentationSubmissionResult.get())
@@ -204,9 +270,10 @@ public class VCLImpl: VCL {
             profileServiceTypeVerifier?.verifyServiceTypeOfVerifiedProfile(
                 verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: did),
                 expectedServiceTypes: VCLServiceTypes(issuingType: credentialManifestDescriptor.issuingType),
-                successHandler: { [weak self] in
+                successHandler: { [weak self] verifiedProfile in
                     self?.credentialManifestUseCase.getCredentialManifest(
-                        credentialManifestDescriptor: credentialManifestDescriptor
+                        credentialManifestDescriptor: credentialManifestDescriptor,
+                        verifiedProfile: verifiedProfile
                     ) { [weak self] credentialManifestResult in
                         do {
                             successHandler(try credentialManifestResult.get())
@@ -231,6 +298,7 @@ public class VCLImpl: VCL {
     
     public func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
+        didJwk: VCLDidJwk? = nil,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
@@ -238,7 +306,10 @@ public class VCLImpl: VCL {
             credentialManifest: generateOffersDescriptor.credentialManifest,
             verifiableCredentials: generateOffersDescriptor.identificationVerifiableCredentials
         )
-        identificationUseCase.submit(submission: identificationSubmission) {
+        identificationSubmissionUseCase.submit(
+            submission: identificationSubmission,
+            didJwk: didJwk
+        ) {
             [weak self] identificationSubmissionResult in
             do {
                 let identificationSubmission = try identificationSubmissionResult.get()
@@ -285,9 +356,9 @@ public class VCLImpl: VCL {
             token: token,
             generateOffersDescriptor: generateOffersDescriptor
         ) {
-            [weak self] vnOffersResult in
+            [weak self] offersResult in
             do {
-                successHandler(try vnOffersResult.get())
+                successHandler(try offersResult.get())
             } catch {
                 self?.logError(message: "generateOffers", error: error)
                 errorHandler(error as? VCLError ?? VCLError(error: error))
@@ -297,13 +368,16 @@ public class VCLImpl: VCL {
     
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        didJwk: VCLDidJwk? = nil,
         token: VCLToken,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         finalizeOffersUseCase.finalizeOffers(
-            token: token,
-            finalizeOffersDescriptor: finalizeOffersDescriptor) {
+            finalizeOffersDescriptor: finalizeOffersDescriptor,
+            didJwk: didJwk,
+            token: token
+        ) {
                 [weak self] jwtVerifiableCredentials in
                 do {
                     successHandler(try jwtVerifiableCredentials.get())
@@ -356,11 +430,11 @@ public class VCLImpl: VCL {
     
     public func verifyJwt(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         successHandler: @escaping (Bool) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) {
+        jwtServiceUseCase.verifyJwt(jwt: jwt, publicJwk: publicJwk) {
             [weak self] isVerifiedResult in
             do {
                 successHandler(try isVerifiedResult.get())
@@ -391,7 +465,7 @@ public class VCLImpl: VCL {
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        jwtServiceUseCase.generateDidJwk(
+        keyServiceUseCase.generateDidJwk(
             completionBlock: {
                 [weak self] didJwkResult in
                 do {
@@ -407,5 +481,10 @@ public class VCLImpl: VCL {
 extension VCLImpl {
     func logError(message: String = "", error: Error) {
         VCLLog.e("\(message): \(error)")
+    }
+    
+    func printVersion() {
+        VCLLog.d("Version: \(GlobalConfig.Version)")
+        VCLLog.d("Build: \(GlobalConfig.Build)")
     }
 }

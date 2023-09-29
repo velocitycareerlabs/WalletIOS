@@ -11,15 +11,18 @@ import Foundation
 
 public struct VCLFinalizeOffersDescriptor {
     public let credentialManifest: VCLCredentialManifest
+    public let offers: VCLOffers
     public let approvedOfferIds: [String]
     public let rejectedOfferIds: [String]
     
     public init(
         credentialManifest: VCLCredentialManifest,
+        offers: VCLOffers,
         approvedOfferIds: [String],
         rejectedOfferIds: [String]
     ) {
         self.credentialManifest = credentialManifest
+        self.offers = offers
         self.approvedOfferIds = approvedOfferIds
         self.rejectedOfferIds = rejectedOfferIds
     }
@@ -35,6 +38,7 @@ public struct VCLFinalizeOffersDescriptor {
     var issuerId: String { get { credentialManifest.issuerId } }
     var exchangeId: String { get { credentialManifest.exchangeId } }
     var finalizeOffersUri: String { get { credentialManifest.finalizeOffersUri } }
+    var serviceTypes: VCLServiceTypes { get { credentialManifest.verifiedProfile.serviceTypes } }
     
     public func generateRequestBody(jwt: VCLJwt) -> [String: Any?] {
         var retVal = self.payload

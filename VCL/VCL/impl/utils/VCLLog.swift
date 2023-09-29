@@ -16,6 +16,12 @@ struct VCLLog {
             case warning = "⚠️"
             case debug = "💬"
         }
+    static func d(_ infoData: Data?, level: LogLevel = .debug, file: String = #file, function: String = #function, line: Int = #line) {
+        if GlobalConfig.IsLoggerOn {
+            let info = String(data: infoData ?? Data(bytes: [] as [UInt8], count: 0), encoding: .utf8) ?? ""
+            print("\(level.rawValue), \((file as NSString).lastPathComponent), \(line), \(function), \(GlobalConfig.LogTagPrefix + info)")
+        }
+    }
     static func d(_ info: String, level: LogLevel = .debug, file: String = #file, function: String = #function, line: Int = #line) {
         if GlobalConfig.IsLoggerOn {
             print("\(level.rawValue), \((file as NSString).lastPathComponent), \(line), \(function), \(GlobalConfig.LogTagPrefix + info)")

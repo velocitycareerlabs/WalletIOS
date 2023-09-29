@@ -51,7 +51,7 @@ extension String {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
-                VCLLog.e(error)
+//                VCLLog.e(error)
             }
         }
         return nil
@@ -95,8 +95,8 @@ extension String {
             .path.split(separator: "/")
             .filter{ $0.hasPrefix(subPathPrefix) }
             .first) {
-                return String(urlSubPath)
-            }
+            return String(urlSubPath)
+        }
         return nil
     }
     
@@ -128,25 +128,25 @@ extension String {
         }
         return String(data: data, encoding: .utf8)
     }
-
     
-    func decodeJwtBase64Url() -> [String] {
-        var retVal = [String]()
+    
+    func decodeJwtBase64Url() -> [String?] {
+        var retVal = [String?]()
         let base64Parts = self.split(separator: ".").map{ String($0) }
         if base64Parts.count >= 1, let decoded = base64Parts[0].decodeBase64URL() {
             retVal.append(decoded)
         } else {
-            retVal.append("")
+            retVal.append(nil)
         }
         if base64Parts.count >= 2, let decoded = base64Parts[1].decodeBase64URL() {
             retVal.append(decoded)
         } else {
-            retVal.append("")
+            retVal.append(nil)
         }
         if base64Parts.count >= 3 {
             retVal.append(base64Parts[2]) // sha256
         } else {
-            retVal.append("")
+            retVal.append(nil)
         }
         return retVal
     }
@@ -170,25 +170,25 @@ extension String {
 //        return dict
 //    }
     func getUrlQueryParams() -> [String: String]? {
-            var map: [String: String]? = nil
-            do {
-                let params = self.split(whereSeparator: { (char) -> Bool in
-                    return char == "?" || char == "&"
-                })
-                map = [String: String]()
-                for param in params {
-                    let pair = param.split(separator: "=")
-                    if pair.count == 2 {
-                        let key = String(pair[0])
-                        let value = String(pair[1])
-                        map?[key] = value
-                    }
+        var map: [String: String]? = nil
+        do {
+            let params = self.split(whereSeparator: { (char) -> Bool in
+                return char == "?" || char == "&"
+            })
+            map = [String: String]()
+            for param in params {
+                let pair = param.split(separator: "=")
+                if pair.count == 2 {
+                    let key = String(pair[0])
+                    let value = String(pair[1])
+                    map?[key] = value
                 }
-            } catch {
-//                VCLLog.error(error)
             }
-            return map
+        } catch {
+//            VCLLog.error(error)
         }
+        return map
+    }
     
     func removePrefix(_ prefix: String) -> String {
         guard self.hasPrefix(prefix) else { return self }
@@ -199,10 +199,10 @@ extension String {
         guard self.contains(suffixStart) else { return self }
         var components = self.components(separatedBy: suffixStart)
         if components.count > 0 {
-          components.removeLast()
-          return components[0]
+            components.removeLast()
+            return components[0]
         } else {
-          return self
+            return self
         }
     }
 }

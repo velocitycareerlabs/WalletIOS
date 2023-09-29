@@ -4,16 +4,13 @@
 //
 //  Created by Michael Avoyan on 09/05/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import UIKit
 
 class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
-    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
-
     private let credentialManifestRepository: CredentialManifestRepository
     private let resolveKidRepository: ResolveKidRepository
     private let jwtServiceRepository: JwtServiceRepository
@@ -29,65 +26,38 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         self.executor = executor
     }
     
-    func getCredentialManifest(credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-                               completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void) {
-        executor.runOnBackgroundThread() { [weak self] in
-            if let _self = self {
-                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(CredentialManifestUseCase.self)") {
-                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-                }
-                
-                self?.credentialManifestRepository.getCredentialManifest(
-                    credentialManifestDescriptor: credentialManifestDescriptor
-                ) {
-                    jwtStrResult in
-                    do {
-                        let jwtStr = try jwtStrResult.get()
-                        _self.onGetJwtSuccess(
-                            jwtStr,
-                            credentialManifestDescriptor,
-                            completionBlock
-                        )
-                    } catch {
-                        _self.onError(error, completionBlock)
-                    }
-                }
-                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-            } else {
-                completionBlock(.failure(VCLError(message: "self is nil")))
-            }
-        }
-    }
-    
-    private func onGetJwtSuccess(
-        _ jwtStr: String,
-        _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+    func getCredentialManifest(
+        credentialManifestDescriptor: VCLCredentialManifestDescriptor,
+        verifiedProfile: VCLVerifiedProfile,
+        completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        self.jwtServiceRepository.decode(encodedJwt: jwtStr) {
-            [weak self] jwtResult in
-            do {
-                let jwt = try jwtResult.get()
-                self?.onDecodeJwtSuccess(
-                    jwt,
-                    credentialManifestDescriptor,
-                    completionBlock
-                )
-            } catch {
-                self?.onError(error, completionBlock)
+        executor.runOnBackground { [weak self] in
+            self?.credentialManifestRepository.getCredentialManifest(
+                credentialManifestDescriptor: credentialManifestDescriptor
+            ) {
+                credentialManifestResult in
+                do {
+                    self?.ongetCredentialManifestSuccess(
+                        VCLJwt(encodedJwt: try credentialManifestResult.get()),
+                        credentialManifestDescriptor,
+                        verifiedProfile,
+                        completionBlock
+                    )
+                } catch {
+                    self?.onError(error, completionBlock)
+                }
             }
         }
     }
     
-    private func onDecodeJwtSuccess(
+    private func ongetCredentialManifestSuccess(
         _ jwt: VCLJwt,
         _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
+        _ verifiedProfile: VCLVerifiedProfile,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        if let keyID = jwt.keyID?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
-            self.resolveKidRepository.getPublicKey(keyID: keyID) {
+        if let kid = jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
+            self.resolveKidRepository.getPublicKey(kid: kid) {
                 [weak self] publicKeyResult in
                 do {
                     let publicKey = try publicKeyResult.get()
@@ -95,6 +65,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                         publicKey,
                         jwt,
                         credentialManifestDescriptor,
+                        verifiedProfile,
                         completionBlock
                     )
                 } catch {
@@ -102,19 +73,20 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                 }
             }
         } else {
-            self.executor.runOnMainThread {
+            self.executor.runOnMain {
                 completionBlock(.failure(VCLError(message: "Empty KeyID")))
             }
         }
     }
     
     private func onResolvePublicKeySuccess(
-        _ jwkPublic: VCLJwkPublic,
+        _ publicJwk: VCLPublicJwk,
         _ jwt: VCLJwt,
         _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
+        _ verifiedProfile: VCLVerifiedProfile,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        self.jwtServiceRepository.verifyJwt(jwt: jwt, jwkPublic: jwkPublic) {
+        self.jwtServiceRepository.verifyJwt(jwt: jwt, publicJwk: publicJwk) {
             [weak self] isVerifiedResult in
             do {
                 let isVerified = try isVerifiedResult.get()
@@ -122,6 +94,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                     isVerified,
                     jwt,
                     credentialManifestDescriptor,
+                    verifiedProfile,
                     completionBlock
                 )
             } catch {
@@ -134,17 +107,19 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         _ isVerified: Bool,
         _ jwt: VCLJwt,
         _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
+        _ verifiedProfile: VCLVerifiedProfile,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if isVerified == true {
-            executor.runOnMainThread { completionBlock(.success(
+            executor.runOnMain { completionBlock(.success(
                 VCLCredentialManifest(
                     jwt: jwt,
-                    vendorOriginContext: credentialManifestDescriptor.vendorOriginContext
+                    vendorOriginContext: credentialManifestDescriptor.vendorOriginContext,
+                    verifiedProfile: verifiedProfile
                 )))
             }
         } else {
-            executor.runOnMainThread {
+            executor.runOnMain {
                 completionBlock(.failure(VCLError(message: "Failed  to verify: \(jwt)")))
             }
         }
@@ -154,7 +129,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         _ error: Error,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        executor.runOnMainThread {
+        executor.runOnMain {
             completionBlock(.failure(VCLError(error: error)))
         }
     }

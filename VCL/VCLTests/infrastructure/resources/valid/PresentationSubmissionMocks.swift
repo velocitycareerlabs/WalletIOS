@@ -18,14 +18,14 @@ class PresentationSubmissionMocks {
     static let PresentationSubmissionResultJson = "{\"token\":\"u7yLD8KS2eTEqkg9aRQE\",\"exchange\":{\"id\":\"64131231\",\"type\":\"DISCLOSURE\",\"disclosureComplete\":true,\"exchangeComplete\":true}}"
     static let PresentationRequest = VCLPresentationRequest(
         jwt: JwtServiceMocks.JWT,
-        jwkPublic: JwtServiceMocks.JwkPublic,
+        publicJwk: JwtServiceMocks.PublicJwk,
         deepLink: DeepLinkMocks.CredentialManifestDeepLinkMainNet,
         pushDelegate: PushDelegate
     )
 
     static let SelectionsList = [
-        VCLVerifiableCredential(inputDescriptor: "IdDocument", jwtVc: JwtServiceMocks.AdamSmithIdDocumentJwt),
-        VCLVerifiableCredential(inputDescriptor: "Email", jwtVc: JwtServiceMocks.AdamSmithEmailJwt)
+        VCLVerifiableCredential(inputDescriptor: "PhoneV1.0", jwtVc: JwtServiceMocks.AdamSmithPhoneJwt),
+        VCLVerifiableCredential(inputDescriptor: "EmailV1.0", jwtVc: JwtServiceMocks.AdamSmithEmailJwt)
     ]
     
     static let PresentationSubmissionJwt = PresentationRequestMocks.PresentationRequestJwt

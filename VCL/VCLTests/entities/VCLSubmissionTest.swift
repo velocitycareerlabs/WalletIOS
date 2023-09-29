@@ -11,7 +11,6 @@ import Foundation
 import XCTest
 @testable import VCL
 
-/// TODO: Test after updating Micrisoft jwt library
 final class VCLSubmissionTest: XCTestCase {
     var subject: VCLSubmission!
 
@@ -43,5 +42,10 @@ final class VCLSubmissionTest: XCTestCase {
 
         assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushUrl] as! String == subject.pushDelegate!.pushUrl)
         assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushToken] as! String == subject.pushDelegate!.pushToken)
+    }
+    
+    func testContext() {
+        assert(VCLSubmission.CodingKeys.KeyContext == "@context")
+        assert(VCLSubmission.CodingKeys.ValueContextList == ["https://www.w3.org/2018/credentials/v1"])
     }
 }

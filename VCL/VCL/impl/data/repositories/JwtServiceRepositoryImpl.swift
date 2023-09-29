@@ -4,57 +4,42 @@
 //
 //  Created by Michael Avoyan on 08/04/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
 class JwtServiceRepositoryImpl: JwtServiceRepository {
     
-    private let jwtService: JwtService
+    private let jwtService: VCLJwtService
     
-    init(_ jwtService: JwtService) {
+    init(_ jwtService: VCLJwtService) {
         self.jwtService = jwtService
-    }
-    
-    func decode(
-        encodedJwt: String,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
-    ) {
-        completionBlock(.success(jwtService.decode(encodedJwt: encodedJwt)))
     }
     
     func verifyJwt(
         jwt: VCLJwt,
-        jwkPublic: VCLJwkPublic,
+        publicJwk: VCLPublicJwk,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        do {
-            completionBlock(.success(try jwtService.verify(jwt: jwt, jwkPublic: jwkPublic)))
-        } catch {
-            completionBlock(.failure(VCLError(error: error)))
-        }
+        jwtService.verify(
+            jwt: jwt,
+            publicJwk: publicJwk,
+            completionBlock: { verificationResult in completionBlock(verificationResult) }
+        )
     }
     
     func generateSignedJwt(
+        kid: String? = nil,
+        nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
-        do {
-            completionBlock(.success(try jwtService.sign(jwtDescriptor: jwtDescriptor)))
-        } catch {
-            completionBlock(.failure(VCLError(error: error)))
-        }
-    }
-    
-    func generateDidJwk(
-        didJwkDescriptor: VCLDidJwkDescriptor? = nil,
-        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
-    ) {
-        do {
-            completionBlock(.success(try jwtService.generateDidJwk(didJwkDescriptor: didJwkDescriptor)))
-        } catch {
-            completionBlock(.failure(VCLError(error: error)))
-        }
+        jwtService.sign(
+            kid: kid,
+            nonce: nonce,
+            jwtDescriptor: jwtDescriptor,
+            completionBlock: { jwtResult in completionBlock(jwtResult) }
+        )
     }
 }

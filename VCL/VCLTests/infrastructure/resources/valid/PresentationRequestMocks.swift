@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 04/05/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 @testable import VCL
@@ -16,23 +16,30 @@ class PresentationRequestMocks {
     static let EncodedPresentationRequestResponse =
         "{\"presentation_request\":\"\(EncodedPresentationRequest)\"}"
     
-    static let PresentationRequestJwtDecodedJson = "{\"payload\":{\"exchange_id\":\"6092492cc41813579fb49ada\",\"metadata\":{\"client_name\":\"Google\",\"logo_uri\":\"https://expresswriters.com/wp-content/uploads/2015/09/google-new-logo-1280x720.jpg\",\"tos_uri\":\"https://requisitions.acme.example.com/disclosure-terms.html\",\"max_retention_period\":\"2m\"},\"presentation_definition\":{\"id\":\"6092492cc41813579fb49ada.5f4d7ec9461170000749cf75\",\"purpose\":\"Job offer\",\"format\":{\"jwt_vp\":{\"alg\":[\"secp256k1\"]}},\"input_descriptors\":[{\"id\":\"IdentityAndContact\",\"schema\":[{\"uri\":\"IdentityAndContact\"}]},{\"id\":\"EducationDegree\",\"schema\":[{\"uri\":\"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/education-degree.schema.json\"}]},{\"id\":\"PastEmploymentPosition\",\"schema\":[{\"uri\":\"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/past-employment-position.schema.json\"}]},{\"id\":\"CurrentEmploymentPosition\",\"schema\":[{\"uri\":\"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/current-employment-position.schema.json\"}]},{\"id\":\"Certification\",\"schema\":[{\"uri\":\"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/certification.schema.json\"}]},{\"id\":\"Badge\",\"schema\":[{\"uri\":\"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/badge.schema.json\"}]},{\"id\":\"Assessment\",\"schema\":[{\"uri\":\"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/assessment.schema.json\"}]}]},\"iss\":\"did:velocity:0xd60231a3d0de0f197f1784f6f37ebcfaa291ab23\",\"iat\":1620199724,\"exp\":1620804524,\"nbf\":1620199724},\"header\":{\"typ\":\"JWT\",\"kid\":\"did:velocity:0xd60231a3d0de0f197f1784f6f37ebcfaa291ab23#key-1\",\"alg\":\"ES256K\"}}"
+    static let PresentationRequestJwtDecodedHeaderJson =
+        "{ \"typ\": \"JWT\", \"kid\": \"did:velocity:0xd4df29726d500f9b85bc6c7f1b3c021f16305692#key-1\", \"alg\": \"ES256K\" }"
+
+    static let PresentationRequestJwtDecodedPayloadJson =
+        "{ \"exchange_id\": \"60ec1f766d274e00086748ca\", \"metadata\": { \"client_name\": \"Microsoft Corporation\", \"logo_uri\": \"https://agsol.com/wp-content/uploads/2018/09/new-microsoft-logo-SIZED-SQUARE.jpg\", \"tos_uri\": \"https://www.velocityexperiencecenter.com/terms-and-conditions-vnf\", \"max_retention_period\": \"6m\" }, \"presentation_definition\": { \"id\": \"60ec1f766d274e00086748ca.60ec143e6d274e00086748bc\", \"purpose\": \"Id Check\", \"format\": { \"jwt_vp\": { \"alg\": [ \"secp256k1\" ] } }, \"input_descriptors\": [ { \"id\": \"IdDocument\", \"schema\": [ { \"uri\": \"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/id-document.v1.schema.json\" } ] }, { \"id\": \"Email\", \"schema\": [ { \"uri\": \"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/email.schema.json\" } ] }, { \"id\": \"Phone\", \"schema\": [ { \"uri\": \"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/phone.schema.json\" } ] }, { \"id\": \"PastEmploymentPosition\", \"schema\": [ { \"uri\": \"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/past-employment-position.schema.json\" } ] }, { \"id\": \"CurrentEmploymentPosition\", \"schema\": [ { \"uri\": \"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/current-employment-position.schema.json\" } ] }, { \"id\": \"EducationDegree\", \"schema\": [ { \"uri\": \"https://devservices.velocitycareerlabs.io/api/v0.6/schemas/education-degree.schema.json\" } ] } ] }, \"iss\": \"did:velocity:0xd4df29726d500f9b85bc6c7f1b3c021f16305692\", \"iat\": 1626087286, \"exp\": 1626692086, \"nbf\": 1626087286 }"
+    
+    static let PresentationRequestJwtSignature =
+        "BSQnMNNJyicCsh6zeh7k5GBHC6T9QgPNV4SHhSXsnz3sBJMwNBFz7v4axLCoCiKHtIxNj5"
     
     static let PresentationRequestJwt = VCLJwt(
-        header: PresentationRequestJwtDecodedJson.toDictionary()?[VCLJwt.CodingKeys.KeyHeader] as? [String : Any],
-        payload: PresentationRequestJwtDecodedJson.toDictionary()?[VCLJwt.CodingKeys.KeyPayload] as? [String : Any],
-        signature: PresentationRequestJwtDecodedJson.toDictionary()?[VCLJwt.CodingKeys.KeySignature] as? String,
+        header: PresentationRequestJwtDecodedHeaderJson.toDictionary(),
+        payload: PresentationRequestJwtDecodedPayloadJson.toDictionary(),
+        signature: PresentationRequestJwtSignature,
         encodedJwt: EncodedPresentationRequest
     )
     
     static let JWK = "{\"alg\":\"ES256K\",\"use\":\"sig\",\"kid\":\"uemn6l5ro6hLNrgiPRl1Dy51V9whez4tu4hlwsNOTVk\",\"crv\":\"secp256k1\",\"x\":\"oLYCa-AlnVpW8Rq9iST_1eY_XoyvGRry7y1xS4vU4qo\",\"y\":\"PUMAsawZ24WaSnRIdDb_wNbShAvfsGF71ke1DcJGxlM\",\"kty\":\"EC\"}\n"
 
     
-    static let jwkPublic = VCLJwkPublic(valueStr: JWK)
+    static let PublicJwk = VCLPublicJwk(valueStr: JWK)
     
     static let PresentationRequest = VCLPresentationRequest(
         jwt: PresentationRequestJwt,
-        jwkPublic: jwkPublic,
+        publicJwk: PublicJwk,
         deepLink: VCLDeepLink(value: "")
     )
 }

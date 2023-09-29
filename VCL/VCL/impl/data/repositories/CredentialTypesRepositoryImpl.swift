@@ -76,6 +76,8 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
                 let schemaName = payload[VCLCredentialType.CodingKeys.KeySchemaName] as? String
                 let credentialType = payload[VCLCredentialType.CodingKeys.KeyCredentialType] as? String
                 let recommended = payload[VCLCredentialType.CodingKeys.KeyRecommended] as? Bool
+                let jsonldContext = payload[VCLCredentialType.CodingKeys.KeyJsonldContext] as? [String]
+                let issuerCategory = payload[VCLCredentialType.CodingKeys.KeyIssuerCategory] as? String
 
                 credentialTypesArr.append(
                     VCLCredentialType(
@@ -85,7 +87,9 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
                         createdAt: createdAt,
                         schemaName: schemaName,
                         credentialType: credentialType,
-                        recommended: recommended
+                        recommended: recommended,
+                        jsonldContext: jsonldContext,
+                        issuerCategory: issuerCategory
                     )
                 )
             }

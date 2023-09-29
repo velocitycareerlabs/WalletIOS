@@ -39,7 +39,7 @@ class NetworkServiceImpl: NetworkService {
             completionBlock(.failure(VCLError(message: "Request error: \(request.stringify())")))
           return
         }
-        let task = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             if let taskError = error {
                 completionBlock(.failure(VCLError(error: taskError, code: VCLStatusCode.NetworkError.rawValue)))
             }
@@ -54,6 +54,7 @@ class NetworkServiceImpl: NetworkService {
                 }
                 if (200...299).contains(httpResponse.statusCode) {
                     let response = Response(payload: jsonData, code: httpResponse.statusCode)
+                    self?.logResponse(response)
                     completionBlock(.success(response))
                 }
                 else {
@@ -93,12 +94,17 @@ class NetworkServiceImpl: NetworkService {
     }
     
     private func logRequest(_ request: Request) {
-        let logMethod = "Method: \(request.method)"
-        let endpointLog = "\nEndpoint: \(request.endpoint)"
-        var bodyLog = ""
+        let logMethod = "Request Method: \(request.method)"
+        let endpointLog = " Request Endpoint: \(request.endpoint)"
+        var bodyLog = "\n"
         if let body = request.body {
-            bodyLog = "\nBody: \(body)"
+            bodyLog = " Request Body: \(body)"
         }
         VCLLog.d("\(logMethod)\(endpointLog)\(bodyLog)")
+    }
+    
+    private func logResponse(_ response: Response) {
+        VCLLog.d("Response:\nstatus code: \(response.code)")
+        VCLLog.d(response.payload)
     }
 }

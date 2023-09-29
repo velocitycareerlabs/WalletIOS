@@ -11,19 +11,25 @@ import Foundation
 
 public struct VCLInitializationDescriptor {
     public let environment: VCLEnvironment
+    public let xVnfProtocolVersion: VCLXVnfProtocolVersion
     public let cacheSequence: Int
     public let keycahinAccessGroupIdentifier: String?
     public let isDebugOn: Bool
+    public let cryptoServicesDescriptor: VCLCryptoServicesDescriptor
     
     public init(
-        environment: VCLEnvironment = VCLEnvironment.PROD,
+        environment: VCLEnvironment = .Prod,
+        xVnfProtocolVersion: VCLXVnfProtocolVersion = .XVnfProtocolVersion1,
         cacheSequence: Int = 0,
         keycahinAccessGroupIdentifier: String? = nil,
-        isDebugOn: Bool = false
+        isDebugOn: Bool = false,
+        cryptoServicesDescriptor: VCLCryptoServicesDescriptor = VCLCryptoServicesDescriptor()
     ) {
         self.environment = environment
+        self.xVnfProtocolVersion = xVnfProtocolVersion
         self.cacheSequence = cacheSequence
         self.keycahinAccessGroupIdentifier = keycahinAccessGroupIdentifier
         self.isDebugOn = isDebugOn
+        self.cryptoServicesDescriptor = cryptoServicesDescriptor
     }
 }

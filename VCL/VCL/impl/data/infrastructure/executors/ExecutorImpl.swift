@@ -10,25 +10,19 @@
 import Foundation
 
 class ExecutorImpl: Executor {
-    private var mainThread: DispatchQueue
+    private var dispatchQueueMain: DispatchQueue
     
     init() {
-        self.mainThread = DispatchQueue.main
+        self.dispatchQueueMain = DispatchQueue.main
     }
     
-//    func runOn(_ callinghQueue: DispatchQueue, _ block: @escaping () -> Void) {
-//        callinghQueue.async {
-//            block()
-//        }
-//    }
-    
-    func runOnMainThread(_ block: @escaping () -> Void) {
-        self.mainThread.async {
+    func runOnMain(_ block: @escaping () -> Void) {
+        self.dispatchQueueMain.async {
             block()
         }
     }
     
-    func runOnBackgroundThread(_ block: @escaping () -> Void) {
+    func runOnBackground(_ block: @escaping () -> Void) {
         DispatchQueue.global().async {
             block()
         }

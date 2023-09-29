@@ -41,4 +41,8 @@ extension Data {
         }
         return nil
     }
+    
+    func toBool() -> Bool? {
+        return String(data: self, encoding: .utf8).flatMap(Bool.init)
+    }
 }

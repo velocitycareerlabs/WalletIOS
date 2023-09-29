@@ -11,56 +11,67 @@ import Foundation
 import XCTest
 @testable import VCL
 
-/// TODO: Need to mock MS lib storage
 class VCLFinalizeOffersDescriptorTest: XCTestCase {
-    
-    var credentialManifest: VCLCredentialManifest!
     
     var subject: VCLFinalizeOffersDescriptor!
     
-    private let exchangeId = "exchangeId"
-    private let finalizeOffersUri = "finalizeOffersUri"
+    private let offers = VCLOffers(
+        payload: [String: Any](),
+        all: [[String: Any]](),
+        responseCode: 200, token:
+            VCLToken(value: ""), challenge: ""
+    )
+    
+    private let jtiMock = "some jti"
+    private let issMock = "some iss"
+    private let audMock = "some sud"
+    private let nonceMock = "some nonce"
+    
     private let approvedOfferIds = ["approvedOfferId1", "approvedOfferId2"]
     private let rejectedOfferIds = ["rejectedOfferId1", "rejectedOfferId2"]
     
     override func setUp() {
-//        let credentialManifest = VCLCredentialManifest(jwt: VCLJwt(encodedJwt: CredentialManifestMocks.CredentialManifestJwt))
-//
-//        subject = VCLFinalizeOffersDescriptor(
-//            credentialManifest: credentialManifest,
-//            approvedOfferIds: approvedOfferIds,
-//            rejectedOfferIds: rejectedOfferIds
-//        )
+        
+        let credentialManifest = VCLCredentialManifest(
+            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+        )
+        
+        subject = VCLFinalizeOffersDescriptor(
+            credentialManifest: credentialManifest,
+            offers: offers,
+            approvedOfferIds: approvedOfferIds,
+            rejectedOfferIds: rejectedOfferIds
+        )
     }
     
     func testGenerateRequestBody() {
-//        let uuid = UUID().uuidString
-//        let jti = UUID().uuidString
-//        let iss = UUID().uuidString
-//        let aud = UUID().uuidString
-//        let payload = "{\"key1\": \"value1\"}".toDictionary()!
-//        var jwt: VCLJwt? = nil
-//        do {
-//            jwt = try JwtServiceImpl().sign(
-//                jwtDescriptor: VCLJwtDescriptor(
-//                    didJwk: JwtServiceMocks.didJwk,
-//                    kid: uuid,
-//                    payload: payload,
-//                    jti: jti,
-//                    iss: iss,
-//                    aud: aud
-//                ))
-//        } catch {
-//            XCTFail("\(error)")
-//        }
-//
-//        let requestBody = subject.generateRequestBody(jwt: jwt!)
-//
-//        assert((requestBody["exchangeId"] as! String) == exchangeId)
-//        assert((requestBody["approvedOfferIds"] as! String).toList() as! [String] == approvedOfferIds)
-//        assert((requestBody["rejectedOfferIds"] as! String).toList() as! [String] == rejectedOfferIds)
-//        let proof = (requestBody["proof"] as! String).toDictionary()!
-//        assert((proof["proof_type"] as! String) == "jwt")
-//        assert((proof["jwt"] as! String) == jwt?.encodedJwt)
+        let payload = "{\"key1\": \"value1\"}".toDictionary()!
+        
+        VCLJwtServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)).sign(
+            nonce: nonceMock,
+            jwtDescriptor: VCLJwtDescriptor(
+                payload: payload,
+                jti: jtiMock,
+                iss: issMock,
+                aud: audMock
+            )) { [weak self] jwtResult in
+                do {
+                    let jwt = try jwtResult.get()
+                    let requestBody = self!.subject.generateRequestBody(jwt: jwt)
+                    
+                    assert((requestBody["exchangeId"] as! String) == "645e315309237c760ac022b1")
+                    assert(requestBody["approvedOfferIds"] as? [String] == self!.approvedOfferIds)
+                    assert(requestBody["rejectedOfferIds"] as? [String] == self!.rejectedOfferIds)
+                    
+                    let proof = requestBody["proof"] as? [String: Any]
+                    assert((proof?["proof_type"] as? String) == "jwt")
+                    assert((proof?["jwt"] as? String) == jwt.encodedJwt)
+                    //        equivalent to checking nonce in proof jwt
+                    assert(jwt.payload?["nonce"] as? String == self!.nonceMock)
+                } catch {
+                    XCTFail("\(error)")
+                }
+            }
     }
 }
