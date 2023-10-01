@@ -11,11 +11,11 @@ import Foundation
 import VCToken
 
 public class VCLDidJwk {
-    /// The did:jwk
+    /// The did in jwk format encoded to Base64 format
     public let did: String
-    /// public JWK
+    /// The public JWK
     public let publicJwk: VCLPublicJwk
-    /// kid of jwt - did:jwk suffixed with #0
+    /// The kid of jwt - did:jwk suffixed with #0
     public let kid: String
     /// The id of private key save in secure enclave
     public let keyId: String
