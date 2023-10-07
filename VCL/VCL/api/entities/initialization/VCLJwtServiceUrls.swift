@@ -11,9 +11,12 @@ import Foundation
 
 public struct VCLJwtServiceUrls {
     public let jwtSignServiceUrl: String
-    public let jwtVerifyServiceUrl: String
+    public let jwtVerifyServiceUrl: String?
     
-    public init(jwtSignServiceUrl: String, jwtVerifyServiceUrl: String) {
+    public init(
+        jwtSignServiceUrl: String,
+        jwtVerifyServiceUrl: String? = nil
+    ) {
         self.jwtSignServiceUrl = jwtSignServiceUrl
         self.jwtVerifyServiceUrl = jwtVerifyServiceUrl
     }

@@ -1,44 +1,22 @@
 //
-//  VCLJwtServiceRemoteImpl.swift
+//  VCLJwtSignServiceRemoteImpl.swift
 //  VCL
 //
-//  Created by Michael Avoyan on 08/06/2023.
+//  Created by Michael Avoyan on 03/10/2023.
 //
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-class VCLJwtServiceRemoteImpl: VCLJwtService {
+class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
     
     private let networkService: NetworkService
-    private let jwtServiceUrls: VCLJwtServiceUrls
+    private let jwtSignServiceUrl: String
     
-    init(_ networkService: NetworkService, _ jwtServiceUrls: VCLJwtServiceUrls) {
+    init(_ networkService: NetworkService, _ jwtSignServiceUrl: String) {
         self.networkService = networkService
-        self.jwtServiceUrls = jwtServiceUrls
-    }
-    
-    func verify(
-        jwt: VCLJwt,
-        publicJwk: VCLPublicJwk,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
-    ) {
-        networkService.sendRequest(
-            endpoint: jwtServiceUrls.jwtVerifyServiceUrl,
-            body: generatePayloadToVerify(jwt: jwt, publicJwk: publicJwk).toJsonString(),
-            contentType: .ApplicationJson,
-            method: .POST,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
-        ) { verifiedJwtResult in
-            do {
-                let payloadDict = try verifiedJwtResult.get().payload.toDictionary()
-                let isVerified = (payloadDict?[CodingKeys.KeyVerified] as? Bool) == true
-                completionBlock(.success(isVerified))
-            } catch {
-                completionBlock(.failure(VCLError(error: error)))
-            }
-        }
+        self.jwtSignServiceUrl = jwtSignServiceUrl
     }
     
     func sign(
@@ -48,7 +26,7 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         networkService.sendRequest(
-            endpoint: jwtServiceUrls.jwtSignServiceUrl,
+            endpoint: jwtSignServiceUrl,
             body: generateJwtPayloadToSign(nonce: nonce, jwtDescriptor: jwtDescriptor).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST
@@ -57,22 +35,12 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
                 if let jwtStr = try signedJwtResult.get().payload.toDictionary()?[CodingKeys.KeyCompactJwt] as? String {
                     completionBlock(.success(VCLJwt(encodedJwt: jwtStr)))
                 } else {
-                    completionBlock(.failure(VCLError(payload: "Failed to parse data from \(self?.jwtServiceUrls.jwtVerifyServiceUrl ?? "")")))
+                    completionBlock(.failure(VCLError(payload: "Failed to parse data from \(self?.jwtSignServiceUrl ?? "")")))
                 }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))
             }
         }
-    }
-    
-    private func generatePayloadToVerify(
-        jwt: VCLJwt,
-        publicJwk: VCLPublicJwk
-    ) -> [String: Any] {
-        return [
-            CodingKeys.KeyJwt: jwt.encodedJwt,
-            CodingKeys.KeyPublicKey: publicJwk.valueDict
-        ]
     }
     
     private func generateJwtPayloadToSign(
@@ -107,10 +75,6 @@ class VCLJwtServiceRemoteImpl: VCLJwtService {
         public static let KeyOptions = "options"
         public static let KeyPayload = "payload"
 
-        public static let KeyJwt = "jwt"
         public static let KeyCompactJwt = "compactJwt"
-        public static let KeyVerified = "verified"
-
-        public static let KeyPublicKey = "publicKey"
     }
 }

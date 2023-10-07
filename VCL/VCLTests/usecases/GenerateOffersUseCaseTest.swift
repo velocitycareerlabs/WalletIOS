@@ -39,12 +39,11 @@ final class GenerateOffersUseCaseTest: XCTestCase {
     }
     
     func testGenerateOffersEmptyJsonObj() {
-        // Arrange
         subject = GenerateOffersUseCaseImpl(
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonObj)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
@@ -52,7 +51,6 @@ final class GenerateOffersUseCaseTest: XCTestCase {
                 verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
             ))
 
-        // Action
         subject.generateOffers(token: VCLToken(value: ""), generateOffersDescriptor: generateOffersDescriptor) {
             do {
                 let offers = try $0.get()

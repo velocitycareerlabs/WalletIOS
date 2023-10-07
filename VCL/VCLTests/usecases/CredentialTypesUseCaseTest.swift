@@ -18,34 +18,28 @@ final class CredentialTypesUseCaseTest: XCTestCase {
     }
     
     func testCountryCodesSuccess() {
-        // Arrange
         subject = CredentialTypesUseCaseImpl(
             CredentialTypesRepositoryImpl(
                 NetworkServiceSuccess(
                     validResponse: CredentialTypesMocks.CredentialTypesJson
                 ), EmptyCacheService()
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
-        var result: VCLResult<VCLCredentialTypes>? = nil
         
-        // Action
-        subject.getCredentialTypes(cacheSequence: 1) {
-            result = $0
-        }
-        
-        // Assert
-        do {
-            compareCredentialTypes(
-                credentialTypesArr1: try result!.get().all!,
-                credentialTypesArr2: geExpectedCredentialTypesArr()
-            )
-            compareCredentialTypes(
-                credentialTypesArr1: try result!.get().recommendedTypes!,
-                credentialTypesArr2: geExpectedRecommendedCredentialTypesArr()
-            )
-        } catch {
-            XCTFail("\(error)")
+        subject.getCredentialTypes(cacheSequence: 1) { [weak self] in
+            do {
+                self?.compareCredentialTypes(
+                    credentialTypesArr1: try $0.get().all!,
+                    credentialTypesArr2: self?.geExpectedCredentialTypesArr() ?? []
+                )
+                self?.compareCredentialTypes(
+                    credentialTypesArr1: try $0.get().recommendedTypes!,
+                    credentialTypesArr2: self?.geExpectedRecommendedCredentialTypesArr() ?? []
+                )
+            } catch {
+                XCTFail("\(error)")
+            }
         }
     }
     

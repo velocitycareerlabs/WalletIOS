@@ -20,7 +20,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
         subject.getVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
@@ -44,7 +44,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
 
         subject.getVerifiedProfile(
@@ -69,7 +69,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
 
         subject.getVerifiedProfile(
@@ -94,7 +94,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
         
         subject.getVerifiedProfile(
@@ -119,7 +119,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
         
         subject.getVerifiedProfile(

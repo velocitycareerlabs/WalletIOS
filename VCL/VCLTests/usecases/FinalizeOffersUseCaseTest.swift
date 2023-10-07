@@ -90,7 +90,8 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialMocks.JwtCredentialsFromRegularIssuer)
             ),
             JwtServiceRepositoryImpl(
-                VCLJwtServiceLocalImpl(keyService)
+                VCLJwtSignServiceLocalImpl(keyService),
+                VCLJwtVerifyServiceLocalImpl()
             ),
             CredentialIssuerVerifierImpl(
                 CredentialTypesModelMock(
@@ -133,7 +134,8 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialMocks.JwtCredentialsFromRegularIssuer)
             ),
             JwtServiceRepositoryImpl(
-                VCLJwtServiceLocalImpl(keyService)
+                VCLJwtSignServiceLocalImpl(keyService),
+                VCLJwtVerifyServiceLocalImpl()
             ),
             CredentialIssuerVerifierImpl(
                 CredentialTypesModelMock(
@@ -177,7 +179,8 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialMocks.JwtEmptyCredentials)
             ),
             JwtServiceRepositoryImpl(
-                VCLJwtServiceLocalImpl(keyService)
+                VCLJwtSignServiceLocalImpl(keyService),
+                VCLJwtVerifyServiceLocalImpl()
             ),
             CredentialIssuerVerifierImpl(
                 CredentialTypesModelMock(

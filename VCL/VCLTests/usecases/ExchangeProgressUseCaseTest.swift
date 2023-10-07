@@ -19,14 +19,12 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
     }
     
     func testGetExchangeProgress() {
-        // Arrange
         subject = ExchangeProgressUseCaseImpl(
             ExchangeProgressRepositoryImpl(
                 NetworkServiceSuccess(validResponse: ExchangeProgressMocks.ExchangeProgressJson)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
-        var result: VCLResult<VCLExchange>? = nil
         let submissionResult = VCLSubmissionResult(token: VCLToken(value: ""), exchange: VCLExchange(), jti: "", submissionId: "")
         let exchangeDescriptor = VCLExchangeDescriptor(
             presentationSubmission: VCLPresentationSubmission(
@@ -35,17 +33,13 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
             ), submissionResult: submissionResult
         )
 
-        // Action
-        subject.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) {
-            result = $0
-        }
-
-        // Assert
-        do {
-            let exchange = try result?.get()
-            assert(exchange == expectedExchange(exchangeJsonDict: ExchangeProgressMocks.ExchangeProgressJson.toDictionary()!))
-        } catch {
-            XCTFail("\(error)")
+        subject.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) { [weak self] in
+            do {
+                let exchange = try $0.get()
+                assert(exchange == self?.expectedExchange(exchangeJsonDict: ExchangeProgressMocks.ExchangeProgressJson.toDictionary()!))
+            } catch {
+                XCTFail("\(error)")
+            }
         }
     }
     
