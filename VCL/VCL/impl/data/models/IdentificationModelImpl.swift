@@ -28,7 +28,7 @@ class IdentificationModelImpl: IdentificationModel {
             didJwk: didJwk
         ) { [weak self] result in
             do {
-                self?.data = try result.get().token
+                self?.data = try result.get().issuingToken
             } catch {}
             completionBlock(result)
         }

@@ -46,8 +46,8 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
             ),
             EmptyExecutor()
         ).generateOffers(
-            token: VCLToken(value: ""),
-            generateOffersDescriptor: generateOffersDescriptor
+            generateOffersDescriptor: generateOffersDescriptor,
+            issuingToken: VCLToken(value: "")
         ) { result in
             do {
                 let offers = try result.get()
@@ -106,7 +106,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
         subject.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptorFailed,
             didJwk: didJwk,
-            token: VCLToken(value: "")
+            issuingToken: VCLToken(value: "")
         ) {
             do {
                 let finalizeOffers = try $0.get()
@@ -150,7 +150,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
         subject.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptorPassed,
             didJwk: didJwk,
-            token: VCLToken(value: "")
+            issuingToken: VCLToken(value: "")
         ) {
             do {
                 let finalizeOffers = try $0.get()
@@ -195,7 +195,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
         subject.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptorPassed,
             didJwk: didJwk,
-            token: VCLToken(value: "")
+            issuingToken: VCLToken(value: "")
         ) {
             do {
                 let finalizeOffers = try $0.get()

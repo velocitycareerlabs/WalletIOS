@@ -82,7 +82,7 @@ class ViewController: UIViewController {
             }
         )
     }
-
+    
     private func showControls() {
         loadingIndicator.stopAnimating()
         controlsView.isHidden = false
@@ -198,14 +198,14 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorByOrganization =
         VCLCredentialManifestDescriptorByService(
             service: serviceCredentialAgentIssuer,
-//            issuingType: VCLIssuingType.Career,
+            //            issuingType: VCLIssuingType.Career,
             credentialTypes: serviceCredentialAgentIssuer.credentialTypes // Can come from any where
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorByOrganization,
             successHandler: { [weak self] credentialManifest in
                 NSLog("VCL Credential Manifest received: \(credentialManifest.jwt.payload?.toJson() ?? "")")
-//                NSLog("VCL Credential Manifest received")
+                //                NSLog("VCL Credential Manifest received")
                 
                 self?.generateOffers(credentialManifest: credentialManifest)
             },
@@ -223,7 +223,7 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorByDeepLink =
         VCLCredentialManifestDescriptorByDeepLink(
             deepLink: deepLink//,
-//            issuingType: VCLIssuingType.Identity
+            //            issuingType: VCLIssuingType.Identity
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorByDeepLink,
@@ -249,13 +249,13 @@ class ViewController: UIViewController {
             successHandler: { [weak self] offers in
                 NSLog("VCL Generated Offers: \(offers.all)")
                 NSLog("VCL Generated Offers Response Code: \(offers.responseCode)")
-                NSLog("VCL Generated Offers Token: \(offers.token)")
+                NSLog("VCL Generated Offers Token: \(offers.issuingToken)")
                 
-//                Check offers invoked after the push notification is notified the app that offers are ready:
+                //                Check offers invoked after the push notification is notified the app that offers are ready:
                 self?.checkForOffers(
                     credentialManifest: credentialManifest,
                     generateOffersDescriptor: generateOffersDescriptor,
-                    token: offers.token
+                    issuingToken: offers.issuingToken
                 )
             },
             errorHandler: { error in
@@ -267,15 +267,15 @@ class ViewController: UIViewController {
     private func checkForOffers(
         credentialManifest: VCLCredentialManifest,
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        token: VCLToken
+        issuingToken: VCLToken
     ) {
         vcl.checkForOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            token: token,
+            issuingToken:                     issuingToken,
             successHandler: { [weak self] offers in
                 NSLog("VCL Checked Offers: \(offers.all)")
                 NSLog("VCL Checked Offers Response Code: \(offers.responseCode)")
-                NSLog("VCL Checked Offers Token: \(offers.token)")
+                NSLog("VCL Checked Offers Token: \(offers.issuingToken)")
                 if (offers.responseCode == 200) {
                     self?.finalizeOffers(
                         credentialManifest: credentialManifest,
@@ -303,7 +303,7 @@ class ViewController: UIViewController {
         vcl.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
             didJwk: self.didJwk,
-            token: offers.token,
+            issuingToken: offers.issuingToken,
             successHandler: { verifiableCredentials in
                 NSLog("VCL finalized Offers")
                 NSLog("VCL Passed Credentials: \(verifiableCredentials.passedCredentials)")

@@ -59,7 +59,7 @@ public protocol VCL {
     
     func checkForOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        token: VCLToken,
+        issuingToken: VCLToken,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -67,7 +67,7 @@ public protocol VCL {
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         didJwk: VCLDidJwk?,
-        token: VCLToken,
+        issuingToken: VCLToken,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) 
