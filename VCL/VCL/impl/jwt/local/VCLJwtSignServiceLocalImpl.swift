@@ -1,8 +1,8 @@
 //
-//  VCLJwtServiceLocalImpl.swift
+//  VCLJwtSignServiceLocalImpl.swift
 //  VCL
 //
-//  Created by Michael Avoyan on 03/06/2021.
+//  Created by Michael Avoyan on 03/10/2023.
 //
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
@@ -11,7 +11,7 @@ import Foundation
 import VCToken
 import VCCrypto
 
-class VCLJwtServiceLocalImpl: VCLJwtService {
+class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     
     private let keyService: VCLKeyService
     private let tokenSigning: TokenSigning
@@ -19,23 +19,6 @@ class VCLJwtServiceLocalImpl: VCLJwtService {
     init(_ keyService: VCLKeyService) {
         self.keyService = keyService
         self.tokenSigning = Secp256k1Signer() // No need to be injected
-    }
-    
-    func verify(
-        jwt: VCLJwt,
-        publicJwk: VCLPublicJwk,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
-    ) {
-        do {
-            let pubKey = ECPublicJwk(
-                x: publicJwk.valueDict[VCLJwt.CodingKeys.KeyX] as? String ?? "",
-                y: publicJwk.valueDict[VCLJwt.CodingKeys.KeyY] as? String ?? "",
-                keyId: publicJwk.valueDict[VCLJwt.CodingKeys.KeyKid] as? String ?? ""
-            )
-            completionBlock(.success(try jwt.jwsToken?.verify(using: TokenVerifier(), withPublicKey: pubKey) == true))
-        } catch {
-            completionBlock(.failure(VCLError(error: error)))
-        }
     }
     
     func sign(
@@ -144,8 +127,6 @@ class VCLJwtServiceLocalImpl: VCLJwtService {
     }
     
     public struct CodingKeys {
-        public static let KeyKid = "kid"
-        
         public static let KeyIss = "iss"
         public static let KeyAud = "aud"
         public static let KeySub = "sub"
@@ -154,13 +135,6 @@ class VCLJwtServiceLocalImpl: VCLJwtService {
         public static let KeyNbf = "nbf"
         public static let KeyExp = "exp"
         public static let KeyNonce = "nonce"
-        
-        public static let KeyPayload = "payload"
-        public static let KeyJwt = "jwt"
-        public static let KeyPublicKey = "publicKey"
-        
-        public static let KeyOptions = "options"
-        public static let KeyRequired = "required"
     }
 
 }

@@ -27,13 +27,11 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: PresentationRequestMocks.JWK)
             ),
             JwtServiceRepositoryImpl(
-                VCLJwtServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance))
+                VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
+                VCLJwtVerifyServiceLocalImpl()
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
-        var result: VCLResult<VCLPresentationRequest>? = nil
-
-        // Action
         subject.getPresentationRequest(presentationRequestDescriptor: VCLPresentationRequestDescriptor(
             deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet,
             pushDelegate: VCLPushDelegate(
@@ -41,22 +39,19 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 pushToken: pushToken
             )
         )) {
-            result = $0
-        }
+            do {
+                let presentationRequest = try $0.get()
 
-        // Assert
-        do {
-            let presentationRequest = try result!.get()
-
-            assert(presentationRequest.publicJwk.valueStr.sorted() == VCLPublicJwk(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueStr.sorted())
-            assert(presentationRequest.publicJwk.valueDict == VCLPublicJwk(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueDict)
-            assert(presentationRequest.jwt.encodedJwt == PresentationRequestMocks.PresentationRequestJwt.encodedJwt)
-            assert(presentationRequest.jwt.header! == PresentationRequestMocks.PresentationRequestJwt.header!)
-            assert(presentationRequest.jwt.payload! == PresentationRequestMocks.PresentationRequestJwt.payload!)
-            assert(presentationRequest.pushDelegate!.pushUrl == pushUrl)
-            assert(presentationRequest.pushDelegate!.pushToken == pushToken)
-        } catch {
-            XCTFail("\(error)")
+                assert(presentationRequest.publicJwk.valueStr.sorted() == VCLPublicJwk(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueStr.sorted())
+                assert(presentationRequest.publicJwk.valueDict == VCLPublicJwk(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueDict)
+                assert(presentationRequest.jwt.encodedJwt == PresentationRequestMocks.PresentationRequestJwt.encodedJwt)
+                assert(presentationRequest.jwt.header! == PresentationRequestMocks.PresentationRequestJwt.header!)
+                assert(presentationRequest.jwt.payload! == PresentationRequestMocks.PresentationRequestJwt.payload!)
+                assert(presentationRequest.pushDelegate!.pushUrl == pushUrl)
+                assert(presentationRequest.pushDelegate!.pushToken == pushToken)
+            } catch {
+                XCTFail("\(error)")
+            }
         }
     }
 }
