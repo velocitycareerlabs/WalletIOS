@@ -10,7 +10,9 @@
 import Foundation
 
 protocol GenerateOffersUseCase {
-    func generateOffers(token: VCLToken,
-                        generateOffersDescriptor: VCLGenerateOffersDescriptor,
-                        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void)
+    func generateOffers(
+        generateOffersDescriptor: VCLGenerateOffersDescriptor,
+        issuingToken: VCLToken,
+        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
+    )
 }

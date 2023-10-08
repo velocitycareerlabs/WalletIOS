@@ -13,7 +13,7 @@ protocol FinalizeOffersUseCase {
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         didJwk: VCLDidJwk?,
-        token: VCLToken,
+        issuingToken: VCLToken,
         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     )
 }

@@ -17,8 +17,8 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
     }
     
     func generateOffers(
-        token: VCLToken,
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
+        issuingToken: VCLToken,
         completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
     ) {
         networkService.sendRequest(
@@ -27,14 +27,14 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
             contentType: .ApplicationJson,
             method: .POST,
             headers:[
-                (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(token.value)"),
+                (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(                issuingToken.value)"),
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
             ]) { [weak self] response in
                 do {
                     let offersResponse = try response.get()
                     if let zelf = self {
                         completionBlock(.success(
-                            zelf.parse(offersResponse: offersResponse, token: token)
+                            zelf.parse(offersResponse: offersResponse, token:                 issuingToken)
                         ))
                     } else {
                         completionBlock(.failure(VCLError(message: "VCL offers parse could not be completed - self is dead")))

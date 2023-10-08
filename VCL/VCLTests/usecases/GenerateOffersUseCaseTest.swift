@@ -27,7 +27,10 @@ final class GenerateOffersUseCaseTest: XCTestCase {
                 jwt: CommonMocks.JWT,
                 verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
         ))
-        subject.generateOffers(token: VCLToken(value: ""), generateOffersDescriptor: generateOffersDescriptor) {
+        subject.generateOffers(
+            generateOffersDescriptor: generateOffersDescriptor,
+            issuingToken: VCLToken(value: "")
+        ) {
             do {
                 let offers = try $0.get()
                 assert(offers.all == GenerateOffersMocks.Offers.toListOfDictionaries()!)
@@ -51,7 +54,10 @@ final class GenerateOffersUseCaseTest: XCTestCase {
                 verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
             ))
 
-        subject.generateOffers(token: VCLToken(value: ""), generateOffersDescriptor: generateOffersDescriptor) {
+        subject.generateOffers( 
+            generateOffersDescriptor: generateOffersDescriptor,
+            issuingToken: VCLToken(value: "")
+        ) {
             do {
                 let offers = try $0.get()
                 assert(offers.all == "[]".toListOfDictionaries()!)
@@ -77,7 +83,10 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             ))
 
         // Action
-        subject.generateOffers(token: VCLToken(value: ""), generateOffersDescriptor: generateOffersDescriptor) {
+        subject.generateOffers(
+            generateOffersDescriptor: generateOffersDescriptor,
+            issuingToken: VCLToken(value: "")
+        ) {
             do {
                 let offers = try $0.get()
                 assert(offers.all == GenerateOffersMocks.GeneratedOffersEmptyJsonArr.toListOfDictionaries()!)

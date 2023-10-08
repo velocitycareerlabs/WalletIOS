@@ -10,7 +10,7 @@
 import Foundation
 
 class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
-        
+    
     private let generateOffersRepository: GenerateOffersRepository
     private let executor: Executor
     
@@ -20,14 +20,15 @@ class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
     }
     
     func generateOffers(
-        token: VCLToken,
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
+        issuingToken: VCLToken,
         completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             self?.generateOffersRepository.generateOffers(
-                token:token,
-                generateOffersDescriptor: generateOffersDescriptor) { offersResult in
+                generateOffersDescriptor: generateOffersDescriptor,
+                issuingToken: issuingToken
+            ) { offersResult in
                     self?.executor.runOnMain { completionBlock(offersResult) }
                 }
         }

@@ -12,7 +12,7 @@ public class VCLImpl: VCL {
     private static let ModelsToInitializeAmount = 3
     
     private var initializationDescriptor: VCLInitializationDescriptor!
-
+    
     private var credentialTypesModel: CredentialTypesModel!
     private var credentialTypeSchemasModel: CredentialTypeSchemasModel!
     private var countriesModel: CountriesModel!
@@ -38,15 +38,15 @@ public class VCLImpl: VCL {
         successHandler: @escaping () -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-
+        
         self.initializationDescriptor = initializationDescriptor
         
         initGlobalConfigurations()
         
         printVersion()
-
+        
         self.initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
-
+        
         cacheRemoteData(
             cacheSequence: initializationDescriptor.cacheSequence,
             successHandler: successHandler,
@@ -314,8 +314,9 @@ public class VCLImpl: VCL {
             do {
                 let identificationSubmission = try identificationSubmissionResult.get()
                 self?.generateOffersUseCase.generateOffers(
-                    token: identificationSubmission.token,
-                    generateOffersDescriptor: generateOffersDescriptor) {
+                    generateOffersDescriptor: generateOffersDescriptor,
+                    issuingToken: identificationSubmission.issuingToken
+                ) {
                         vnOffersResult in
                         do {
                             successHandler(try vnOffersResult.get())
@@ -334,13 +335,13 @@ public class VCLImpl: VCL {
     
     public func checkForOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        token: VCLToken,
+        issuingToken: VCLToken,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         invokeGenerateOffersUseCase(
             generateOffersDescriptor: generateOffersDescriptor,
-            token: token,
+            issuingToken: issuingToken,
             successHandler: successHandler,
             errorHandler: errorHandler
         )
@@ -348,13 +349,13 @@ public class VCLImpl: VCL {
     
     private func invokeGenerateOffersUseCase(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        token: VCLToken,
+        issuingToken: VCLToken,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         generateOffersUseCase.generateOffers(
-            token: token,
-            generateOffersDescriptor: generateOffersDescriptor
+            generateOffersDescriptor: generateOffersDescriptor,
+            issuingToken: issuingToken
         ) {
             [weak self] offersResult in
             do {
@@ -369,23 +370,23 @@ public class VCLImpl: VCL {
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         didJwk: VCLDidJwk? = nil,
-        token: VCLToken,
+        issuingToken: VCLToken,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         finalizeOffersUseCase.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
             didJwk: didJwk,
-            token: token
+            issuingToken: issuingToken
         ) {
-                [weak self] jwtVerifiableCredentials in
-                do {
-                    successHandler(try jwtVerifiableCredentials.get())
-                } catch {
-                    self?.logError(message: "finalizeOffers", error: error)
-                    errorHandler(error as? VCLError ?? VCLError(error: error))
-                }
+            [weak self] jwtVerifiableCredentials in
+            do {
+                successHandler(try jwtVerifiableCredentials.get())
+            } catch {
+                self?.logError(message: "finalizeOffers", error: error)
+                errorHandler(error as? VCLError ?? VCLError(error: error))
             }
+        }
     }
     
     public func getCredentialTypesUIFormSchema(
