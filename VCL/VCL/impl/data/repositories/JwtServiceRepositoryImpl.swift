@@ -25,11 +25,13 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
     func verifyJwt(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         jwtVerifyService.verify(
             jwt: jwt,
             publicJwk: publicJwk,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
             completionBlock: { verificationResult in completionBlock(verificationResult) }
         )
     }
@@ -38,12 +40,14 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
         kid: String? = nil,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         jwtSignService.sign(
             kid: kid,
             nonce: nonce,
             jwtDescriptor: jwtDescriptor,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
             completionBlock: { jwtResult in completionBlock(jwtResult) }
         )
     }

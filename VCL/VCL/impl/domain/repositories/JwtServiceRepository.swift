@@ -13,12 +13,14 @@ protocol JwtServiceRepository {
     func verifyJwt(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
     func generateSignedJwt(
         kid: String?, // did:jwk in case of person binding
         nonce: String?, // nonce == challenge
         jwtDescriptor: VCLJwtDescriptor,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     )
 }
@@ -28,8 +30,15 @@ extension JwtServiceRepository {
         kid: String? = nil,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
+        remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
-        generateSignedJwt(kid: kid, nonce: nonce, jwtDescriptor: jwtDescriptor, completionBlock: completionBlock)
+        generateSignedJwt(
+            kid: kid,
+            nonce: nonce,
+            jwtDescriptor: jwtDescriptor,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            completionBlock: completionBlock
+        )
     }
 }

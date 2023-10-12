@@ -56,7 +56,8 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
         
         subject.submit(
             submission: presentationSubmission,
-            didJwk: didJwk
+            didJwk: didJwk,
+            remoteCryptoServicesToken: nil
         ) {
             do {
                 let presentationSubmissionResult = try $0.get()

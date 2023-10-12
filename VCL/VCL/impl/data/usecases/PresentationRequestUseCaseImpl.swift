@@ -30,6 +30,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
@@ -40,6 +41,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                     self?.onPresentationRequestSuccess(
                         VCLJwt(encodedJwt: try encodedJwtStrResult.get()),
                         presentationRequestDescriptor,
+                        remoteCryptoServicesToken,
                         completionBlock
                     )
                 } catch {
@@ -52,6 +54,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     private func onPresentationRequestSuccess(
         _ jwt: VCLJwt,
         _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
+        _ remoteCryptoServicesToken: VCLToken?,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         if let kid = jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
@@ -63,6 +66,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                         publicKey,
                         jwt,
                         presentationRequestDescriptor,
+                        remoteCryptoServicesToken,
                         completionBlock
                     )
                 }
@@ -79,6 +83,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         _ publicJwk: VCLPublicJwk,
         _ jwt: VCLJwt,
         _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
+        _ remoteCryptoServicesToken: VCLToken?,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         let presentationRequest = VCLPresentationRequest(
@@ -89,7 +94,8 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         )
         self.jwtServiceRepository.verifyJwt(
             jwt: presentationRequest.jwt,
-            publicJwk: presentationRequest.publicJwk
+            publicJwk: presentationRequest.publicJwk,
+            remoteCryptoServicesToken: remoteCryptoServicesToken
         ) {
             [weak self] isVerifiedResult in
             do {

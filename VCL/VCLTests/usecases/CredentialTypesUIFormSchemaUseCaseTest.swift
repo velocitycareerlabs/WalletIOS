@@ -25,7 +25,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypesUIFormSchemaMocks.UISchemaFormJsonFull)
             ),
-            EmptyExecutor(),
+            ExecutorImpl(),
             DispatcherImpl()
         )
 
@@ -100,7 +100,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypesUIFormSchemaMocks.UISchemaFormJsonOnlyRegions)
             ),
-            EmptyExecutor(),
+            ExecutorImpl(),
             DispatcherImpl()
         )
         
@@ -137,7 +137,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypesUIFormSchemaMocks.UISchemaFormJsonOnlyEnums)
             ),
-            EmptyExecutor(),
+            ExecutorImpl(),
             DispatcherImpl()
         )
 

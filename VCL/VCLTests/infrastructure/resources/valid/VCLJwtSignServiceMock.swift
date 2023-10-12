@@ -17,6 +17,6 @@ class VCLJwtSignServiceMock: VCLJwtSignService {
         jwtDescriptor: VCLJwtDescriptor,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
-        
+        completionBlock(.success(VCLJwt(encodedJwt: "")))
     }
 }

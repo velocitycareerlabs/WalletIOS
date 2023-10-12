@@ -38,7 +38,8 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 pushUrl: pushUrl,
                 pushToken: pushToken
             )
-        )) {
+        ), remoteCryptoServicesToken: nil
+        ) {
             do {
                 let presentationRequest = try $0.get()
 

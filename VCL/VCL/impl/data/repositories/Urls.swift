@@ -39,8 +39,8 @@ struct Params {
 }
 
 struct HeaderKeys {
-    static let HeaderKeyAuthorization = "Authorization"
-    static let HeaderValuePrefixBearer = "Bearer"
+    static let Authorization = "Authorization"
+    static let Bearer = "Bearer"
     static let XVnfProtocolVersion = "x-vnf-protocol-version"
 }
 

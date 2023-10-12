@@ -21,7 +21,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
                 ),
-                EmptyExecutor()
+                ExecutorImpl()
             )
         )
 
@@ -43,7 +43,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileInspectorJsonStr)
                 ),
-                EmptyExecutor()
+                ExecutorImpl()
             )
         )
 
@@ -65,7 +65,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
                 ),
-                EmptyExecutor()
+                ExecutorImpl()
             )
         )
 
@@ -87,7 +87,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
                 ),
-                EmptyExecutor()
+                ExecutorImpl()
             )
         )
 
@@ -110,7 +110,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1)
                 ),
-                EmptyExecutor()
+                ExecutorImpl()
             )
         )
 
@@ -133,7 +133,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
                 ),
-                EmptyExecutor()
+                ExecutorImpl()
             )
         )
 

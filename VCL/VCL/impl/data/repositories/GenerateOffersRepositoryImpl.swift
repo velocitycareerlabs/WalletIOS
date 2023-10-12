@@ -27,9 +27,10 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
             contentType: .ApplicationJson,
             method: .POST,
             headers:[
-                (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(                issuingToken.value)"),
+                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(issuingToken.value)"),
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
-            ]) { [weak self] response in
+            ]
+        ) { [weak self] response in
                 do {
                     let offersResponse = try response.get()
                     if let zelf = self {

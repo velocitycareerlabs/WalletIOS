@@ -13,6 +13,7 @@ protocol CredentialManifestUseCase {
     func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         verifiedProfile: VCLVerifiedProfile,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     )
 }

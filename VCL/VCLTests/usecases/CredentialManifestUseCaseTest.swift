@@ -38,7 +38,10 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 deepLink: DeepLinkMocks.CredentialManifestDeepLinkDevNet,
                 issuingType: VCLIssuingType.Career
             ),
-            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+            verifiedProfile: VCLVerifiedProfile(
+                payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!
+            ),
+            remoteCryptoServicesToken: nil
         ) {
             do {
                 let credentialManifest = try $0.get()

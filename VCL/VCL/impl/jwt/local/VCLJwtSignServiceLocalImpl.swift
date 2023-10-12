@@ -25,6 +25,7 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
         kid: String? = nil,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
+        remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
             let secp256k1Signer = Secp256k1Signer()

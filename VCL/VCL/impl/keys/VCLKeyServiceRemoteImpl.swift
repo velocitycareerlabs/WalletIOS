@@ -22,6 +22,7 @@ class VCLKeyServiceRemoteImpl: VCLKeyService {
     }
     
     func generateDidJwk(
+        remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     )  {
         networkService.sendRequest(
@@ -29,7 +30,10 @@ class VCLKeyServiceRemoteImpl: VCLKeyService {
             body: generatePayloadToCreateDidJwk(),
             contentType: .ApplicationJson,
             method: .POST,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
+            headers: [
+                (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion),
+                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(remoteCryptoServicesToken?.value ?? "")")
+            ]
         ) { [weak self] didJwkResult in
             do {
                 if let didJwkJson = try didJwkResult.get().payload.toDictionary() {

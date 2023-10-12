@@ -23,10 +23,13 @@ class KeyServiceUseCaseImpl: KeyServiceUseCase {
     }
     
     func generateDidJwk(
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            self?.keyServiceRepository.generateDidJwk { didJwkResult in
+            self?.keyServiceRepository.generateDidJwk(
+                remoteCryptoServicesToken: remoteCryptoServicesToken
+            ) { didJwkResult in
                 self?.executor.runOnMain { completionBlock(didJwkResult) }
             }
         }

@@ -13,7 +13,11 @@ import Foundation
 @testable import VCCrypto
 
 class VCLKeyServiceMock: VCLKeyService {
-    func generateDidJwk(completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void) {
+    func generateDidJwk(
+        remoteCryptoServicesToken: VCLToken? = nil,
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+    ) {
+        completionBlock(.success(VCLDidJwk(did: "", publicJwk: VCLPublicJwk(valueStr: ""), kid: "", keyId: "")))
     }
     
     func generateSecret(completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void) {
