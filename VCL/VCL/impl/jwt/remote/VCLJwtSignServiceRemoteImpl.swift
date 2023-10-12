@@ -23,13 +23,18 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
         kid: String? = nil,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
+        remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: jwtSignServiceUrl,
             body: generateJwtPayloadToSign(nonce: nonce, jwtDescriptor: jwtDescriptor).toJsonString(),
             contentType: .ApplicationJson,
-            method: .POST
+            method: .POST,
+            headers: [
+                (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion),
+                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(remoteCryptoServicesToken?.value ?? "")")
+            ]
         ) { [weak self] signedJwtResult in
             do {
                 if let jwtStr = try signedJwtResult.get().payload.toDictionary()?[CodingKeys.KeyCompactJwt] as? String {

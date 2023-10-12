@@ -28,6 +28,7 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
     func submit(
         submission: VCLSubmission,
         didJwk: VCLDidJwk? = nil,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         executor.runOnBackground  { [weak self] in
@@ -38,7 +39,9 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
                     payload: submission.payload,
                     jti: submission.jti,
                     iss: submission.iss
-                )) { signedJwtResult in
+                ),
+                remoteCryptoServicesToken: remoteCryptoServicesToken
+            ) { signedJwtResult in
                     do {
                         let jwt = try signedJwtResult.get()
                         self?.submissionRepository.submit(

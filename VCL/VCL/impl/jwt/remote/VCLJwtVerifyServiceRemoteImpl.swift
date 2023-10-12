@@ -22,6 +22,7 @@ class VCLJwtVerifyServiceRemoteImpl: VCLJwtVerifyService {
     func verify(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
+        remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         networkService.sendRequest(
@@ -29,7 +30,10 @@ class VCLJwtVerifyServiceRemoteImpl: VCLJwtVerifyService {
             body: generatePayloadToVerify(jwt: jwt, publicJwk: publicJwk).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
+            headers: [
+                (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion),
+                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(remoteCryptoServicesToken?.value ?? "")")
+            ]
         ) { verifiedJwtResult in
             do {
                 let payloadDict = try verifiedJwtResult.get().payload.toDictionary()

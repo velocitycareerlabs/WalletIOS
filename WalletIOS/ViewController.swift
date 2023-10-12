@@ -46,7 +46,7 @@ class ViewController: UIViewController {
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
                 environment: environment,
-                xVnfProtocolVersion: .XVnfProtocolVersion2//,
+                xVnfProtocolVersion: .XVnfProtocolVersion2
 //                cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
 //                    cryptoServiceType: .Remote,
 //                    remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
@@ -105,7 +105,8 @@ class ViewController: UIViewController {
                 pushDelegate: VCLPushDelegate(
                     pushUrl: "pushUrl",
                     pushToken: "pushToken"
-                )),
+                )
+            ),
             successHandler: { [weak self] presentationRequest in
                 NSLog("VCL Presentation request received: \(presentationRequest.jwt.payload?.toJson() ?? "")")
                 
@@ -344,7 +345,9 @@ class ViewController: UIViewController {
     
     @objc private func verifyJwt() {
         vcl.verifyJwt(
-            jwt: Constants.SomeJwt, publicJwk: Constants.SomePublicJwk, successHandler: { isVerified in
+            jwt: Constants.SomeJwt, 
+            publicJwk: Constants.SomePublicJwk,
+            successHandler: { isVerified in
                 NSLog("VCL JWT verified: \(isVerified)")
             },
             errorHandler: { error in

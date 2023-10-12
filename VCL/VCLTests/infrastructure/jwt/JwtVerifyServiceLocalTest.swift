@@ -50,7 +50,7 @@ class JwtVerifyServiceLocalTest: XCTestCase {
                 let jwt = try jwtResult.get()
                 assert(jwt.kid == self.didJwk.kid)
                 
-                self.subject.verify(jwt: jwt, publicJwk: self.didJwk.publicJwk) { verifiedResult in
+                self.subject.verify(jwt: jwt, publicJwk: self.didJwk.publicJwk, remoteCryptoServicesToken: nil) { verifiedResult in
                     do {
                         let verified = try verifiedResult.get()
                         assert(verified, "failed to verify jwt: \(verified)")

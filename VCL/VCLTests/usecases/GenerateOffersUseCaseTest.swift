@@ -20,7 +20,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffers)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
@@ -74,7 +74,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonArr)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(

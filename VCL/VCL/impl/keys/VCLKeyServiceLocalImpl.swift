@@ -26,6 +26,7 @@ class VCLKeyServiceLocalImpl: VCLKeyService {
     }
 
     func generateDidJwk(
+        remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
         generateSecret { [weak self] secretResult in

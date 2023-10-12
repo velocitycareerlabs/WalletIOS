@@ -33,7 +33,8 @@ final class JwtServiceUseCaseTest: XCTestCase {
                 payload: JwtServiceMocks.Json.toDictionary()!,
                 jti: "some jti",
                 iss: "some iss"
-            )
+            ),
+            remoteCryptoServicesToken: nil
         ) {
             do {
                 let jwt = try $0.get()
@@ -52,11 +53,16 @@ final class JwtServiceUseCaseTest: XCTestCase {
                 payload: JwtServiceMocks.Json.toDictionary()!,
                 jti: "some jti",
                 iss: "some iss"
-            )
+            ),
+            remoteCryptoServicesToken: nil
         ) {
             do {
                 let jwt = try $0.get()
-                self.subject.verifyJwt(jwt: jwt, publicJwk: VCLPublicJwk(valueDict: (jwt.jwsToken!.headers.jsonWebKey?.toDictionary())!)) {
+                self.subject.verifyJwt(
+                    jwt: jwt,
+                    publicJwk: VCLPublicJwk(valueDict: jwt.jwsToken?.headers.jsonWebKey?.toDictionary() ?? [:]),
+                    remoteCryptoServicesToken: nil
+                ) {
                     do {
                         let isVerivied = try $0.get()
                         assert(isVerivied)
@@ -71,7 +77,7 @@ final class JwtServiceUseCaseTest: XCTestCase {
     }
     
     func testSignByExistingKey() {
-        keyService.generateDidJwk() { [weak self] didJwkResult in
+        keyService.generateDidJwk(remoteCryptoServicesToken: nil) { [weak self] didJwkResult in
             do {
                 let didJwk = try didJwkResult.get()
                 
@@ -81,11 +87,16 @@ final class JwtServiceUseCaseTest: XCTestCase {
                         payload: JwtServiceMocks.Json.toDictionary()!,
                         jti: "some jti",
                         iss: "some iss"
-                    )
+                    ),
+                    remoteCryptoServicesToken: nil
                 ) {
                     do {
                         let jwt = try $0.get()
-                        self!.subject.verifyJwt(jwt: jwt, publicJwk: VCLPublicJwk(valueDict: (jwt.jwsToken!.headers.jsonWebKey?.toDictionary())!)) {
+                        self!.subject.verifyJwt(
+                            jwt: jwt,
+                            publicJwk: VCLPublicJwk(valueDict: jwt.jwsToken?.headers.jsonWebKey?.toDictionary() ?? [:]),
+                            remoteCryptoServicesToken: nil
+                        ) {
                             do {
                                 let isVerified = try $0.get()
                                 assert(isVerified)
@@ -99,11 +110,8 @@ final class JwtServiceUseCaseTest: XCTestCase {
                     }
                 }
             } catch {
-                XCTFail("\(error)")                
+                XCTFail("\(error)")
             }
         }
-    }
-    
-    override class func tearDown() {
     }
 }

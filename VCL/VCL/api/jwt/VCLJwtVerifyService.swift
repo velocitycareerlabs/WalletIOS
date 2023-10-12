@@ -13,6 +13,7 @@ public protocol VCLJwtVerifyService {
     func verify(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
 }

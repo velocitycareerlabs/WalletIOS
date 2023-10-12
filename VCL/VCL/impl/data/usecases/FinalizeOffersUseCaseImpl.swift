@@ -34,6 +34,7 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         didJwk: VCLDidJwk? = nil,
         issuingToken: VCLToken,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         executor.runOnBackground {
@@ -44,7 +45,8 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
                     keyId: didJwk?.keyId,
                     iss: didJwk?.did ?? UUID().uuidString,
                     aud: finalizeOffersDescriptor.issuerId
-                )
+                ),
+                remoteCryptoServicesToken: remoteCryptoServicesToken
             ) { [weak self] proofJwtResult in
                 do {
                     let proof = try proofJwtResult.get()

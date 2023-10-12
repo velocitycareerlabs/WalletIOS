@@ -25,7 +25,7 @@ final class KeyServiceUseCaseTest: XCTestCase {
     }
 
     func testGenerateJwk() {
-        subject.generateDidJwk {
+        subject.generateDidJwk(remoteCryptoServicesToken: nil) {
             do {
                 let didJwk = try $0.get()
                 let jwkDict = didJwk.publicJwk.valueDict
@@ -46,10 +46,12 @@ final class KeyServiceUseCaseTest: XCTestCase {
     }
     
     func testGenerateDifferentJwks() {
-        subject.generateDidJwk { [weak self] in
+        subject.generateDidJwk(
+            remoteCryptoServicesToken: nil
+        ) { [weak self] in
             do {
                 let didJwk1 = try $0.get()
-                self?.subject.generateDidJwk {
+                self?.subject.generateDidJwk(remoteCryptoServicesToken: nil) {
                     do {
                         let didJwk2 = try $0.get()
                         

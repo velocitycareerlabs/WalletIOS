@@ -14,6 +14,7 @@ public protocol VCLJwtSignService {
         kid: String?,
         nonce: String?,
         jwtDescriptor: VCLJwtDescriptor,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     )
 }
@@ -23,8 +24,15 @@ extension VCLJwtSignService {
         kid: String? = nil,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
+        remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
-        sign(kid: kid, nonce: nonce, jwtDescriptor: jwtDescriptor, completionBlock: completionBlock)
+        sign(
+            kid: kid,
+            nonce: nonce,
+            jwtDescriptor: jwtDescriptor,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            completionBlock: completionBlock
+        )
     }
 }

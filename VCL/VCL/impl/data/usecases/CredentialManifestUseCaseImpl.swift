@@ -29,6 +29,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         verifiedProfile: VCLVerifiedProfile,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
@@ -41,6 +42,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                         VCLJwt(encodedJwt: try credentialManifestResult.get()),
                         credentialManifestDescriptor,
                         verifiedProfile,
+                        remoteCryptoServicesToken,
                         completionBlock
                     )
                 } catch {
@@ -54,6 +56,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         _ jwt: VCLJwt,
         _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         _ verifiedProfile: VCLVerifiedProfile,
+        _ remoteCryptoServicesToken: VCLToken?,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if let kid = jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
@@ -66,6 +69,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                         jwt,
                         credentialManifestDescriptor,
                         verifiedProfile,
+                        remoteCryptoServicesToken,
                         completionBlock
                     )
                 } catch {
@@ -84,9 +88,14 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         _ jwt: VCLJwt,
         _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         _ verifiedProfile: VCLVerifiedProfile,
+        _ remoteCryptoServicesToken: VCLToken?,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        self.jwtServiceRepository.verifyJwt(jwt: jwt, publicJwk: publicJwk) {
+        self.jwtServiceRepository.verifyJwt(
+            jwt: jwt,
+            publicJwk: publicJwk,
+            remoteCryptoServicesToken: remoteCryptoServicesToken
+        ) {
             [weak self] isVerifiedResult in
             do {
                 let isVerified = try isVerifiedResult.get()
