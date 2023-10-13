@@ -250,7 +250,7 @@ class ViewController: UIViewController {
             successHandler: { [weak self] offers in
                 NSLog("VCL Generated Offers: \(offers.all)")
                 NSLog("VCL Generated Offers Response Code: \(offers.responseCode)")
-                NSLog("VCL Generated Offers Token: \(offers.issuingToken)")
+                NSLog("VCL Generated Offers Issuing Token: \(offers.issuingToken)")
                 
                 //                Check offers invoked after the push notification is notified the app that offers are ready:
                 self?.checkForOffers(
@@ -276,7 +276,7 @@ class ViewController: UIViewController {
             successHandler: { [weak self] offers in
                 NSLog("VCL Checked Offers: \(offers.all)")
                 NSLog("VCL Checked Offers Response Code: \(offers.responseCode)")
-                NSLog("VCL Checked Offers Token: \(offers.issuingToken)")
+                NSLog("VCL Checked Offers Issuing Token: \(offers.issuingToken)")
                 if (offers.responseCode == 200) {
                     self?.finalizeOffers(
                         credentialManifest: credentialManifest,
