@@ -20,13 +20,13 @@ public struct VCLOffers {
         payload: [String: Any],
         all: [[String: Any]],
         responseCode: Int,
-        token: VCLToken,
+        issuingToken: VCLToken,
         challenge: String
     ) {
         self.payload = payload
         self.all = all
         self.responseCode = responseCode
-        self.issuingToken = token
+        self.issuingToken = issuingToken
         self.challenge = challenge
     }
     

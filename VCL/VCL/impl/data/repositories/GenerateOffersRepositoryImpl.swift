@@ -35,7 +35,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
                     let offersResponse = try response.get()
                     if let zelf = self {
                         completionBlock(.success(
-                            zelf.parse(offersResponse: offersResponse, token:                 issuingToken)
+                            zelf.parse(offersResponse: offersResponse, issuingToken: issuingToken)
                         ))
                     } else {
                         completionBlock(.failure(VCLError(message: "VCL offers parse could not be completed - self is dead")))
@@ -46,14 +46,14 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
             }
     }
     
-    private func parse(offersResponse: Response, token: VCLToken) -> VCLOffers {
+    private func parse(offersResponse: Response, issuingToken: VCLToken) -> VCLOffers {
         // VCLXVnfProtocolVersion.XVnfProtocolVersion2
         if let payload = offersResponse.payload.toDictionary() {
             return VCLOffers(
                 payload: payload,
                 all:  (payload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]]) ?? [],
                 responseCode: offersResponse.code,
-                token: token,
+                issuingToken: issuingToken,
                 challenge: (payload[VCLOffers.CodingKeys.KeyChallenge] as? String) ?? ""
             )
         } // VCLXVnfProtocolVersion.XVnfProtocolVersion1
@@ -62,7 +62,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
                 payload: [:],
                 all: allOffers,
                 responseCode: offersResponse.code,
-                token: token,
+                issuingToken: issuingToken,
                 challenge: ""
             )
         } // No offers
@@ -71,7 +71,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
                 payload: [:],
                 all: [],
                 responseCode: offersResponse.code,
-                token: token,
+                issuingToken: issuingToken,
                 challenge: ""
             )
         }

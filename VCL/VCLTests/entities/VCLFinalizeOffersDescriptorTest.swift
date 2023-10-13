@@ -18,7 +18,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     private let offers = VCLOffers(
         payload: [String: Any](),
         all: [[String: Any]](),
-        responseCode: 200, token:
+        responseCode: 200, issuingToken:
             VCLToken(value: ""), challenge: ""
     )
     

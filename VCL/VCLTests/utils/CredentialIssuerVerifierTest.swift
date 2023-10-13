@@ -15,7 +15,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
 
     var subject: CredentialIssuerVerifier!
 
-    private let OffersMock = VCLOffers(payload: [:], all: [], responseCode: 1, token: VCLToken(value: ""), challenge: "")
+    private let OffersMock = VCLOffers(payload: [:], all: [], responseCode: 1, issuingToken: VCLToken(value: ""), challenge: "")
 
     var finalizeOffersDescriptorWithoutPermittedServices: VCLFinalizeOffersDescriptor!
     var credentialManifestWithoutPermittedServices: VCLCredentialManifest!
