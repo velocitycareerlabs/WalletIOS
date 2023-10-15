@@ -12,6 +12,6 @@ import Foundation
 protocol GenerateOffersRepository {
     func generateOffers(  
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        issuingToken: VCLToken,
+        exchangeToken: VCLToken,
         completionBlock: @escaping (VCLResult<VCLOffers>) -> Void)
 }

@@ -18,8 +18,9 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     private let offers = VCLOffers(
         payload: [String: Any](),
         all: [[String: Any]](),
-        responseCode: 200, issuingToken:
-            VCLToken(value: ""), challenge: ""
+        responseCode: 200,
+        exchangeToken: VCLToken(value: ""),
+        challenge: ""
     )
     
     private let jtiMock = "some jti"

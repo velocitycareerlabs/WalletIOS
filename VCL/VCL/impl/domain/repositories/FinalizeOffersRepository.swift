@@ -12,7 +12,7 @@ import Foundation
 protocol FinalizeOffersRepository {
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        issuingToken: VCLToken,
+                exchangeToken: VCLToken,
         proof: VCLJwt,
         completionBlock: @escaping (VCLResult<[String]>) -> Void
     )

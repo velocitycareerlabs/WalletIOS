@@ -30,7 +30,7 @@ class IdentificationModelImpl: IdentificationModel {
             remoteCryptoServicesToken: remoteCryptoServicesToken
         ) { [weak self] result in
             do {
-                self?.data = try result.get().issuingToken
+                self?.data = try result.get().exchangeToken
             } catch {}
             completionBlock(result)
         }

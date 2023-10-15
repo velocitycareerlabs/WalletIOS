@@ -62,7 +62,7 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
             do {
                 let presentationSubmissionResult = try $0.get()
                 
-                assert(presentationSubmissionResult.issuingToken.value == expectedPresentationSubmissionResult.issuingToken.value)
+                assert(presentationSubmissionResult.exchangeToken.value == expectedPresentationSubmissionResult.exchangeToken.value)
                 assert(presentationSubmissionResult.exchange.id == expectedPresentationSubmissionResult.exchange.id)
                 assert(presentationSubmissionResult.jti == expectedPresentationSubmissionResult.jti)
                 assert(presentationSubmissionResult.submissionId == expectedPresentationSubmissionResult.submissionId)
@@ -75,7 +75,7 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
     private func expectedPresentationSubmissionResult(_ jsonDict: [String: Any], _ jti: String, submissionId: String) -> VCLSubmissionResult {
         let exchangeJsonDict = jsonDict[VCLSubmissionResult.CodingKeys.KeyExchange]
         return VCLSubmissionResult(
-            issuingToken: VCLToken(value: (jsonDict[VCLSubmissionResult.CodingKeys.KeyToken] as! String)),
+            exchangeToken: VCLToken(value: (jsonDict[VCLSubmissionResult.CodingKeys.KeyToken] as! String)),
             exchange: expectedExchange(exchangeJsonDict as! [String : Any]),
             jti: jti,
             submissionId: submissionId

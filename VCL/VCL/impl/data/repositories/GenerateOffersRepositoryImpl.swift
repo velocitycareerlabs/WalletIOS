@@ -18,7 +18,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
     
     func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        issuingToken: VCLToken,
+        exchangeToken: VCLToken,
         completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
     ) {
         networkService.sendRequest(
@@ -27,7 +27,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
             contentType: .ApplicationJson,
             method: .POST,
             headers:[
-                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(issuingToken.value)"),
+                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(exchangeToken.value)"),
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
             ]
         ) { [weak self] response in
@@ -35,7 +35,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
                     let offersResponse = try response.get()
                     if let zelf = self {
                         completionBlock(.success(
-                            zelf.parse(offersResponse: offersResponse, issuingToken: issuingToken)
+                            zelf.parse(offersResponse: offersResponse, exchangeToken: exchangeToken)
                         ))
                     } else {
                         completionBlock(.failure(VCLError(message: "VCL offers parse could not be completed - self is dead")))
@@ -46,14 +46,14 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
             }
     }
     
-    private func parse(offersResponse: Response, issuingToken: VCLToken) -> VCLOffers {
+    private func parse(offersResponse: Response, exchangeToken: VCLToken) -> VCLOffers {
         // VCLXVnfProtocolVersion.XVnfProtocolVersion2
         if let payload = offersResponse.payload.toDictionary() {
             return VCLOffers(
                 payload: payload,
-                all:  (payload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]]) ?? [],
+                all: (payload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]]) ?? [],
                 responseCode: offersResponse.code,
-                issuingToken: issuingToken,
+                exchangeToken: exchangeToken,
                 challenge: (payload[VCLOffers.CodingKeys.KeyChallenge] as? String) ?? ""
             )
         } // VCLXVnfProtocolVersion.XVnfProtocolVersion1
@@ -62,7 +62,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
                 payload: [:],
                 all: allOffers,
                 responseCode: offersResponse.code,
-                issuingToken: issuingToken,
+                exchangeToken: exchangeToken,
                 challenge: ""
             )
         } // No offers
@@ -71,7 +71,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
                 payload: [:],
                 all: [],
                 responseCode: offersResponse.code,
-                issuingToken: issuingToken,
+                exchangeToken: exchangeToken,
                 challenge: ""
             )
         }

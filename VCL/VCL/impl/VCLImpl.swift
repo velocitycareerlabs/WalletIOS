@@ -323,7 +323,7 @@ public class VCLImpl: VCL {
                 let identificationSubmission = try identificationSubmissionResult.get()
                 self?.generateOffersUseCase.generateOffers(
                     generateOffersDescriptor: generateOffersDescriptor,
-                    issuingToken: identificationSubmission.issuingToken
+                    exchangeToken: identificationSubmission.exchangeToken
                 ) {
                         vnOffersResult in
                         do {
@@ -343,13 +343,13 @@ public class VCLImpl: VCL {
     
     public func checkForOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        issuingToken: VCLToken,
+        exchangeToken: VCLToken,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         invokeGenerateOffersUseCase(
             generateOffersDescriptor: generateOffersDescriptor,
-            issuingToken: issuingToken,
+            exchangeToken: exchangeToken,
             successHandler: successHandler,
             errorHandler: errorHandler
         )
@@ -357,13 +357,13 @@ public class VCLImpl: VCL {
     
     private func invokeGenerateOffersUseCase(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        issuingToken: VCLToken,
+        exchangeToken: VCLToken,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         generateOffersUseCase.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            issuingToken: issuingToken
+            exchangeToken: exchangeToken
         ) {
             [weak self] offersResult in
             do {
@@ -378,7 +378,7 @@ public class VCLImpl: VCL {
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         didJwk: VCLDidJwk? = nil,
-        issuingToken: VCLToken,
+                exchangeToken: VCLToken,
         remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
@@ -386,7 +386,7 @@ public class VCLImpl: VCL {
         finalizeOffersUseCase.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
             didJwk: didJwk,
-            issuingToken: issuingToken,
+                    exchangeToken:         exchangeToken,
             remoteCryptoServicesToken: remoteCryptoServicesToken
         ) {
             [weak self] jwtVerifiableCredentials in
