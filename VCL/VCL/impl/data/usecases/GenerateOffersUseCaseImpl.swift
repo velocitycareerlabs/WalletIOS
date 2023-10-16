@@ -21,13 +21,13 @@ class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
     
     func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        exchangeToken: VCLToken,
+        sessionToken: VCLToken,
         completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             self?.generateOffersRepository.generateOffers(
                 generateOffersDescriptor: generateOffersDescriptor,
-                exchangeToken: exchangeToken
+                sessionToken: sessionToken
             ) { offersResult in
                     self?.executor.runOnMain { completionBlock(offersResult) }
                 }

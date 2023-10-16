@@ -29,7 +29,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         ))
         subject.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            exchangeToken: VCLToken(value: "")
+            sessionToken: VCLToken(value: "")
         ) {
             do {
                 let offers = try $0.get()
@@ -56,7 +56,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
 
         subject.generateOffers( 
             generateOffersDescriptor: generateOffersDescriptor,
-            exchangeToken: VCLToken(value: "")
+            sessionToken: VCLToken(value: "")
         ) {
             do {
                 let offers = try $0.get()
@@ -85,7 +85,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         // Action
         subject.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            exchangeToken: VCLToken(value: "")
+            sessionToken: VCLToken(value: "")
         ) {
             do {
                 let offers = try $0.get()

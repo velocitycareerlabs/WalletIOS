@@ -13,20 +13,20 @@ public struct VCLOffers {
     public let payload: [String: Any]
     public let all: [[String: Any]]
     public let responseCode: Int
-    public let exchangeToken: VCLToken
+    public let sessionToken: VCLToken
     public let challenge: String
     
     public init(
         payload: [String: Any],
         all: [[String: Any]],
         responseCode: Int,
-        exchangeToken: VCLToken,
+        sessionToken: VCLToken,
         challenge: String
     ) {
         self.payload = payload
         self.all = all
         self.responseCode = responseCode
-        self.exchangeToken = exchangeToken
+        self.sessionToken = sessionToken
         self.challenge = challenge
     }
     

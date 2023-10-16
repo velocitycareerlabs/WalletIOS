@@ -323,16 +323,16 @@ public class VCLImpl: VCL {
                 let identificationSubmission = try identificationSubmissionResult.get()
                 self?.generateOffersUseCase.generateOffers(
                     generateOffersDescriptor: generateOffersDescriptor,
-                    exchangeToken: identificationSubmission.exchangeToken
+                    sessionToken: identificationSubmission.sessionToken
                 ) {
-                        vnOffersResult in
-                        do {
-                            successHandler(try vnOffersResult.get())
-                        } catch {
-                            self?.logError(message: "submit identification", error: error)
-                            errorHandler(error as? VCLError ?? VCLError(error: error))
-                        }
+                    vnOffersResult in
+                    do {
+                        successHandler(try vnOffersResult.get())
+                    } catch {
+                        self?.logError(message: "submit identification", error: error)
+                        errorHandler(error as? VCLError ?? VCLError(error: error))
                     }
+                }
                 
             } catch {
                 self?.logError(message: "submit identification", error: error)
@@ -343,13 +343,13 @@ public class VCLImpl: VCL {
     
     public func checkForOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        exchangeToken: VCLToken,
+                sessionToken: VCLToken,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         invokeGenerateOffersUseCase(
             generateOffersDescriptor: generateOffersDescriptor,
-            exchangeToken: exchangeToken,
+            sessionToken: sessionToken,
             successHandler: successHandler,
             errorHandler: errorHandler
         )
@@ -357,13 +357,13 @@ public class VCLImpl: VCL {
     
     private func invokeGenerateOffersUseCase(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        exchangeToken: VCLToken,
+        sessionToken: VCLToken,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         generateOffersUseCase.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            exchangeToken: exchangeToken
+            sessionToken: sessionToken
         ) {
             [weak self] offersResult in
             do {
@@ -378,7 +378,7 @@ public class VCLImpl: VCL {
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         didJwk: VCLDidJwk? = nil,
-                exchangeToken: VCLToken,
+        sessionToken: VCLToken,
         remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
@@ -386,7 +386,7 @@ public class VCLImpl: VCL {
         finalizeOffersUseCase.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
             didJwk: didJwk,
-                    exchangeToken:         exchangeToken,
+            sessionToken: sessionToken,
             remoteCryptoServicesToken: remoteCryptoServicesToken
         ) {
             [weak self] jwtVerifiableCredentials in

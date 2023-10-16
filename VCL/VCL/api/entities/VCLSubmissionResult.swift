@@ -11,18 +11,18 @@ import Foundation
 
 public struct VCLSubmissionResult {
     
-    public let exchangeToken: VCLToken
+    public let sessionToken: VCLToken
     public let exchange: VCLExchange
     public let jti: String
     public let submissionId: String
     
     public init(
-        exchangeToken: VCLToken,
+        sessionToken: VCLToken,
         exchange: VCLExchange,
         jti: String,
         submissionId: String
     ) {
-        self.exchangeToken = exchangeToken
+        self.sessionToken = sessionToken
         self.exchange = exchange
         self.jti = jti
         self.submissionId = submissionId
