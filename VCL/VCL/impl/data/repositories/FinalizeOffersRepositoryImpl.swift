@@ -21,7 +21,7 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
     
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        exchangeToken: VCLToken,
+        sessionToken: VCLToken,
         proof: VCLJwt,
         completionBlock: @escaping (VCLResult<[String]>) -> Void
     ) {
@@ -31,7 +31,7 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
             contentType: .ApplicationJson,
             method: .POST,
             headers:[
-                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(exchangeToken.value)"),
+                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(sessionToken.value)"),
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
             ]
         ) { result in

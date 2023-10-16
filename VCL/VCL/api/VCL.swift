@@ -63,7 +63,7 @@ public protocol VCL {
     
     func checkForOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        exchangeToken: VCLToken,
+        sessionToken: VCLToken,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -71,7 +71,7 @@ public protocol VCL {
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         didJwk: VCLDidJwk?,
-        exchangeToken: VCLToken,
+        sessionToken: VCLToken,
         remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
@@ -175,7 +175,7 @@ extension VCL {
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         didJwk: VCLDidJwk? = nil,
-        exchangeToken: VCLToken,
+        sessionToken: VCLToken,
         remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
@@ -183,7 +183,7 @@ extension VCL {
         finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
             didJwk: didJwk,
-            exchangeToken: exchangeToken,
+            sessionToken: sessionToken,
             remoteCryptoServicesToken: remoteCryptoServicesToken,
             successHandler:successHandler,
             errorHandler: errorHandler

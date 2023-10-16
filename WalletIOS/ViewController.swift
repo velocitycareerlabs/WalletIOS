@@ -250,13 +250,13 @@ class ViewController: UIViewController {
             successHandler: { [weak self] offers in
                 NSLog("VCL Generated Offers: \(offers.all)")
                 NSLog("VCL Generated Offers Response Code: \(offers.responseCode)")
-                NSLog("VCL Generated Offers Issuing Token: \(offers.exchangeToken)")
+                NSLog("VCL Generated Offers Issuing Token: \(offers.sessionToken)")
                 
                 //                Check offers invoked after the push notification is notified the app that offers are ready:
                 self?.checkForOffers(
                     credentialManifest: credentialManifest,
                     generateOffersDescriptor: generateOffersDescriptor,
-                    exchangeToken: offers.exchangeToken
+                    sessionToken: offers.sessionToken
                 )
             },
             errorHandler: { error in
@@ -268,15 +268,15 @@ class ViewController: UIViewController {
     private func checkForOffers(
         credentialManifest: VCLCredentialManifest,
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        exchangeToken: VCLToken
+        sessionToken: VCLToken
     ) {
         vcl.checkForOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            exchangeToken: exchangeToken,
+            sessionToken: sessionToken,
             successHandler: { [weak self] offers in
                 NSLog("VCL Checked Offers: \(offers.all)")
                 NSLog("VCL Checked Offers Response Code: \(offers.responseCode)")
-                NSLog("VCL Checked Offers Exchange Token: \(offers.exchangeToken)")
+                NSLog("VCL Checked Offers Session Token: \(offers.sessionToken)")
                 if (offers.responseCode == 200) {
                     self?.finalizeOffers(
                         credentialManifest: credentialManifest,
@@ -304,7 +304,7 @@ class ViewController: UIViewController {
         vcl.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
             didJwk: self.didJwk,
-                    exchangeToken: offers.exchangeToken,
+            sessionToken: offers.sessionToken,
             successHandler: { verifiableCredentials in
                 NSLog("VCL finalized Offers")
                 NSLog("VCL Passed Credentials: \(verifiableCredentials.passedCredentials)")

@@ -50,7 +50,7 @@ class SubmissionRepositoryImpl: SubmissionRepository {
     private func parse(_ jsonDict: [String: Any]?, _ jti: String, _ submissionId: String) -> VCLSubmissionResult {
         let exchangeJsonDict = jsonDict?[VCLSubmissionResult.CodingKeys.KeyExchange]
         return VCLSubmissionResult(
-            exchangeToken: VCLToken(value: jsonDict?[VCLSubmissionResult.CodingKeys.KeyToken] as? String ?? ""),
+            sessionToken: VCLToken(value: jsonDict?[VCLSubmissionResult.CodingKeys.KeyToken] as? String ?? ""),
             exchange: parseExchange(exchangeJsonDict as? [String : Any]),
             jti: jti,
             submissionId: submissionId

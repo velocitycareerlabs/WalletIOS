@@ -19,7 +19,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
         payload: [String: Any](),
         all: [[String: Any]](),
         responseCode: 200,
-        exchangeToken: VCLToken(value: ""),
+        sessionToken: VCLToken(value: ""),
         challenge: ""
     )
     
