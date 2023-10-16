@@ -238,10 +238,11 @@ class VclBlocksProvider {
                 try chooseJwtSignService(cryptoServicesDescriptor),
                 try chooseJwtVerifyService(cryptoServicesDescriptor)
             ),
-            CredentialIssuerVerifierImpl(
-                credentialTypesModel,
-                NetworkServiceImpl()
-            ),
+//            CredentialIssuerVerifierImpl(
+//                credentialTypesModel,
+//                NetworkServiceImpl()
+//            ),
+            CredentialIssuerVerifierEmptyImpl(),
             CredentialDidVerifierImpl(),
             ExecutorImpl()
         )
