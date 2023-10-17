@@ -185,6 +185,7 @@
 		28692930267661FB000C0F72 /* CredentialTypesUIFormSchemaUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2869292F267661FB000C0F72 /* CredentialTypesUIFormSchemaUseCaseImpl.swift */; };
 		286B5DE529012D21002154D0 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 286B5DE429012D21002154D0 /* CacheService.swift */; };
 		286B5DE729012E4F002154D0 /* CacheServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 286B5DE629012E4F002154D0 /* CacheServiceImpl.swift */; };
+		2870CEF42ADE847400817B01 /* CredentialIssuerVerifierEmptyImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2870CEF32ADE847400817B01 /* CredentialIssuerVerifierEmptyImpl.swift */; };
 		2884060626C9262D0030E967 /* VCLDeepLinkTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884060526C9262D0030E967 /* VCLDeepLinkTest.swift */; };
 		2884060C26C9289F0030E967 /* VCLCredentialManifestDescriptorByDeepLinkTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884060B26C9289F0030E967 /* VCLCredentialManifestDescriptorByDeepLinkTest.swift */; };
 		2885C85D26D6864600FCAB99 /* VCLServiceCredentialAgentIssuer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2885C85C26D6864600FCAB99 /* VCLServiceCredentialAgentIssuer.swift */; };
@@ -509,6 +510,7 @@
 		2869292F267661FB000C0F72 /* CredentialTypesUIFormSchemaUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTypesUIFormSchemaUseCaseImpl.swift; sourceTree = "<group>"; };
 		286B5DE429012D21002154D0 /* CacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		286B5DE629012E4F002154D0 /* CacheServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheServiceImpl.swift; sourceTree = "<group>"; };
+		2870CEF32ADE847400817B01 /* CredentialIssuerVerifierEmptyImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialIssuerVerifierEmptyImpl.swift; sourceTree = "<group>"; };
 		2884060526C9262D0030E967 /* VCLDeepLinkTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLDeepLinkTest.swift; sourceTree = "<group>"; };
 		2884060B26C9289F0030E967 /* VCLCredentialManifestDescriptorByDeepLinkTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLCredentialManifestDescriptorByDeepLinkTest.swift; sourceTree = "<group>"; };
 		2885C85C26D6864600FCAB99 /* VCLServiceCredentialAgentIssuer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLServiceCredentialAgentIssuer.swift; sourceTree = "<group>"; };
@@ -1234,6 +1236,7 @@
 			isa = PBXGroup;
 			children = (
 				28D3F8CD2A641842001CF3C2 /* CredentialDidVerifierImpl.swift */,
+				2870CEF32ADE847400817B01 /* CredentialIssuerVerifierEmptyImpl.swift */,
 				28D3F8D12A642B29001CF3C2 /* CredentialIssuerVerifierImpl.swift */,
 				28D3F8D72A643513001CF3C2 /* Utils.swift */,
 			);
@@ -1479,6 +1482,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				282F1C892670AFE200887A5C /* VCLJwtServiceLocalImpl.swift in Sources */,
+				2870CEF42ADE847400817B01 /* CredentialIssuerVerifierEmptyImpl.swift in Sources */,
 				286415EE264D65E2006C1AA3 /* FinalizeOffersUseCase.swift in Sources */,
 				28C66FFF2666206E00F47954 /* IdentificationSubmissionRepositoryImpl.swift in Sources */,
 				28C5FA5C272AD9C200F10DBE /* VCLVerifiedProfileDescriptor.swift in Sources */,
@@ -1912,7 +1916,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.16.4;
+				MARKETING_VERSION = 1.16.5;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;
@@ -1938,7 +1942,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.16.4;
+				MARKETING_VERSION = 1.16.5;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;

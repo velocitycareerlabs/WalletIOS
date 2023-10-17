@@ -202,10 +202,11 @@ class VclBlocksProvider {
             JwtServiceRepositoryImpl(
                 try chooseJwtService(cryptoServicesDescriptor)
             ),
-            CredentialIssuerVerifierImpl(
-                credentialTypesModel,
-                NetworkServiceImpl()
-            ),
+//            CredentialIssuerVerifierImpl(
+//                credentialTypesModel,
+//                NetworkServiceImpl()
+//            ),
+            CredentialIssuerVerifierEmptyImpl(),
             CredentialDidVerifierImpl(),
             ExecutorImpl()
         )
