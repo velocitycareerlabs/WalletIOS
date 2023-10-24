@@ -204,7 +204,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     func testVerifyIdentityIssuerSuccess() {
         subject = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.issuerCategoryIdentityIssuer
+                issuerCategory: CredentialTypesModelMock.IssuerCategoryIdDocumentIssuer
             ),
             NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
         )
@@ -225,7 +225,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     func testVerifyEmptyCredentialsSuccess() {
         subject = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.issuerCategoryIdentityIssuer
+                issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryContactIssuer
             ),
             NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
         )

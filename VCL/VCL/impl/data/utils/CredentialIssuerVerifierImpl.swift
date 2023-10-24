@@ -11,14 +11,14 @@ import Foundation
 import UIKit
 
 class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
-
+    
     private let credentialTypesModel: CredentialTypesModel
     private let networkService: NetworkService
     
     private var mainBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
     private var resolveConetxBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
     private var completeConetxBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
-
+    
     private let mainDispatcher = DispatchGroup()
     private let resolveConetxDispatcher = DispatchGroup()
     private let completeConetxDispatcher = DispatchGroup()
@@ -101,7 +101,13 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ serviceTypes: VCLServiceTypes,
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if (serviceTypes.contains(serviceType: VCLServiceType.IdentityIssuer)) {
+        if (
+            serviceTypes.contains(serviceType: VCLServiceType.IdentityIssuer) ||
+            serviceTypes.contains(serviceType: VCLServiceType.IdDocumentIssuer) ||
+            serviceTypes.contains(serviceType: VCLServiceType.NotaryIdDocumentIssuer) ||
+            serviceTypes.contains(serviceType: VCLServiceType.NotaryContactIssuer) ||
+            serviceTypes.contains(serviceType: VCLServiceType.ContactIssuer)
+        ) {
             verifyIdentityIssuer(
                 credentialType,
                 completionBlock
@@ -119,7 +125,13 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ credentialType: VCLCredentialType,
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if (credentialType.issuerCategory == VCLServiceType.IdentityIssuer.rawValue) {
+        if (
+            credentialType.issuerCategory == VCLServiceType.IdentityIssuer.rawValue ||
+            credentialType.issuerCategory == VCLServiceType.IdDocumentIssuer.rawValue ||
+            credentialType.issuerCategory == VCLServiceType.NotaryIdDocumentIssuer.rawValue ||
+            credentialType.issuerCategory == VCLServiceType.NotaryContactIssuer.rawValue ||
+            credentialType.issuerCategory == VCLServiceType.ContactIssuer.rawValue
+        ) {
             completionBlock(VCLResult.success(true))
         } else {
             onError(
@@ -189,7 +201,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ completionBlock: @escaping (VCLResult<[[String: Any]]>) -> Void
     ) {
         var completeContexts = [[String: Any]]()
-
+        
         self.resolveConetxBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish resolveConetxBackgroundTaskIdentifier") {
             UIApplication.shared.endBackgroundTask(self.resolveConetxBackgroundTaskIdentifier!)
             self.resolveConetxBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
