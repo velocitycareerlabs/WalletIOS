@@ -12,27 +12,44 @@ import Foundation
 public enum VCLServiceType: String {
     case Inspector = "Inspector"
     case Issuer = "Issuer"
-    case IdentityIssuer = "IdentityIssuer"
     case NotaryIssuer = "NotaryIssuer"
     case CareerIssuer = "CareerIssuer"
+//    Identity issuer types:
+    case IdentityIssuer = "IdentityIssuer"
+    case IdDocumentIssuer = "IdDocumentIssuer"
+    case NotaryIdDocumentIssuer = "NotaryIdDocumentIssuer"
+    case ContactIssuer = "ContactIssuer"
+    case NotaryContactIssuer = "NotaryContactIssuer"
     case Undefined = "Undefined"
     
     public static func fromString(value: String) -> VCLServiceType {
         if(value.contains(VCLServiceType.Inspector.rawValue)) {
-            return VCLServiceType.Inspector
+            return .Inspector
         }
         if(value.contains(VCLServiceType.NotaryIssuer.rawValue)) {
-            return VCLServiceType.NotaryIssuer
+            return .NotaryIssuer
         }
         if(value.contains(VCLServiceType.IdentityIssuer.rawValue)) {
-            return VCLServiceType.IdentityIssuer
+            return .IdentityIssuer
+        }
+        if(value.contains(VCLServiceType.NotaryIdDocumentIssuer.rawValue)) {
+            return .NotaryIdDocumentIssuer
+        }
+        if(value.contains(VCLServiceType.IdDocumentIssuer.rawValue)) {
+            return .IdDocumentIssuer
+        }
+        if(value.contains(VCLServiceType.NotaryContactIssuer.rawValue)) {
+            return .NotaryContactIssuer
+        }
+        if(value.contains(VCLServiceType.ContactIssuer.rawValue)) {
+            return .ContactIssuer
         }
         if(value.contains(VCLServiceType.CareerIssuer.rawValue)) {
-            return VCLServiceType.CareerIssuer
+            return .CareerIssuer
         }
         if(value.contains(VCLServiceType.Issuer.rawValue)) {
-            return VCLServiceType.Issuer
+            return .Issuer
         }
-        return VCLServiceType.Undefined
+        return .Undefined
     }
 }
