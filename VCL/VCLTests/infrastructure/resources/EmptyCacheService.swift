@@ -22,4 +22,8 @@ class EmptyCacheService: CacheService {
     func getCredentialTypeSchema(key: String) -> Data? { return nil }
     func setCredentialTypeSchema(key: String, value: Data, cacheSequence: Int) {}
     func isResetCacheCredentialTypeSchema(cacheSequence: Int) -> Bool { return false }
+    
+    func getServiceTypes(key: String) -> Data? { return nil }
+    func setServiceTypes(key: String, value: Data, cacheSequence: Int) {}
+    func isResetCacheServiceTypes(cacheSequence: Int) -> Bool { return false }
 }

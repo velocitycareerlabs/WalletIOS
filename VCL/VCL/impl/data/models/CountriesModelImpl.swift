@@ -10,7 +10,7 @@
 import Foundation
 
 class CountriesModelImpl: CountriesModel {
-
+    
     private(set) var data: VCLCountries? = nil
     let countriesUseCase: CountriesUseCase
     
@@ -23,9 +23,9 @@ class CountriesModelImpl: CountriesModel {
         completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
     ) {
         countriesUseCase.getCountries(cacheSequence: cacheSequence) { [weak self] result in
-                do {
-                    self?.data = try result.get()
-                } catch {}
+            do {
+                self?.data = try result.get()
+            } catch {}
             completionBlock(result)
         }
     }

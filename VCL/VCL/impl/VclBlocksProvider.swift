@@ -134,6 +134,18 @@ class VclBlocksProvider {
         )
     }
     
+    static func provideServiceTypesModel() -> ServiceTypesModel {
+        return ServiceTypesModelImpl(
+            ServiceTypesUseCaseImpl(
+                ServiceTypesRepositoryImpl(
+                    NetworkServiceImpl(),
+                    CacheServiceImpl()
+                ),
+                ExecutorImpl()
+            )
+        )
+    }
+    
     static func providePresentationRequestUseCase(
         _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
     ) throws -> PresentationRequestUseCase {

@@ -14,6 +14,7 @@ class CacheServiceImpl: CacheService {
     private static let KEY_CACHE_SEQUENCE_COUNTRIES = "KEY_CACHE_SEQUENCE_COUNTRIES"
     private static let KEY_CACHE_SEQUENCE_CREDENTIAL_TYPES = "KEY_CACHE_SEQUENCE_CREDENTIAL_TYPES"
     private static let KEY_CACHE_SEQUENCE_CREDENTIAL_TYPE_SCHEMA = "KEY_CACHE_SEQUENCE_CREDENTIAL_TYPE_SCHEMA"
+    private static let KEY_CACHE_SEQUENCE_SERVICE_TYPES = "KEY_CACHE_SEQUENCE_SERVICE_TYPES"
 
     private var defaults: UserDefaults = UserDefaults()
 
@@ -63,4 +64,16 @@ class CacheServiceImpl: CacheService {
     func isResetCacheCredentialTypeSchema(cacheSequence: Int) -> Bool {
         return getInt(key: CacheServiceImpl.KEY_CACHE_SEQUENCE_CREDENTIAL_TYPE_SCHEMA) < cacheSequence
     }
+    
+    func getServiceTypes(key: String) -> Data? {
+        return getData(key: key)
+    }
+    func setServiceTypes(key: String, value: Data, cacheSequence: Int) {
+        setData(key: key, value: value)
+        setInt(key: CacheServiceImpl.KEY_CACHE_SEQUENCE_SERVICE_TYPES, value: cacheSequence)
+    }
+    func isResetCacheServiceTypes(cacheSequence: Int) -> Bool {
+        return getInt(key: CacheServiceImpl.KEY_CACHE_SEQUENCE_SERVICE_TYPES) < cacheSequence
+    }
+    
 }
