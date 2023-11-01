@@ -28,7 +28,7 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
     ) {
         networkService.sendRequest(
             endpoint: jwtSignServiceUrl,
-            body: generateJwtPayloadToSign(nonce: nonce, jwtDescriptor: jwtDescriptor).toJsonString(),
+            body: generateJwtPayloadToSign(kid: kid, nonce: nonce, jwtDescriptor: jwtDescriptor).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
             headers: [
@@ -49,12 +49,18 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
     }
     
     private func generateJwtPayloadToSign(
-        nonce: String? = nil,
+        kid: String?,
+        nonce: String?,
         jwtDescriptor: VCLJwtDescriptor
     ) -> [String: Any] {
         var retVal = [String: Any]()
+        var header = [String: Any]()
         var options = [String: Any]()
         var payload = jwtDescriptor.payload ?? [:]
+        
+//        Base assumption:
+//        HeaderValues.XVnfProtocolVersion == VCLXVnfProtocolVersion.XVnfProtocolVersion2
+        header[CodingKeys.KeyKid] = kid
 
         options[CodingKeys.KeyKeyId] = jwtDescriptor.keyId
         options[CodingKeys.KeyAud] = jwtDescriptor.aud
@@ -64,6 +70,7 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
         
         payload[CodingKeys.KeyNonce] = nonce
 
+        retVal[CodingKeys.KeyHeader] = header
         retVal[CodingKeys.KeyOptions] = options
         retVal[CodingKeys.KeyPayload] = payload
 
@@ -72,11 +79,13 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
 
     public struct CodingKeys {
         public static let KeyKeyId = "keyId"
+        public static let KeyKid = "kid"
         public static let KeyIss = "iss"
         public static let KeyAud = "aud"
         public static let KeyJti = "jti"
         public static let KeyNonce = "nonce"
 
+        public static let KeyHeader = "header"
         public static let KeyOptions = "options"
         public static let KeyPayload = "payload"
 
