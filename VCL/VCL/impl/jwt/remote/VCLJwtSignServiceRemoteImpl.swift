@@ -48,7 +48,7 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
         }
     }
     
-    private func generateJwtPayloadToSign(
+    internal func generateJwtPayloadToSign(
         kid: String?,
         nonce: String?,
         jwtDescriptor: VCLJwtDescriptor
@@ -63,12 +63,11 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
         header[CodingKeys.KeyKid] = kid
 
         options[CodingKeys.KeyKeyId] = jwtDescriptor.keyId
-        options[CodingKeys.KeyAud] = jwtDescriptor.aud
-        options[CodingKeys.KeyJti] = jwtDescriptor.jti
-        options[CodingKeys.KeyIss] = jwtDescriptor.iss
-        options[CodingKeys.KeyIss] = jwtDescriptor.iss
         
         payload[CodingKeys.KeyNonce] = nonce
+        payload[CodingKeys.KeyAud] = jwtDescriptor.aud
+        payload[CodingKeys.KeyJti] = jwtDescriptor.jti
+        payload[CodingKeys.KeyIss] = jwtDescriptor.iss
 
         retVal[CodingKeys.KeyHeader] = header
         retVal[CodingKeys.KeyOptions] = options

@@ -223,6 +223,7 @@
 		289A53AD264D64E500B84389 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289A539B264D64E500B84389 /* XCTestManifests.swift */; };
 		289DFDC926F2190F00052CA8 /* VCLEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289DFDC826F2190F00052CA8 /* VCLEnvironment.swift */; };
 		289F3D6826CD14CE00E81396 /* VCLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289F3D6726CD14CE00E81396 /* VCLService.swift */; };
+		28A4B2AF2AF29DB300C0992E /* VCLJwtSignServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A4B2AE2AF29DB300C0992E /* VCLJwtSignServiceTest.swift */; };
 		28A595AD26CA700000D6E176 /* CredentialManifestMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A595AC26CA700000D6E176 /* CredentialManifestMocks.swift */; };
 		28A595B826CA724900D6E176 /* JwtServiceMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A595B726CA724900D6E176 /* JwtServiceMocks.swift */; };
 		28A72FFA26C939440079EFEA /* VCLOrganizationsDescriptorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A72FF926C939440079EFEA /* VCLOrganizationsDescriptorTest.swift */; };
@@ -553,6 +554,7 @@
 		289A539B264D64E500B84389 /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		289DFDC826F2190F00052CA8 /* VCLEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLEnvironment.swift; sourceTree = "<group>"; };
 		289F3D6726CD14CE00E81396 /* VCLService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLService.swift; sourceTree = "<group>"; };
+		28A4B2AE2AF29DB300C0992E /* VCLJwtSignServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLJwtSignServiceTest.swift; sourceTree = "<group>"; };
 		28A595AC26CA700000D6E176 /* CredentialManifestMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialManifestMocks.swift; sourceTree = "<group>"; };
 		28A595B726CA724900D6E176 /* JwtServiceMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JwtServiceMocks.swift; sourceTree = "<group>"; };
 		28A72FF926C939440079EFEA /* VCLOrganizationsDescriptorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLOrganizationsDescriptorTest.swift; sourceTree = "<group>"; };
@@ -662,8 +664,8 @@
 		284362D42A114825007F70CC /* jwt */ = {
 			isa = PBXGroup;
 			children = (
-				2873A4672ACC5315003AE086 /* JwtSignServiceLocalTest.swift */,
-				2873A46D2ACC9B36003AE086 /* JwtVerifyServiceLocalTest.swift */,
+				28A4B2A32AF29D7B00C0992E /* local */,
+				28A4B2AD2AF29D8E00C0992E /* remote */,
 			);
 			path = jwt;
 			sourceTree = "<group>";
@@ -1225,6 +1227,23 @@
 			path = usecases;
 			sourceTree = "<group>";
 		};
+		28A4B2A32AF29D7B00C0992E /* local */ = {
+			isa = PBXGroup;
+			children = (
+				2873A4672ACC5315003AE086 /* JwtSignServiceLocalTest.swift */,
+				2873A46D2ACC9B36003AE086 /* JwtVerifyServiceLocalTest.swift */,
+			);
+			path = local;
+			sourceTree = "<group>";
+		};
+		28A4B2AD2AF29D8E00C0992E /* remote */ = {
+			isa = PBXGroup;
+			children = (
+				28A4B2AE2AF29DB300C0992E /* VCLJwtSignServiceTest.swift */,
+			);
+			path = remote;
+			sourceTree = "<group>";
+		};
 		28BA0AD426CA636900FF28BB /* valid */ = {
 			isa = PBXGroup;
 			children = (
@@ -1726,6 +1745,7 @@
 				2873A46E2ACC9B36003AE086 /* JwtVerifyServiceLocalTest.swift in Sources */,
 				2884060626C9262D0030E967 /* VCLDeepLinkTest.swift in Sources */,
 				281EDC32295AF3A000D2D381 /* VCLPublicJwkTest.swift in Sources */,
+				28A4B2AF2AF29DB300C0992E /* VCLJwtSignServiceTest.swift in Sources */,
 				28C9B25D2A0D143200AC87BD /* KeyServiceUseCaseTest.swift in Sources */,
 				28F1A62B299EA70D001A151F /* ProfileServiceTypeVerifierTest.swift in Sources */,
 				2896186629016E27009B1FC7 /* CacheServiceTest.swift in Sources */,
@@ -1931,7 +1951,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 111;
+				CURRENT_PROJECT_VERSION = 112;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1944,7 +1964,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.18.3;
+				MARKETING_VERSION = 1.18.4;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;
@@ -1957,7 +1977,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 111;
+				CURRENT_PROJECT_VERSION = 112;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1970,7 +1990,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.18.3;
+				MARKETING_VERSION = 1.18.4;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;
