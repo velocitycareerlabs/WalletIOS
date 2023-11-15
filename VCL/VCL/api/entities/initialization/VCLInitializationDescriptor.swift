@@ -16,6 +16,7 @@ public struct VCLInitializationDescriptor {
     public let keycahinAccessGroupIdentifier: String?
     public let isDebugOn: Bool
     public let cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+    public let isDirectIssuerCheckOn: Bool
     
     public init(
         environment: VCLEnvironment = .Prod,
@@ -23,7 +24,8 @@ public struct VCLInitializationDescriptor {
         cacheSequence: Int = 0,
         keycahinAccessGroupIdentifier: String? = nil,
         isDebugOn: Bool = false,
-        cryptoServicesDescriptor: VCLCryptoServicesDescriptor = VCLCryptoServicesDescriptor()
+        cryptoServicesDescriptor: VCLCryptoServicesDescriptor = VCLCryptoServicesDescriptor(),
+        isDirectIssuerCheckOn: Bool = true
     ) {
         self.environment = environment
         self.xVnfProtocolVersion = xVnfProtocolVersion
@@ -31,5 +33,6 @@ public struct VCLInitializationDescriptor {
         self.keycahinAccessGroupIdentifier = keycahinAccessGroupIdentifier
         self.isDebugOn = isDebugOn
         self.cryptoServicesDescriptor = cryptoServicesDescriptor
+        self.isDirectIssuerCheckOn = isDirectIssuerCheckOn
     }
 }

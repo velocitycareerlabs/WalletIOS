@@ -229,8 +229,16 @@ class VclBlocksProvider {
     
     static func provideFinalizeOffersUseCase(
         _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
-        _ credentialTypesModel: CredentialTypesModel
+        _ credentialTypesModel: CredentialTypesModel,
+        _ isDirectIssuerCheckOn: Bool
     ) throws -> FinalizeOffersUseCase {
+        var credentialIssuerVerifier: CredentialIssuerVerifier = CredentialIssuerVerifierEmptyImpl()
+        if (isDirectIssuerCheckOn) {
+            credentialIssuerVerifier = CredentialIssuerVerifierImpl(
+                credentialTypesModel,
+                NetworkServiceImpl()
+            )
+        }
         return FinalizeOffersUseCaseImpl(
             FinalizeOffersRepositoryImpl(
                 NetworkServiceImpl()),
@@ -238,11 +246,7 @@ class VclBlocksProvider {
                 try chooseJwtSignService(cryptoServicesDescriptor),
                 try chooseJwtVerifyService(cryptoServicesDescriptor)
             ),
-//            CredentialIssuerVerifierImpl(
-//                credentialTypesModel,
-//                NetworkServiceImpl()
-//            ),
-            CredentialIssuerVerifierEmptyImpl(),
+            credentialIssuerVerifier,
             CredentialDidVerifierImpl(),
             ExecutorImpl()
         )

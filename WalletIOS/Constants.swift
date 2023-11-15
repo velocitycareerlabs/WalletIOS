@@ -19,6 +19,9 @@ struct Constants  {
     
     static let CredentialManifestDeepLinkStrDev =
     "velocity-network-devnet://issue?request_uri=https%3A%2F%2Fdevagent.velocitycareerlabs.io%2Fapi%2Fholder%2Fv0.6%2Forg%2Fdid%3Aion%3AEiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA%2Fissue%2Fget-credential-manifest%3Fid%3D6384a3ad148b1991687f67c9%26credential_types%3DEmploymentPastV1.1"
+//    Open badge deep link
+//         "velocity-network-devnet://issue?request_uri=https%3A%2F%2Fdevagent.velocitycareerlabs.io%2Fapi%2Fholder%2Fv0.6%2Forg%2Fdid%3Aion%3AEiBMsw27IKRYIdwUOfDeBd0LnWVeG2fPxxJi9L1fvjM20g%2Fissue%2Fget-credential-manifest%3Fid%3D65520714d778c03b43828792%26credential_types%3DOpenBadgeCredential"
+
     
     static let CredentialManifestDeepLinkIdentificationStrDev =
     "velocity-network-devnet://issue?request_uri=https%3A%2F%2Fdevverifagent.velocitycareerlabs.io%2Fapi%2Fholder%2Fv0.6%2Forg%2Fdid%3Aion%3AEiAehWmpX5mHBuc93SIhPXF8bsEx68G6mPcdIaLNGbozPA%2Fissue%2Fget-credential-manifest%3FvendorOriginContext%3Dn2KuBU8QgpdmTJ7ZDVWs1"
