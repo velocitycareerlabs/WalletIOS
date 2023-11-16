@@ -76,7 +76,8 @@ public class VCLImpl: VCL {
         finalizeOffersUseCase =
         try VclBlocksProvider.provideFinalizeOffersUseCase(
             initializationDescriptor.cryptoServicesDescriptor,
-            credentialTypesModel
+            credentialTypesModel,
+            initializationDescriptor.isDirectIssuerCheckOn
         )
         credentialTypesUIFormSchemaUseCase =
         VclBlocksProvider.provideCredentialTypesUIFormSchemaUseCase()

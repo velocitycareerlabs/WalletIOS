@@ -55,7 +55,8 @@ class ViewController: UIViewController {
 //                        ),
 //                        jwtServiceUrls: VCLJwtServiceUrls(
 //                            jwtSignServiceUrl: Constants.getJwtSignServiceUrl(environment: environment),
-//                            jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment: environment))
+//                            jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment: environment)
+//                          )
 //                    )
 //                )
             ),
