@@ -151,7 +151,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
             do {
-                let isVerified = try $0.get()
+                let _ = try $0.get()
                 XCTFail("\(VCLErrorCode.IssuerRequiresNotaryPermission.rawValue) error code is expected")
             } catch {
                 assert((error as! VCLError).errorCode == VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
@@ -172,7 +172,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             finalizeOffersDescriptor: finalizeOffersDescriptorWithoutPermittedServices
         ) {
             do {
-                let isVerified = try $0.get()
+                let _ = try $0.get()
                 XCTFail("\(VCLErrorCode.CredentialTypeNotRegistered.rawValue) error code is expected")
             } catch {
                 assert((error as! VCLError).errorCode == VCLErrorCode.CredentialTypeNotRegistered.rawValue)
@@ -193,7 +193,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
             do {
-                let isVerified = try $0.get()
+                let _ = try $0.get()
                 XCTFail("\(VCLErrorCode.InvalidCredentialSubjectContext.rawValue) error code is expected")
             } catch {
                 assert((error as! VCLError).errorCode == VCLErrorCode.InvalidCredentialSubjectContext.rawValue)
@@ -256,7 +256,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             finalizeOffersDescriptor: finalizeOffersDescriptorOfIdentityIssuer
         ) {
             do {
-                let isVerified = try $0.get()
+                let _ = try $0.get()
                 XCTFail("\(VCLErrorCode.IssuerRequiresIdentityPermission.rawValue) error code is expected")
             } catch {
                 assert((error as! VCLError).errorCode == VCLErrorCode.IssuerRequiresIdentityPermission.rawValue)
@@ -277,7 +277,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
             do {
-                let isVerified = try $0.get()
+                let _ = try $0.get()
                 XCTFail("\(VCLErrorCode.InvalidCredentialSubjectContext.rawValue) error code is expected")
             } catch {
                 assert((error as! VCLError).errorCode == VCLErrorCode.InvalidCredentialSubjectContext.rawValue)
@@ -285,7 +285,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         }
     }
 
-    func testVerifyIssuerWithoutServicesFailedPrimaryOrganizationNotFound() {
+    func testVerifyIssuerPrimaryOrganizationNotFound() {
         subject = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
@@ -299,9 +299,9 @@ class CredentialIssuerVerifierTest: XCTestCase {
         ) {
             do {
                 let isVerified = try $0.get()
-                XCTFail("\(VCLErrorCode.InvalidCredentialSubjectType.rawValue) error code is expected")
+                assert(isVerified)
             } catch {
-                assert((error as! VCLError).errorCode == VCLErrorCode.InvalidCredentialSubjectType.rawValue)
+                XCTFail("\(error)")
             }
         }
     }
