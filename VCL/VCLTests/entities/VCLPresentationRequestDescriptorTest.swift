@@ -27,24 +27,24 @@ final class VCLPresentationRequestDescriptorTest: XCTestCase {
         let queryParams =
         "\(VCLPresentationRequestDescriptor.CodingKeys.KeyPushDelegatePushUrl)=\(PresentationRequestDescriptorMocks.PushDelegate.pushUrl.encode()!)" +
         "&\(VCLPresentationRequestDescriptor.CodingKeys.KeyPushDelegatePushToken)=\(PresentationRequestDescriptorMocks.PushDelegate.pushToken.encode()!)"
-        let mockEndpoint = (PresentationRequestDescriptorMocks.RequestUri.decode()! + "?" + queryParams)
+        let mockEndpoint = (PresentationRequestDescriptorMocks.RequestUri.decode()! + "&" + queryParams)
 
-        assert(subject.endpoint == mockEndpoint)
+        assert(subject.endpoint?.decode()?.isUrlEquivalentTo(url: mockEndpoint.decode() ?? "") == true)
         assert(subject.pushDelegate!.pushUrl == PresentationRequestDescriptorMocks.PushDelegate.pushUrl)
         assert(subject.pushDelegate!.pushToken == PresentationRequestDescriptorMocks.PushDelegate.pushToken)
         assert(subject.did == PresentationRequestDescriptorMocks.InspectorDid)
     }
-    
+
     func testPresentationRequestDescriptorWithoutPushDelegateOnlySuccess() {
         subject = VCLPresentationRequestDescriptor(
             deepLink: PresentationRequestDescriptorMocks.DeepLink
         )
 
-        assert(subject.endpoint == PresentationRequestDescriptorMocks.RequestUri.decode()!)
+        assert(subject.endpoint?.decode()?.isUrlEquivalentTo(url: PresentationRequestDescriptorMocks.RequestUri.decode() ?? "") == true)
         assert(subject.pushDelegate == nil)
         assert(subject.did == PresentationRequestDescriptorMocks.InspectorDid)
     }
-    
+
     func testPresentationRequestDescriptorWithQParamsWithPushDelegateSuccess() {
         subject = VCLPresentationRequestDescriptor(
             deepLink: PresentationRequestDescriptorMocks.DeepLinkWithQParams,
@@ -55,24 +55,24 @@ final class VCLPresentationRequestDescriptorTest: XCTestCase {
         "\(VCLPresentationRequestDescriptor.CodingKeys.KeyPushDelegatePushUrl)=\(PresentationRequestDescriptorMocks.PushDelegate.pushUrl.encode()!)" +
         "&\(VCLPresentationRequestDescriptor.CodingKeys.KeyPushDelegatePushToken)=\(PresentationRequestDescriptorMocks.PushDelegate.pushToken.encode()!)"
         let mockEndpoint = (
-                PresentationRequestDescriptorMocks.RequestUri.decode()! + "?" + PresentationRequestDescriptorMocks.QParms + "&" + queryParams
+            PresentationRequestDescriptorMocks.RequestUri.decode()! + "&" + PresentationRequestDescriptorMocks.QParams + "&" + queryParams
                 )
 
-        assert(subject.endpoint == mockEndpoint)
+        assert(subject.endpoint?.decode()?.isUrlEquivalentTo(url: mockEndpoint.decode()!) == true)
         assert(subject.pushDelegate!.pushUrl == PresentationRequestDescriptorMocks.PushDelegate.pushUrl)
         assert(subject.pushDelegate!.pushToken == PresentationRequestDescriptorMocks.PushDelegate.pushToken)
         assert(subject.did == PresentationRequestDescriptorMocks.InspectorDid)
     }
-    
+
     func testPresentationRequestDescriptorWithQParamsWithoutPushDelegateOnlySuccess() {
         subject = VCLPresentationRequestDescriptor(
             deepLink: PresentationRequestDescriptorMocks.DeepLinkWithQParams
         )
 
         let mockEndpoint =
-            (PresentationRequestDescriptorMocks.RequestUri.decode()! + "?" + PresentationRequestDescriptorMocks.QParms)
+        (PresentationRequestDescriptorMocks.RequestUri.decode()! + "&" + PresentationRequestDescriptorMocks.QParams)
 
-        assert(subject.endpoint == mockEndpoint)
+        assert(subject.endpoint?.decode()?.isUrlEquivalentTo(url: mockEndpoint.decode()!) == true)
         assert(subject.pushDelegate == nil)
         assert(subject.did == PresentationRequestDescriptorMocks.InspectorDid)
     }

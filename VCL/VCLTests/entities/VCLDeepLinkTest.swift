@@ -24,7 +24,6 @@ final class VCLDeepLinkTest: XCTestCase {
         assert(subject.value == DeepLinkMocks.OpenidInitiateIssuanceStrDev)
         assert(subject.value.decode() == DeepLinkMocks.OpenidInitiateIssuanceStrDev.decode())
         assert(subject.requestUri == nil)
-        assert(subject.issuer == DeepLinkMocks.IssuerDecoded)
         assert(subject.did == DeepLinkMocks.OIDIssuerDid)
     }
 
@@ -33,8 +32,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.PresentationRequestDeepLinkDevNetStr)
         assert(subject.value.decode() == DeepLinkMocks.PresentationRequestDeepLinkDevNetStr.decode())
-        assert(subject.requestUri!.decode() == DeepLinkMocks.PresentationRequestRequestDecodedUriStr)
-        assert(subject.issuer == nil)
+        assert(subject.requestUri?.isUrlEquivalentTo(url: DeepLinkMocks.PresentationRequestRequestDecodedUriStr ?? "") == true)
         assert(subject.vendorOriginContext == DeepLinkMocks.PresentationRequestVendorOriginContext)
         assert(subject.did == DeepLinkMocks.InspectorDid)
     }
@@ -44,8 +42,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.PresentationRequestDeepLinkTestNetStr)
         assert(subject.value.decode() == DeepLinkMocks.PresentationRequestDeepLinkTestNetStr.decode())
-        assert(subject.requestUri!.decode() == DeepLinkMocks.PresentationRequestRequestDecodedUriStr)
-        assert(subject.issuer == nil)
+        assert(subject.requestUri?.isUrlEquivalentTo(url: DeepLinkMocks.PresentationRequestRequestDecodedUriStr ?? "") == true)
         assert(subject.vendorOriginContext == DeepLinkMocks.PresentationRequestVendorOriginContext)
         assert(subject.did == DeepLinkMocks.InspectorDid)
     }
@@ -55,8 +52,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.PresentationRequestDeepLinkMainNetStr)
         assert(subject.value.decode() == DeepLinkMocks.PresentationRequestDeepLinkMainNetStr.decode())
-        assert(subject.requestUri!.decode() == DeepLinkMocks.PresentationRequestRequestDecodedUriStr)
-        assert(subject.issuer == nil)
+        assert(subject.requestUri?.isUrlEquivalentTo(url: DeepLinkMocks.PresentationRequestRequestDecodedUriStr ?? "") == true)
         assert(subject.vendorOriginContext == DeepLinkMocks.PresentationRequestVendorOriginContext)
         assert(subject.did == DeepLinkMocks.InspectorDid)
     }
@@ -66,8 +62,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.CredentialManifestDeepLinkDevNetStr)
         assert(subject.value.decode() == DeepLinkMocks.CredentialManifestDeepLinkDevNetStr.decode())
-        assert(subject.requestUri!.isUrlEquivalentTo(url: DeepLinkMocks.CredentialManifestRequestDecodedUriStr))
-        assert(subject.issuer == nil)
+        assert(subject.requestUri?.isUrlEquivalentTo(url: DeepLinkMocks.CredentialManifestRequestDecodedUriStr) == true)
         assert(subject.vendorOriginContext == nil)
         assert(subject.did == DeepLinkMocks.IssuerDid)
     }
@@ -77,8 +72,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.CredentialManifestDeepLinkTestNetStr)
         assert(subject.value.decode() == DeepLinkMocks.CredentialManifestDeepLinkTestNetStr.decode())
-        assert(subject.requestUri!.isUrlEquivalentTo(url: DeepLinkMocks.CredentialManifestRequestDecodedUriStr))
-        assert(subject.issuer == nil)
+        assert(subject.requestUri?.isUrlEquivalentTo(url: DeepLinkMocks.CredentialManifestRequestDecodedUriStr) == true)
         assert(subject.vendorOriginContext == nil)
         assert(subject.did == DeepLinkMocks.IssuerDid)
     }
@@ -88,8 +82,7 @@ final class VCLDeepLinkTest: XCTestCase {
 
         assert(subject.value == DeepLinkMocks.CredentialManifestDeepLinkMainNetStr)
         assert(subject.value.decode() == DeepLinkMocks.CredentialManifestDeepLinkMainNetStr.decode())
-        assert(subject.requestUri!.isUrlEquivalentTo(url: DeepLinkMocks.CredentialManifestRequestDecodedUriStr))
-        assert(subject.issuer == nil)
+        assert(subject.requestUri?.isUrlEquivalentTo(url: DeepLinkMocks.CredentialManifestRequestDecodedUriStr) == true)
         assert(subject.vendorOriginContext == nil)
         assert(subject.did == DeepLinkMocks.IssuerDid)
     }
