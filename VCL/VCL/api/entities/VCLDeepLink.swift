@@ -25,7 +25,8 @@ public struct VCLDeepLink {
     }}
     
     public var did: String? { get{
-        retrieveQueryParam(key: CodingKeys.KeyIssuerDid) ?? retrieveQueryParam(key: CodingKeys.KeyInspectorDid)
+        (retrieveQueryParam(key: CodingKeys.KeyIssuerDid) ?? retrieveQueryParam(key: CodingKeys.KeyInspectorDid)) ??
+        requestUri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix) // fallback for old agents
     } }
     
     private func generateUri(uriKey: String, asSubParams: Bool = false) -> String? {
@@ -49,6 +50,7 @@ public struct VCLDeepLink {
     }
     
     public struct CodingKeys {
+        public static let KeyDidPrefix = "did:"
         public static let KeyRequestUri = "request_uri"
         public static let KeyVendorOriginContext = "vendorOriginContext"
         public static let KeyIssuerDid = "issuerDid"
