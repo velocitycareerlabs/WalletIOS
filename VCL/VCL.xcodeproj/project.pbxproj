@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -29,12 +29,6 @@
 		280587F826CD3BCC00E89146 /* VCLCredentialManifestDescriptorByServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 280587F726CD3BCC00E89146 /* VCLCredentialManifestDescriptorByServiceTest.swift */; };
 		2806600229B5EB6A00433302 /* VCLCredentialManifestTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2806600129B5EB6A00433302 /* VCLCredentialManifestTest.swift */; };
 		2806600D29B5EB8700433302 /* VCLFinalizeOffersDescriptorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2806600C29B5EB8700433302 /* VCLFinalizeOffersDescriptorTest.swift */; };
-		280A6FC6267264A9000DF3F7 /* Secp256k1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 284828292670AF3500AE3271 /* Secp256k1.framework */; };
-		280A6FC7267264A9000DF3F7 /* Secp256k1.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 284828292670AF3500AE3271 /* Secp256k1.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		280A6FCE267264AC000DF3F7 /* VCCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 284828162670AF2000AE3271 /* VCCrypto.framework */; };
-		280A6FCF267264AC000DF3F7 /* VCCrypto.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 284828162670AF2000AE3271 /* VCCrypto.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		280A6FD0267264B0000DF3F7 /* VCToken.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 284828212670AF2D00AE3271 /* VCToken.framework */; };
-		280A6FD1267264B0000DF3F7 /* VCToken.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 284828212670AF2D00AE3271 /* VCToken.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2810CFA626CA9ACF00A3A9B9 /* PresentationRequestMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2810CFA526CA9ACF00A3A9B9 /* PresentationRequestMocks.swift */; };
 		2811227C2678CE1700DE519C /* JwtServiceUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2811227B2678CE1700DE519C /* JwtServiceUseCaseTest.swift */; };
 		2812ACF3294A284600390A06 /* VCLStatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2812ACF2294A284600390A06 /* VCLStatusCode.swift */; };
@@ -81,6 +75,10 @@
 		285D154926CA92CE00532E1C /* OrganizationsUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285D154826CA92CE00532E1C /* OrganizationsUseCaseTest.swift */; };
 		285E702F26C2736C008099A4 /* SubmissionUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285E702E26C2736C008099A4 /* SubmissionUseCaseImpl.swift */; };
 		285E703126C27C78008099A4 /* PresentationSubmissionRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285E703026C27C78008099A4 /* PresentationSubmissionRepositoryImpl.swift */; };
+		285EDDC22B0E3DD900BD4B80 /* Secp256k1.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 285EDDC12B0E3DA600BD4B80 /* Secp256k1.xcframework */; };
+		285EDDC32B0E3DD900BD4B80 /* Secp256k1.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 285EDDC12B0E3DA600BD4B80 /* Secp256k1.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		285EDDCD2B0E3E6400BD4B80 /* VCCrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 285EDDCC2B0E3E6400BD4B80 /* VCCrypto.xcframework */; };
+		285EDDD22B0E3EBD00BD4B80 /* VCToken.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 285EDDD12B0E3EBD00BD4B80 /* VCToken.xcframework */; };
 		285F63E32677665E0081D522 /* CredentialTypesUIFormSchemaUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285F63E22677665E0081D522 /* CredentialTypesUIFormSchemaUseCaseTest.swift */; };
 		28600695274A81540018AC8F /* VCLOffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28600694274A81540018AC8F /* VCLOffers.swift */; };
 		286415A9264D65E2006C1AA3 /* VclBlocksProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2864152A264D65E2006C1AA3 /* VclBlocksProvider.swift */; };
@@ -286,48 +284,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		284828152670AF2000AE3271 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2848280F2670AF2000AE3271 /* VCCrypto.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 92CDE7AA24DC78DD00F95B5D;
-			remoteInfo = VCCrypto;
-		};
-		284828172670AF2000AE3271 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2848280F2670AF2000AE3271 /* VCCrypto.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 92CDE7B324DC78DD00F95B5D;
-			remoteInfo = VCCryptoTests;
-		};
-		284828192670AF2000AE3271 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2848280F2670AF2000AE3271 /* VCCrypto.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 92CDE7ED24DE1C6100F95B5D;
-			remoteInfo = VCCryptoTestApp;
-		};
-		284828202670AF2D00AE3271 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2848281B2670AF2D00AE3271 /* VCToken.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 55ADE25724F5406000D9990E;
-			remoteInfo = VCToken;
-		};
-		284828222670AF2D00AE3271 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2848281B2670AF2D00AE3271 /* VCToken.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 55ADE26024F5406000D9990E;
-			remoteInfo = VCTokenTests;
-		};
-		284828282670AF3500AE3271 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 284828242670AF3500AE3271 /* Secp256k1.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 92B9684D25240F2100F64AB0;
-			remoteInfo = Secp256k1;
-		};
 		289A536B264D647200B84389 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 289A5357264D647100B84389 /* Project object */;
@@ -344,9 +300,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				280A6FD1267264B0000DF3F7 /* VCToken.framework in Embed Frameworks */,
-				280A6FCF267264AC000DF3F7 /* VCCrypto.framework in Embed Frameworks */,
-				280A6FC7267264A9000DF3F7 /* Secp256k1.framework in Embed Frameworks */,
+				285EDDC32B0E3DD900BD4B80 /* Secp256k1.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -394,9 +348,6 @@
 		28429A392A6944F600496342 /* VCLXVnfProtocolVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLXVnfProtocolVersion.swift; sourceTree = "<group>"; };
 		2842BB5A26C15B4C00B07F2E /* VCLSubmission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLSubmission.swift; sourceTree = "<group>"; };
 		284362CA2A112999007F70CC /* KeyServiceLocalTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyServiceLocalTest.swift; sourceTree = "<group>"; };
-		2848280F2670AF2000AE3271 /* VCCrypto.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = VCCrypto.xcodeproj; path = Microsoft/VCCrypto/VCCrypto.xcodeproj; sourceTree = "<group>"; };
-		2848281B2670AF2D00AE3271 /* VCToken.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = VCToken.xcodeproj; path = Microsoft/VCToken/VCToken.xcodeproj; sourceTree = "<group>"; };
-		284828242670AF3500AE3271 /* Secp256k1.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Secp256k1.xcodeproj; path = Microsoft/Secp256k1/Secp256k1.xcodeproj; sourceTree = "<group>"; };
 		284BF89C270EDE8700030401 /* GlobalConfigTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConfigTest.swift; sourceTree = "<group>"; };
 		284D72242A670E0C00298DB9 /* JsonLdMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonLdMocks.swift; sourceTree = "<group>"; };
 		28507A1C2663F91E00F97259 /* ExchangeProgressUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeProgressUseCase.swift; sourceTree = "<group>"; };
@@ -411,6 +362,9 @@
 		285D154826CA92CE00532E1C /* OrganizationsUseCaseTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationsUseCaseTest.swift; sourceTree = "<group>"; };
 		285E702E26C2736C008099A4 /* SubmissionUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionUseCaseImpl.swift; sourceTree = "<group>"; };
 		285E703026C27C78008099A4 /* PresentationSubmissionRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationSubmissionRepositoryImpl.swift; sourceTree = "<group>"; };
+		285EDDC12B0E3DA600BD4B80 /* Secp256k1.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Secp256k1.xcframework; path = Microsoft/Secp256k1.xcframework; sourceTree = "<group>"; };
+		285EDDCC2B0E3E6400BD4B80 /* VCCrypto.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VCCrypto.xcframework; path = Microsoft/VCCrypto.xcframework; sourceTree = "<group>"; };
+		285EDDD12B0E3EBD00BD4B80 /* VCToken.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VCToken.xcframework; path = Microsoft/VCToken.xcframework; sourceTree = "<group>"; };
 		285F63E22677665E0081D522 /* CredentialTypesUIFormSchemaUseCaseTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTypesUIFormSchemaUseCaseTest.swift; sourceTree = "<group>"; };
 		28600694274A81540018AC8F /* VCLOffers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCLOffers.swift; sourceTree = "<group>"; };
 		2864152A264D65E2006C1AA3 /* VclBlocksProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VclBlocksProvider.swift; sourceTree = "<group>"; };
@@ -623,9 +577,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				280A6FD0267264B0000DF3F7 /* VCToken.framework in Frameworks */,
-				280A6FCE267264AC000DF3F7 /* VCCrypto.framework in Frameworks */,
-				280A6FC6267264A9000DF3F7 /* Secp256k1.framework in Frameworks */,
+				285EDDD22B0E3EBD00BD4B80 /* VCToken.xcframework in Frameworks */,
+				285EDDC22B0E3DD900BD4B80 /* Secp256k1.xcframework in Frameworks */,
+				285EDDCD2B0E3E6400BD4B80 /* VCCrypto.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -670,33 +624,6 @@
 				28A4B2AD2AF29D8E00C0992E /* remote */,
 			);
 			path = jwt;
-			sourceTree = "<group>";
-		};
-		284828102670AF2000AE3271 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				284828162670AF2000AE3271 /* VCCrypto.framework */,
-				284828182670AF2000AE3271 /* VCCryptoTests.xctest */,
-				2848281A2670AF2000AE3271 /* VCCryptoTestApp.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		2848281C2670AF2D00AE3271 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				284828212670AF2D00AE3271 /* VCToken.framework */,
-				284828232670AF2D00AE3271 /* VCTokenTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		284828252670AF3500AE3271 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				284828292670AF3500AE3271 /* Secp256k1.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		28641529264D65E2006C1AA3 /* impl */ = {
@@ -1119,9 +1046,9 @@
 		289A5356264D647100B84389 = {
 			isa = PBXGroup;
 			children = (
-				284828242670AF3500AE3271 /* Secp256k1.xcodeproj */,
-				2848281B2670AF2D00AE3271 /* VCToken.xcodeproj */,
-				2848280F2670AF2000AE3271 /* VCCrypto.xcodeproj */,
+				285EDDD12B0E3EBD00BD4B80 /* VCToken.xcframework */,
+				285EDDCC2B0E3E6400BD4B80 /* VCCrypto.xcframework */,
+				285EDDC12B0E3DA600BD4B80 /* Secp256k1.xcframework */,
 				289A5361264D647100B84389 /* Products */,
 				289A5362264D647100B84389 /* VCL */,
 				289A536D264D647200B84389 /* VCLTests */,
@@ -1417,20 +1344,6 @@
 			mainGroup = 289A5356264D647100B84389;
 			productRefGroup = 289A5361264D647100B84389 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 284828252670AF3500AE3271 /* Products */;
-					ProjectRef = 284828242670AF3500AE3271 /* Secp256k1.xcodeproj */;
-				},
-				{
-					ProductGroup = 284828102670AF2000AE3271 /* Products */;
-					ProjectRef = 2848280F2670AF2000AE3271 /* VCCrypto.xcodeproj */;
-				},
-				{
-					ProductGroup = 2848281C2670AF2D00AE3271 /* Products */;
-					ProjectRef = 2848281B2670AF2D00AE3271 /* VCToken.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				289A535F264D647100B84389 /* VCL */,
@@ -1439,51 +1352,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		284828162670AF2000AE3271 /* VCCrypto.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = VCCrypto.framework;
-			remoteRef = 284828152670AF2000AE3271 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		284828182670AF2000AE3271 /* VCCryptoTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = VCCryptoTests.xctest;
-			remoteRef = 284828172670AF2000AE3271 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		2848281A2670AF2000AE3271 /* VCCryptoTestApp.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = VCCryptoTestApp.app;
-			remoteRef = 284828192670AF2000AE3271 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		284828212670AF2D00AE3271 /* VCToken.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = VCToken.framework;
-			remoteRef = 284828202670AF2D00AE3271 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		284828232670AF2D00AE3271 /* VCTokenTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = VCTokenTests.xctest;
-			remoteRef = 284828222670AF2D00AE3271 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		284828292670AF3500AE3271 /* Secp256k1.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Secp256k1.framework;
-			remoteRef = 284828282670AF3500AE3271 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		289A535E264D647100B84389 /* Resources */ = {
