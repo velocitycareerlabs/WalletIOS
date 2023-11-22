@@ -6,20 +6,6 @@
 	objectVersion = 50;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		28D2EFA829DC00E2001B4E80 /* Secp256k1Aggregate */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 28D2EFAB29DC00E2001B4E80 /* Build configuration list for PBXAggregateTarget "Secp256k1Aggregate" */;
-			buildPhases = (
-				28D2EFAC29DC00F2001B4E80 /* Run Script to Build XCFramework */,
-			);
-			dependencies = (
-			);
-			name = Secp256k1Aggregate;
-			productName = Secp256k1Aggregate;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		92E7A9B32524E45B000E8246 /* secp256k1_ecdh.h in Headers */ = {isa = PBXBuildFile; fileRef = 92E7A9432524E45B000E8246 /* secp256k1_ecdh.h */; };
 		92E7A9B42524E45B000E8246 /* secp256k1_schnorrsig.h in Headers */ = {isa = PBXBuildFile; fileRef = 92E7A9442524E45B000E8246 /* secp256k1_schnorrsig.h */; };
@@ -387,9 +373,6 @@
 				LastUpgradeCheck = 1170;
 				ORGANIZATIONNAME = Microsoft;
 				TargetAttributes = {
-					28D2EFA829DC00E2001B4E80 = {
-						CreatedOnToolsVersion = 14.3;
-					};
 					92B9684C25240F2100F64AB0 = {
 						CreatedOnToolsVersion = 11.7;
 					};
@@ -409,7 +392,6 @@
 			projectRoot = "";
 			targets = (
 				92B9684C25240F2100F64AB0 /* Secp256k1 */,
-				28D2EFA829DC00E2001B4E80 /* Secp256k1Aggregate */,
 			);
 		};
 /* End PBXProject section */
@@ -423,27 +405,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		28D2EFAC29DC00F2001B4E80 /* Run Script to Build XCFramework */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script to Build XCFramework";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/${PROJECT_DIR}/scripts/build_xcframework.sh\n";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		92B9684925240F2100F64AB0 /* Sources */ = {
@@ -459,24 +420,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		28D2EFA929DC00E2001B4E80 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7DDDGP43MJ;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		28D2EFAA29DC00E2001B4E80 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7DDDGP43MJ;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		92B9685325240F2100F64AB0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -602,10 +545,9 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_MODULES_AUTOLINK = NO;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 7DDDGP43MJ;
+				DEVELOPMENT_TEAM = UBF8T346G9;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -653,10 +595,9 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_MODULES_AUTOLINK = NO;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 7DDDGP43MJ;
+				DEVELOPMENT_TEAM = UBF8T346G9;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -702,15 +643,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		28D2EFAB29DC00E2001B4E80 /* Build configuration list for PBXAggregateTarget "Secp256k1Aggregate" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				28D2EFA929DC00E2001B4E80 /* Debug */,
-				28D2EFAA29DC00E2001B4E80 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		92B9684725240F2100F64AB0 /* Build configuration list for PBXProject "Secp256k1" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
