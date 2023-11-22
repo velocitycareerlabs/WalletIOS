@@ -11,14 +11,14 @@ import Foundation
 import UIKit
 
 class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
-
+    
     private let credentialTypesModel: CredentialTypesModel
     private let networkService: NetworkService
     
     private var mainBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
     private var resolveConetxBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
     private var completeConetxBackgroundTaskIdentifier: UIBackgroundTaskIdentifier!
-
+    
     private let mainDispatcher = DispatchGroup()
     private let resolveConetxDispatcher = DispatchGroup()
     private let completeConetxDispatcher = DispatchGroup()
@@ -43,7 +43,6 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             completionBlock(VCLResult.failure(VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue)))
         } else {
             var globalError: VCLError? = nil
-            
             self.mainBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish mainBackgroundTaskIdentifier") {
                 UIApplication.shared.endBackgroundTask(self.mainBackgroundTaskIdentifier!)
                 self.mainBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
@@ -60,7 +59,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                         ) { [weak self] result in
                             do {
                                 let isVerified = try result.get()
-//                                do nothing
+                                VCLLog.d("Credential verification result = \(isVerified)")
                             } catch {
                                 if let e = error as? VCLError {
                                     globalError = e
@@ -101,7 +100,13 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ serviceTypes: VCLServiceTypes,
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if (serviceTypes.contains(serviceType: VCLServiceType.IdentityIssuer)) {
+        if (
+            serviceTypes.contains(serviceType: VCLServiceType.IdentityIssuer) ||
+            serviceTypes.contains(serviceType: VCLServiceType.IdDocumentIssuer) ||
+            serviceTypes.contains(serviceType: VCLServiceType.NotaryIdDocumentIssuer) ||
+            serviceTypes.contains(serviceType: VCLServiceType.NotaryContactIssuer) ||
+            serviceTypes.contains(serviceType: VCLServiceType.ContactIssuer)
+        ) {
             verifyIdentityIssuer(
                 credentialType,
                 completionBlock
@@ -119,7 +124,13 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ credentialType: VCLCredentialType,
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if (credentialType.issuerCategory == VCLServiceType.IdentityIssuer.rawValue) {
+        if (
+            credentialType.issuerCategory == VCLServiceType.IdentityIssuer.rawValue ||
+            credentialType.issuerCategory == VCLServiceType.IdDocumentIssuer.rawValue ||
+            credentialType.issuerCategory == VCLServiceType.NotaryIdDocumentIssuer.rawValue ||
+            credentialType.issuerCategory == VCLServiceType.NotaryContactIssuer.rawValue ||
+            credentialType.issuerCategory == VCLServiceType.ContactIssuer.rawValue
+        ) {
             completionBlock(VCLResult.success(true))
         } else {
             onError(
@@ -138,7 +149,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             completionBlock(VCLResult.success(true))
         } else if (permittedServiceCategory.contains(serviceType: VCLServiceType.Issuer)) {
             if let credentialSubject = Utils.getCredentialSubject(jwtCredential) {
-                if let credentialSubjectContexts = (credentialSubject[CredentialIssuerVerifierImpl.CodingKeys.KeyContext] as? [String]) {
+                if let credentialSubjectContexts = retrieveContextFromCredentialSubject(credentialSubject) {
                     resolveCredentialSubjectContexts(credentialSubjectContexts) { [weak self] credentialSubjectContextsResult in
                         if let _self = self {
                             do {
@@ -184,12 +195,21 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         }
     }
     
+    private func retrieveContextFromCredentialSubject(_ credentialSubject: [String: Any]) -> [String]? {
+        if let credentialSubjectContexts = credentialSubject[CodingKeys.KeyContext] as? [String] {
+            return credentialSubjectContexts
+        } else if let credentialSubjectContext = credentialSubject[CodingKeys.KeyContext] as? String {
+            return [credentialSubjectContext]
+        }
+        return nil
+    }
+
+    
     private func resolveCredentialSubjectContexts(
         _ credentialSubjectContexts: [String],
         _ completionBlock: @escaping (VCLResult<[[String: Any]]>) -> Void
     ) {
         var completeContexts = [[String: Any]]()
-
         self.resolveConetxBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish resolveConetxBackgroundTaskIdentifier") {
             UIApplication.shared.endBackgroundTask(self.resolveConetxBackgroundTaskIdentifier!)
             self.resolveConetxBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
@@ -208,10 +228,10 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                     if let ldContextResponse = try result.get().payload.toDictionary() {
                         completeContexts.append(ldContextResponse)
                     } else {
-                        VCLLog.e("Invalid format of credentialSubjectContext: \(credentialSubjectContext)")
+                        VCLLog.e("Unexpected LD-Context payload.")
                     }
                 } catch {
-                    VCLLog.e("Error fetching \(credentialSubjectContext)")
+                    VCLLog.e("Error fetching \(credentialSubjectContext):\n\(error)")
                 }
                 self?.resolveConetxDispatcher.leave()
             }
@@ -240,38 +260,34 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if let credentialSubjectType = (credentialSubject[CodingKeys.KeyType] as? String) {
-            
             var globalError: VCLError? = nil
             var isCredentialVerified = false
             self.completeConetxBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish completeConetxBackgroundTaskIdentifier") {
                 UIApplication.shared.endBackgroundTask(self.completeConetxBackgroundTaskIdentifier!)
                 self.completeConetxBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             }
-            
             completeContexts.forEach { completeContext in
-                
                 completeConetxDispatcher.enter()
-                
-                if let context = (((completeContext[CodingKeys.KeyContext] as? [String: Any])?[credentialSubjectType] as? [String: Any])?[CodingKeys.KeyContext] as? [String: Any]) {
-                    if let K = _self.findKeyForPrimaryOrganizationValue(context) {
-                        if let did = ((credentialSubject[K] as? [String: Any])?[CodingKeys.KeyIdentifier] as? String) {
-                            if (jwtCredential.iss == did) {
-                                isCredentialVerified = true
-                                completeConetxDispatcher.leave()
-                            } else {
-                                globalError = VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
-                                completeConetxDispatcher.leave()
-                            }
+                let activeContext = (((completeContext[CodingKeys.KeyContext] as? [String: Any])?[credentialSubjectType] as? [String: Any]))?[CodingKeys.KeyContext] as? [String: Any] ?? completeContext
+                if let K = findKeyForPrimaryOrganizationValue(activeContext) {
+                    if let did = Utils.getIdentifier(K, credentialSubject) {
+                        if (jwtCredential.iss == did) {
+                            isCredentialVerified = true
+                            completeConetxDispatcher.leave()
                         } else {
-                            globalError = VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
+                            globalError =
+                            VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
                             completeConetxDispatcher.leave()
                         }
                     } else {
-                        globalError = VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectType.rawValue)
+                        globalError =
+                        VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
                         completeConetxDispatcher.leave()
                     }
                 } else {
-                    globalError = VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue)
+//                    When K is null, the credential will pass these checks:
+//                    https://velocitycareerlabs.atlassian.net/browse/VL-6181?focusedCommentId=44343
+                    isCredentialVerified = true
                     completeConetxDispatcher.leave()
                 }
             }
@@ -294,14 +310,18 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         }
     }
     
-    func findKeyForPrimaryOrganizationValue(_ context: [String: Any]) -> String? {
-        var retVal: String? = nil
-        context.forEach { (key, value) in
-            if ((value as? [String: Any])?[CodingKeys.KeyId] as? String == CodingKeys.ValPrimaryOrganization) {
-                retVal = key
+    private func findKeyForPrimaryOrganizationValue(
+        _ activeContext: [String: Any]
+    ) -> String? {
+        for (key, value) in activeContext {
+            if let valueMap = value as? [String: Any] {
+                if (valueMap[CodingKeys.KeyId] as? String == CodingKeys.ValPrimaryOrganization || 
+                    valueMap[CodingKeys.KeyId] as? String == CodingKeys.ValPrimarySourceProfile) {
+                    return key
+                }
             }
         }
-        return retVal
+        return nil
     }
     
     func onError<T>(
@@ -320,6 +340,9 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         static let KeyId = "@id"
         static let KeyIdentifier = "identifier"
         
-        static let ValPrimaryOrganization = "https://velocitynetwork.foundation/contexts#primaryOrganization"
+        static let ValPrimaryOrganization =
+            "https://velocitynetwork.foundation/contexts#primaryOrganization"
+        static let ValPrimarySourceProfile =
+            "https://velocitynetwork.foundation/contexts#primarySourceProfile"
     }
 }

@@ -98,7 +98,7 @@ class NetworkServiceImpl: NetworkService {
         let endpointLog = " Request Endpoint: \(request.endpoint)"
         var bodyLog = "\n"
         if let body = request.body {
-            bodyLog = " Request Body: \(body)"
+            bodyLog = "\nRequest Body: \n\(body)"
         }
         VCLLog.d("\(logMethod)\(endpointLog)\(bodyLog)")
     }

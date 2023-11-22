@@ -13,6 +13,7 @@ protocol SubmissionUseCase {
     func submit(
         submission: VCLSubmission,
         didJwk: VCLDidJwk?,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     )
 }

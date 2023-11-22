@@ -25,10 +25,15 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
     func verifyJwt(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            self?.jwtServiceRepository.verifyJwt(jwt: jwt, publicJwk: publicJwk) { isVeriviedResult in
+            self?.jwtServiceRepository.verifyJwt(
+                jwt: jwt, 
+                publicJwk: publicJwk,
+                remoteCryptoServicesToken: remoteCryptoServicesToken
+            ) { isVeriviedResult in
                 self?.executor.runOnMain { completionBlock(isVeriviedResult) }
             }
         }
@@ -38,13 +43,15 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
         kid: String? = nil,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             self?.jwtServiceRepository.generateSignedJwt(
                 kid: kid,
                 nonce: nonce,
-                jwtDescriptor: jwtDescriptor
+                jwtDescriptor: jwtDescriptor,
+                remoteCryptoServicesToken: remoteCryptoServicesToken
             ) { jwtResult in
                 self?.executor.runOnMain { completionBlock(jwtResult) }
             }

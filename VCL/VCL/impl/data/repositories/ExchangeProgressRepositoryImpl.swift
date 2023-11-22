@@ -25,7 +25,7 @@ class ExchangeProgressRepositoryImpl: ExchangeProgressRepository {
             contentType: Request.ContentType.ApplicationJson,
             method: .GET,
             headers:[
-                (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(exchangeDescriptor.token.value)"),
+                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(exchangeDescriptor.sessionToken.value)"),
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
             ]
         ) { [weak self] response in

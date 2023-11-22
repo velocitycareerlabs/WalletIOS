@@ -35,9 +35,10 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: PresentationSubmissionMocks.PresentationSubmissionResultJson)
             ),
             JwtServiceRepositoryImpl(
-                VCLJwtServiceLocalImpl(keyService)
+                VCLJwtSignServiceLocalImpl(keyService),
+                VCLJwtVerifyServiceLocalImpl()
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
         let presentationSubmission = VCLPresentationSubmission(
             presentationRequest: VCLPresentationRequest(
@@ -47,39 +48,34 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
             ),
             verifiableCredentials: [VCLVerifiableCredential]()
         )
-        var result: VCLResult<VCLSubmissionResult>? = nil
-        
-        // Action
-        subject.submit(
-            submission: presentationSubmission,
-            didJwk: didJwk
-        ) {
-            result = $0
-        }
-        
         let expectedPresentationSubmissionResult =
             expectedPresentationSubmissionResult(
                 PresentationSubmissionMocks.PresentationSubmissionResultJson.toDictionary()!,
                 presentationSubmission.jti, submissionId: presentationSubmission.submissionId
             )
         
-        // Assert
-        do {
-            let presentationSubmissionResult = try result?.get()
-            
-            assert(presentationSubmissionResult!.token.value == expectedPresentationSubmissionResult.token.value)
-            assert(presentationSubmissionResult!.exchange.id == expectedPresentationSubmissionResult.exchange.id)
-            assert(presentationSubmissionResult!.jti == expectedPresentationSubmissionResult.jti)
-            assert(presentationSubmissionResult!.submissionId == expectedPresentationSubmissionResult.submissionId)
-        } catch {
-            XCTFail("\(error)")
+        subject.submit(
+            submission: presentationSubmission,
+            didJwk: didJwk,
+            remoteCryptoServicesToken: nil
+        ) {
+            do {
+                let presentationSubmissionResult = try $0.get()
+                
+                assert(presentationSubmissionResult.sessionToken.value == expectedPresentationSubmissionResult.sessionToken.value)
+                assert(presentationSubmissionResult.exchange.id == expectedPresentationSubmissionResult.exchange.id)
+                assert(presentationSubmissionResult.jti == expectedPresentationSubmissionResult.jti)
+                assert(presentationSubmissionResult.submissionId == expectedPresentationSubmissionResult.submissionId)
+            } catch {
+                XCTFail("\(error)")
+            }
         }
     }
     
     private func expectedPresentationSubmissionResult(_ jsonDict: [String: Any], _ jti: String, submissionId: String) -> VCLSubmissionResult {
         let exchangeJsonDict = jsonDict[VCLSubmissionResult.CodingKeys.KeyExchange]
         return VCLSubmissionResult(
-            token: VCLToken(value: (jsonDict[VCLSubmissionResult.CodingKeys.KeyToken] as! String)),
+            sessionToken: VCLToken(value: (jsonDict[VCLSubmissionResult.CodingKeys.KeyToken] as! String)),
             exchange: expectedExchange(exchangeJsonDict as! [String : Any]),
             jti: jti,
             submissionId: submissionId

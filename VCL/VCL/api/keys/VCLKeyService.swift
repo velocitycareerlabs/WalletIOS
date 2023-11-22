@@ -13,6 +13,7 @@ import VCCrypto
 
 public protocol VCLKeyService {
     func generateDidJwk(
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     )
     func generateSecret(

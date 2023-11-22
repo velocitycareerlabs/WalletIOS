@@ -14,6 +14,7 @@ protocol IdentificationModel: Model {
     func submit(
         identificationSubmission: VCLIdentificationSubmission,
         didJwk: VCLDidJwk,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     )
 }

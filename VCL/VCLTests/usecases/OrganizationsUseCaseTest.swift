@@ -19,33 +19,27 @@ final class OrganizationsUseCaseTest: XCTestCase {
     }
 
     func testCountryCodesSuccess() {
-        // Arrange
         subject = OrganizationsUseCaseImpl(
             OrganizationsRepositoryImpl(
                 NetworkServiceSuccess(
                     validResponse: OrganizationsMocks.OrganizationJsonResult
                 )
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
         let serviceDictMock = OrganizationsMocks.IssuingServiceJsonStr.toDictionary()
-        var result: VCLResult<VCLOrganizations>? = nil
 
-        // Action
         subject.searchForOrganizations(organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor(query: "")){
-            result = $0
-        }
-        
-        // Assert
-        do {
-            let serviceCredentialAgentIssuer = (try result?.get().all[0].serviceCredentialAgentIssuers[0])!
-            assert(serviceCredentialAgentIssuer.payload == serviceDictMock!)
-            assert(serviceCredentialAgentIssuer.id == serviceDictMock![VCLService.CodingKeys.KeyId] as! String)
-            assert(serviceCredentialAgentIssuer.type == serviceDictMock![VCLService.CodingKeys.KeyType] as! String)
-            assert(serviceCredentialAgentIssuer.credentialTypes == (serviceDictMock![VCLService.CodingKeys.KeyCredentialTypes] as! [String]))
-            assert(serviceCredentialAgentIssuer.serviceEndpoint == OrganizationsMocks.IssuingServiceEndpoint)
-        } catch {
-            XCTFail("\(error)")
+            do {
+                let serviceCredentialAgentIssuer = try $0.get().all[0].serviceCredentialAgentIssuers[0]
+                assert(serviceCredentialAgentIssuer.payload == serviceDictMock!)
+                assert(serviceCredentialAgentIssuer.id == serviceDictMock![VCLService.CodingKeys.KeyId] as! String)
+                assert(serviceCredentialAgentIssuer.type == serviceDictMock![VCLService.CodingKeys.KeyType] as! String)
+                assert(serviceCredentialAgentIssuer.credentialTypes == (serviceDictMock![VCLService.CodingKeys.KeyCredentialTypes] as! [String]))
+                assert(serviceCredentialAgentIssuer.serviceEndpoint == OrganizationsMocks.IssuingServiceEndpoint)
+            } catch {
+                XCTFail("\(error)")
+            }
         }
     }
     

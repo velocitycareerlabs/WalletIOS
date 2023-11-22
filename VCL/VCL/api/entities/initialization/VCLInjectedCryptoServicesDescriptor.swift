@@ -11,10 +11,17 @@ import Foundation
 
 public struct VCLInjectedCryptoServicesDescriptor {
     public let keyService: VCLKeyService
-    public let jwtService: VCLJwtService
+    public let jwtSignService: VCLJwtSignService
+    public let jwtVerifyService: VCLJwtVerifyService?
     
-    public init(keyService: VCLKeyService, jwtService: VCLJwtService) {
+    public init(
+        keyService: VCLKeyService,
+        jwtSignService: VCLJwtSignService,
+        jwtVerifyService: VCLJwtVerifyService? = nil
+        
+    ) {
         self.keyService = keyService
-        self.jwtService = jwtService
+        self.jwtSignService = jwtSignService
+        self.jwtVerifyService = jwtVerifyService
     }
 }

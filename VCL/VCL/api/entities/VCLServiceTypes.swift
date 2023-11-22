@@ -31,13 +31,23 @@ public class VCLServiceTypes {
                 VCLServiceType.NotaryIssuer
             ]
         case VCLIssuingType.Identity:
-            all = [VCLServiceType.IdentityIssuer]
+            all = [
+                VCLServiceType.IdentityIssuer,
+                VCLServiceType.IdDocumentIssuer,
+                VCLServiceType.NotaryIdDocumentIssuer,
+                VCLServiceType.ContactIssuer,
+                VCLServiceType.NotaryContactIssuer
+            ]
         case VCLIssuingType.Refresh:
             all = [
                 VCLServiceType.Issuer,
                 VCLServiceType.CareerIssuer,
                 VCLServiceType.NotaryIssuer,
-                VCLServiceType.IdentityIssuer
+                VCLServiceType.IdentityIssuer,
+                VCLServiceType.IdDocumentIssuer,
+                VCLServiceType.NotaryIdDocumentIssuer,
+                VCLServiceType.ContactIssuer,
+                VCLServiceType.NotaryContactIssuer
             ]
         case VCLIssuingType.Undefined:
             all = [VCLServiceType.Undefined]

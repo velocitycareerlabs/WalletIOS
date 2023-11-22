@@ -20,14 +20,17 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffers)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
                 jwt: CommonMocks.JWT,
                 verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
         ))
-        subject.generateOffers(token: VCLToken(value: ""), generateOffersDescriptor: generateOffersDescriptor) {
+        subject.generateOffers(
+            generateOffersDescriptor: generateOffersDescriptor,
+            sessionToken: VCLToken(value: "")
+        ) {
             do {
                 let offers = try $0.get()
                 assert(offers.all == GenerateOffersMocks.Offers.toListOfDictionaries()!)
@@ -39,12 +42,11 @@ final class GenerateOffersUseCaseTest: XCTestCase {
     }
     
     func testGenerateOffersEmptyJsonObj() {
-        // Arrange
         subject = GenerateOffersUseCaseImpl(
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonObj)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
@@ -52,8 +54,10 @@ final class GenerateOffersUseCaseTest: XCTestCase {
                 verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
             ))
 
-        // Action
-        subject.generateOffers(token: VCLToken(value: ""), generateOffersDescriptor: generateOffersDescriptor) {
+        subject.generateOffers( 
+            generateOffersDescriptor: generateOffersDescriptor,
+            sessionToken: VCLToken(value: "")
+        ) {
             do {
                 let offers = try $0.get()
                 assert(offers.all == "[]".toListOfDictionaries()!)
@@ -70,7 +74,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonArr)
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
@@ -79,7 +83,10 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             ))
 
         // Action
-        subject.generateOffers(token: VCLToken(value: ""), generateOffersDescriptor: generateOffersDescriptor) {
+        subject.generateOffers(
+            generateOffersDescriptor: generateOffersDescriptor,
+            sessionToken: VCLToken(value: "")
+        ) {
             do {
                 let offers = try $0.get()
                 assert(offers.all == GenerateOffersMocks.GeneratedOffersEmptyJsonArr.toListOfDictionaries()!)

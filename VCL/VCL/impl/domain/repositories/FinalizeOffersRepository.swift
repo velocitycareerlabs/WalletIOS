@@ -11,9 +11,9 @@ import Foundation
 
 protocol FinalizeOffersRepository {
     func finalizeOffers(
-        token: VCLToken,
-        proof: VCLJwt,
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        sessionToken: VCLToken,
+        proof: VCLJwt,
         completionBlock: @escaping (VCLResult<[String]>) -> Void
     )
 }

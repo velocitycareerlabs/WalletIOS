@@ -46,7 +46,7 @@ class ViewController: UIViewController {
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
                 environment: environment,
-                xVnfProtocolVersion: .XVnfProtocolVersion2//,
+                xVnfProtocolVersion: .XVnfProtocolVersion2
 //                cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
 //                    cryptoServiceType: .Remote,
 //                    remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
@@ -55,7 +55,8 @@ class ViewController: UIViewController {
 //                        ),
 //                        jwtServiceUrls: VCLJwtServiceUrls(
 //                            jwtSignServiceUrl: Constants.getJwtSignServiceUrl(environment: environment),
-//                            jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment: environment))
+//                            jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment: environment)
+//                          )
 //                    )
 //                )
             ),
@@ -82,7 +83,7 @@ class ViewController: UIViewController {
             }
         )
     }
-
+    
     private func showControls() {
         loadingIndicator.stopAnimating()
         controlsView.isHidden = false
@@ -105,7 +106,8 @@ class ViewController: UIViewController {
                 pushDelegate: VCLPushDelegate(
                     pushUrl: "pushUrl",
                     pushToken: "pushToken"
-                )),
+                )
+            ),
             successHandler: { [weak self] presentationRequest in
                 NSLog("VCL Presentation request received: \(presentationRequest.jwt.payload?.toJson() ?? "")")
                 
@@ -198,14 +200,14 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorByOrganization =
         VCLCredentialManifestDescriptorByService(
             service: serviceCredentialAgentIssuer,
-//            issuingType: VCLIssuingType.Career,
+            //            issuingType: VCLIssuingType.Career,
             credentialTypes: serviceCredentialAgentIssuer.credentialTypes // Can come from any where
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorByOrganization,
             successHandler: { [weak self] credentialManifest in
                 NSLog("VCL Credential Manifest received: \(credentialManifest.jwt.payload?.toJson() ?? "")")
-//                NSLog("VCL Credential Manifest received")
+                //                NSLog("VCL Credential Manifest received")
                 
                 self?.generateOffers(credentialManifest: credentialManifest)
             },
@@ -223,7 +225,7 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorByDeepLink =
         VCLCredentialManifestDescriptorByDeepLink(
             deepLink: deepLink//,
-//            issuingType: VCLIssuingType.Identity
+            //            issuingType: VCLIssuingType.Identity
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorByDeepLink,
@@ -249,13 +251,13 @@ class ViewController: UIViewController {
             successHandler: { [weak self] offers in
                 NSLog("VCL Generated Offers: \(offers.all)")
                 NSLog("VCL Generated Offers Response Code: \(offers.responseCode)")
-                NSLog("VCL Generated Offers Token: \(offers.token)")
+                NSLog("VCL Generated Offers Issuing Token: \(offers.sessionToken)")
                 
-//                Check offers invoked after the push notification is notified the app that offers are ready:
+                //                Check offers invoked after the push notification is notified the app that offers are ready:
                 self?.checkForOffers(
                     credentialManifest: credentialManifest,
                     generateOffersDescriptor: generateOffersDescriptor,
-                    token: offers.token
+                    sessionToken: offers.sessionToken
                 )
             },
             errorHandler: { error in
@@ -267,15 +269,15 @@ class ViewController: UIViewController {
     private func checkForOffers(
         credentialManifest: VCLCredentialManifest,
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        token: VCLToken
+        sessionToken: VCLToken
     ) {
         vcl.checkForOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            token: token,
+            sessionToken: sessionToken,
             successHandler: { [weak self] offers in
                 NSLog("VCL Checked Offers: \(offers.all)")
                 NSLog("VCL Checked Offers Response Code: \(offers.responseCode)")
-                NSLog("VCL Checked Offers Token: \(offers.token)")
+                NSLog("VCL Checked Offers Session Token: \(offers.sessionToken)")
                 if (offers.responseCode == 200) {
                     self?.finalizeOffers(
                         credentialManifest: credentialManifest,
@@ -303,7 +305,7 @@ class ViewController: UIViewController {
         vcl.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
             didJwk: self.didJwk,
-            token: offers.token,
+            sessionToken: offers.sessionToken,
             successHandler: { verifiableCredentials in
                 NSLog("VCL finalized Offers")
                 NSLog("VCL Passed Credentials: \(verifiableCredentials.passedCredentials)")
@@ -344,7 +346,9 @@ class ViewController: UIViewController {
     
     @objc private func verifyJwt() {
         vcl.verifyJwt(
-            jwt: Constants.SomeJwt, publicJwk: Constants.SomePublicJwk, successHandler: { isVerified in
+            jwt: Constants.SomeJwt, 
+            publicJwk: Constants.SomePublicJwk,
+            successHandler: { isVerified in
                 NSLog("VCL JWT verified: \(isVerified)")
             },
             errorHandler: { error in

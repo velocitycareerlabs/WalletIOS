@@ -27,9 +27,10 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
             ),
             JwtServiceRepositoryImpl(
-                VCLJwtServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance))
+                VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
+                VCLJwtVerifyServiceLocalImpl()
             ),
-            EmptyExecutor()
+            ExecutorImpl()
         )
 
         subject.getCredentialManifest(
@@ -37,7 +38,10 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 deepLink: DeepLinkMocks.CredentialManifestDeepLinkDevNet,
                 issuingType: VCLIssuingType.Career
             ),
-            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+            verifiedProfile: VCLVerifiedProfile(
+                payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!
+            ),
+            remoteCryptoServicesToken: nil
         ) {
             do {
                 let credentialManifest = try $0.get()

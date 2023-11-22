@@ -21,6 +21,7 @@ public protocol VCL {
     
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
+        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLPresentationRequest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -28,6 +29,7 @@ public protocol VCL {
     func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
         didJwk: VCLDidJwk?,
+        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -46,6 +48,7 @@ public protocol VCL {
     
     func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
+        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLCredentialManifest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -53,13 +56,14 @@ public protocol VCL {
     func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
         didJwk: VCLDidJwk?,
+        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
     
     func checkForOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        token: VCLToken,
+        sessionToken: VCLToken,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -67,7 +71,8 @@ public protocol VCL {
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         didJwk: VCLDidJwk?,
-        token: VCLToken,
+        sessionToken: VCLToken,
+        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) 
@@ -87,18 +92,143 @@ public protocol VCL {
     func verifyJwt(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
+        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (Bool) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
     
     func generateSignedJwt(
         jwtDescriptor: VCLJwtDescriptor,
+        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLJwt) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
     
     func generateDidJwk(
+        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
+}
+
+extension VCL {
+    public func getPresentationRequest(
+        presentationRequestDescriptor: VCLPresentationRequestDescriptor,
+        remoteCryptoServicesToken: VCLToken? = nil,
+        successHandler: @escaping (VCLPresentationRequest) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        getPresentationRequest(
+            presentationRequestDescriptor: presentationRequestDescriptor,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            successHandler: successHandler,
+            errorHandler: errorHandler
+        )
+    }
+    
+    public func submitPresentation(
+        presentationSubmission: VCLPresentationSubmission,
+        didJwk: VCLDidJwk? = nil,
+        remoteCryptoServicesToken: VCLToken? = nil,
+        successHandler: @escaping (VCLSubmissionResult) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        submitPresentation(
+            presentationSubmission: presentationSubmission,
+            didJwk: didJwk,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            successHandler: successHandler,
+            errorHandler: errorHandler
+        )
+    }
+    
+    public func getCredentialManifest(
+        credentialManifestDescriptor: VCLCredentialManifestDescriptor,
+        remoteCryptoServicesToken: VCLToken? = nil,
+        successHandler: @escaping (VCLCredentialManifest) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        getCredentialManifest(
+            credentialManifestDescriptor: credentialManifestDescriptor,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            successHandler: successHandler,
+            errorHandler: errorHandler
+        )
+    }
+    
+    public func generateOffers(
+        generateOffersDescriptor: VCLGenerateOffersDescriptor,
+        didJwk: VCLDidJwk? = nil,
+        remoteCryptoServicesToken: VCLToken? = nil,
+        successHandler: @escaping (VCLOffers) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        generateOffers(
+            generateOffersDescriptor: generateOffersDescriptor,
+            didJwk: didJwk,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            successHandler: successHandler,
+            errorHandler: errorHandler
+        )
+    }
+    
+    public func finalizeOffers(
+        finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        didJwk: VCLDidJwk? = nil,
+        sessionToken: VCLToken,
+        remoteCryptoServicesToken: VCLToken? = nil,
+        successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        finalizeOffers(
+            finalizeOffersDescriptor: finalizeOffersDescriptor,
+            didJwk: didJwk,
+            sessionToken: sessionToken,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            successHandler:successHandler,
+            errorHandler: errorHandler
+        )
+    }
+    
+    public func verifyJwt(
+        jwt: VCLJwt,
+        publicJwk: VCLPublicJwk,
+        remoteCryptoServicesToken: VCLToken? = nil,
+        successHandler: @escaping (Bool) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        verifyJwt(
+            jwt: jwt,
+            publicJwk: publicJwk,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            successHandler: successHandler,
+            errorHandler: errorHandler
+        )
+    }
+    
+    public func generateSignedJwt(
+        jwtDescriptor: VCLJwtDescriptor,
+        remoteCryptoServicesToken: VCLToken? = nil,
+        successHandler: @escaping (VCLJwt) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        generateSignedJwt(
+            jwtDescriptor: jwtDescriptor,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            successHandler: successHandler,
+            errorHandler: errorHandler
+        )
+    }
+    
+    public func generateDidJwk(
+        remoteCryptoServicesToken: VCLToken? = nil,
+        successHandler: @escaping (VCLDidJwk) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        generateDidJwk(
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            successHandler: successHandler,
+            errorHandler: errorHandler
+        )
+    }
 }

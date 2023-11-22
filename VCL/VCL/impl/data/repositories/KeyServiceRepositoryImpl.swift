@@ -18,8 +18,12 @@ class KeyServiceRepositoryImpl: KeyServiceRepository {
     }
     
     func generateDidJwk(
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
-        keyService.generateDidJwk(completionBlock: completionBlock)
+        keyService.generateDidJwk(
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            completionBlock: completionBlock
+        )
     }
 }

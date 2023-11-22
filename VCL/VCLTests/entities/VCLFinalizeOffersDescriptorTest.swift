@@ -18,8 +18,9 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     private let offers = VCLOffers(
         payload: [String: Any](),
         all: [[String: Any]](),
-        responseCode: 200, token:
-            VCLToken(value: ""), challenge: ""
+        responseCode: 200,
+        sessionToken: VCLToken(value: ""),
+        challenge: ""
     )
     
     private let jtiMock = "some jti"
@@ -48,7 +49,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     func testGenerateRequestBody() {
         let payload = "{\"key1\": \"value1\"}".toDictionary()!
         
-        VCLJwtServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)).sign(
+        VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)).sign(
             nonce: nonceMock,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payload,

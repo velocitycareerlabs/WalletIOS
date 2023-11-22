@@ -16,10 +16,12 @@ public struct VCLExchangeDescriptor {
     public var processUri: String { get { presentationSubmission.progressUri } }
     public var did: String { get { presentationSubmission.iss } }
     public var exchangeId: String? { get { submissionResult.exchange.id } }
-    public var token: VCLToken { get { submissionResult.token } }
+    public var sessionToken: VCLToken { get { submissionResult.sessionToken } }
     
-    public init(presentationSubmission: VCLPresentationSubmission,
-                submissionResult: VCLSubmissionResult) {
+    public init(
+        presentationSubmission: VCLPresentationSubmission,
+        submissionResult: VCLSubmissionResult
+    ) {
         self.presentationSubmission = presentationSubmission
         self.submissionResult = submissionResult
     }

@@ -16,7 +16,7 @@ class VCLSubmissionResultTest: XCTestCase {
 
     override func setUp() {
         subject = VCLSubmissionResult(
-            token: VCLToken(value: "token123"),
+            sessionToken: VCLToken(value: "token123"),
             exchange: VCLExchange(
                 id: "id123",
                 type: "type123",
@@ -29,7 +29,7 @@ class VCLSubmissionResultTest: XCTestCase {
     }
 
     func testProps() {
-        assert(subject.token.value == "token123")
+        assert(subject.sessionToken.value == "token123")
         assert(subject.exchange.id == "id123")
         assert(subject.exchange.type == "type123")
         assert(subject.exchange.exchangeComplete == true)

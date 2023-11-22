@@ -13,7 +13,10 @@ public struct VCLRemoteCryptoServicesUrlsDescriptor {
     public let keyServiceUrls: VCLKeyServiceUrls
     public let jwtServiceUrls: VCLJwtServiceUrls
     
-    public init(keyServiceUrls: VCLKeyServiceUrls, jwtServiceUrls: VCLJwtServiceUrls) {
+    public init(
+        keyServiceUrls: VCLKeyServiceUrls,
+        jwtServiceUrls: VCLJwtServiceUrls
+    ) {
         self.keyServiceUrls = keyServiceUrls
         self.jwtServiceUrls = jwtServiceUrls
     }

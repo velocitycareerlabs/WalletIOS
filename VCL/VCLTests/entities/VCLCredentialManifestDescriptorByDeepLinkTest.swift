@@ -24,7 +24,7 @@ final class VCLCredentialManifestDescriptorByDeepLinkTest: XCTestCase {
             issuingType: VCLIssuingType.Career
         )
         
-        assert(((subject.endpoint?.isUrlEquivalentTo(url: CredentialManifestDescriptorMocks.DeepLinkRequestUri.decode()!)) == true))
+        assert(subject.endpoint?.decode()?.isUrlEquivalentTo(url: CredentialManifestDescriptorMocks.DeepLinkRequestUri.decode()!) == true)
         assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
     }
     

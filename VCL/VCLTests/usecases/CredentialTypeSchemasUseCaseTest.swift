@@ -19,30 +19,23 @@ final class CredentialTypeSchemasUseCaseTest: XCTestCase {
     }
     
     func testGetCredentialTypeSchemasSuccess() {
-        // Arrange
         subject = CredentialTypeSchemasUseCaseImpl(
             CredentialTypeSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypeSchemaMocks.CredentialTypeSchemaJson), EmptyCacheService()
             ),
             CredentialTypeSchemaMocks.CredentialTypes,
-            EmptyExecutor(),
-            EmptyDispatcher(),
-            EmptyDsptchQueue()
+            ExecutorImpl(),
+            DispatcherImpl(),
+            DsptchQueueImpl("CredentialTypeSchemas")
         )
-        
-        var result: VCLResult<VCLCredentialTypeSchemas>? = nil
-        
-        // Action
+                
         subject.getCredentialTypeSchemas(cacheSequence: 1) {
-            result = $0
-        }
-        
-        // Assert
-        do {
-            let credentialTypeSchemas = try result?.get()
-            assert((credentialTypeSchemas!.all![CredentialTypeSchemaMocks.CredentialType.schemaName!]!.payload)! == CredentialTypeSchemaMocks.CredentialTypeSchemaJson.toDictionary()!)
-        } catch {
-            XCTFail("\(error)")
+            do {
+                let credentialTypeSchemas = try $0.get()
+                assert((credentialTypeSchemas.all![CredentialTypeSchemaMocks.CredentialType.schemaName!]!.payload)! == CredentialTypeSchemaMocks.CredentialTypeSchemaJson.toDictionary()!)
+            } catch {
+                XCTFail("\(error)")
+            }
         }
     }
     

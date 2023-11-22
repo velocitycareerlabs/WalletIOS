@@ -20,9 +20,9 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
     }
     
     func finalizeOffers(
-        token: VCLToken,
-        proof: VCLJwt,
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        sessionToken: VCLToken,
+        proof: VCLJwt,
         completionBlock: @escaping (VCLResult<[String]>) -> Void
     ) {
         networkService.sendRequest(
@@ -31,7 +31,7 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
             contentType: .ApplicationJson,
             method: .POST,
             headers:[
-                (HeaderKeys.HeaderKeyAuthorization, "\(HeaderKeys.HeaderValuePrefixBearer) \(token.value)"),
+                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(sessionToken.value)"),
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
             ]
         ) { result in

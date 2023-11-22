@@ -11,20 +11,27 @@ import Foundation
 
 class JwtServiceRepositoryImpl: JwtServiceRepository {
     
-    private let jwtService: VCLJwtService
+    public let jwtSignService: VCLJwtSignService
+    public let jwtVerifyService: VCLJwtVerifyService
     
-    init(_ jwtService: VCLJwtService) {
-        self.jwtService = jwtService
+    init(
+        _ jwtSignService: VCLJwtSignService,
+        _ jwtVerifyService: VCLJwtVerifyService
+    ) {
+        self.jwtSignService = jwtSignService
+        self.jwtVerifyService = jwtVerifyService
     }
     
     func verifyJwt(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        jwtService.verify(
+        jwtVerifyService.verify(
             jwt: jwt,
             publicJwk: publicJwk,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
             completionBlock: { verificationResult in completionBlock(verificationResult) }
         )
     }
@@ -33,12 +40,14 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
         kid: String? = nil,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
-        jwtService.sign(
+        jwtSignService.sign(
             kid: kid,
             nonce: nonce,
             jwtDescriptor: jwtDescriptor,
+            remoteCryptoServicesToken: remoteCryptoServicesToken,
             completionBlock: { jwtResult in completionBlock(jwtResult) }
         )
     }

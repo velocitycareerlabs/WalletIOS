@@ -36,7 +36,12 @@ class CredentialTypesModelMock: CredentialTypesModel {
     ) {
     }
 
-    static let issuerCategoryIdentityIssuer = "IdentityIssuer"
     static let IssuerCategoryNotaryIssuer = "NotaryIssuer"
     static let issuerCategoryRegularIssuer = "RegularIssuer"
+//        Identity issuer categories:
+    static let IssuerCategoryIdentityIssuer = "IdentityIssuer"
+    static let IssuerCategoryIdDocumentIssuer = "IdDocumentIssuer"
+    static let IssuerCategoryNotaryIdDocumentIssuer = "NotaryIdDocumentIssuer"
+    static let IssuerCategoryContactIssuer = "ContactIssuer"
+    static let IssuerCategoryNotaryContactIssuer = "NotaryContactIssuer"
 }

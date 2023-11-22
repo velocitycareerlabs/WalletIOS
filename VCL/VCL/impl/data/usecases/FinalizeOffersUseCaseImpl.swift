@@ -33,7 +33,8 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         didJwk: VCLDidJwk? = nil,
-        token: VCLToken,
+        sessionToken: VCLToken,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         executor.runOnBackground {
@@ -44,14 +45,15 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
                     keyId: didJwk?.keyId,
                     iss: didJwk?.did ?? UUID().uuidString,
                     aud: finalizeOffersDescriptor.issuerId
-                )
+                ),
+                remoteCryptoServicesToken: remoteCryptoServicesToken
             ) { [weak self] proofJwtResult in
                 do {
                     let proof = try proofJwtResult.get()
                     self?.finalizeOffersRepository.finalizeOffers(
-                        token: token,
-                        proof: proof,
-                        finalizeOffersDescriptor: finalizeOffersDescriptor
+                        finalizeOffersDescriptor: finalizeOffersDescriptor,
+                        sessionToken: sessionToken,
+                        proof: proof
                     ) { encodedJwtCredentialsListResult in
                         do {
                             let encodedJwtCredentialsList = try encodedJwtCredentialsListResult.get()
