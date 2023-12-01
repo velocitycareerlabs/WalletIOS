@@ -1,0 +1,63 @@
+name: WalletIOS-SDK_CICD
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - VL-3881
+
+jobs:
+  build-ios-sdk:
+    runs-on: [ macos-11 ]
+    env:
+      #Xcode config
+      XC_VERSION: "13.2.1"
+      # #Certs
+      # ENCRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz.gpg"
+      # DECRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz"
+      # CERTS_FILE_PATH: "./certs.p12"
+      # CERTS_ENCRYPTION_PWD: ${{ secrets.CERTS_ENCRYPTION_PWD }}
+      # CERTS_EXPORT_PWD: ${{ secrets.CERTS_EXPORT_PWD }}
+      KEYCHAIN: "velocity.keychain"
+    steps:
+
+      - name: Git clone repository
+        uses: actions/checkout@v2
+
+      - name: Select latest Xcode
+        run: "sudo xcode-select -s /Applications/Xcode_${{ env.XC_VERSION }}.app"
+
+      - name: Configure keychain and code signing
+        run: |
+          security create-keychain -p "" "${{ env.KEYCHAIN }}"
+          security list-keychains -s "${{ env.KEYCHAIN }}"
+          security unlock-keychain -p "" ${{ env.KEYCHAIN }}
+          security set-keychain-settings ${{ env.KEYCHAIN }}
+          security default-keychain -s ${{ env.KEYCHAIN }}
+          security list-keychains
+
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" "${{ env.KEYCHAIN }}"
+
+          security find-identity -p codesigning -v
+
+      - name: VNF build
+        run: scripts/build_xcframework.sh
+        working-directory: VNF
+
+      # - name: Commit for upload xcframework
+      #   run: echo "VNF_PUSH_COMMIT=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
+
+      # - name: Clone Specs repo
+      #   run: git clone https://${{ secrets.VNF_SDK_POD_ACCESS_TOKEN }}@github.com/velocitynetworkfoundation/Specs.git
+
+      # - name: Clone VNF-Swift repo
+      #   run: git clone https://${{ secrets.VNF_SDK_POD_ACCESS_TOKEN }}@github.com/velocitynetworkfoundation/VNF-Swift.git
+
+      # - name: Copy for git push
+      #   run: |
+      #      cp -r VNF/build/VNF.xcframework VNF-Swift/Frameworks/
+
+      # - name: Copy for git push
+      #   run: |
+      #      git add -A && git commit -m "${{ env.VNF_PUSH_COMMIT }}" && git push
+      #   working-directory: VNF-Swift
