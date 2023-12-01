@@ -1,4 +1,4 @@
-name: WalletIOS-SDK_CICD
+name: WalletIOS-SDK
 
 on:
   workflow_dispatch:
@@ -35,10 +35,6 @@ jobs:
           security set-keychain-settings ${{ env.KEYCHAIN }}
           security default-keychain -s ${{ env.KEYCHAIN }}
           security list-keychains
-
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" "${{ env.KEYCHAIN }}"
-
-          security find-identity -p codesigning -v
 
       - name: VNF build
         run: scripts/build_xcframework.sh
