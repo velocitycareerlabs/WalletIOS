@@ -36,9 +36,9 @@ jobs:
           security default-keychain -s ${{ env.KEYCHAIN }}
           security list-keychains
 
-      - name: VNF build
+      - name: VCL build
         run: scripts/build_xcframework.sh
-        working-directory: VNF
+        working-directory: VCL
 
       # - name: Commit for upload xcframework
       #   run: echo "VNF_PUSH_COMMIT=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
