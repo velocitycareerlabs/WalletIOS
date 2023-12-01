@@ -8,10 +8,10 @@ on:
 
 jobs:
   build-ios-sdk:
-    runs-on: [ macos-11 ]
+    runs-on: macos-13 
     env:
       #Xcode config
-      XC_VERSION: "13.2.1"
+      XC_VERSION: "14.2"
       # #Certs
       # ENCRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz.gpg"
       # DECRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz"
@@ -22,7 +22,7 @@ jobs:
     steps:
 
       - name: Git clone repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_${{ env.XC_VERSION }}.app"
