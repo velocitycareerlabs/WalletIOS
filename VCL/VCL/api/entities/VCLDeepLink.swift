@@ -15,24 +15,19 @@ public struct VCLDeepLink {
     public init(value: String) {
         self.value = value
     }
-    
-    public var did: String? { get{
-        if let did = requestUri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix) {
-            return did
-        }
-        return issuer?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix)
-    } }
-    public var issuer: String? { get {
-        return generateUri(uriKey: CodingKeys.KeyIssuer)
-    } }
 
     public var requestUri: String? { get {
         return generateUri(uriKey: CodingKeys.KeyRequestUri)
     } }
     
     public var vendorOriginContext: String? { get {
-        self.value.decode()?.getUrlQueryParams()?[CodingKeys.KeyVendorOriginContext]
+        self.retrieveQueryParam(key: CodingKeys.KeyVendorOriginContext)
     }}
+    
+    public var did: String? { get{
+        (retrieveQueryParam(key: CodingKeys.KeyIssuerDid) ?? retrieveQueryParam(key: CodingKeys.KeyInspectorDid)) ??
+        requestUri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix) // fallback for old agents
+    } }
     
     private func generateUri(uriKey: String, asSubParams: Bool = false) -> String? {
         if let queryParams = self.value.decode()?.getUrlQueryParams() {
@@ -40,7 +35,6 @@ public struct VCLDeepLink {
                 let queryItems = queryParams
                     .filter { (key, value) in key != uriKey && value.isEmpty == false }
                     .map {(key, value) in "\(key)=\(value.encode() ?? "")" }
-                    .sorted() // Sort is needed for unit tests
                     .joined(separator: "&")
                 if queryItems.isEmpty == false {
                     return asSubParams ? "\(uri)&\(queryParams)" : uri.appendQueryParams(queryParams: queryItems)
@@ -51,14 +45,15 @@ public struct VCLDeepLink {
         return nil
     }
     
-    private func retrieveVendorOriginContext() -> String? {
-        return self.value.decode()?.getUrlQueryParams()?[CodingKeys.KeyVendorOriginContext]
+    private func retrieveQueryParam(key: String) -> String? {
+        return self.value.decode()?.getUrlQueryParams()?[key]
     }
     
     public struct CodingKeys {
         public static let KeyDidPrefix = "did:"
-        public static let KeyIssuer = "issuer"
         public static let KeyRequestUri = "request_uri"
         public static let KeyVendorOriginContext = "vendorOriginContext"
+        public static let KeyIssuerDid = "issuerDid"
+        public static let KeyInspectorDid = "inspectorDid"
     }
 }

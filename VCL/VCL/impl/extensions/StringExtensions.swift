@@ -11,27 +11,30 @@ import Foundation
 
 extension String {
     
+//    func isUrlEquivalentTo(url: String) -> Bool {
+//        var retVal = true
+//        
+//        guard let thisQueryParams = self.getUrlQueryParams(), let urlQueryParams = url.getUrlQueryParams() else {
+//            return false
+//        }
+//        
+//        thisQueryParams.forEach { key, value in
+//            retVal = retVal && urlQueryParams[key] == value
+//        }
+//        
+//        let thisHost = URL(string: self)?.host
+//        let urlHost = URL(string: url)?.host
+//        let thisPath = URL(string: self)?.path
+//        let urlPath = URL(string: url)?.path
+//        
+//        retVal = retVal && thisHost == urlHost
+//        retVal = retVal && thisPath == urlPath
+//        
+//        return retVal
+//    }
     func isUrlEquivalentTo(url: String) -> Bool {
-            var retVal = true
-            
-            guard let thisQueryParams = self.getUrlQueryParams(), let urlQueryParams = url.getUrlQueryParams() else {
-                return false
-            }
-            
-            thisQueryParams.forEach { key, value in
-                retVal = retVal && urlQueryParams[key] == value
-            }
-            
-            let thisHost = URL(string: self)?.host
-            let urlHost = URL(string: url)?.host
-            let thisPath = URL(string: self)?.path
-            let urlPath = URL(string: url)?.path
-            
-            retVal = retVal && thisHost == urlHost
-            retVal = retVal && thisPath == urlPath
-            
-            return retVal
-        }
+        return self.sorted() == url.sorted()
+    }
     
     func toQueryString() -> String? {
         var urlVars:[String] = []
