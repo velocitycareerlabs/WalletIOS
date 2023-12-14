@@ -27,18 +27,18 @@ public struct VCLFinalizeOffersDescriptor {
         self.rejectedOfferIds = rejectedOfferIds
     }
     
-    var payload: [String: Any?] { get {
+    public var payload: [String: Any?] { get {
         [
             CodingKeys.KeyExchangeId: exchangeId,
             CodingKeys.KeyApprovedOfferIds: approvedOfferIds,
             CodingKeys.KeyRejectedOfferIds: rejectedOfferIds
         ]
     } }
-    var did: String { get { credentialManifest.did } }
-    var issuerId: String { get { credentialManifest.issuerId } }
-    var exchangeId: String { get { credentialManifest.exchangeId } }
-    var finalizeOffersUri: String { get { credentialManifest.finalizeOffersUri } }
-    var serviceTypes: VCLServiceTypes { get { credentialManifest.verifiedProfile.serviceTypes } }
+    public var aud: String { get { credentialManifest.aud } }
+    public var issuerId: String { get { credentialManifest.issuerId } }
+    public var exchangeId: String { get { credentialManifest.exchangeId } }
+    public var finalizeOffersUri: String { get { credentialManifest.finalizeOffersUri } }
+    public var serviceTypes: VCLServiceTypes { get { credentialManifest.verifiedProfile.serviceTypes } }
     
     public func generateRequestBody(jwt: VCLJwt) -> [String: Any?] {
         var retVal = self.payload

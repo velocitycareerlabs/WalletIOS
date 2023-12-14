@@ -14,6 +14,6 @@ protocol FinalizeOffersRepository {
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
         proof: VCLJwt,
-        completionBlock: @escaping (VCLResult<[String]>) -> Void
+        completionBlock: @escaping (VCLResult<[VCLJwt]>) -> Void
     )
 }

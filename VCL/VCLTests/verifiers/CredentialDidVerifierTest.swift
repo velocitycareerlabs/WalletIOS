@@ -17,7 +17,7 @@ class CredentialDidVerifierTest: XCTestCase {
     CredentialMocks.JwtCredentialsFromNotaryIssuer.toList()?.count ?? 0
         private let credentialsFromRegularIssuerAmount =
     CredentialMocks.JwtCredentialsFromRegularIssuer.toList()?.count ?? 0
-    private let OffersMock = VCLOffers(payload: [String: Any](), all: [[String: Any]](), responseCode: 1, sessionToken: VCLToken(value: ""), challenge: "")
+    private let OffersMock = VCLOffers(payload: [String: Any](), all: [VCLOffer(payload: [:])], responseCode: 1, sessionToken: VCLToken(value: ""), challenge: "")
 
         var finalizeOffersDescriptorOfNotaryIssuer: VCLFinalizeOffersDescriptor!
         var credentialManifestFromNotaryIssuer: VCLCredentialManifest!
@@ -51,7 +51,7 @@ class CredentialDidVerifierTest: XCTestCase {
 
         func testVerifyCredentialsSuccess() {
             subject.verifyCredentials(
-                jwtEncodedCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toList()! as! [String],
+                jwtCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toJwtList()!,
                 finalizeOffersDescriptor: finalizeOffersDescriptorOfNotaryIssuer
             ) {
                 do {
@@ -76,7 +76,7 @@ class CredentialDidVerifierTest: XCTestCase {
 
         func testVerifyCredentialsFailed() {
             subject.verifyCredentials(
-                jwtEncodedCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toList() as! [String],
+                jwtCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toJwtList()!,
                 finalizeOffersDescriptor: finalizeOffersDescriptorOfNotaryIssuer
             ) {
                 do {
@@ -101,7 +101,7 @@ class CredentialDidVerifierTest: XCTestCase {
 
         func testVerifyCredentials1Passed1Failed() {
             subject.verifyCredentials(
-                jwtEncodedCredentials: "[\"\(CredentialMocks.JwtCredentialEmploymentPastFromNotaryIssuer)\", \"\(CredentialMocks.JwtCredentialEmailFromIdentityIssuer)\"]".toList() as! [String],
+                jwtCredentials: "[\"\(CredentialMocks.JwtCredentialEmploymentPastFromNotaryIssuer)\", \"\(CredentialMocks.JwtCredentialEmailFromIdentityIssuer)\"]".toJwtList()!,
                 finalizeOffersDescriptor: finalizeOffersDescriptorOfNotaryIssuer
             ) {
                 do {
@@ -127,7 +127,7 @@ class CredentialDidVerifierTest: XCTestCase {
 
         func testVerifyCredentialsEmpty() {
             subject.verifyCredentials(
-                jwtEncodedCredentials: CredentialMocks.JwtEmptyCredentials.toList() as! [String],
+                jwtCredentials: CredentialMocks.JwtEmptyCredentials.toJwtList()!,
                 finalizeOffersDescriptor: finalizeOffersDescriptorOfNotaryIssuer
             ) {
                 do {

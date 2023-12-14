@@ -8,7 +8,7 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-@testable import VCCrypto
+import VCCrypto
 
 enum SecretStoreMockError: Error {
     case noKeyFound

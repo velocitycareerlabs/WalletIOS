@@ -11,7 +11,7 @@ import Foundation
 
 protocol CredentialDidVerifier {
     func verifyCredentials(
-        jwtEncodedCredentials: [String],
+        jwtCredentials: [VCLJwt],
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     )

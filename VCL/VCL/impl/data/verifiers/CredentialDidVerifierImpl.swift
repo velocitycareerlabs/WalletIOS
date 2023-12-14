@@ -14,15 +14,14 @@ class CredentialDidVerifierImpl: CredentialDidVerifier {
     let dispatcher = DispatcherImpl()
     
     func verifyCredentials(
-        jwtEncodedCredentials: [String],
+        jwtCredentials: [VCLJwt],
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         var passedCredentials = [VCLJwt]()
         var failedCredentials = [VCLJwt]()
-        jwtEncodedCredentials.forEach{ [weak self] jwtCredential in
+        jwtCredentials.forEach{ [weak self] jwtCredential in
             self?.dispatcher.enter()
-            let jwtCredential = VCLJwt(encodedJwt: jwtCredential)
             if (self?.verifyCredential(jwtCredential, finalizeOffersDescriptor) == true) {
                 passedCredentials.append(jwtCredential)
             } else {
@@ -46,7 +45,8 @@ class CredentialDidVerifierImpl: CredentialDidVerifier {
         _ jwtCredential: VCLJwt,
         _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor
     ) -> Bool {
-        return jwtCredential.payload?["iss"] as? String == finalizeOffersDescriptor.did
+        // iss == vc.issuer.id
+        return jwtCredential.payload?["iss"] as? String == finalizeOffersDescriptor.issuerId
     }
 }
 

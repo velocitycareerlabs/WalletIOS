@@ -15,6 +15,7 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     private let jwtServiceRepository: JwtServiceRepository
     private let credentialIssuerVerifier: CredentialIssuerVerifier
     private let credentialDidVerifier: CredentialDidVerifier
+    private let credentialsByDeepLinkVerifier: CredentialsByDeepLinkVerifier
     private let executor: Executor
     
     init(
@@ -22,77 +23,115 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
         _ jwtServiceRepository: JwtServiceRepository,
         _ credentialIssuerVerifier: CredentialIssuerVerifier,
         _ credentialDidVerifier: CredentialDidVerifier,
+        _ credentialsByDeepLinkVerifier: CredentialsByDeepLinkVerifier,
         _ executor: Executor
     ) {
         self.finalizeOffersRepository = finalizeOffersRepository
         self.jwtServiceRepository = jwtServiceRepository
         self.credentialDidVerifier = credentialDidVerifier
         self.credentialIssuerVerifier = credentialIssuerVerifier
+        self.credentialsByDeepLinkVerifier = credentialsByDeepLinkVerifier
         self.executor = executor
     }
+    
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        didJwk: VCLDidJwk? = nil,
+        didJwk: VCLDidJwk?,
         sessionToken: VCLToken,
         remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
-        executor.runOnBackground {
-            self.jwtServiceRepository.generateSignedJwt(
+        executor.runOnBackground { [weak self] in
+            self?.jwtServiceRepository.generateSignedJwt(
                 kid: didJwk?.kid,
                 nonce: finalizeOffersDescriptor.offers.challenge,
                 jwtDescriptor: VCLJwtDescriptor(
                     keyId: didJwk?.keyId,
                     iss: didJwk?.did ?? UUID().uuidString,
-                    aud: finalizeOffersDescriptor.issuerId
+                    aud: finalizeOffersDescriptor.aud
                 ),
                 remoteCryptoServicesToken: remoteCryptoServicesToken
-            ) { [weak self] proofJwtResult in
+            ) { proofJwtResult in
                 do {
                     let proof = try proofJwtResult.get()
                     self?.finalizeOffersRepository.finalizeOffers(
                         finalizeOffersDescriptor: finalizeOffersDescriptor,
                         sessionToken: sessionToken,
                         proof: proof
-                    ) { encodedJwtCredentialsListResult in
+                    ) { jwtCredentialsListResult in
                         do {
-                            let encodedJwtCredentialsList = try encodedJwtCredentialsListResult.get()
-                            self?.verifyCredentialsByIssuer(
-                                encodedJwtCredentialsList,
+                            let jwtCredentials = try jwtCredentialsListResult.get()
+                            self?.verifyCredentialsByDeepLink(
+                                jwtCredentials,
                                 finalizeOffersDescriptor
-                            ) {
+                            ) { verifyCredentialsByDeepLinkResult in
                                 do {
-                                    let _ = try $0.get()
-                                    self?.verifyCredentialByDid(
-                                        encodedJwtCredentialsList,
+                                    _ = try verifyCredentialsByDeepLinkResult.get()
+                                    self?.verifyCredentialsByIssuer(
+                                        jwtCredentials,
                                         finalizeOffersDescriptor
-                                    ) { jwtVerifiableCredentialsResult in
-                                        self?.executor.runOnMain {
-                                            completionBlock(jwtVerifiableCredentialsResult)
+                                    ) { verifyCredentialsByIssuerResult in
+                                        do {
+                                            let _ = try verifyCredentialsByIssuerResult.get()
+                                            self?.verifyCredentialByDid(
+                                                jwtCredentials,
+                                                finalizeOffersDescriptor
+                                            ) { jwtVerifiableCredentialsResult in
+                                                self?.executor.runOnMain {
+                                                    completionBlock(
+                                                        jwtVerifiableCredentialsResult
+                                                    )
+                                                }
+                                            }
+                                        } catch {
+                                            self?.onError(VCLError(error: error), completionBlock)
                                         }
                                     }
                                 } catch {
-                                    self?.onError(VCLError(error: error), completionBlock)
+                                    self?.onError(VCLError(error: error), completionBlock)            
                                 }
                             }
                         } catch {
-                            self?.onError(VCLError(error: error), completionBlock)
+                            self?.onError(VCLError(error: error), completionBlock)              
                         }
                     }
                 } catch {
-                    self?.onError(VCLError(error: error), completionBlock)
+                    self?.onError(VCLError(error: error), completionBlock)          
                 }
             }
         }
     }
+    
+    private func verifyCredentialsByDeepLink(
+        _ jwtCredentials: [VCLJwt],
+        _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        _ completionBlock: @escaping (VCLResult<Bool>) -> Void
+    ) {
+        if let deepLink = finalizeOffersDescriptor.credentialManifest.deepLink {
+            credentialsByDeepLinkVerifier.verifyCredentials(
+                jwtCredentials: jwtCredentials,
+                deepLink: deepLink
+            ) { isVerifiedRes in
+                do {
+                    VCLLog.d("Credentials by deep link verification result: \(try isVerifiedRes.get())")
+                    completionBlock(.success(true))
+                } catch {
+                    completionBlock(.failure(VCLError(error: error)))
+                }
+            }
+        } else {
+            VCLLog.d("Deep link was not provided => nothing to verify")
+            completionBlock(.success(true))
+        }
+    }
 
     private func verifyCredentialsByIssuer(
-        _ encodedJwtCredentialsList: [String],
+        _ jwtCredentials: [VCLJwt],
         _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         credentialIssuerVerifier.verifyCredentials(
-            jwtEncodedCredentials: encodedJwtCredentialsList,
+            jwtCredentials: jwtCredentials,
             finalizeOffersDescriptor: finalizeOffersDescriptor
         ) { credentialIssuerVerifierResult in
             do {
@@ -104,12 +143,12 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     }
 
     private func verifyCredentialByDid(
-        _ encodedJwtCredentialsList: [String],
+        _ jwtCredentials: [VCLJwt],
         _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         _ completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
-        self.credentialDidVerifier.verifyCredentials(
-            jwtEncodedCredentials: encodedJwtCredentialsList,
+        credentialDidVerifier.verifyCredentials(
+            jwtCredentials: jwtCredentials,
             finalizeOffersDescriptor: finalizeOffersDescriptor
         ) { jwtVerifiableCredentialsResult in
             do {

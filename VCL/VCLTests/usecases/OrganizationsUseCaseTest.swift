@@ -13,7 +13,7 @@ import XCTest
 
 final class OrganizationsUseCaseTest: XCTestCase {
     
-    var subject: OrganizationsUseCase!
+    private var subject: OrganizationsUseCase!
     
     override func setUp() {
     }

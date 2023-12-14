@@ -11,7 +11,7 @@ import Foundation
 
 class CredentialIssuerVerifierEmptyImpl: CredentialIssuerVerifier {
     func verifyCredentials(
-        jwtEncodedCredentials: [String],
+        jwtCredentials: [VCLJwt],
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {

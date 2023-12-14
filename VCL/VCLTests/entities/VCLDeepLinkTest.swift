@@ -13,7 +13,7 @@ import XCTest
 
 final class VCLDeepLinkTest: XCTestCase {
     
-    var subject: VCLDeepLink!
+    private var subject: VCLDeepLink!
     
     override func setUp() {
     }
