@@ -13,7 +13,7 @@ import XCTest
 
 final class PresentationRequestUseCaseTest: XCTestCase {
     
-    var subject: PresentationRequestUseCase!
+    private var subject: PresentationRequestUseCase!
     
     func testCountryCodesSuccess() {
         // Arrange
@@ -30,6 +30,7 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
+            PresentationRequestByDeepLinkVerifierImpl(),
             ExecutorImpl()
         )
         subject.getPresentationRequest(presentationRequestDescriptor: VCLPresentationRequestDescriptor(

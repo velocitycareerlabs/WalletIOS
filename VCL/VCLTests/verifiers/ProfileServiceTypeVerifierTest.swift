@@ -13,7 +13,7 @@ import XCTest
 
 class ProfileServiceTypeVerifierTest: XCTestCase {
 
-    var subject: ProfileServiceTypeVerifier!
+    private var subject: ProfileServiceTypeVerifier!
 
     func testVerificationSuccess1() {
         subject = ProfileServiceTypeVerifier(

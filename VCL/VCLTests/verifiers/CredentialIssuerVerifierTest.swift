@@ -13,21 +13,21 @@ import XCTest
 
 class CredentialIssuerVerifierTest: XCTestCase {
 
-    var subject: CredentialIssuerVerifier!
+    private var subject: CredentialIssuerVerifier!
 
     private let OffersMock = VCLOffers(payload: [:], all: [], responseCode: 1, sessionToken: VCLToken(value: ""), challenge: "")
 
-    var finalizeOffersDescriptorWithoutPermittedServices: VCLFinalizeOffersDescriptor!
-    var credentialManifestWithoutPermittedServices: VCLCredentialManifest!
+    private var finalizeOffersDescriptorWithoutPermittedServices: VCLFinalizeOffersDescriptor!
+    private var credentialManifestWithoutPermittedServices: VCLCredentialManifest!
 
-    var finalizeOffersDescriptorOfNotaryIssuer: VCLFinalizeOffersDescriptor!
-    var credentialManifestFromNotaryIssuer: VCLCredentialManifest!
+    private var finalizeOffersDescriptorOfNotaryIssuer: VCLFinalizeOffersDescriptor!
+    private var credentialManifestFromNotaryIssuer: VCLCredentialManifest!
 
-    var finalizeOffersDescriptorOfRegularIssuer: VCLFinalizeOffersDescriptor!
-    var credentialManifestFromRegularIssuer: VCLCredentialManifest!
+    private var finalizeOffersDescriptorOfRegularIssuer: VCLFinalizeOffersDescriptor!
+    private var credentialManifestFromRegularIssuer: VCLCredentialManifest!
 
-    var finalizeOffersDescriptorOfIdentityIssuer: VCLFinalizeOffersDescriptor!
-    var credentialManifestFromIdentityIssuer: VCLCredentialManifest!
+    private var finalizeOffersDescriptorOfIdentityIssuer: VCLFinalizeOffersDescriptor!
+    private var credentialManifestFromIdentityIssuer: VCLCredentialManifest!
 
     override func setUp() {
         credentialManifestWithoutPermittedServices = VCLCredentialManifest(
@@ -84,7 +84,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         subject.verifyCredentials(
-            jwtEncodedCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toList() as! [String],
+            jwtCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfNotaryIssuer
         ) {
             do {
@@ -105,7 +105,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         subject.verifyCredentials(
-            jwtEncodedCredentials: CredentialMocks.JwtCredentialsWithoutSubject.toList() as! [String],
+            jwtCredentials: CredentialMocks.JwtCredentialsWithoutSubject.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfNotaryIssuer
         ) {
             do {
@@ -126,7 +126,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         subject.verifyCredentials(
-            jwtEncodedCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toList() as! [String],
+            jwtCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
             do {
@@ -147,7 +147,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         subject.verifyCredentials(
-            jwtEncodedCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toList() as! [String],
+            jwtCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
             do {
@@ -168,7 +168,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         subject.verifyCredentials(
-            jwtEncodedCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toList() as! [String],
+            jwtCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorWithoutPermittedServices
         ) {
             do {
@@ -189,7 +189,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         subject.verifyCredentials(
-            jwtEncodedCredentials: CredentialMocks.JwtCredentialsWithoutSubject.toList() as! [String],
+            jwtCredentials: CredentialMocks.JwtCredentialsWithoutSubject.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
             do {
@@ -210,7 +210,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         subject.verifyCredentials(
-            jwtEncodedCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toList() as! [String],
+            jwtCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfIdentityIssuer
         ) {
             do {
@@ -231,7 +231,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         subject.verifyCredentials(
-            jwtEncodedCredentials: CredentialMocks.JwtEmptyCredentials.toList() as! [String],
+            jwtCredentials: CredentialMocks.JwtEmptyCredentials.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfIdentityIssuer
         ) {
             do {
@@ -252,7 +252,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         subject.verifyCredentials(
-            jwtEncodedCredentials: CredentialMocks.JwtCredentialsFromIdentityIssuer.toList() as! [String],
+            jwtCredentials: CredentialMocks.JwtCredentialsFromIdentityIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfIdentityIssuer
         ) {
             do {
@@ -273,7 +273,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         subject.verifyCredentials(
-            jwtEncodedCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toList() as! [String],
+            jwtCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
             do {
@@ -294,7 +294,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         subject.verifyCredentials(
-            jwtEncodedCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toList() as! [String],
+            jwtCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
             do {

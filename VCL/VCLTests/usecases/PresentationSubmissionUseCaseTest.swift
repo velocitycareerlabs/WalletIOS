@@ -13,10 +13,10 @@ import XCTest
 
 final class PresentationSubmissionUseCaseTest: XCTestCase {
     
-    var subject: PresentationSubmissionUseCase!
+    private var subject: PresentationSubmissionUseCase!
     
-    var didJwk: VCLDidJwk!
-    let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
+    private var didJwk: VCLDidJwk!
+    private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     
     override func setUp() {
         keyService.generateDidJwk() { [weak self] didJwkResult in

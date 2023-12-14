@@ -11,14 +11,14 @@ import Foundation
 
 public struct VCLOffers {
     public let payload: [String: Any]
-    public let all: [[String: Any]]
+    public let all: [VCLOffer]
     public let responseCode: Int
     public let sessionToken: VCLToken
     public let challenge: String
     
     public init(
         payload: [String: Any],
-        all: [[String: Any]],
+        all: [VCLOffer],
         responseCode: Int,
         sessionToken: VCLToken,
         challenge: String

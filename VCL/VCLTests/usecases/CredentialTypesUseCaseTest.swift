@@ -12,7 +12,7 @@ import XCTest
 @testable import VCL
 
 final class CredentialTypesUseCaseTest: XCTestCase {
-    var subject: CredentialTypesUseCase!
+    private var subject: CredentialTypesUseCase!
     
     override func setUp() {
     }

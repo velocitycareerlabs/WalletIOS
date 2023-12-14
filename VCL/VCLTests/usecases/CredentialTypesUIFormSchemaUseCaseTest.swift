@@ -13,8 +13,8 @@ import XCTest
 
 final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
     
-    var subject: CredentialTypesUIFormSchemaUseCase!
-    var mockedCountries: VCLCountries!
+    private var subject: CredentialTypesUIFormSchemaUseCase!
+    private var mockedCountries: VCLCountries!
     
     override func setUp() {
         mockedCountries = jsonArrToCountries(CredentialTypesUIFormSchemaMocks.CountriesJson.toList() as! [[String: Any]])

@@ -13,13 +13,14 @@ import XCTest
 
 final class GenerateOffersUseCaseTest: XCTestCase {
     
-    var subject: GenerateOffersUseCase!
+    private var subject: GenerateOffersUseCase!
     
     func testGenerateOffers() {
         subject = GenerateOffersUseCaseImpl(
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffers)
             ),
+            OffersByDeepLinkVerifierImpl(),
             ExecutorImpl()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
@@ -46,6 +47,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonObj)
             ),
+            OffersByDeepLinkVerifierImpl(),
             ExecutorImpl()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
@@ -74,6 +76,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonArr)
             ),
+            OffersByDeepLinkVerifierImpl(),
             ExecutorImpl()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(

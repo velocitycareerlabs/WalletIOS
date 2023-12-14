@@ -13,7 +13,7 @@ import XCTest
 
 final class VCLCredentialManifestDescriptorRefreshTest: XCTestCase {
     
-    var subject: VCLCredentialManifestDescriptorRefresh!
+    private var subject: VCLCredentialManifestDescriptorRefresh!
     
     override func setUp() {
     }

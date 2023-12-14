@@ -32,11 +32,11 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
     }
     
     func verifyCredentials(
-        jwtEncodedCredentials: [String],
+        jwtCredentials: [VCLJwt],
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if (jwtEncodedCredentials.isEmpty) /* nothing to verify */ {
+        if (jwtCredentials.isEmpty) /* nothing to verify */ {
             completionBlock(VCLResult.success(true))
         }
         else if (finalizeOffersDescriptor.serviceTypes.all.isEmpty) {
@@ -47,9 +47,8 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                 UIApplication.shared.endBackgroundTask(self.mainBackgroundTaskIdentifier!)
                 self.mainBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             }
-            jwtEncodedCredentials.forEach { encodedJwtCredential in
+            jwtCredentials.forEach { jwtCredential in
                 mainDispatcher.enter()
-                let jwtCredential = VCLJwt(encodedJwt: encodedJwtCredential)
                 if let credentialTypeName = Utils.getCredentialType(jwtCredential) {
                     if let credentialType = credentialTypesModel.credentialTypeByTypeName(type: credentialTypeName) {
                         verifyCredential(
@@ -74,7 +73,6 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                         }
                     } else {
                         globalError = VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue)
-                        mainDispatcher.leave()
                     }
                 } else {
                     globalError = VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue)
@@ -150,30 +148,23 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         } else if (permittedServiceCategory.contains(serviceType: VCLServiceType.Issuer)) {
             if let credentialSubject = Utils.getCredentialSubject(jwtCredential) {
                 if let credentialSubjectContexts = retrieveContextFromCredentialSubject(credentialSubject) {
-                    resolveCredentialSubjectContexts(credentialSubjectContexts) { [weak self] credentialSubjectContextsResult in
-                        if let _self = self {
+                    resolveCredentialSubjectContexts(credentialSubjectContexts, self) { [weak self] credentialSubjectContextsResult in
                             do {
                                 let completeContexts = try credentialSubjectContextsResult.get()
-                                _self.onResolveCredentialSubjectContexts(
+                                self?.onResolveCredentialSubjectContexts(
                                     credentialSubject,
                                     jwtCredential,
                                     completeContexts,
-                                    _self,
+                                    self,
                                     completionBlock
                                 )
                             }
                             catch {
-                                _self.onError(
+                                self?.onError(
                                     VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
                                     completionBlock
                                 )
                             }
-                        } else {
-                            self?.onError(
-                                VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
-                                completionBlock
-                            )
-                        }
                     }
                 } else {
                     onError(
@@ -203,10 +194,10 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         }
         return nil
     }
-
     
     private func resolveCredentialSubjectContexts(
         _ credentialSubjectContexts: [String],
+        _ _self: CredentialIssuerVerifierImpl,
         _ completionBlock: @escaping (VCLResult<[[String: Any]]>) -> Void
     ) {
         var completeContexts = [[String: Any]]()
@@ -256,7 +247,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ credentialSubject: [String: Any],
         _ jwtCredential: VCLJwt,
         _ completeContexts: [[String: Any]],
-        _ _self: CredentialIssuerVerifierImpl,
+        _ _self: CredentialIssuerVerifierImpl?,
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if let credentialSubjectType = (credentialSubject[CodingKeys.KeyType] as? String) {
@@ -303,7 +294,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             mainBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
             
         } else {
-            _self.onError(
+            _self?.onError(
                 VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectType.rawValue),
                 completionBlock
             )
