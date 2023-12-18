@@ -28,6 +28,7 @@ public struct VCLCredentialManifest {
     }
     
     public var iss: String { get { return jwt.payload?[CodingKeys.KeyIss] as? String ?? "" } }
+    public var did: String { get { return iss } }
     public var issuerId: String { get {
         jwt.payload?[CodingKeys.KeyIssuer] as? String
         ?? (jwt.payload?[CodingKeys.KeyIssuer] as? [String: Any])?[CodingKeys.KeyId] as? String
