@@ -15,7 +15,8 @@ class CredentialsByDeepLinkVerifierImpl: CredentialsByDeepLinkVerifier {
         deepLink: VCLDeepLink,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if let errorCredential = jwtCredentials.first(where: { $0.iss != deepLink.did }) {
+        if let mismatchedCredential = jwtCredentials.first(where: { $0.iss != deepLink.did }) {
+            VCLLog.e("mismatched credential: \(mismatchedCredential.encodedJwt) \ndeepLink: \(deepLink.value)")
             completionBlock(.failure(VCLError(errorCode: VCLErrorCode.MismatchedCredentialIssuerDid.rawValue)))
         } else {
             completionBlock(.success(true))
