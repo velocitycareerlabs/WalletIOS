@@ -18,6 +18,7 @@ class PresentationRequestByDeepLinkVerifierImpl: PresentationRequestByDeepLinkVe
         if presentationRequest.iss == deepLink.did {
             completionBlock(.success(true))
         } else {
+            VCLLog.e("presentation request: \(presentationRequest.jwt.encodedJwt) \ndeepLink: \(deepLink.value)")
             completionBlock(.failure(VCLError(errorCode: VCLErrorCode.MismatchedPresentationRequestInspectorDid.rawValue)))
         }
     }

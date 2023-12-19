@@ -15,7 +15,8 @@ class OffersByDeepLinkVerifierImpl: OffersByDeepLinkVerifier {
         deepLink: VCLDeepLink,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if let errorOffer = offers.all.first(where: { $0.issuerId != deepLink.did }) {
+        if let mismatchedOffer = offers.all.first(where: { $0.issuerId != deepLink.did }) {
+            VCLLog.e("mismatched offer: \(mismatchedOffer.payload) \ndeepLink: \(deepLink.value)")
             completionBlock(.failure(VCLError(errorCode: VCLErrorCode.MismatchedOfferIssuerDid.rawValue)))
         } else {
             completionBlock(.success(true))
