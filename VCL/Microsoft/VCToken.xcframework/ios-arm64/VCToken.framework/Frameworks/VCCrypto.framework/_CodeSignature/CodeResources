@@ -6,19 +6,19 @@
 	<dict>
 		<key>Frameworks/Secp256k1.framework/Info.plist</key>
 		<data>
-		DbPU98sRjpFoyNflFl3JucqgQYw=
+		smRX51+a5egdC3y2xs7XjbYoRaw=
 		</data>
 		<key>Frameworks/Secp256k1.framework/Secp256k1</key>
 		<data>
-		cuEhYyOaoA+lCF/1Xx5vBaUwRE8=
+		Jm317/ebR+xsi2DKcm8bB5D0Ag8=
 		</data>
 		<key>Frameworks/Secp256k1.framework/_CodeSignature/CodeResources</key>
 		<data>
-		6Qfv/UwUK43jVDg1x1KDszVgtF4=
+		i7bg8AF/xK9zA6tT3Rf3Dq1cy+s=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		fp74GS9ReJZZuQYWO764qBN60UY=
+		QLBRZ7CzkUUVApTgNA4ZgD03c4s=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -27,21 +27,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			m4ndIeezYlkSeaSItqnbnVl3hftjqPk4FbNImjvbc9Q=
+			w1cXamHmO0nF70XMeZY5GkaViSB9OdttpkguQyB+i5k=
 			</data>
 		</dict>
 		<key>Frameworks/Secp256k1.framework/Secp256k1</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			vBfskvo05v9ihL+fmZkbB6UB53TppnGgbWeg1rSZnNU=
+			Yi8eB3bllkLRToDy3Pix0heSm/M9rT9+MBZZ3JHOGXw=
 			</data>
 		</dict>
 		<key>Frameworks/Secp256k1.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			U/yPw6huVCe1D8VJLBjlX8yJP/AHW686HNQUiswLSwI=
+			pRvA33j5nM5byEWPpfzXGLM8IyuIqtPoIYc/SphRyk0=
 			</data>
 		</dict>
 	</dict>

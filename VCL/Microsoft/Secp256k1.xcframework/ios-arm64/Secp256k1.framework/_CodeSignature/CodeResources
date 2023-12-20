@@ -4,44 +4,41 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>Frameworks/Secp256k1.framework/Info.plist</key>
+		<key>Headers/secp256k1.h</key>
 		<data>
-		DbPU98sRjpFoyNflFl3JucqgQYw=
-		</data>
-		<key>Frameworks/Secp256k1.framework/Secp256k1</key>
-		<data>
-		cuEhYyOaoA+lCF/1Xx5vBaUwRE8=
-		</data>
-		<key>Frameworks/Secp256k1.framework/_CodeSignature/CodeResources</key>
-		<data>
-		6Qfv/UwUK43jVDg1x1KDszVgtF4=
+		Dqz2GgnVPFlN/TalaCtLiwbRQkc=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		fp74GS9ReJZZuQYWO764qBN60UY=
+		smRX51+a5egdC3y2xs7XjbYoRaw=
+		</data>
+		<key>Modules/module.modulemap</key>
+		<data>
+		+4R2rHg3SLAvb7Db51tyK0ntJ/Q=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>Frameworks/Secp256k1.framework/Info.plist</key>
+		<key>Headers/secp256k1.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			Dqz2GgnVPFlN/TalaCtLiwbRQkc=
+			</data>
 			<key>hash2</key>
 			<data>
-			m4ndIeezYlkSeaSItqnbnVl3hftjqPk4FbNImjvbc9Q=
+			JgWhIALN1gZHM8BAZOMuJEZseCBJWqKWrMp1qHvlMrk=
 			</data>
 		</dict>
-		<key>Frameworks/Secp256k1.framework/Secp256k1</key>
+		<key>Modules/module.modulemap</key>
 		<dict>
-			<key>hash2</key>
+			<key>hash</key>
 			<data>
-			vBfskvo05v9ihL+fmZkbB6UB53TppnGgbWeg1rSZnNU=
+			+4R2rHg3SLAvb7Db51tyK0ntJ/Q=
 			</data>
-		</dict>
-		<key>Frameworks/Secp256k1.framework/_CodeSignature/CodeResources</key>
-		<dict>
 			<key>hash2</key>
 			<data>
-			U/yPw6huVCe1D8VJLBjlX8yJP/AHW686HNQUiswLSwI=
+			1M4rqsKszyIhrax5cjGUBnV0Gd+LS/TesEmwZiOFiZ4=
 			</data>
 		</dict>
 	</dict>

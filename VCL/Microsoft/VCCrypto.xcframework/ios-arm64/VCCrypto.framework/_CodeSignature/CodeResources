@@ -6,19 +6,19 @@
 	<dict>
 		<key>Frameworks/Secp256k1.framework/Info.plist</key>
 		<data>
-		DbPU98sRjpFoyNflFl3JucqgQYw=
+		smRX51+a5egdC3y2xs7XjbYoRaw=
 		</data>
 		<key>Frameworks/Secp256k1.framework/Secp256k1</key>
 		<data>
-		cuEhYyOaoA+lCF/1Xx5vBaUwRE8=
+		Jm317/ebR+xsi2DKcm8bB5D0Ag8=
 		</data>
 		<key>Frameworks/Secp256k1.framework/_CodeSignature/CodeResources</key>
 		<data>
-		6Qfv/UwUK43jVDg1x1KDszVgtF4=
+		i7bg8AF/xK9zA6tT3Rf3Dq1cy+s=
 		</data>
 		<key>Headers/VCCrypto-Swift.h</key>
 		<data>
-		AMuL1JITdNFI3yowR7Wt/HLgblo=
+		QgXTBd/4uwuv6I/J1M5qK2HQ8y8=
 		</data>
 		<key>Headers/VCCrypto.h</key>
 		<data>
@@ -26,47 +26,27 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		fp74GS9ReJZZuQYWO764qBN60UY=
+		QLBRZ7CzkUUVApTgNA4ZgD03c4s=
 		</data>
-		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
+		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
 		ztCo+yOL5q5uIwNB09KjdY6A+jU=
 		</data>
-		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
+		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<data>
-		LIxnmN85kswe3cYVWwdGoVPk/cE=
+		oVVxTJowwD4rHKSdviaYX5UFvvU=
 		</data>
-		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
+		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		tJVrjFGA7/XSWqn3bS8k3qr7bSo=
+		mB/OlsaSrXrXNGtiBccRfru0rvY=
 		</data>
-		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
+		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		LIxnmN85kswe3cYVWwdGoVPk/cE=
+		oVVxTJowwD4rHKSdviaYX5UFvvU=
 		</data>
-		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
+		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		I4YWE6QkkU+kixTf1MPEt0ztu/U=
-		</data>
-		<key>Modules/VCCrypto.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
-		<data>
-		ztCo+yOL5q5uIwNB09KjdY6A+jU=
-		</data>
-		<key>Modules/VCCrypto.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
-		<data>
-		y/Ng3SZblMgvc6kuE9ubygQv9aE=
-		</data>
-		<key>Modules/VCCrypto.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
-		<data>
-		lGcdH4cPVJqhbaSjLSe6B6mf2KM=
-		</data>
-		<key>Modules/VCCrypto.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
-		<data>
-		y/Ng3SZblMgvc6kuE9ubygQv9aE=
-		</data>
-		<key>Modules/VCCrypto.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
-		<data>
-		em23UbfIESFBvw23JHh/hrrGBYI=
+		zbz4KTVhclyxcqhKWcyvDMPt+iw=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -79,28 +59,28 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			m4ndIeezYlkSeaSItqnbnVl3hftjqPk4FbNImjvbc9Q=
+			w1cXamHmO0nF70XMeZY5GkaViSB9OdttpkguQyB+i5k=
 			</data>
 		</dict>
 		<key>Frameworks/Secp256k1.framework/Secp256k1</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			vBfskvo05v9ihL+fmZkbB6UB53TppnGgbWeg1rSZnNU=
+			Yi8eB3bllkLRToDy3Pix0heSm/M9rT9+MBZZ3JHOGXw=
 			</data>
 		</dict>
 		<key>Frameworks/Secp256k1.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			U/yPw6huVCe1D8VJLBjlX8yJP/AHW686HNQUiswLSwI=
+			pRvA33j5nM5byEWPpfzXGLM8IyuIqtPoIYc/SphRyk0=
 			</data>
 		</dict>
 		<key>Headers/VCCrypto-Swift.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			WozWhMXXlzK1kB5CbUuTnwI5LwEFLYIMTljfuK2uQDA=
+			b4xqE5CD2uHIwUSkXMvqk+byDvEDoH2sY1Io103OK7M=
 			</data>
 		</dict>
 		<key>Headers/VCCrypto.h</key>
@@ -110,74 +90,39 @@
 			FcfzSYS7plF8l+FfsJ6A445wW+fXiJP6i0tCrdD4Ngk=
 			</data>
 		</dict>
-		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
+		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			SqooYQL5w86sfargLrxcGz+ILOcra9RydIawS5mMdZ8=
 			</data>
 		</dict>
-		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
+		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			QL0jFH/XamBb0WBiXNbQL4rL30BeQkkxMuAtW47Tqv4=
+			WaSK8z4m4vZLqliHK76h6mT8iPjoJBtaE4kf3AvAegI=
 			</data>
 		</dict>
-		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
+		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			8tX55/faAzp9Qk5xr6TEvcprf6BalZCa7bBoSkofesI=
+			z50NcrHtO6ahcNQydD16bmgHlIT0Cjpz/V/qqYrRYz0=
 			</data>
 		</dict>
-		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
+		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			QL0jFH/XamBb0WBiXNbQL4rL30BeQkkxMuAtW47Tqv4=
+			WaSK8z4m4vZLqliHK76h6mT8iPjoJBtaE4kf3AvAegI=
 			</data>
 		</dict>
-		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
+		<key>Modules/VCCrypto.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			47qrCTDhi0MwitxUfsVBAPprqGL3mCXcTLVgwrrrl4s=
-			</data>
-		</dict>
-		<key>Modules/VCCrypto.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			SqooYQL5w86sfargLrxcGz+ILOcra9RydIawS5mMdZ8=
-			</data>
-		</dict>
-		<key>Modules/VCCrypto.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			pOO0NgjXw1pObIJznOKqReB3ENwQv4dEjBUTiXudfRo=
-			</data>
-		</dict>
-		<key>Modules/VCCrypto.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			X6QN3GxOEx2VG44aUGSvLCjvT6a2LX/VGotz6P+aMLQ=
-			</data>
-		</dict>
-		<key>Modules/VCCrypto.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			pOO0NgjXw1pObIJznOKqReB3ENwQv4dEjBUTiXudfRo=
-			</data>
-		</dict>
-		<key>Modules/VCCrypto.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			pded3FMXt4Huk1PiGU9PMOk5LkwXAU5mfON0AKMsaL0=
+			EP3bOhfBZ3WYvhK86aUwzDfRzmO/Pe0Ku95Wu6l1AU8=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
