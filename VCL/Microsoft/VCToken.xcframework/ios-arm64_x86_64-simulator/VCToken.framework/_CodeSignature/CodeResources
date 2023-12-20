@@ -6,43 +6,43 @@
 	<dict>
 		<key>Frameworks/Secp256k1.framework/Info.plist</key>
 		<data>
-		PLLtSCEd8NMqTK3y+H8CLnnGgns=
+		DbPU98sRjpFoyNflFl3JucqgQYw=
 		</data>
 		<key>Frameworks/Secp256k1.framework/Secp256k1</key>
 		<data>
-		m129Y1SeO9BAIhD6YUiYW2k17Ck=
+		RMMp+i0N8YL1EEDEnG0J8jiQ0u4=
 		</data>
 		<key>Frameworks/Secp256k1.framework/_CodeSignature/CodeResources</key>
 		<data>
-		ZljHGyzDgasESbYVx8OOU+On+ks=
+		6Qfv/UwUK43jVDg1x1KDszVgtF4=
 		</data>
 		<key>Frameworks/VCCrypto.framework/Frameworks/Secp256k1.framework/Info.plist</key>
 		<data>
-		PLLtSCEd8NMqTK3y+H8CLnnGgns=
+		DbPU98sRjpFoyNflFl3JucqgQYw=
 		</data>
 		<key>Frameworks/VCCrypto.framework/Frameworks/Secp256k1.framework/Secp256k1</key>
 		<data>
-		Q1VPcsiWw9pSjPwXVYCkis6R35Y=
+		TTWICQNkqvppTLLwxJQqiMKTi9s=
 		</data>
 		<key>Frameworks/VCCrypto.framework/Frameworks/Secp256k1.framework/_CodeSignature/CodeResources</key>
 		<data>
-		ZljHGyzDgasESbYVx8OOU+On+ks=
+		6Qfv/UwUK43jVDg1x1KDszVgtF4=
 		</data>
 		<key>Frameworks/VCCrypto.framework/Info.plist</key>
 		<data>
-		Xtcu5c+Mz8i220dzU5OIAmfgSvw=
+		fp74GS9ReJZZuQYWO764qBN60UY=
 		</data>
 		<key>Frameworks/VCCrypto.framework/VCCrypto</key>
 		<data>
-		LlAYAd51ZHmcAB3nEM6D6qBPuus=
+		teJPapHHtMtYephaOtFjkkLNceU=
 		</data>
 		<key>Frameworks/VCCrypto.framework/_CodeSignature/CodeResources</key>
 		<data>
-		kIPNHNLApFMcRlapDtzfqSSEfaA=
+		vtvu6Ys3F3ZhvyfjQ771AANslIg=
 		</data>
 		<key>Headers/VCToken-Swift.h</key>
 		<data>
-		CvXT6B7ZYVHo3GLSiBGUVg5xvaw=
+		VboyR3ACsGaXJHSJbMOviD0gpqI=
 		</data>
 		<key>Headers/VCToken.h</key>
 		<data>
@@ -50,47 +50,47 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		ILWH4bi+Iun987AwAyjordS5h2U=
+		lb66Ag7LNl3ffIbqFIatAl1ewOU=
 		</data>
 		<key>Modules/VCToken.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		3jP5w8V9bq7l8VZdVO2JuGnGeQE=
+		uYjPYc1Dirq7G47DY7zleuzL9+o=
 		</data>
 		<key>Modules/VCToken.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		cEy709qe/T48jep/hd1AgMXGOrY=
+		yLwcotygkQk58GDOa6SzZ9FXYQM=
 		</data>
 		<key>Modules/VCToken.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		pTnodes25mltU8n4n8RKd3lRpXM=
+		VQxgm6A3D2Rb9oLOepXF3oLtWFg=
 		</data>
 		<key>Modules/VCToken.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		cEy709qe/T48jep/hd1AgMXGOrY=
+		yLwcotygkQk58GDOa6SzZ9FXYQM=
 		</data>
 		<key>Modules/VCToken.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		v0mLnx+6Gf+IfdgRRFoOoYBqLb0=
+		zXv3xTCURA9oMfGWP8b3AzzI6zM=
 		</data>
 		<key>Modules/VCToken.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		3jP5w8V9bq7l8VZdVO2JuGnGeQE=
+		uYjPYc1Dirq7G47DY7zleuzL9+o=
 		</data>
 		<key>Modules/VCToken.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		S+0hmelgHPs6IqASfzH7Ho52XQE=
+		7f2Hyc43pdr2P3EL6Lab9/2OUzA=
 		</data>
 		<key>Modules/VCToken.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		Vcu7beToPJV6mA6smfMN4gWmLKE=
+		e9gEmAIl+j4TvGai9FBWlN3I7G0=
 		</data>
 		<key>Modules/VCToken.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		S+0hmelgHPs6IqASfzH7Ho52XQE=
+		7f2Hyc43pdr2P3EL6Lab9/2OUzA=
 		</data>
 		<key>Modules/VCToken.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		k8dTIMStXo+9l0U3biFf9YkrnTI=
+		wDPI9yXHhQ8T/wuPcq0oHQxrW3U=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -103,70 +103,70 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			eVOMth99omAExU7HB9RD9O6kXkRN5fCx4jX7Nc0mx/c=
+			m4ndIeezYlkSeaSItqnbnVl3hftjqPk4FbNImjvbc9Q=
 			</data>
 		</dict>
 		<key>Frameworks/Secp256k1.framework/Secp256k1</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Bc5/k+hr4/kC4E9Zk/13tQNqhEI4C925+NtwDlHkgLk=
+			GXPhXzP81zAkGGSgWbDFDEMfqXS3qldnMDmoWcWS5HI=
 			</data>
 		</dict>
 		<key>Frameworks/Secp256k1.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+I0CgTC1Gfx5OhzTuSnQ+YsQLbwwhBG+xDJWmi51qAk=
+			U/yPw6huVCe1D8VJLBjlX8yJP/AHW686HNQUiswLSwI=
 			</data>
 		</dict>
 		<key>Frameworks/VCCrypto.framework/Frameworks/Secp256k1.framework/Info.plist</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			eVOMth99omAExU7HB9RD9O6kXkRN5fCx4jX7Nc0mx/c=
+			m4ndIeezYlkSeaSItqnbnVl3hftjqPk4FbNImjvbc9Q=
 			</data>
 		</dict>
 		<key>Frameworks/VCCrypto.framework/Frameworks/Secp256k1.framework/Secp256k1</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			P1KpuGoOdPHoQePSWD3JRoVlKPuO6cokoBo3aTmgGBs=
+			0+g+4kiH1A3oWwVlUn867p1RoXxH3MC5UDiZKbpenow=
 			</data>
 		</dict>
 		<key>Frameworks/VCCrypto.framework/Frameworks/Secp256k1.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+I0CgTC1Gfx5OhzTuSnQ+YsQLbwwhBG+xDJWmi51qAk=
+			U/yPw6huVCe1D8VJLBjlX8yJP/AHW686HNQUiswLSwI=
 			</data>
 		</dict>
 		<key>Frameworks/VCCrypto.framework/Info.plist</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			k9iw1rTrJV22jfiMQqzd/wZCis5qxHM1ccQYVqDarsU=
+			mHIm9IMBxsggum9P53MP2VCV4qRVlhx7GxwOSG2t9pE=
 			</data>
 		</dict>
 		<key>Frameworks/VCCrypto.framework/VCCrypto</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Jcd/qKDDIfr1AX2gBRup1oJI5lOQzSvqiTcHFogKe7M=
+			cHTPyZzVPdSHSK4qlp1b28MH/QHBh+ut1Dj6qbFAOVo=
 			</data>
 		</dict>
 		<key>Frameworks/VCCrypto.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			nk+OEO1GuKPFRcX0dKC+xQjTkn6MIbVbCtMP/GtjiWY=
+			FTgTBzAxp59h+68/FSw6r2UHb7ECQuR/Kj+iD6fipro=
 			</data>
 		</dict>
 		<key>Headers/VCToken-Swift.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			LONDja58bM1TZoTea08SFWJ61u5PoynrM4MT/lT0y9U=
+			V1u9/voVjsO06J9mtvGgsr1AhS+Qvx5s4+4/XsFZegs=
 			</data>
 		</dict>
 		<key>Headers/VCToken.h</key>
@@ -180,70 +180,70 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			xJSaVgDrZOqPCKSNoC7ex896XZRN9dXBDHidtWJECAo=
+			svMzpXZcENoBB2EmQcnXSCAylzCiEEXt1i+dqDBo/MM=
 			</data>
 		</dict>
 		<key>Modules/VCToken.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Ytg+ECkFA1Jrm+b8N65iaxo52vzBdRaMFwYweP6ksvE=
+			nM0GNfP3H8UQH5QelQKHEhu3hM1d3BmCp5zz4aEuqhI=
 			</data>
 		</dict>
 		<key>Modules/VCToken.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			wgRlG9MeBynx/z5QgPj9Iiwvq5rHkLp/QKvGagfifbE=
+			51zVau0j/fsdH4p+LLl5LZgGeij7vUDjPEAXMFMi9eM=
 			</data>
 		</dict>
 		<key>Modules/VCToken.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Ytg+ECkFA1Jrm+b8N65iaxo52vzBdRaMFwYweP6ksvE=
+			nM0GNfP3H8UQH5QelQKHEhu3hM1d3BmCp5zz4aEuqhI=
 			</data>
 		</dict>
 		<key>Modules/VCToken.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			wTAjkQ4VC3ulRFlmj/Xeo1UmN+7ilv3yu8BCj+Ecekk=
+			WOiCG7+XNoismeFU29cRhknXS1APsKi5rVk7doLPhxE=
 			</data>
 		</dict>
 		<key>Modules/VCToken.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			xJSaVgDrZOqPCKSNoC7ex896XZRN9dXBDHidtWJECAo=
+			svMzpXZcENoBB2EmQcnXSCAylzCiEEXt1i+dqDBo/MM=
 			</data>
 		</dict>
 		<key>Modules/VCToken.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			NM/Usn2NFHBmjvVuZ+IyjVkO4cdTLbrQgp3s3b15GQY=
+			Ch7kbKhwG21HTHwPg0IMgWqqAUIyWjk2f45qNtGl6Kc=
 			</data>
 		</dict>
 		<key>Modules/VCToken.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			2B7tZREkGC6FNMg5y1Wzwv25bHVV8PnjOOuDwZ/B4Qs=
+			T9IgmQIXefcj0yQ1mq1l5tt5f8m8gVI6+HFom+x4fYw=
 			</data>
 		</dict>
 		<key>Modules/VCToken.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			NM/Usn2NFHBmjvVuZ+IyjVkO4cdTLbrQgp3s3b15GQY=
+			Ch7kbKhwG21HTHwPg0IMgWqqAUIyWjk2f45qNtGl6Kc=
 			</data>
 		</dict>
 		<key>Modules/VCToken.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			CPxXpCd5b5oqhtQHTPHoycf4TgxNriDHHvekL5D7tHo=
+			xKyHjokSWsdYOA6UD+asAoqVHNGJftbWdb2E1NswV48=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

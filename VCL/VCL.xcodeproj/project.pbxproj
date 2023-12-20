@@ -51,6 +51,9 @@
 		282703AC26A4862B001A8DDA /* IdentificationModelImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282703AB26A4862B001A8DDA /* IdentificationModelImpl.swift */; };
 		2829746E26C117BE008CE30A /* VCLCredentialManifestDescriptorByService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2829746D26C117BE008CE30A /* VCLCredentialManifestDescriptorByService.swift */; };
 		2829747926C11863008CE30A /* VCLOrganization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2829747826C11863008CE30A /* VCLOrganization.swift */; };
+		282D71D22B3332B40045DD99 /* VCCrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282D71CF2B3332B40045DD99 /* VCCrypto.xcframework */; };
+		282D71D32B3332B40045DD99 /* Secp256k1.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282D71D02B3332B40045DD99 /* Secp256k1.xcframework */; };
+		282D71D42B3332B40045DD99 /* VCToken.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282D71D12B3332B40045DD99 /* VCToken.xcframework */; };
 		2834F0E827B94A0500FA5D4D /* VCLCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2834F0E727B94A0500FA5D4D /* VCLCountry.swift */; };
 		28350EAD294F28AB000FD631 /* VCLServiceTypesTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28350EAC294F28AB000FD631 /* VCLServiceTypesTest.swift */; };
 		28350EB8294F294A000FD631 /* VCLServiceTypeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28350EB7294F294A000FD631 /* VCLServiceTypeTest.swift */; };
@@ -79,9 +82,6 @@
 		285D154926CA92CE00532E1C /* OrganizationsUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285D154826CA92CE00532E1C /* OrganizationsUseCaseTest.swift */; };
 		285E702F26C2736C008099A4 /* SubmissionUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285E702E26C2736C008099A4 /* SubmissionUseCaseImpl.swift */; };
 		285E703126C27C78008099A4 /* PresentationSubmissionRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285E703026C27C78008099A4 /* PresentationSubmissionRepositoryImpl.swift */; };
-		285EDDC22B0E3DD900BD4B80 /* Secp256k1.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 285EDDC12B0E3DA600BD4B80 /* Secp256k1.xcframework */; };
-		285EDDCD2B0E3E6400BD4B80 /* VCCrypto.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 285EDDCC2B0E3E6400BD4B80 /* VCCrypto.xcframework */; };
-		285EDDD22B0E3EBD00BD4B80 /* VCToken.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 285EDDD12B0E3EBD00BD4B80 /* VCToken.xcframework */; };
 		285F63E32677665E0081D522 /* CredentialTypesUIFormSchemaUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285F63E22677665E0081D522 /* CredentialTypesUIFormSchemaUseCaseTest.swift */; };
 		28600695274A81540018AC8F /* VCLOffers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28600694274A81540018AC8F /* VCLOffers.swift */; };
 		286415A9264D65E2006C1AA3 /* VclBlocksProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2864152A264D65E2006C1AA3 /* VclBlocksProvider.swift */; };
@@ -336,6 +336,9 @@
 		282703AB26A4862B001A8DDA /* IdentificationModelImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificationModelImpl.swift; sourceTree = "<group>"; };
 		2829746D26C117BE008CE30A /* VCLCredentialManifestDescriptorByService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLCredentialManifestDescriptorByService.swift; sourceTree = "<group>"; };
 		2829747826C11863008CE30A /* VCLOrganization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLOrganization.swift; sourceTree = "<group>"; };
+		282D71CF2B3332B40045DD99 /* VCCrypto.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = VCCrypto.xcframework; sourceTree = "<group>"; };
+		282D71D02B3332B40045DD99 /* Secp256k1.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = Secp256k1.xcframework; sourceTree = "<group>"; };
+		282D71D12B3332B40045DD99 /* VCToken.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = VCToken.xcframework; sourceTree = "<group>"; };
 		2834F0E727B94A0500FA5D4D /* VCLCountry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLCountry.swift; sourceTree = "<group>"; };
 		28350EAC294F28AB000FD631 /* VCLServiceTypesTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLServiceTypesTest.swift; sourceTree = "<group>"; };
 		28350EB7294F294A000FD631 /* VCLServiceTypeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLServiceTypeTest.swift; sourceTree = "<group>"; };
@@ -364,9 +367,6 @@
 		285D154826CA92CE00532E1C /* OrganizationsUseCaseTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationsUseCaseTest.swift; sourceTree = "<group>"; };
 		285E702E26C2736C008099A4 /* SubmissionUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionUseCaseImpl.swift; sourceTree = "<group>"; };
 		285E703026C27C78008099A4 /* PresentationSubmissionRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationSubmissionRepositoryImpl.swift; sourceTree = "<group>"; };
-		285EDDC12B0E3DA600BD4B80 /* Secp256k1.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Secp256k1.xcframework; path = Microsoft/Secp256k1.xcframework; sourceTree = "<group>"; };
-		285EDDCC2B0E3E6400BD4B80 /* VCCrypto.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VCCrypto.xcframework; path = Microsoft/VCCrypto.xcframework; sourceTree = "<group>"; };
-		285EDDD12B0E3EBD00BD4B80 /* VCToken.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = VCToken.xcframework; path = Microsoft/VCToken.xcframework; sourceTree = "<group>"; };
 		285F63E22677665E0081D522 /* CredentialTypesUIFormSchemaUseCaseTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTypesUIFormSchemaUseCaseTest.swift; sourceTree = "<group>"; };
 		28600694274A81540018AC8F /* VCLOffers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCLOffers.swift; sourceTree = "<group>"; };
 		2864152A264D65E2006C1AA3 /* VclBlocksProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VclBlocksProvider.swift; sourceTree = "<group>"; };
@@ -588,9 +588,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				285EDDD22B0E3EBD00BD4B80 /* VCToken.xcframework in Frameworks */,
-				285EDDC22B0E3DD900BD4B80 /* Secp256k1.xcframework in Frameworks */,
-				285EDDCD2B0E3E6400BD4B80 /* VCCrypto.xcframework in Frameworks */,
+				282D71D42B3332B40045DD99 /* VCToken.xcframework in Frameworks */,
+				282D71D32B3332B40045DD99 /* Secp256k1.xcframework in Frameworks */,
+				282D71D22B3332B40045DD99 /* VCCrypto.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,6 +610,16 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		282D71CE2B3332B40045DD99 /* Microsoft */ = {
+			isa = PBXGroup;
+			children = (
+				282D71CF2B3332B40045DD99 /* VCCrypto.xcframework */,
+				282D71D02B3332B40045DD99 /* Secp256k1.xcframework */,
+				282D71D12B3332B40045DD99 /* VCToken.xcframework */,
+			);
+			path = Microsoft;
 			sourceTree = "<group>";
 		};
 		2840148726F23CA200BD2C93 /* repositories */ = {
@@ -1073,9 +1083,7 @@
 		289A5356264D647100B84389 = {
 			isa = PBXGroup;
 			children = (
-				285EDDD12B0E3EBD00BD4B80 /* VCToken.xcframework */,
-				285EDDCC2B0E3E6400BD4B80 /* VCCrypto.xcframework */,
-				285EDDC12B0E3DA600BD4B80 /* Secp256k1.xcframework */,
+				282D71CE2B3332B40045DD99 /* Microsoft */,
 				289A5361264D647100B84389 /* Products */,
 				289A5362264D647100B84389 /* VCL */,
 				289A536D264D647200B84389 /* VCLTests */,
@@ -1888,7 +1896,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.21.1;
+				MARKETING_VERSION = 1.21.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;
@@ -1914,7 +1922,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.21.1;
+				MARKETING_VERSION = 1.21.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SUPPORTS_MACCATALYST = NO;

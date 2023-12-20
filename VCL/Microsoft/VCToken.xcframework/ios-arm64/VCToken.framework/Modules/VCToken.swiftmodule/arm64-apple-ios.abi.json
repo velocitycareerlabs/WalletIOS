@@ -5782,504 +5782,504 @@
   },
   "ConstValues": [
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 762,
       "length": 5,
       "value": "\"kty\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 789,
       "length": 5,
       "value": "\"kid\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 824,
       "length": 9,
       "value": "\"key_ops\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 859,
       "length": 5,
       "value": "\"alg\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 886,
       "length": 5,
       "value": "\"crv\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 762,
       "length": 5,
       "value": "\"kty\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 789,
       "length": 5,
       "value": "\"kid\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 824,
       "length": 9,
       "value": "\"key_ops\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 859,
       "length": 5,
       "value": "\"alg\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 886,
       "length": 5,
       "value": "\"crv\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 1004,
       "length": 4,
       "value": "\"EC\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 1055,
       "length": 5,
       "value": "\"sig\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "Array",
       "offset": 1090,
       "length": 10,
       "value": "[\"verify\"]"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 1126,
       "length": 8,
       "value": "\"ES256K\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 1156,
       "length": 11,
       "value": "\"secp256k1\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 1911,
       "length": 61,
       "value": "\"{\"crv\":\"\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 1931,
       "length": 1,
       "value": "\"\",\"kty\":\"\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 1954,
       "length": 1,
       "value": "\"\",\"x\":\"\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 1969,
       "length": 1,
       "value": "\"\"\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 2099,
       "length": 18,
       "value": "\",\"y\":\"\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/ECPublicJwk.swift",
       "kind": "StringLiteral",
       "offset": 2113,
       "length": 1,
       "value": "\"\"}\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/TokenVerifier.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/TokenVerifier.swift",
       "kind": "BooleanLiteral",
       "offset": 958,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsToken.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsToken.swift",
       "kind": "StringLiteral",
       "offset": 2875,
       "length": 3,
       "value": "\".\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
       "kind": "StringLiteral",
       "offset": 834,
       "length": 5,
       "value": "\"kty\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
       "kind": "StringLiteral",
       "offset": 861,
       "length": 5,
       "value": "\"kid\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
       "kind": "StringLiteral",
       "offset": 886,
       "length": 3,
       "value": "\"k\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
       "kind": "StringLiteral",
       "offset": 911,
       "length": 5,
       "value": "\"crv\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
       "kind": "StringLiteral",
       "offset": 834,
       "length": 5,
       "value": "\"kty\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
       "kind": "StringLiteral",
       "offset": 861,
       "length": 5,
       "value": "\"kid\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
       "kind": "StringLiteral",
       "offset": 886,
       "length": 3,
       "value": "\"k\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JWK.swift",
       "kind": "StringLiteral",
       "offset": 911,
       "length": 5,
       "value": "\"crv\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1382,
       "length": 5,
       "value": "\"typ\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1413,
       "length": 5,
       "value": "\"alg\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1445,
       "length": 5,
       "value": "\"jwk\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1472,
       "length": 5,
       "value": "\"kid\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1505,
       "length": 5,
       "value": "\"cty\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1543,
       "length": 5,
       "value": "\"enc\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1579,
       "length": 5,
       "value": "\"p2s\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1611,
       "length": 5,
       "value": "\"p2c\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1382,
       "length": 5,
       "value": "\"typ\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1413,
       "length": 5,
       "value": "\"alg\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1445,
       "length": 5,
       "value": "\"jwk\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1472,
       "length": 5,
       "value": "\"kid\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1505,
       "length": 5,
       "value": "\"cty\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1543,
       "length": 5,
       "value": "\"enc\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1579,
       "length": 5,
       "value": "\"p2s\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/Header.swift",
       "kind": "StringLiteral",
       "offset": 1611,
       "length": 5,
       "value": "\"p2c\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweEncoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweEncoder.swift",
       "kind": "StringLiteral",
       "offset": 926,
       "length": 3,
       "value": "\".\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweEncoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweEncoder.swift",
       "kind": "StringLiteral",
       "offset": 1022,
       "length": 3,
       "value": "\".\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweEncoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweEncoder.swift",
       "kind": "StringLiteral",
       "offset": 1108,
       "length": 3,
       "value": "\".\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweEncoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweEncoder.swift",
       "kind": "StringLiteral",
       "offset": 1201,
       "length": 3,
       "value": "\".\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
       "kind": "StringLiteral",
       "offset": 722,
       "length": 3,
       "value": "\".\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 780,
       "length": 1,
       "value": "3"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 815,
       "length": 1,
       "value": "2"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 979,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 1217,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 1418,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
       "kind": "StringLiteral",
       "offset": 1423,
       "length": 3,
       "value": "\".\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 1450,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 1532,
       "length": 1,
       "value": "3"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 1604,
       "length": 1,
       "value": "2"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsEncoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JwsEncoder.swift",
       "kind": "StringLiteral",
       "offset": 1114,
       "length": 3,
       "value": "\".\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
       "kind": "StringLiteral",
       "offset": 687,
       "length": 3,
       "value": "\".\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 726,
       "length": 1,
       "value": "5"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 879,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 1062,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 1227,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 1354,
       "length": 1,
       "value": "2"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 1489,
       "length": 1,
       "value": "3"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/JweDecoder.swift",
       "kind": "IntegerLiteral",
       "offset": 1631,
       "length": 1,
       "value": "4"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/PbesJwe.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/PbesJwe.swift",
       "kind": "IntegerLiteral",
       "offset": 735,
       "length": 2,
       "value": "16"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/PbesJwe.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCToken\/VCToken\/algorithms\/PbesJwe.swift",
       "kind": "IntegerLiteral",
       "offset": 1230,
       "length": 1,

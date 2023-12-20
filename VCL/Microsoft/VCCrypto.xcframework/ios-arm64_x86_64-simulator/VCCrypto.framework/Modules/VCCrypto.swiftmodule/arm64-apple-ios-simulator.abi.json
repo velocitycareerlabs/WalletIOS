@@ -5689,728 +5689,728 @@
   },
   "ConstValues": [
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Sha512.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Sha512.swift",
       "kind": "IntegerLiteral",
       "offset": 658,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeyManagementOperations.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeyManagementOperations.swift",
       "kind": "StringLiteral",
       "offset": 1661,
       "length": 8,
       "value": "\"r%02dB\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "IntegerLiteral",
       "offset": 475,
       "length": 1,
       "value": "4"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "IntegerLiteral",
       "offset": 503,
       "length": 1,
       "value": "4"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "IntegerLiteral",
       "offset": 544,
       "length": 1,
       "value": "4"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 567,
       "length": 3,
       "value": "\"=\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 596,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 687,
       "length": 3,
       "value": "\"-\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 698,
       "length": 3,
       "value": "\"+\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 741,
       "length": 3,
       "value": "\"_\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 752,
       "length": 3,
       "value": "\"\/\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 977,
       "length": 3,
       "value": "\"+\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 988,
       "length": 3,
       "value": "\"-\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 1031,
       "length": 3,
       "value": "\"\/\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 1042,
       "length": 3,
       "value": "\"_\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 1085,
       "length": 3,
       "value": "\"=\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Base64.swift",
       "kind": "StringLiteral",
       "offset": 1096,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/CryptoOperations.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/CryptoOperations.swift",
       "kind": "Dictionary",
       "offset": 873,
       "length": 3,
       "value": "[]"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
       "kind": "StringLiteral",
       "offset": 446,
       "length": 24,
       "value": "\"com.microsoft.vcCrypto\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
       "kind": "BooleanLiteral",
       "offset": 1222,
       "length": 4,
       "value": "true"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
       "kind": "BooleanLiteral",
       "offset": 1524,
       "length": 4,
       "value": "true"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
       "kind": "IntegerLiteral",
       "offset": 2389,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
       "kind": "IntegerLiteral",
       "offset": 3114,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
       "kind": "IntegerLiteral",
       "offset": 3221,
       "length": 1,
       "value": "4"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
       "kind": "IntegerLiteral",
       "offset": 5306,
       "length": 1,
       "value": "4"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/KeychainSecretStore.swift",
       "kind": "StringLiteral",
       "offset": 6064,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
       "kind": "IntegerLiteral",
       "offset": 474,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
       "kind": "IntegerLiteral",
       "offset": 494,
       "length": 1,
       "value": "2"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
       "kind": "IntegerLiteral",
       "offset": 526,
       "length": 1,
       "value": "2"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
       "kind": "IntegerLiteral",
       "offset": 663,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
       "kind": "IntegerLiteral",
       "offset": 734,
       "length": 2,
       "value": "16"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Extensions\/Data+Hex.swift",
       "kind": "StringLiteral",
       "offset": 900,
       "length": 8,
       "value": "\"%02hhx\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Random32BytesSecret.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Random32BytesSecret.swift",
       "kind": "StringLiteral",
       "offset": 564,
       "length": 6,
       "value": "\"r32B\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Random32BytesSecret.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Random32BytesSecret.swift",
       "kind": "IntegerLiteral",
       "offset": 1064,
       "length": 2,
       "value": "32"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Random32BytesSecret.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Random32BytesSecret.swift",
       "kind": "IntegerLiteral",
       "offset": 1243,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Random32BytesSecret.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Random32BytesSecret.swift",
       "kind": "IntegerLiteral",
       "offset": 2178,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Random32BytesSecret.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Random32BytesSecret.swift",
       "kind": "IntegerLiteral",
       "offset": 3161,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
       "kind": "StringLiteral",
       "offset": 863,
       "length": 20,
       "value": "\"PBES2-HS256+A128KW\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
       "kind": "IntegerLiteral",
       "offset": 985,
       "length": 2,
       "value": "16"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
       "kind": "StringLiteral",
       "offset": 1001,
       "length": 20,
       "value": "\"PBES2-HS384+A192KW\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
       "kind": "IntegerLiteral",
       "offset": 1123,
       "length": 2,
       "value": "24"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
       "kind": "StringLiteral",
       "offset": 1139,
       "length": 20,
       "value": "\"PBES2-HS512+A256KW\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
       "kind": "IntegerLiteral",
       "offset": 1261,
       "length": 2,
       "value": "32"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
       "kind": "IntegerLiteral",
       "offset": 1626,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Pbkdf.swift",
       "kind": "IntegerLiteral",
       "offset": 1862,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2.swift",
       "kind": "IntegerLiteral",
       "offset": 1437,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2.swift",
       "kind": "IntegerLiteral",
       "offset": 1660,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Sha256.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Sha256.swift",
       "kind": "IntegerLiteral",
       "offset": 658,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Protocols\/SupportedCurve.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Protocols\/SupportedCurve.swift",
       "kind": "StringLiteral",
       "offset": 467,
       "length": 9,
       "value": "\"ED25519\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Protocols\/SupportedCurve.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Protocols\/SupportedCurve.swift",
       "kind": "StringLiteral",
       "offset": 498,
       "length": 11,
       "value": "\"SECP256K1\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Protocols\/SupportedCurve.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Protocols\/SupportedCurve.swift",
       "kind": "StringLiteral",
       "offset": 467,
       "length": 9,
       "value": "\"ED25519\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Protocols\/SupportedCurve.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Protocols\/SupportedCurve.swift",
       "kind": "StringLiteral",
       "offset": 498,
       "length": 11,
       "value": "\"SECP256K1\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 978,
       "length": 2,
       "value": "32"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 1330,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 1391,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 1666,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 2558,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 2732,
       "length": 2,
       "value": "64"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 3304,
       "length": 2,
       "value": "64"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 3385,
       "length": 2,
       "value": "32"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 3791,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 3862,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 4018,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 4085,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 4441,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 4713,
       "length": 2,
       "value": "65"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 4744,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "BooleanLiteral",
       "offset": 4982,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 5174,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 6405,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 6697,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 6845,
       "length": 2,
       "value": "65"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Secp256k1.swift",
       "kind": "IntegerLiteral",
       "offset": 6918,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
       "kind": "IntegerLiteral",
       "offset": 675,
       "length": 2,
       "value": "16"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
       "kind": "IntegerLiteral",
       "offset": 1023,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
       "kind": "IntegerLiteral",
       "offset": 1292,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
       "kind": "IntegerLiteral",
       "offset": 2983,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
       "kind": "IntegerLiteral",
       "offset": 3155,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
       "kind": "IntegerLiteral",
       "offset": 4853,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
       "kind": "IntegerLiteral",
       "offset": 4867,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
       "kind": "IntegerLiteral",
       "offset": 5668,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/Aes.swift",
       "kind": "IntegerLiteral",
       "offset": 5775,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
       "kind": "IntegerLiteral",
       "offset": 426,
       "length": 4,
       "value": "0x04"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
       "kind": "IntegerLiteral",
       "offset": 426,
       "length": 4,
       "value": "0x04"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
       "kind": "IntegerLiteral",
       "offset": 426,
       "length": 4,
       "value": "0x04"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
       "kind": "IntegerLiteral",
       "offset": 897,
       "length": 2,
       "value": "65"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
       "kind": "IntegerLiteral",
       "offset": 975,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
       "kind": "IntegerLiteral",
       "offset": 979,
       "length": 2,
       "value": "33"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
       "kind": "IntegerLiteral",
       "offset": 1029,
       "length": 2,
       "value": "33"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
       "kind": "IntegerLiteral",
       "offset": 1034,
       "length": 2,
       "value": "65"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
       "kind": "IntegerLiteral",
       "offset": 1111,
       "length": 2,
       "value": "32"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/Secp256k1PublicKey.swift",
       "kind": "IntegerLiteral",
       "offset": 1159,
       "length": 2,
       "value": "32"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
       "kind": "StringLiteral",
       "offset": 1890,
       "length": 15,
       "value": "\"A128CBC-HS256\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
       "kind": "IntegerLiteral",
       "offset": 1982,
       "length": 2,
       "value": "16"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
       "kind": "StringLiteral",
       "offset": 1998,
       "length": 15,
       "value": "\"A192CBC-HS384\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
       "kind": "IntegerLiteral",
       "offset": 2090,
       "length": 2,
       "value": "24"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
       "kind": "StringLiteral",
       "offset": 2106,
       "length": 15,
       "value": "\"A256CBC-HS512\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
       "kind": "IntegerLiteral",
       "offset": 2198,
       "length": 2,
       "value": "32"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Algo\/HmacSha2AesCbc.swift",
       "kind": "IntegerLiteral",
       "offset": 2545,
       "length": 1,
       "value": "8"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/ED25519PublicKey.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/ED25519PublicKey.swift",
       "kind": "IntegerLiteral",
       "offset": 580,
       "length": 2,
       "value": "32"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/EphemeralSecret.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/EphemeralSecret.swift",
       "kind": "StringLiteral",
       "offset": 690,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/EphemeralSecret.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/EphemeralSecret.swift",
       "kind": "IntegerLiteral",
       "offset": 1252,
       "length": 2,
       "value": "32"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/EphemeralSecret.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/EphemeralSecret.swift",
       "kind": "IntegerLiteral",
       "offset": 1885,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/EphemeralSecret.swift",
+      "filePath": "\/Users\/michaelavoyan\/Develop\/iOS\/iOS_Projects\/_GitHubIOS_\/WalletIOS_Backup\/WalletIOS\/VCL\/Microsoft\/VCCrypto\/VCCrypto\/Keys\/EphemeralSecret.swift",
       "kind": "IntegerLiteral",
       "offset": 2982,
       "length": 1,
