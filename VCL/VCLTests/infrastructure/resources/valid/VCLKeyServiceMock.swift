@@ -8,9 +8,9 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
+import VCToken
+import VCCrypto
 @testable import VCL
-@testable import VCToken
-@testable import VCCrypto
 
 class VCLKeyServiceMock: VCLKeyService {
     func generateDidJwk(

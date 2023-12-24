@@ -13,7 +13,7 @@ import XCTest
 
 final class ExchangeProgressUseCaseTest: XCTestCase {
     
-    var subject: ExchangeProgressUseCase!
+    private var subject: ExchangeProgressUseCase!
     
     override func setUp() {
     }

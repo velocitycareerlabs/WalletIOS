@@ -13,7 +13,7 @@ import XCTest
 
 final class CredentialManifestUseCaseTest: XCTestCase {
     
-    var subject: CredentialManifestUseCase!
+    private var subject: CredentialManifestUseCase!
 
     override func setUp() {
     }
@@ -30,6 +30,7 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
+            CredentialManifestByDeepLinkVerifierImpl(),
             ExecutorImpl()
         )
 

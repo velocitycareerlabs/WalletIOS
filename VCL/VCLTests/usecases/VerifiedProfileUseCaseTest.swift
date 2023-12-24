@@ -13,7 +13,7 @@ import XCTest
 
 final class VerifiedProfileUseCaseTest: XCTestCase {
     
-    var subject: VerifiedProfileUseCase!
+    private var subject: VerifiedProfileUseCase!
     
     func testGetVerifiedProfileIssuerSuccess() {
         subject = VerifiedProfileUseCaseImpl(

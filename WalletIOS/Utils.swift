@@ -17,10 +17,10 @@ class Utils {
         var offer1: String? = nil
         var offer2: String? = nil
         if(offers.all.count > 0) {
-            offer1 = ((offers.all[0])["id"]) as? String ?? ""
+            offer1 = offers.all[0].id
         }
         if(offers.all.count > 1) {
-            offer2 = ((offers.all[1])["id"]) as? String ?? ""
+            offer2 = offers.all[1].id
         }
         approvedOfferIds = [offer1].compactMap{ $0 }
         rejectedOfferIds = [offer2].compactMap{ $0 }

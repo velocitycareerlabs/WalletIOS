@@ -13,7 +13,7 @@ import XCTest
 
 final class CredentialTypeSchemasUseCaseTest: XCTestCase {
     
-    var subject: CredentialTypeSchemasUseCase!
+    private var subject: CredentialTypeSchemasUseCase!
     
     override func setUp() {
     }

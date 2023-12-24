@@ -14,15 +14,20 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     private let credentialManifestRepository: CredentialManifestRepository
     private let resolveKidRepository: ResolveKidRepository
     private let jwtServiceRepository: JwtServiceRepository
+    private let credentialManifestByDeepLinkVerifier: CredentialManifestByDeepLinkVerifier
     private let executor: Executor
     
-    init(_ credentialManifestRepository: CredentialManifestRepository,
-         _ resolveKidRepository: ResolveKidRepository,
-         _ jwtServiceRepository: JwtServiceRepository,
-         _ executor: Executor) {
+    init(
+        _ credentialManifestRepository: CredentialManifestRepository,
+        _ resolveKidRepository: ResolveKidRepository,
+        _ jwtServiceRepository: JwtServiceRepository,
+        _ credentialManifestByDeepLinkVerifier: CredentialManifestByDeepLinkVerifier,
+        _ executor: Executor
+    ) {
         self.credentialManifestRepository = credentialManifestRepository
         self.resolveKidRepository = resolveKidRepository
         self.jwtServiceRepository = jwtServiceRepository
+        self.credentialManifestByDeepLinkVerifier = credentialManifestByDeepLinkVerifier
         self.executor = executor
     }
     
@@ -38,10 +43,13 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
             ) {
                 credentialManifestResult in
                 do {
-                    self?.ongetCredentialManifestSuccess(
-                        VCLJwt(encodedJwt: try credentialManifestResult.get()),
-                        credentialManifestDescriptor,
-                        verifiedProfile,
+                    self?.onGetCredentialManifestSuccess(
+                        VCLCredentialManifest(
+                            jwt: VCLJwt(encodedJwt: try credentialManifestResult.get()),
+                            vendorOriginContext: credentialManifestDescriptor.vendorOriginContext,
+                            verifiedProfile: verifiedProfile,
+                            deepLink: credentialManifestDescriptor.deepLink
+                        ),
                         remoteCryptoServicesToken,
                         completionBlock
                     )
@@ -52,23 +60,50 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         }
     }
     
-    private func ongetCredentialManifestSuccess(
-        _ jwt: VCLJwt,
-        _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        _ verifiedProfile: VCLVerifiedProfile,
+    private func onGetCredentialManifestSuccess(
+        _ credentialManifest: VCLCredentialManifest,
         _ remoteCryptoServicesToken: VCLToken?,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        if let kid = jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
+        if let deepLink = credentialManifest.deepLink {
+            credentialManifestByDeepLinkVerifier.verifyCredentialManifest(
+                credentialManifest: credentialManifest, deepLink: deepLink
+            ) { [weak self] isVerifiedRes in
+                do {
+                    VCLLog.d("Credential manifest deep link verification result: \(try isVerifiedRes.get())")
+                    self?.onCredentialManifestDidVerificationSuccess(
+                        credentialManifest,
+                        remoteCryptoServicesToken,
+                        completionBlock
+                    )
+                }
+                catch {
+                    self?.onError(error, completionBlock)
+                }
+            }
+        } else {
+            VCLLog.d("Deep link was not provided => nothing to verify")
+            onCredentialManifestDidVerificationSuccess(
+                credentialManifest,
+                remoteCryptoServicesToken,
+                completionBlock
+            )
+        }
+    }
+    
+    private func onCredentialManifestDidVerificationSuccess(
+        _ credentialManifest: VCLCredentialManifest,
+        _ remoteCryptoServicesToken: VCLToken?,
+        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+    ) {
+        if let kid = credentialManifest.jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
             self.resolveKidRepository.getPublicKey(kid: kid) {
                 [weak self] publicKeyResult in
                 do {
                     let publicKey = try publicKeyResult.get()
                     self?.onResolvePublicKeySuccess(
                         publicKey,
-                        jwt,
-                        credentialManifestDescriptor,
-                        verifiedProfile,
+                        credentialManifest,
                         remoteCryptoServicesToken,
                         completionBlock
                     )
@@ -85,14 +120,12 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onResolvePublicKeySuccess(
         _ publicJwk: VCLPublicJwk,
-        _ jwt: VCLJwt,
-        _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        _ verifiedProfile: VCLVerifiedProfile,
+        _ credentialManifest: VCLCredentialManifest,
         _ remoteCryptoServicesToken: VCLToken?,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         self.jwtServiceRepository.verifyJwt(
-            jwt: jwt,
+            jwt: credentialManifest.jwt,
             publicJwk: publicJwk,
             remoteCryptoServicesToken: remoteCryptoServicesToken
         ) {
@@ -101,9 +134,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                 let isVerified = try isVerifiedResult.get()
                 self?.onVerificationSuccess(
                     isVerified,
-                    jwt,
-                    credentialManifestDescriptor,
-                    verifiedProfile,
+                    credentialManifest,
                     completionBlock
                 )
             } catch {
@@ -114,23 +145,18 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onVerificationSuccess(
         _ isVerified: Bool,
-        _ jwt: VCLJwt,
-        _ credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        _ verifiedProfile: VCLVerifiedProfile,
+        _ credentialManifest: VCLCredentialManifest,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
-        if isVerified == true {
-            executor.runOnMain { completionBlock(.success(
-                VCLCredentialManifest(
-                    jwt: jwt,
-                    vendorOriginContext: credentialManifestDescriptor.vendorOriginContext,
-                    verifiedProfile: verifiedProfile
-                )))
+        if (isVerified) {
+            executor.runOnMain {
+                completionBlock(.success(credentialManifest))
             }
         } else {
-            executor.runOnMain {
-                completionBlock(.failure(VCLError(message: "Failed  to verify: \(jwt)")))
-            }
+            onError(
+                VCLError(message: "Failed to verify credentialManifest jwt:\n\(credentialManifest.jwt)"),
+                completionBlock
+            )
         }
     }
     

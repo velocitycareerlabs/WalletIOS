@@ -13,7 +13,7 @@ import XCTest
 
 final class VCLOrganizationsDescriptorTest: XCTestCase {
     
-    var subject: VCLOrganizationsSearchDescriptor!
+    private var subject: VCLOrganizationsSearchDescriptor!
     
     override func setUp() {
     }
