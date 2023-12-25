@@ -186,6 +186,8 @@
 		2873A46E2ACC9B36003AE086 /* JwtVerifyServiceLocalTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2873A46D2ACC9B36003AE086 /* JwtVerifyServiceLocalTest.swift */; };
 		2873A4792ACC9DC0003AE086 /* VCLJwtSignServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2873A4782ACC9DC0003AE086 /* VCLJwtSignServiceMock.swift */; };
 		2873A47B2ACC9DD3003AE086 /* VCLJwtVerifyServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2873A47A2ACC9DD3003AE086 /* VCLJwtVerifyServiceMock.swift */; };
+		287B13E82B3877EC00421A29 /* VCLTokenTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B13E72B3877EC00421A29 /* VCLTokenTest.swift */; };
+		287B13EA2B38785C00421A29 /* TokenMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287B13E92B38785C00421A29 /* TokenMocks.swift */; };
 		2884060626C9262D0030E967 /* VCLDeepLinkTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884060526C9262D0030E967 /* VCLDeepLinkTest.swift */; };
 		2884060C26C9289F0030E967 /* VCLCredentialManifestDescriptorByDeepLinkTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2884060B26C9289F0030E967 /* VCLCredentialManifestDescriptorByDeepLinkTest.swift */; };
 		2885C85D26D6864600FCAB99 /* VCLServiceCredentialAgentIssuer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2885C85C26D6864600FCAB99 /* VCLServiceCredentialAgentIssuer.swift */; };
@@ -471,6 +473,8 @@
 		2873A46D2ACC9B36003AE086 /* JwtVerifyServiceLocalTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JwtVerifyServiceLocalTest.swift; sourceTree = "<group>"; };
 		2873A4782ACC9DC0003AE086 /* VCLJwtSignServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLJwtSignServiceMock.swift; sourceTree = "<group>"; };
 		2873A47A2ACC9DD3003AE086 /* VCLJwtVerifyServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLJwtVerifyServiceMock.swift; sourceTree = "<group>"; };
+		287B13E72B3877EC00421A29 /* VCLTokenTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLTokenTest.swift; sourceTree = "<group>"; };
+		287B13E92B38785C00421A29 /* TokenMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenMocks.swift; sourceTree = "<group>"; };
 		2884060526C9262D0030E967 /* VCLDeepLinkTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLDeepLinkTest.swift; sourceTree = "<group>"; };
 		2884060B26C9289F0030E967 /* VCLCredentialManifestDescriptorByDeepLinkTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLCredentialManifestDescriptorByDeepLinkTest.swift; sourceTree = "<group>"; };
 		2885C85C26D6864600FCAB99 /* VCLServiceCredentialAgentIssuer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLServiceCredentialAgentIssuer.swift; sourceTree = "<group>"; };
@@ -1058,6 +1062,7 @@
 				28350EB7294F294A000FD631 /* VCLServiceTypeTest.swift */,
 				28C7513D2937D1BF0053CCEC /* VCLSubmissionResultTest.swift */,
 				288A27D82946744400B6AC63 /* VCLSubmissionTest.swift */,
+				287B13E72B3877EC00421A29 /* VCLTokenTest.swift */,
 			);
 			path = entities;
 			sourceTree = "<group>";
@@ -1247,10 +1252,11 @@
 				28C52809293DFA7E00D5D7FF /* PresentationRequestDescriptorMocks.swift */,
 				2810CFA526CA9ACF00A3A9B9 /* PresentationRequestMocks.swift */,
 				281E504A26CA9D0200D0FB4F /* PresentationSubmissionMocks.swift */,
-				285C90E72AADCF62000A9E3E /* VCLKeyServiceMock.swift */,
-				2825AA0D272B19D40044D7C5 /* VerifiedProfileMocks.swift */,
+				287B13E92B38785C00421A29 /* TokenMocks.swift */,
 				2873A4782ACC9DC0003AE086 /* VCLJwtSignServiceMock.swift */,
 				2873A47A2ACC9DD3003AE086 /* VCLJwtVerifyServiceMock.swift */,
+				285C90E72AADCF62000A9E3E /* VCLKeyServiceMock.swift */,
+				2825AA0D272B19D40044D7C5 /* VerifiedProfileMocks.swift */,
 			);
 			path = valid;
 			sourceTree = "<group>";
@@ -1638,6 +1644,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2893D07B2AC318960079B290 /* VCLXVnfProtocolVersionTest.swift in Sources */,
+				287B13EA2B38785C00421A29 /* TokenMocks.swift in Sources */,
 				28C52808293DF98500D5D7FF /* VCLPresentationRequestDescriptorTest.swift in Sources */,
 				28576F4C2AD16971008E6A48 /* EmptyExecutor.swift in Sources */,
 				2801D1CA2A31EF4F00B659B4 /* VCLJwtTest.swift in Sources */,
@@ -1685,6 +1692,7 @@
 				28350EAD294F28AB000FD631 /* VCLServiceTypesTest.swift in Sources */,
 				285D154926CA92CE00532E1C /* OrganizationsUseCaseTest.swift in Sources */,
 				28BA0AE026CA63BB00FF28BB /* CountriesMocks.swift in Sources */,
+				287B13E82B3877EC00421A29 /* VCLTokenTest.swift in Sources */,
 				285C90E82AADCF62000A9E3E /* VCLKeyServiceMock.swift in Sources */,
 				2806600229B5EB6A00433302 /* VCLCredentialManifestTest.swift in Sources */,
 				284B89D52B2B32D6000E9776 /* PresentationRequestByDeepLinkVerifierTest.swift in Sources */,
@@ -1884,7 +1892,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 117;
+				CURRENT_PROJECT_VERSION = 118;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1897,7 +1905,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.21.5;
+				MARKETING_VERSION = 1.22.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1914,7 +1922,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 117;
+				CURRENT_PROJECT_VERSION = 118;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1927,7 +1935,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.21.5;
+				MARKETING_VERSION = 1.22.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
