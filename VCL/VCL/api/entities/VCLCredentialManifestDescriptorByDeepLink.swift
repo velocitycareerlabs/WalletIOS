@@ -13,11 +13,13 @@ public class VCLCredentialManifestDescriptorByDeepLink: VCLCredentialManifestDes
     
     public init(
         deepLink: VCLDeepLink,
-        issuingType: VCLIssuingType = VCLIssuingType.Career
+        issuingType: VCLIssuingType = VCLIssuingType.Career,
+        pushDelegate: VCLPushDelegate? = nil
     ) {
         super.init(
             uri: deepLink.requestUri,
             issuingType: issuingType,
+            pushDelegate: pushDelegate,
             vendorOriginContext: deepLink.vendorOriginContext,
             deepLink: deepLink
         )
