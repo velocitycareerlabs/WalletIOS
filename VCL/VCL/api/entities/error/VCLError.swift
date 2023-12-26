@@ -4,52 +4,61 @@
 //
 //  Created by Michael Avoyan on 08/03/2023.
 //
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
 public struct VCLError: Error {
     public let payload: String?
     public let error: String?
-    public let errorCode: String?
+    public let errorCode: String
     public let message: String?
     public let statusCode: Int?
 
     public init(
         payload: String? = nil,
         error: String? = nil,
-        errorCode: String? = nil,
+        errorCode: VCLErrorCode = VCLErrorCode.SdkError,
         message: String? = nil,
         statusCode: Int? = nil
     ) {
         self.payload = payload
         self.error = error
-        self.errorCode = errorCode
+        self.errorCode = errorCode.rawValue
         self.message = message
         self.statusCode = statusCode
     }
 
-    public init(payload: String?, errorCode: String? = nil) {
+    public init(
+        payload: String?,
+        errorCode: VCLErrorCode = VCLErrorCode.SdkError
+    ) {
         let payloadJson = payload?.toDictionary()
         self.payload = payload
         self.error = payloadJson?[CodingKeys.KeyError] as? String
-        self.errorCode = payloadJson?[CodingKeys.KeyErrorCode] as? String
+        self.errorCode = payloadJson?[CodingKeys.KeyErrorCode] as? String ?? errorCode.rawValue
         self.message = payloadJson?[CodingKeys.KeyMessage] as? String
         self.statusCode = payloadJson?[CodingKeys.KeyStatusCode] as? Int
     }
     
-    public init(error: Error? = nil, code: Int? = nil) {
+    public init(
+        error: Error? = nil,
+        errorCode: VCLErrorCode = VCLErrorCode.SdkError,
+        statusCode: Int? = nil
+    ) {
         if let vclError = error as? VCLError {
             self.payload = vclError.payload
             self.error = vclError.error
             self.errorCode = vclError.errorCode
             self.message = vclError.message
-            self.statusCode = vclError.statusCode ?? code
+            self.statusCode = vclError.statusCode ?? statusCode
         } else {
             self.payload = nil
             self.error = nil
-            self.errorCode = nil
+            self.errorCode = errorCode.rawValue
             self.message = "\(String(describing: error))"
-            self.statusCode = code
+            self.statusCode = statusCode
         }
     }
 

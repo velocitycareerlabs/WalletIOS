@@ -19,7 +19,7 @@ class CredentialManifestByDeepLinkVerifierImpl: CredentialManifestByDeepLinkVeri
             completionBlock(.success(true))
         } else {
             VCLLog.e("credential manifest: \(credentialManifest.jwt.encodedJwt) \ndeepLink: \(deepLink.value)")
-            completionBlock(.failure(VCLError(errorCode: VCLErrorCode.MismatchedRequestIssuerDid.rawValue)))
+            completionBlock(.failure(VCLError(errorCode: VCLErrorCode.MismatchedRequestIssuerDid)))
         }
     }
 }
