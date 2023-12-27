@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - VL-3881
+      - main
+      - rc
 
 jobs:
   build-ios-sdk:
@@ -12,21 +13,32 @@ jobs:
     env:
       #Xcode config
       XC_VERSION: "14.2"
-      # #Certs
-      # ENCRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz.gpg"
-      # DECRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz"
-      # CERTS_FILE_PATH: "./certs.p12"
-      # CERTS_ENCRYPTION_PWD: ${{ secrets.CERTS_ENCRYPTION_PWD }}
-      # CERTS_EXPORT_PWD: ${{ secrets.CERTS_EXPORT_PWD }}
+      #Certs
+      ENCRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz.gpg"
+      DECRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz"
+      CERTS_FILE_PATH: "./certs.p12"
+      CERTS_ENCRYPTION_PWD: ${{ secrets.CERTS_ENCRYPTION_PWD }}
+      CERT_VCL_APPLE_EXPORT_PWD: ${{ secrets.CERTS_ENCRYPTION_PWD }}
+      APPLE_CERTS_BASE64: ${{ secrets.APPLE_CERTS_BASE64 }}
+      # Recomends to use separated PAT token to access to another repos
+      PAT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       KEYCHAIN: "velocity.keychain"
+      RC_SUFFIX: 'rc'
     steps:
-
+      # Git clone repository
       - name: Git clone repository
         uses: actions/checkout@v4
-
+      # Select latest Xcode
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_${{ env.XC_VERSION }}.app"
-
+      # Extract branch name
+      - name: Extract branch name
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')" >> $GITHUB_ENV
+      # Certificate
+      - name: Certificate
+        run: "echo ${{ env.APPLE_CERTS_BASE64 }} | base64 -d > ${{ env.ENCRYPTED_CERTS_FILE_PATH }}"
+      # Configure keychain and code signing
       - name: Configure keychain and code signing
         run: |
           security create-keychain -p "" "${{ env.KEYCHAIN }}"
@@ -36,24 +48,49 @@ jobs:
           security default-keychain -s ${{ env.KEYCHAIN }}
           security list-keychains
 
+          gpg -d -o "${{ env.DECRYPTED_CERTS_FILE_PATH }}" --pinentry-mode=loopback --passphrase "${{ secrets.CERTS_ENCRYPTION_PWD }}" "${{ env.ENCRYPTED_CERTS_FILE_PATH }}"
+          tar xzvf ${{ env.DECRYPTED_CERTS_FILE_PATH }}
+
+          security import "${{ env.CERTS_FILE_PATH }}" -k "${{ env.KEYCHAIN }}" -P "${{ env.CERT_VCL_APPLE_EXPORT_PWD }}" -A
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" "${{ env.KEYCHAIN }}"
+
+          security find-identity -p codesigning -v
+      # VCL build
       - name: VCL build
         run: scripts/build_xcframework.sh
         working-directory: VCL
-
-      # - name: Commit for upload xcframework
-      #   run: echo "VNF_PUSH_COMMIT=$(git log -1 --pretty=format:'%s')" >> $GITHUB_ENV
-
-      # - name: Clone Specs repo
-      #   run: git clone https://${{ secrets.VNF_SDK_POD_ACCESS_TOKEN }}@github.com/velocitynetworkfoundation/Specs.git
-
-      # - name: Clone VNF-Swift repo
-      #   run: git clone https://${{ secrets.VNF_SDK_POD_ACCESS_TOKEN }}@github.com/velocitynetworkfoundation/VNF-Swift.git
-
-      # - name: Copy for git push
-      #   run: |
-      #      cp -r VNF/build/VNF.xcframework VNF-Swift/Frameworks/
-
-      # - name: Copy for git push
-      #   run: |
-      #      git add -A && git commit -m "${{ env.VNF_PUSH_COMMIT }}" && git push
-      #   working-directory: VNF-Swift
+      # Git Set Identity
+      - name: Git Identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+      # Get Version
+      - name: Get Version
+        run: echo "FRAMEWORK_VERSION=$(cat VCL.xcodeproj/project.pbxproj | grep 'Release' -B 8 | grep PRODUCT_BUNDLE_IDENTIFIER -B 1 | grep MARKETING_VERSION | cut -d'=' -f2 | sed -e 's/^[ \t]*//;s/;//')${{ env.RELEASE_TAG }}" >> $GITHUB_ENV
+        working-directory: VCL
+        env: 
+          RELEASE_TAG: ${{ github.ref != 'refs/heads/main' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
+      # Clone Additional repos
+      - name: Clone Additional repos
+        run: |
+          git clone https://${{ env.PAT_TOKEN }}@github.com/${{ github.repository_owner }}/Specs.git
+          git clone https://${{ env.PAT_TOKEN }}@github.com/${{ github.repository_owner }}/VCL-Swift.git
+      # Publish to Specs
+      - name: Publish to Specs
+        run: |
+          cp -r VCL/0.6.0 VCL/${{ env.FRAMEWORK_VERSION }}
+          sed -i '' 's/0\.6\.0/${{ env.FRAMEWORK_VERSION }}/g' VCL/${{ env.FRAMEWORK_VERSION }}/VCL.podspec
+          git add VCL/${{ env.FRAMEWORK_VERSION }} && git commit -am "sdk ${{ env.FRAMEWORK_VERSION }}" && git push
+        working-directory: Specs
+      # Publish to VCL-Swift
+      - name: Publish to VCL-Swift
+        run: |
+           cp -r ../VCL/build/VCL.xcframework Frameworks/
+           git add Frameworks/ && git commit -am "sdk ${{ env.FRAMEWORK_VERSION }}" && git push
+           git tag ${{ env.FRAMEWORK_VERSION }}
+           git push origin ${{ env.FRAMEWORK_VERSION }}
+           echo ${{ env.PAT_TOKEN }} | gh auth login --with-token
+           gh release create ${{ env.FRAMEWORK_VERSION }} --title "VCL-${{ env.FRAMEWORK_VERSION }}" ${{ env.RELEASE_ARG }}
+        working-directory: VCL-Swift
+        env: 
+          RELEASE_ARG: ${{ github.ref != 'refs/heads/main' && format('{0}', '--prerelease' ) || format('{0}', '--latest') }}
