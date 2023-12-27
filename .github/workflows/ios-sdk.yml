@@ -21,7 +21,7 @@ jobs:
       CERT_VCL_APPLE_EXPORT_PWD: ${{ secrets.CERTS_ENCRYPTION_PWD }}
       APPLE_CERTS_BASE64: ${{ secrets.APPLE_CERTS_BASE64 }}
       # Recomends to use separated PAT token to access to another repos
-      PAT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PAT_TOKEN: ${{ secrets.VCL_SDK_POD_ACCESS_TOKEN }}
       KEYCHAIN: "velocity.keychain"
       RC_SUFFIX: 'rc'
     steps:
