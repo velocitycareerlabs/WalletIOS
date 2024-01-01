@@ -22,7 +22,7 @@ final class JwtServiceUseCaseTest: XCTestCase {
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
         keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     }

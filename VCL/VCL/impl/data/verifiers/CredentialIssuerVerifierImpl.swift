@@ -40,7 +40,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             completionBlock(VCLResult.success(true))
         }
         else if (finalizeOffersDescriptor.serviceTypes.all.isEmpty) {
-            completionBlock(VCLResult.failure(VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered)))
+            completionBlock(VCLResult.failure(VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue)))
         } else {
             var globalError: VCLError? = nil
             self.mainBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish mainBackgroundTaskIdentifier") {
@@ -65,17 +65,17 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                                 } else {
                                     globalError = VCLError(
                                         payload: "\(error)",
-                                        errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure
+                                        errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure.rawValue
                                     )
                                 }
                             }
                             self?.mainDispatcher.leave()
                         }
                     } else {
-                        globalError = VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered)
+                        globalError = VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue)
                     }
                 } else {
-                    globalError = VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered)
+                    globalError = VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue)
                     mainDispatcher.leave()
                 }
             }
@@ -132,7 +132,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             completionBlock(VCLResult.success(true))
         } else {
             onError(
-                VCLError(errorCode: VCLErrorCode.IssuerRequiresIdentityPermission),
+                VCLError(errorCode: VCLErrorCode.IssuerRequiresIdentityPermission.rawValue),
                 completionBlock
             )
         }
@@ -161,26 +161,26 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                             }
                             catch {
                                 self?.onError(
-                                    VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext),
+                                    VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
                                     completionBlock
                                 )
                             }
                     }
                 } else {
                     onError(
-                        VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext),
+                        VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
                         completionBlock
                     )
                 }
             } else {
                 onError(
-                    VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext),
+                    VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
                     completionBlock
                 )
             }
         } else {
             onError(
-                VCLError(errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure),
+                VCLError(errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure.rawValue),
                 completionBlock
             )
         }
@@ -231,7 +231,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         resolveConetxDispatcher.notify(queue: DispatchQueue.global(), execute: {
             if(completeContexts.isEmpty) {
                 self.onError(
-                    VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext),
+                    VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
                     completionBlock
                 )
             } else {
@@ -267,12 +267,12 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                             completeConetxDispatcher.leave()
                         } else {
                             globalError =
-                            VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission)
+                            VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
                             completeConetxDispatcher.leave()
                         }
                     } else {
                         globalError =
-                        VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission)
+                        VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
                         completeConetxDispatcher.leave()
                     }
                 } else {
@@ -286,7 +286,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                 if isCredentialVerified {
                     completionBlock(.success(true))
                 } else {
-                    completionBlock(.failure(globalError ?? VCLError(errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure)))
+                    completionBlock(.failure(globalError ?? VCLError(errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure.rawValue)))
                 }
             })
             
@@ -295,7 +295,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             
         } else {
             _self?.onError(
-                VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectType),
+                VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectType.rawValue),
                 completionBlock
             )
         }

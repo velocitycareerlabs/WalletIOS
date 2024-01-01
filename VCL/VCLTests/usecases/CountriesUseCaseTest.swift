@@ -48,6 +48,25 @@ final class CountriesUseCaseTest: XCTestCase {
         }
     }
     
+    func testGetCountriesFailure() {
+        subject = CountriesUseCaseImpl(
+            CountriesRepositoryImpl(
+                NetworkServiceSuccess(
+                    validResponse: "wrong payload"
+                ), EmptyCacheService()            ),
+            ExecutorImpl()
+        )
+        
+        subject.getCountries(cacheSequence: 1) {
+            do {
+                let _ = try $0.get()
+                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+            } catch {
+                assert((error as! VCLError).errorCode == VCLErrorCode.SdkError.rawValue)
+            }
+        }
+    }
+    
     override func tearDown() {
     }
 }

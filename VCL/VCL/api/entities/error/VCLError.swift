@@ -19,32 +19,32 @@ public struct VCLError: Error {
     public init(
         payload: String? = nil,
         error: String? = nil,
-        errorCode: VCLErrorCode = VCLErrorCode.SdkError,
+        errorCode: String = VCLErrorCode.SdkError.rawValue,
         message: String? = nil,
         statusCode: Int? = nil
     ) {
         self.payload = payload
         self.error = error
-        self.errorCode = errorCode.rawValue
+        self.errorCode = errorCode
         self.message = message
         self.statusCode = statusCode
     }
 
     public init(
         payload: String?,
-        errorCode: VCLErrorCode = VCLErrorCode.SdkError
+        errorCode: String = VCLErrorCode.SdkError.rawValue
     ) {
         let payloadJson = payload?.toDictionary()
         self.payload = payload
         self.error = payloadJson?[CodingKeys.KeyError] as? String
-        self.errorCode = payloadJson?[CodingKeys.KeyErrorCode] as? String ?? errorCode.rawValue
+        self.errorCode = payloadJson?[CodingKeys.KeyErrorCode] as? String ?? errorCode
         self.message = payloadJson?[CodingKeys.KeyMessage] as? String
         self.statusCode = payloadJson?[CodingKeys.KeyStatusCode] as? Int
     }
     
     public init(
         error: Error? = nil,
-        errorCode: VCLErrorCode = VCLErrorCode.SdkError,
+        errorCode: String = VCLErrorCode.SdkError.rawValue,
         statusCode: Int? = nil
     ) {
         if let vclError = error as? VCLError {
@@ -56,7 +56,7 @@ public struct VCLError: Error {
         } else {
             self.payload = nil
             self.error = nil
-            self.errorCode = errorCode.rawValue
+            self.errorCode = errorCode
             self.message = "\(String(describing: error))"
             self.statusCode = statusCode
         }

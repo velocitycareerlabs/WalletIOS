@@ -27,14 +27,14 @@ class VclBlocksProvider {
                     keyServiceUrls
                 )
             } else {
-                throw VCLError(errorCode: VCLErrorCode.RemoteServicesUrlsNotFount)
+                throw VCLError(errorCode: VCLErrorCode.RemoteServicesUrlsNotFount.rawValue)
             }
             
         case VCLCryptoServiceType.Injected:
             if let keyService = cryptoServicesDescriptor.injectedCryptoServicesDescriptor?.keyService {
                 return keyService
             } else {
-                throw VCLError(errorCode: VCLErrorCode.InjectedServicesNotFount)
+                throw VCLError(errorCode: VCLErrorCode.InjectedServicesNotFount.rawValue)
             }
         }
     }
@@ -55,14 +55,14 @@ class VclBlocksProvider {
                     jwtSignServiceUrl
                 )
             } else {
-                throw VCLError(errorCode: VCLErrorCode.RemoteServicesUrlsNotFount)
+                throw VCLError(errorCode: VCLErrorCode.RemoteServicesUrlsNotFount.rawValue)
             }
             
         case VCLCryptoServiceType.Injected:
             if let jwtSignService = cryptoServicesDescriptor.injectedCryptoServicesDescriptor?.jwtSignService {
                 return jwtSignService
             } else {
-                throw VCLError(errorCode: VCLErrorCode.InjectedServicesNotFount)
+                throw VCLError(errorCode: VCLErrorCode.InjectedServicesNotFount.rawValue)
             }
         }
     }
