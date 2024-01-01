@@ -179,7 +179,6 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
     }
     
     func testEmptyCredentials() {
-        // Arrange
         subject = FinalizeOffersUseCaseImpl(
             FinalizeOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialMocks.JwtEmptyCredentials)
@@ -211,6 +210,42 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 assert(finalizeOffers.passedCredentials.isEmpty)
             } catch {
                 XCTFail("\(error)")
+            }
+        }
+    }
+    
+    func testFailure() {
+        subject = FinalizeOffersUseCaseImpl(
+            FinalizeOffersRepositoryImpl(
+                NetworkServiceSuccess(validResponse: "wrong payload")
+            ),
+            JwtServiceRepositoryImpl(
+                VCLJwtSignServiceLocalImpl(keyService),
+                VCLJwtVerifyServiceLocalImpl()
+            ),
+            CredentialIssuerVerifierImpl(
+                CredentialTypesModelMock(
+                    issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
+                ),
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
+            CredentialDidVerifierImpl(),
+            CredentialsByDeepLinkVerifierImpl(),
+            EmptyExecutor()
+        )
+        
+        subject.finalizeOffers(
+            finalizeOffersDescriptor: finalizeOffersDescriptorPassed,
+            didJwk: didJwk,
+            sessionToken: VCLToken(value: ""),
+            remoteCryptoServicesToken: nil
+        ) {
+            do  {
+                let _ = try $0.get()
+                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+            }
+            catch {
+                assert((error as! VCLError).errorCode == VCLErrorCode.SdkError.rawValue)
             }
         }
     }

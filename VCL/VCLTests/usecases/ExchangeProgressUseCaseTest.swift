@@ -18,7 +18,7 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
     override func setUp() {
     }
     
-    func testGetExchangeProgress() {
+    func testGetExchangeProgressSucces() {
         subject = ExchangeProgressUseCaseImpl(
             ExchangeProgressRepositoryImpl(
                 NetworkServiceSuccess(validResponse: ExchangeProgressMocks.ExchangeProgressJson)
@@ -39,6 +39,32 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
                 assert(exchange == self?.expectedExchange(exchangeJsonDict: ExchangeProgressMocks.ExchangeProgressJson.toDictionary()!))
             } catch {
                 XCTFail("\(error)")
+            }
+        }
+    }
+    
+    func testGetExchangeProgressFailuer() {
+        subject = ExchangeProgressUseCaseImpl(
+            ExchangeProgressRepositoryImpl(
+                NetworkServiceSuccess(validResponse: "wrong payload")
+            ),
+            ExecutorImpl()
+        )
+        let submissionResult = VCLSubmissionResult(sessionToken: VCLToken(value: ""), exchange: VCLExchange(), jti: "", submissionId: "")
+        let exchangeDescriptor = VCLExchangeDescriptor(
+            presentationSubmission: VCLPresentationSubmission(
+                presentationRequest: PresentationRequestMocks.PresentationRequest,
+                verifiableCredentials: []
+            ), submissionResult: submissionResult
+        )
+
+        subject.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) {
+            do  {
+                let _ = try $0.get()
+                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+            }
+            catch {
+                assert((error as! VCLError).errorCode == VCLErrorCode.SdkError.rawValue)
             }
         }
     }

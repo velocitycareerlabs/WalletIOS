@@ -25,7 +25,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypesUIFormSchemaMocks.UISchemaFormJsonFull)
             ),
-            ExecutorImpl(),
+            EmptyExecutor(),
             DispatcherImpl()
         )
 
@@ -62,7 +62,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypesUIFormSchemaMocks.UISchemaFormJsonOnlyCountries)
             ),
-            ExecutorImpl(),
+            EmptyExecutor(),
             DispatcherImpl()
         )
 
@@ -100,7 +100,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypesUIFormSchemaMocks.UISchemaFormJsonOnlyRegions)
             ),
-            ExecutorImpl(),
+            EmptyExecutor(),
             DispatcherImpl()
         )
         
@@ -137,7 +137,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypesUIFormSchemaMocks.UISchemaFormJsonOnlyEnums)
             ),
-            ExecutorImpl(),
+            EmptyExecutor(),
             DispatcherImpl()
         )
 
@@ -165,6 +165,31 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
                 assert(expectedAddressRegionNames == nil)
             } catch {
                 XCTFail("\(error)")
+            }
+        }
+    }
+    
+    func testCredentialTypesFormSchemaFailure() {
+        subject = CredentialTypesUIFormSchemaUseCaseImpl(
+            CredentialTypesUIFormSchemaRepositoryImpl(
+                NetworkServiceSuccess(validResponse: "wrong payload")
+            ),
+            EmptyExecutor(),
+            DispatcherImpl()
+        )
+        
+        subject.getCredentialTypesUIFormSchema(
+            credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor(
+                credentialType: "some type", countryCode: VCLCountries.Codes.CA
+            ),
+            countries: mockedCountries
+        ) {
+            do  {
+                let _ = try $0.get()
+                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+            }
+            catch {
+                assert((error as! VCLError).errorCode == VCLErrorCode.SdkError.rawValue)
             }
         }
     }

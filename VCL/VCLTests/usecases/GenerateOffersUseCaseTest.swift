@@ -21,7 +21,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffers)
             ),
             OffersByDeepLinkVerifierImpl(),
-            ExecutorImpl()
+            EmptyExecutor()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
@@ -49,7 +49,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonObj)
             ),
             OffersByDeepLinkVerifierImpl(),
-            ExecutorImpl()
+            EmptyExecutor()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
@@ -72,13 +72,12 @@ final class GenerateOffersUseCaseTest: XCTestCase {
     }
     
     func testGenerateOffersEmptyJsonArr() {
-        // Arrange
         subject = GenerateOffersUseCaseImpl(
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonArr)
             ),
             OffersByDeepLinkVerifierImpl(),
-            ExecutorImpl()
+            EmptyExecutor()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
@@ -86,7 +85,6 @@ final class GenerateOffersUseCaseTest: XCTestCase {
                 verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
             ))
 
-        // Action
         subject.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
             sessionToken: VCLToken(value: "")
@@ -98,8 +96,5 @@ final class GenerateOffersUseCaseTest: XCTestCase {
                 XCTFail("\(error)")
             }
         }
-    }
-    
-    override class func tearDown() {
     }
 }
