@@ -20,7 +20,7 @@ final class KeyServiceUseCaseTest: XCTestCase {
             KeyServiceRepositoryImpl(
                 VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
     }
 

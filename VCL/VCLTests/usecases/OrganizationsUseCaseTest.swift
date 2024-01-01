@@ -25,7 +25,7 @@ final class OrganizationsUseCaseTest: XCTestCase {
                     validResponse: OrganizationsMocks.OrganizationJsonResult
                 )
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
         let serviceDictMock = OrganizationsMocks.IssuingServiceJsonStr.toDictionary()
 

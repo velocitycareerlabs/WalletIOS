@@ -24,7 +24,7 @@ final class CredentialTypeSchemasUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialTypeSchemaMocks.CredentialTypeSchemaJson), EmptyCacheService()
             ),
             CredentialTypeSchemaMocks.CredentialTypes,
-            ExecutorImpl(),
+            EmptyExecutor(),
             DispatcherImpl(),
             DsptchQueueImpl("CredentialTypeSchemas")
         )

@@ -25,4 +25,6 @@ public enum VCLErrorCode: String {
     case MismatchedOfferIssuerDid = "mismatched_offer_issuer_did"
     case MismatchedCredentialIssuerDid = "mismatched_credential_issuer_did"
     case MismatchedPresentationRequestInspectorDid = "mismatched_presentation_request_inspector_did"
+    // General error
+    case SdkError = "sdk_error"
 }
