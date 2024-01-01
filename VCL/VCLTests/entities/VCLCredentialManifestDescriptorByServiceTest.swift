@@ -13,7 +13,7 @@ import XCTest
 
 final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
     
-    var subject: VCLCredentialManifestDescriptorByService!
+    private var subject: VCLCredentialManifestDescriptorByService!
     
     override func setUp() {
     }

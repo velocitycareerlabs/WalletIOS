@@ -12,7 +12,7 @@ import XCTest
 @testable import VCL
 
 class VCLJwtSignServiceTest: XCTestCase {
-var subject: VCLJwtSignServiceRemoteImpl!
+    private var subject: VCLJwtSignServiceRemoteImpl!
 
     override func setUp() {
         subject = VCLJwtSignServiceRemoteImpl(

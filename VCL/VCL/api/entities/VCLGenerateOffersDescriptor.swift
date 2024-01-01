@@ -27,7 +27,7 @@ public struct VCLGenerateOffersDescriptor {
         self.identificationVerifiableCredentials = identificationVerifiableCredentials
     }
     
-    var payload: [String: Any?] { get {
+    public var payload: [String: Any?] { get {
         [
             CodingKeys.KeyExchangeId: exchangeId,
             CodingKeys.KeyTypes: types ?? [Any](),
@@ -35,10 +35,10 @@ public struct VCLGenerateOffersDescriptor {
         ]
     } }
     
-    var did: String { get { credentialManifest.did } }
-    var exchangeId: String { get { credentialManifest.exchangeId } }
+    public var issuerId: String { get { credentialManifest.issuerId } }
+    public var exchangeId: String { get { credentialManifest.exchangeId } }
     
-    var checkOffersUri: String { get { credentialManifest.checkOffersUri } }
+    public var checkOffersUri: String { get { credentialManifest.checkOffersUri } }
 
     public struct CodingKeys {
         public static let KeyDid = "did"

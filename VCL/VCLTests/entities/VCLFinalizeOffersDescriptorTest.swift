@@ -13,11 +13,11 @@ import XCTest
 
 class VCLFinalizeOffersDescriptorTest: XCTestCase {
     
-    var subject: VCLFinalizeOffersDescriptor!
+    private var subject: VCLFinalizeOffersDescriptor!
     
     private let offers = VCLOffers(
         payload: [String: Any](),
-        all: [[String: Any]](),
+        all: [VCLOffer(payload: [:])],
         responseCode: 200,
         sessionToken: VCLToken(value: ""),
         challenge: ""

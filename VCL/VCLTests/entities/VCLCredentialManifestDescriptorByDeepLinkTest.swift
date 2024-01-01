@@ -21,11 +21,14 @@ final class VCLCredentialManifestDescriptorByDeepLinkTest: XCTestCase {
     func testCredentialManifestDescriptorFullValidByDeepLinkSuccess() {
         subject = VCLCredentialManifestDescriptorByDeepLink(
             deepLink: CredentialManifestDescriptorMocks.DeepLink,
-            issuingType: VCLIssuingType.Career
+            issuingType: VCLIssuingType.Career,
+            pushDelegate: VCLPushDelegate(pushUrl: "some url", pushToken: "some token")
         )
         
         assert(subject.endpoint?.decode()?.isUrlEquivalentTo(url: CredentialManifestDescriptorMocks.DeepLinkRequestUri.decode()!) == true)
         assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+        assert(subject.pushDelegate?.pushUrl == "some url")
+        assert(subject.pushDelegate?.pushToken == "some token")
     }
     
     override func tearDown() {

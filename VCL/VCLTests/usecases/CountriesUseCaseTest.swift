@@ -13,7 +13,7 @@ import XCTest
 
 final class CountriesUseCaseTest: XCTestCase {
     
-    var subject: CountriesUseCase!
+    private var subject: CountriesUseCase!
     
     override func setUp() {
     }
@@ -44,6 +44,25 @@ final class CountriesUseCaseTest: XCTestCase {
                 assert(afghanistanRegions.all[2].code == CountriesMocks.AfghanistanRegion3Code)
             } catch {
                 XCTFail("\(error)")
+            }
+        }
+    }
+    
+    func testGetCountriesFailure() {
+        subject = CountriesUseCaseImpl(
+            CountriesRepositoryImpl(
+                NetworkServiceSuccess(
+                    validResponse: "wrong payload"
+                ), EmptyCacheService()            ),
+            ExecutorImpl()
+        )
+        
+        subject.getCountries(cacheSequence: 1) {
+            do {
+                let _ = try $0.get()
+                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+            } catch {
+                assert((error as! VCLError).errorCode == VCLErrorCode.SdkError.rawValue)
             }
         }
     }

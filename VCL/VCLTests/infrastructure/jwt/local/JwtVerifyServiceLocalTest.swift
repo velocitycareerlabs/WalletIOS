@@ -10,9 +10,9 @@ import XCTest
 @testable import VCL
 
 class JwtVerifyServiceLocalTest: XCTestCase {
-    var subject: VCLJwtVerifyService!
-    var jwtSignService: VCLJwtSignService!
-    var didJwk: VCLDidJwk!
+    private var subject: VCLJwtVerifyService!
+    private var jwtSignService: VCLJwtSignService!
+    private var didJwk: VCLDidJwk!
     
     private let payloadMock = "{\"key1\":\"value1\",\"key2\":\"value2\"}".toDictionary()
     private let jtiMock = "some jti"

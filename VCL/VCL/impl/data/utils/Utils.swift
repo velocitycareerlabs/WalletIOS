@@ -55,4 +55,13 @@ class Utils {
         return (credentialSubject as? [String: Any])?["identifier"] as? String
             ?? (credentialSubject as? [String: Any])?["id"] as? String
     }
+    
+    static func offersFromJsonArray(offersJsonArray: [[String: Any]]) -> [VCLOffer] {
+        var allOffers = [VCLOffer]()
+        offersJsonArray.forEach { 
+            allOffers.append(VCLOffer(payload: $0))
+        }
+        return allOffers
+    }
+
 }

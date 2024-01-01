@@ -13,14 +13,14 @@ import XCTest
 
 final class VerifiedProfileUseCaseTest: XCTestCase {
     
-    var subject: VerifiedProfileUseCase!
+    private var subject: VerifiedProfileUseCase!
     
     func testGetVerifiedProfileIssuerSuccess() {
         subject = VerifiedProfileUseCaseImpl(
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1)
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
         subject.getVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
@@ -44,7 +44,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
 
         subject.getVerifiedProfile(
@@ -69,7 +69,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
 
         subject.getVerifiedProfile(
@@ -94,7 +94,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
         
         subject.getVerifiedProfile(
@@ -119,7 +119,7 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
         
         subject.getVerifiedProfile(

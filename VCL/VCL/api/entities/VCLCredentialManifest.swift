@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 09/05/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
@@ -13,20 +13,28 @@ public struct VCLCredentialManifest {
     public let jwt: VCLJwt
     public let vendorOriginContext: String?
     public let verifiedProfile: VCLVerifiedProfile
+    public let deepLink: VCLDeepLink?
     
     public init(
         jwt: VCLJwt,
         vendorOriginContext: String? = nil,
-        verifiedProfile: VCLVerifiedProfile
+        verifiedProfile: VCLVerifiedProfile,
+        deepLink: VCLDeepLink? = nil
     ) {
         self.jwt = jwt
         self.vendorOriginContext = vendorOriginContext
         self.verifiedProfile = verifiedProfile
+        self.deepLink = deepLink
     }
     
     public var iss: String { get { return jwt.payload?[CodingKeys.KeyIss] as? String ?? "" } }
-    public var did: String { get { return (jwt.payload?[CodingKeys.KeyIssuer] as? [String: String])?[CodingKeys.KeyId] ?? "" } }
-    public var issuerId: String { get { return retrieveIssuerId() } }
+    public var did: String { get { return iss } }
+    public var issuerId: String { get {
+        jwt.payload?[CodingKeys.KeyIssuer] as? String
+        ?? (jwt.payload?[CodingKeys.KeyIssuer] as? [String: Any])?[CodingKeys.KeyId] as? String
+        ?? ""
+    } }
+    public var aud: String { get { return retrieveAud() } }
     public var exchangeId: String { get { return jwt.payload?[CodingKeys.KeyExchangeId] as? String ?? "" } }
     public var presentationDefinitionId: String { get { (jwt.payload?[CodingKeys.KeyPresentationDefinitionId] as? [String: Any])?[CodingKeys.KeyId] as? String ?? "" } }
     
@@ -39,7 +47,7 @@ public struct VCLCredentialManifest {
     public var submitPresentationUri: String { get {
         (jwt.payload?[VCLCredentialManifest.CodingKeys.KeyMetadata] as? [String: Any])?[VCLCredentialManifest.CodingKeys.KeySubmitIdentificationUri] as? String ?? "" } }
 
-    private func retrieveIssuerId() -> String {
+    private func retrieveAud() -> String {
         let url = (jwt.payload?[CodingKeys.KeyMetadata] as? [String: String])?[CodingKeys.KeyFinalizeOffersUri] ?? ""
         if let range = url.range(of: "/issue/") {
             return String(url[..<range.lowerBound])
