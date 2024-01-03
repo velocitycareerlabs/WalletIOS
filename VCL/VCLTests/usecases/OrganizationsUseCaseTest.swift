@@ -13,7 +13,7 @@ import XCTest
 
 final class OrganizationsUseCaseTest: XCTestCase {
     
-    var subject: OrganizationsUseCase!
+    private var subject: OrganizationsUseCase!
     
     override func setUp() {
     }
@@ -25,7 +25,7 @@ final class OrganizationsUseCaseTest: XCTestCase {
                     validResponse: OrganizationsMocks.OrganizationJsonResult
                 )
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
         let serviceDictMock = OrganizationsMocks.IssuingServiceJsonStr.toDictionary()
 

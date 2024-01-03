@@ -208,6 +208,26 @@ extension String {
             return self
         }
     }
+    
+    func toJwtList() -> [VCLJwt]? {
+        guard let encodedCredentialList = self.toList() else {
+            return nil
+        }
+
+        let jwtCredentials = DispatchGroup()
+        var vclJwtList = [VCLJwt]()
+
+        encodedCredentialList.forEach { jwtEncodedCredential in
+            jwtCredentials.enter()
+            DispatchQueue.global().async {
+                vclJwtList.append(VCLJwt(encodedJwt: jwtEncodedCredential as? String ?? ""))
+                jwtCredentials.leave()
+            }
+        }
+
+        jwtCredentials.wait()
+        return vclJwtList
+    }
 }
 
 func randomString(length: Int) -> String {

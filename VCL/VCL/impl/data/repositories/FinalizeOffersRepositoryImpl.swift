@@ -23,7 +23,7 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
         proof: VCLJwt,
-        completionBlock: @escaping (VCLResult<[String]>) -> Void
+        completionBlock: @escaping (VCLResult<[VCLJwt]>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: finalizeOffersDescriptor.finalizeOffersUri,
@@ -37,8 +37,8 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
         ) { result in
             do {
                 let finalizedOffersResponse = try result.get()
-                if let encodedJwts = finalizedOffersResponse.payload.toList() as? [String] {
-                    completionBlock(.success(encodedJwts))
+                if let jwts = finalizedOffersResponse.payload.toJwtList() {
+                    completionBlock(.success(jwts))
                 } else {
                     completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: finalizedOffersResponse.payload, encoding: .utf8) ?? "")")))
                 }

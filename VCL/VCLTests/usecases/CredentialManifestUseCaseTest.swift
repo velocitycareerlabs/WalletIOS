@@ -13,12 +13,12 @@ import XCTest
 
 final class CredentialManifestUseCaseTest: XCTestCase {
     
-    var subject: CredentialManifestUseCase!
+    private var subject: CredentialManifestUseCase!
 
     override func setUp() {
     }
 
-    func testGetCredentialManifest() {
+    func testGetCredentialManifestSuccess() {
         subject = CredentialManifestUseCaseImpl(
             CredentialManifestRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialManifestMocks.CredentialManifest1)
@@ -30,7 +30,8 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            ExecutorImpl()
+            CredentialManifestByDeepLinkVerifierImpl(),
+            EmptyExecutor()
         )
 
         subject.getCredentialManifest(
@@ -60,7 +61,41 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 XCTFail("\(error)")
             }
         }
+    }
+    
+    func testGetCredentialManifestFailure() {
+        subject = CredentialManifestUseCaseImpl(
+            CredentialManifestRepositoryImpl(
+                NetworkServiceSuccess(validResponse: "wrong payload")
+            ),
+            ResolveKidRepositoryImpl(
+                NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
+            ),
+            JwtServiceRepositoryImpl(
+                VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
+                VCLJwtVerifyServiceLocalImpl()
+            ),
+            CredentialManifestByDeepLinkVerifierImpl(),
+            EmptyExecutor()
+        )
 
+        subject.getCredentialManifest(
+            credentialManifestDescriptor: VCLCredentialManifestDescriptorByDeepLink(
+                deepLink: DeepLinkMocks.CredentialManifestDeepLinkDevNet,
+                issuingType: VCLIssuingType.Career
+            ),
+            verifiedProfile: VCLVerifiedProfile(
+                payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!
+            ),
+            remoteCryptoServicesToken: nil
+        ) {
+            do {
+                let _ = try $0.get()
+                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+            } catch {
+                assert((error as! VCLError).errorCode == VCLErrorCode.SdkError.rawValue)
+            }
+        }
     }
 
     override func tearDown() {

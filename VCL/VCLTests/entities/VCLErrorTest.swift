@@ -60,13 +60,12 @@ class VCLErrorTes: XCTestCase {
             errorCode: ErrorMocks.ErrorCode,
             message: ErrorMocks.Message
         )
-        let errorFromError = VCLError(error: error, code: 1)
+        let errorFromError = VCLError(error: error)
         
         assert(errorFromError.payload == error.payload)
         assert(errorFromError.error == error.error)
         assert(errorFromError.errorCode == error.errorCode)
         assert(errorFromError.message == error.message)
-        assert(errorFromError.statusCode == 1)
     }
 
     func testErrorToJsonFromPayload() {

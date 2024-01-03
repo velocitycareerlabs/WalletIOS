@@ -13,10 +13,10 @@ import XCTest
 
 final class PresentationSubmissionUseCaseTest: XCTestCase {
     
-    var subject: PresentationSubmissionUseCase!
+    private var subject: PresentationSubmissionUseCase!
     
-    var didJwk: VCLDidJwk!
-    let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
+    private var didJwk: VCLDidJwk!
+    private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     
     override func setUp() {
         keyService.generateDidJwk() { [weak self] didJwkResult in
@@ -29,7 +29,6 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
     }
     
     func testSubmitPresentationSuccess() {
-        // Arrange
         subject = PresentationSubmissionUseCaseImpl(
             PresentationSubmissionRepositoryImpl(
                 NetworkServiceSuccess(validResponse: PresentationSubmissionMocks.PresentationSubmissionResultJson)
@@ -38,7 +37,7 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
                 VCLJwtSignServiceLocalImpl(keyService),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
         let presentationSubmission = VCLPresentationSubmission(
             presentationRequest: VCLPresentationRequest(
@@ -49,10 +48,10 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
             verifiableCredentials: [VCLVerifiableCredential]()
         )
         let expectedPresentationSubmissionResult =
-            expectedPresentationSubmissionResult(
-                PresentationSubmissionMocks.PresentationSubmissionResultJson.toDictionary()!,
-                presentationSubmission.jti, submissionId: presentationSubmission.submissionId
-            )
+        expectedPresentationSubmissionResult(
+            PresentationSubmissionMocks.PresentationSubmissionResultJson.toDictionary()!,
+            presentationSubmission.jti, submissionId: presentationSubmission.submissionId
+        )
         
         subject.submit(
             submission: presentationSubmission,

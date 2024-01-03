@@ -12,7 +12,7 @@ import XCTest
 @testable import VCL
 
 class VclBlocksProviderTest: XCTestCase {
-    let subject = VclBlocksProvider.self
+    private let subject = VclBlocksProvider.self
 
     func testChooseServiceByDefault() {
         do {

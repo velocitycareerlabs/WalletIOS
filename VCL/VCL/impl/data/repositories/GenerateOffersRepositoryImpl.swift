@@ -51,16 +51,16 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
         if let payload = offersResponse.payload.toDictionary() {
             return VCLOffers(
                 payload: payload,
-                all: (payload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]]) ?? [],
+                all: Utils.offersFromJsonArray(offersJsonArray: (payload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]] ?? [])),
                 responseCode: offersResponse.code,
                 sessionToken: sessionToken,
                 challenge: (payload[VCLOffers.CodingKeys.KeyChallenge] as? String) ?? ""
             )
         } // VCLXVnfProtocolVersion.XVnfProtocolVersion1
-        else if let allOffers = offersResponse.payload.toList() as? [[String: Any]] {
+        else if let offersJsonArray = offersResponse.payload.toList() as? [[String: Any]] {
             return VCLOffers(
                 payload: [:],
-                all: allOffers,
+                all: Utils.offersFromJsonArray(offersJsonArray: offersJsonArray),
                 responseCode: offersResponse.code,
                 sessionToken: sessionToken,
                 challenge: ""

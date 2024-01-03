@@ -12,19 +12,19 @@ import XCTest
 @testable import VCL
 
 final class CredentialTypesUseCaseTest: XCTestCase {
-    var subject: CredentialTypesUseCase!
+    private var subject: CredentialTypesUseCase!
     
     override func setUp() {
     }
     
-    func testCountryCodesSuccess() {
+    func testGetCredentialTypesSuccess() {
         subject = CredentialTypesUseCaseImpl(
             CredentialTypesRepositoryImpl(
                 NetworkServiceSuccess(
                     validResponse: CredentialTypesMocks.CredentialTypesJson
                 ), EmptyCacheService()
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
         
         subject.getCredentialTypes(cacheSequence: 1) { [weak self] in
@@ -39,6 +39,27 @@ final class CredentialTypesUseCaseTest: XCTestCase {
                 )
             } catch {
                 XCTFail("\(error)")
+            }
+        }
+    }
+    
+    func testGetCredentialTypesFailure() {
+        subject = CredentialTypesUseCaseImpl(
+            CredentialTypesRepositoryImpl(
+                NetworkServiceSuccess(
+                    validResponse: "wront payload"
+                ), EmptyCacheService()
+            ),
+            EmptyExecutor()
+        )
+        
+        subject.getCredentialTypes(cacheSequence: 1) {
+            do  {
+                let _ = try $0.get()
+                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+            }
+            catch {
+                assert((error as! VCLError).errorCode == VCLErrorCode.SdkError.rawValue)
             }
         }
     }

@@ -13,7 +13,7 @@ import XCTest
 
 final class VCLPresentationRequestDescriptorTest: XCTestCase {
     
-    var subject: VCLPresentationRequestDescriptor!
+    private var subject: VCLPresentationRequestDescriptor!
     
     override func setUp() {
     }

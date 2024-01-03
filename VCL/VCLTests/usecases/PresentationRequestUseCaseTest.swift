@@ -13,10 +13,9 @@ import XCTest
 
 final class PresentationRequestUseCaseTest: XCTestCase {
     
-    var subject: PresentationRequestUseCase!
+    private var subject: PresentationRequestUseCase!
     
-    func testCountryCodesSuccess() {
-        // Arrange
+    func testGetPresentationRequestSuccess() {
         let pushUrl = "push_url"
         let pushToken = "push_token"
         subject = PresentationRequestUseCaseImpl(
@@ -30,19 +29,22 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            ExecutorImpl()
+            PresentationRequestByDeepLinkVerifierImpl(),
+            EmptyExecutor()
         )
-        subject.getPresentationRequest(presentationRequestDescriptor: VCLPresentationRequestDescriptor(
-            deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet,
-            pushDelegate: VCLPushDelegate(
-                pushUrl: pushUrl,
-                pushToken: pushToken
-            )
-        ), remoteCryptoServicesToken: nil
+        subject.getPresentationRequest(
+            presentationRequestDescriptor: VCLPresentationRequestDescriptor(
+                deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet,
+                pushDelegate: VCLPushDelegate(
+                    pushUrl: pushUrl,
+                    pushToken: pushToken
+                )
+            ),
+            remoteCryptoServicesToken: nil
         ) {
             do {
                 let presentationRequest = try $0.get()
-
+                
                 assert(presentationRequest.publicJwk.valueStr.sorted() == VCLPublicJwk(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueStr.sorted())
                 assert(presentationRequest.publicJwk.valueDict == VCLPublicJwk(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueDict)
                 assert(presentationRequest.jwt.encodedJwt == PresentationRequestMocks.PresentationRequestJwt.encodedJwt)
@@ -52,6 +54,37 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 assert(presentationRequest.pushDelegate!.pushToken == pushToken)
             } catch {
                 XCTFail("\(error)")
+            }
+        }
+    }
+    
+    func testGetPresentationRequestFailure() {
+        subject = PresentationRequestUseCaseImpl(
+            PresentationRequestRepositoryImpl(
+                NetworkServiceSuccess(validResponse: "wrong payload")
+            ),
+            ResolveKidRepositoryImpl(
+                NetworkServiceSuccess(validResponse: PresentationRequestMocks.JWK)
+            ),
+            JwtServiceRepositoryImpl(
+                VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
+                VCLJwtVerifyServiceLocalImpl()
+            ),
+            PresentationRequestByDeepLinkVerifierImpl(),
+            EmptyExecutor()
+        )
+        subject.getPresentationRequest(
+            presentationRequestDescriptor: VCLPresentationRequestDescriptor(
+                deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet
+            ),
+            remoteCryptoServicesToken: nil
+        ) {
+            do  {
+                let _ = try $0.get()
+                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+            }
+            catch {
+                assert((error as! VCLError).errorCode == VCLErrorCode.SdkError.rawValue)
             }
         }
     }

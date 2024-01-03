@@ -16,13 +16,15 @@ public class VCLCredentialManifestDescriptor {
     public let pushDelegate: VCLPushDelegate?
     public let did: String?
     public let vendorOriginContext: String?
+    public let deepLink: VCLDeepLink?
     
     public init(
         uri: String?,
         issuingType: VCLIssuingType = VCLIssuingType.Career,
         credentialTypes: [String]? = nil,
         pushDelegate: VCLPushDelegate? = nil,
-        vendorOriginContext: String? = nil
+        vendorOriginContext: String? = nil,
+        deepLink: VCLDeepLink? = nil
     ) {
         self.uri = uri
         self.issuingType = issuingType
@@ -30,6 +32,7 @@ public class VCLCredentialManifestDescriptor {
         self.pushDelegate = pushDelegate
         self.did = uri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix)
         self.vendorOriginContext = vendorOriginContext
+        self.deepLink = deepLink
     }
     
     public var endpoint: String? { get { uri } }
