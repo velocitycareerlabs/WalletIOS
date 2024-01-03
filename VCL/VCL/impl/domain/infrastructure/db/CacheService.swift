@@ -21,4 +21,8 @@ protocol CacheService {
     func getCredentialTypeSchema(key: String) -> Data?
     func setCredentialTypeSchema(key: String, value: Data, cacheSequence: Int)
     func isResetCacheCredentialTypeSchema(cacheSequence: Int) -> Bool
+    
+    func getServiceTypes(key: String) -> Data?
+    func setServiceTypes(key: String, value: Data, cacheSequence: Int)
+    func isResetCacheServiceTypes(cacheSequence: Int) -> Bool
 }

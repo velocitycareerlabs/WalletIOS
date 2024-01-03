@@ -52,6 +52,7 @@ final class UrlsTest: XCTestCase {
     
     private func verifyUrlsPrefix(_ registrarPrefix: String) {
         assert(Urls.CredentialTypes.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.CredentialTypes)")
+        assert(Urls.ServiceTypes.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.ServiceTypes)")
         assert(Urls.CredentialTypeSchemas.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.CredentialTypeSchemas)")
         assert(Urls.Countries.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.Countries)")
         assert(Urls.Organizations.hasPrefix(registrarPrefix), "expected: \(registrarPrefix), actual: \(Urls.Organizations)")

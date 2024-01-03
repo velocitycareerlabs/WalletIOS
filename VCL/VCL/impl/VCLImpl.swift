@@ -9,13 +9,14 @@
 
 public class VCLImpl: VCL {
     
-    private static let ModelsToInitializeAmount = 3
+    private static let ModelsToInitializeAmount = 4
     
     private var initializationDescriptor: VCLInitializationDescriptor!
     
     private var credentialTypesModel: CredentialTypesModel!
     private var credentialTypeSchemasModel: CredentialTypeSchemasModel!
     private var countriesModel: CountriesModel!
+    private var serviceTypesModel: ServiceTypesModel!
     
     private var presentationRequestUseCase: PresentationRequestUseCase!
     private var presentationSubmissionUseCase: PresentationSubmissionUseCase!
@@ -115,6 +116,8 @@ public class VCLImpl: VCL {
         
         countriesModel = VclBlocksProvider.provideCountriesModel()
         
+        serviceTypesModel = VclBlocksProvider.provideServiceTypesModel()
+        
         countriesModel.initialize(cacheSequence: cacheSequence) { [weak self] result in
             do {
                 _ = try result.get()
@@ -154,6 +157,19 @@ public class VCLImpl: VCL {
                 }
             } catch {
                 if self?.initializationWatcher.onInitializedModel(error: error as? VCLError, enforceFailure: true) == true {
+                    self?.completionHandler(successHandler, errorHandler)
+                }
+            }
+        }
+        
+        serviceTypesModel.initialize(cacheSequence: cacheSequence) { [weak self] result in
+            do {
+                _ = try result.get()
+                if self?.initializationWatcher.onInitializedModel(error: nil) == true {
+                    self?.completionHandler(successHandler, errorHandler)
+                }
+            } catch {
+                if self?.initializationWatcher.onInitializedModel(error: error as? VCLError) == true {
                     self?.completionHandler(successHandler, errorHandler)
                 }
             }
