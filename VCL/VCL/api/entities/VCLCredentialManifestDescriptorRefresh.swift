@@ -32,7 +32,7 @@ public class VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescri
         return uri?.appendQueryParams(queryParams: "\(CodingKeys.KeyRefresh)=\(true)")
     }}
     
-    func generateQueryParams() -> String? {
+    override func generateQueryParams() -> String? {
         let pCredentialIds = "\(self.credentialIds.map{ id in "\(CodingKeys.KeyCredentialId)=\(id.encode() ?? "")" }.joined(separator: "&"))"
 
         let qParams = [pCredentialIds].compactMap{ $0 }.filter { !$0.isEmpty }
