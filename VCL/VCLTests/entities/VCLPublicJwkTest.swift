@@ -13,7 +13,7 @@ import XCTest
 
 final class VCLPublicJwkTest: XCTestCase {
     
-    var subject: VCLPublicJwk!
+    private var subject: VCLPublicJwk!
     
     static let jwkDict = KeyServiceMocks.JWK.toDictionary()!
     

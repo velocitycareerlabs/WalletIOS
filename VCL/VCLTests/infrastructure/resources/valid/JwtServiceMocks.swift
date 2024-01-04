@@ -8,8 +8,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-@testable import VCToken
-@testable import VCCrypto
+import VCToken
+import VCCrypto
 @testable import VCL
 
 class JwtServiceMocks {

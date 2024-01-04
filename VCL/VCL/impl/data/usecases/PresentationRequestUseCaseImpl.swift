@@ -1,6 +1,6 @@
 //
 //  PresentationRequestUseCaseImpl.swift
-//  
+//  VCL
 //
 //  Created by Michael Avoyan on 02/04/2021.
 //
@@ -14,17 +14,20 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     private let presentationRequestRepository: PresentationRequestRepository
     private let resolveKidRepository: ResolveKidRepository
     private let jwtServiceRepository: JwtServiceRepository
+    private let presentationRequestByDeepLinkVerifier: PresentationRequestByDeepLinkVerifier
     private let executor: Executor
     
     init(
         _ presentationRequestRepository: PresentationRequestRepository,
         _ resolveKidRepository: ResolveKidRepository,
         _ verifyRepository: JwtServiceRepository,
+        _ presentationRequestByDeepLinkVerifier: PresentationRequestByDeepLinkVerifier,
         _ executor: Executor
     ) {
         self.presentationRequestRepository = presentationRequestRepository
         self.resolveKidRepository = resolveKidRepository
         self.jwtServiceRepository = verifyRepository
+        self.presentationRequestByDeepLinkVerifier = presentationRequestByDeepLinkVerifier
         self.executor = executor
     }
     
@@ -97,16 +100,27 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
             publicJwk: presentationRequest.publicJwk,
             remoteCryptoServicesToken: remoteCryptoServicesToken
         ) {
-            [weak self] isVerifiedResult in
+            [weak self] jwtVerificationRes in
             do {
-                let isVerified = try isVerifiedResult.get()
-                self?.onVerificationSuccess(
-                    isVerified,
-                    presentationRequest,
-                    completionBlock
-                )
+                let isVerified = try jwtVerificationRes.get()
+                self?.presentationRequestByDeepLinkVerifier.verifyPresentationRequest(
+                    presentationRequest: presentationRequest,
+                    deepLink: presentationRequestDescriptor.deepLink
+                ) { byDeepLinkVerificationRes in
+                    do {
+                        let isVerified = try byDeepLinkVerificationRes.get()
+                        VCLLog.d("Presentation request by deep link verification result: \(isVerified)")
+                        self?.onVerificationSuccess(
+                            isVerified,
+                            presentationRequest,
+                            completionBlock
+                        )
+                    } catch {
+                        self?.onError(error, completionBlock)
+                    }
+                }
             } catch {
-                self?.onError(VCLError(error: error), completionBlock)
+                self?.onError(error, completionBlock)
             }
         }
     }

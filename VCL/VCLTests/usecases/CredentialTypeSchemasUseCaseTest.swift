@@ -13,7 +13,7 @@ import XCTest
 
 final class CredentialTypeSchemasUseCaseTest: XCTestCase {
     
-    var subject: CredentialTypeSchemasUseCase!
+    private var subject: CredentialTypeSchemasUseCase!
     
     override func setUp() {
     }
@@ -24,7 +24,7 @@ final class CredentialTypeSchemasUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(validResponse: CredentialTypeSchemaMocks.CredentialTypeSchemaJson), EmptyCacheService()
             ),
             CredentialTypeSchemaMocks.CredentialTypes,
-            ExecutorImpl(),
+            EmptyExecutor(),
             DispatcherImpl(),
             DsptchQueueImpl("CredentialTypeSchemas")
         )

@@ -45,4 +45,16 @@ extension Data {
     func toBool() -> Bool? {
         return String(data: self, encoding: .utf8).flatMap(Bool.init)
     }
+    
+    func toJwtList() -> [VCLJwt]? {
+        if let jsonArray = try? JSONSerialization.jsonObject(with: self) as? [String] {
+            var jwtCredentials = [VCLJwt]()
+            for jwtEncodedCredential in jsonArray {
+                let jwt = VCLJwt(encodedJwt: jwtEncodedCredential)
+                jwtCredentials.append(jwt)
+            }
+            return jwtCredentials
+        }
+        return nil
+    }
 }

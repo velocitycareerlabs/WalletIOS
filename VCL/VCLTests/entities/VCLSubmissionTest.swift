@@ -12,7 +12,7 @@ import XCTest
 @testable import VCL
 
 final class VCLSubmissionTest: XCTestCase {
-    var subject: VCLSubmission!
+    private var subject: VCLSubmission!
 
     override func setUp() {
         subject = VCLPresentationSubmission(

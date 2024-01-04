@@ -13,14 +13,14 @@ import XCTest
 
 final class KeyServiceUseCaseTest: XCTestCase {
     
-    var subject: KeyServiceUseCase!
+    private var subject: KeyServiceUseCase!
 
     override func setUp() {
         subject = KeyServiceUseCaseImpl(
             KeyServiceRepositoryImpl(
                 VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
             ),
-            ExecutorImpl()
+            EmptyExecutor()
         )
     }
 

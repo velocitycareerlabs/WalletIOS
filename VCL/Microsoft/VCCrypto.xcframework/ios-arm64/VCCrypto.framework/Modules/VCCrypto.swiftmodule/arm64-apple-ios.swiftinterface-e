@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.9 (swiftlang-5.9.0.128.108 clang-1500.0.40.1)
+// swift-compiler-version: Apple Swift version 5.9.2 (swiftlang-5.9.2.2.56 clang-1500.1.0.2.5)
 // swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name VCCrypto
 // swift-module-flags-ignorable: -enable-bare-slash-regex
 import CommonCrypto
@@ -11,7 +11,7 @@ import Swift
 import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
-public struct Sha512 : VCCrypto.Hashing {
+public struct Sha512 : Hashing {
   public init()
   public func hash(data: Foundation.Data) -> Foundation.Data
 }
@@ -30,8 +30,8 @@ public protocol SecretStoring {
   func deleteSecret(id: Foundation.UUID, itemTypeCode: Swift.String, accessGroup: Swift.String?) throws
 }
 public protocol KeyManagementOperating {
-  func generateKey() throws -> any VCCrypto.VCCryptoSecret
-  func retrieveKeyFromStorage(withId id: Foundation.UUID) -> any VCCrypto.VCCryptoSecret
+  func generateKey() throws -> any VCCryptoSecret
+  func retrieveKeyFromStorage(withId id: Foundation.UUID) -> any VCCryptoSecret
   func save(key: Foundation.Data, withId id: Foundation.UUID) throws
   func deleteKey(withId id: Foundation.UUID) throws
   func getKey(withId id: Foundation.UUID) throws -> Foundation.Data
@@ -39,7 +39,7 @@ public protocol KeyManagementOperating {
 public enum SupportedHashAlgorithm {
   case SHA256
   case SHA512
-  public static func == (a: VCCrypto.SupportedHashAlgorithm, b: VCCrypto.SupportedHashAlgorithm) -> Swift.Bool
+  public static func == (a: SupportedHashAlgorithm, b: SupportedHashAlgorithm) -> Swift.Bool
   public func hash(into hasher: inout Swift.Hasher)
   public var hashValue: Swift.Int {
     get
@@ -49,11 +49,11 @@ public protocol PublicKey {
   var algorithm: Swift.String { get }
   var uncompressedValue: Foundation.Data { get }
 }
-public struct KeyManagementOperations : VCCrypto.KeyManagementOperating {
-  public init(sdkConfiguration: any VCCrypto.VCSDKConfigurable)
-  public init(secretStore: any VCCrypto.SecretStoring, sdkConfiguration: any VCCrypto.VCSDKConfigurable)
-  public func generateKey() throws -> any VCCrypto.VCCryptoSecret
-  public func retrieveKeyFromStorage(withId id: Foundation.UUID) -> any VCCrypto.VCCryptoSecret
+public struct KeyManagementOperations : KeyManagementOperating {
+  public init(sdkConfiguration: any VCSDKConfigurable)
+  public init(secretStore: any SecretStoring, sdkConfiguration: any VCSDKConfigurable)
+  public func generateKey() throws -> any VCCryptoSecret
+  public func retrieveKeyFromStorage(withId id: Foundation.UUID) -> any VCCryptoSecret
   public func save(key: Foundation.Data, withId id: Foundation.UUID) throws
   public func deleteKey(withId id: Foundation.UUID) throws
   public func getKey(withId id: Foundation.UUID) throws -> Foundation.Data
@@ -68,22 +68,22 @@ public enum CryptoOperationsError : Swift.Error {
   case signingAlgorithmDoesNotSupportGetPublicKey
   case signingAlgorithmDoesNotSupportSigning
   case signingAlgorithmDoesNotSupportVerification
-  public static func == (a: VCCrypto.CryptoOperationsError, b: VCCrypto.CryptoOperationsError) -> Swift.Bool
+  public static func == (a: CryptoOperationsError, b: CryptoOperationsError) -> Swift.Bool
   public func hash(into hasher: inout Swift.Hasher)
   public var hashValue: Swift.Int {
     get
   }
 }
-public struct CryptoOperations : VCCrypto.CryptoOperating {
-  public init(signingAlgorithms: [Swift.String : VCCrypto.SigningAlgorithm] = [:])
-  public func sign(message: Foundation.Data, usingSecret secret: any VCCrypto.VCCryptoSecret, algorithm: Swift.String = SupportedCurve.Secp256k1.rawValue) throws -> Foundation.Data
-  public func getPublicKey(fromSecret secret: any VCCrypto.VCCryptoSecret, algorithm: Swift.String = SupportedCurve.Secp256k1.rawValue) throws -> any VCCrypto.PublicKey
-  public func verify(signature: Foundation.Data, forMessage message: Foundation.Data, usingPublicKey publicKey: any VCCrypto.PublicKey) throws -> Swift.Bool
+public struct CryptoOperations : CryptoOperating {
+  public init(signingAlgorithms: [Swift.String : SigningAlgorithm] = [:])
+  public func sign(message: Foundation.Data, usingSecret secret: any VCCryptoSecret, algorithm: Swift.String = SupportedCurve.Secp256k1.rawValue) throws -> Foundation.Data
+  public func getPublicKey(fromSecret secret: any VCCryptoSecret, algorithm: Swift.String = SupportedCurve.Secp256k1.rawValue) throws -> any PublicKey
+  public func verify(signature: Foundation.Data, forMessage message: Foundation.Data, usingPublicKey publicKey: any PublicKey) throws -> Swift.Bool
 }
 public protocol CryptoOperating {
-  func sign(message: Foundation.Data, usingSecret secret: any VCCrypto.VCCryptoSecret, algorithm: Swift.String) throws -> Foundation.Data
-  func getPublicKey(fromSecret secret: any VCCrypto.VCCryptoSecret, algorithm: Swift.String) throws -> any VCCrypto.PublicKey
-  func verify(signature: Foundation.Data, forMessage message: Foundation.Data, usingPublicKey publicKey: any VCCrypto.PublicKey) throws -> Swift.Bool
+  func sign(message: Foundation.Data, usingSecret secret: any VCCryptoSecret, algorithm: Swift.String) throws -> Foundation.Data
+  func getPublicKey(fromSecret secret: any VCCryptoSecret, algorithm: Swift.String) throws -> any PublicKey
+  func verify(signature: Foundation.Data, forMessage message: Foundation.Data, usingPublicKey publicKey: any PublicKey) throws -> Swift.Bool
 }
 extension Foundation.Data {
   public init(hexString: Swift.String)
@@ -91,23 +91,23 @@ extension Foundation.Data {
 }
 public struct Pbkdf {
   public init()
-  public func derive(from password: Swift.String, withSaltInput p2s: Foundation.Data, forAlgorithm algorithm: Swift.String, rounds: Swift.UInt32) throws -> any VCCrypto.VCCryptoSecret
+  public func derive(from password: Swift.String, withSaltInput p2s: Foundation.Data, forAlgorithm algorithm: Swift.String, rounds: Swift.UInt32) throws -> any VCCryptoSecret
 }
 @available(*, deprecated, message: "Superceded by HmacSha2")
 public struct HmacSha512 {
   public init()
-  public func authenticate(message: Foundation.Data, withSecret secret: any VCCrypto.VCCryptoSecret) throws -> Foundation.Data
-  public func isValidAuthenticationCode(_ mac: Foundation.Data, authenticating message: Foundation.Data, withSecret secret: any VCCrypto.VCCryptoSecret) throws -> Swift.Bool
+  public func authenticate(message: Foundation.Data, withSecret secret: any VCCryptoSecret) throws -> Foundation.Data
+  public func isValidAuthenticationCode(_ mac: Foundation.Data, authenticating message: Foundation.Data, withSecret secret: any VCCryptoSecret) throws -> Swift.Bool
 }
 public struct HmacSha2 {
   public init(algorithm: Swift.UInt32) throws
-  public func authenticate(message: Foundation.Data, with secret: any VCCrypto.VCCryptoSecret) throws -> Foundation.Data
-  public func validate(_ mac: Foundation.Data, authenticating message: Foundation.Data, with secret: any VCCrypto.VCCryptoSecret) throws -> Swift.Bool
+  public func authenticate(message: Foundation.Data, with secret: any VCCryptoSecret) throws -> Foundation.Data
+  public func validate(_ mac: Foundation.Data, authenticating message: Foundation.Data, with secret: any VCCryptoSecret) throws -> Swift.Bool
 }
 public protocol VCSDKConfigurable {
   var accessGroupIdentifier: Swift.String? { get }
 }
-public struct Sha256 : VCCrypto.Hashing {
+public struct Sha256 : Hashing {
   public init()
   public func hash(data: Foundation.Data) -> Foundation.Data
 }
@@ -117,7 +117,7 @@ public enum SupportedSigningOperations {
   case Signing
   case Verification
   case GetPublicKey
-  public static func == (a: VCCrypto.SupportedSigningOperations, b: VCCrypto.SupportedSigningOperations) -> Swift.Bool
+  public static func == (a: SupportedSigningOperations, b: SupportedSigningOperations) -> Swift.Bool
   public func hash(into hasher: inout Swift.Hasher)
   public var hashValue: Swift.Int {
     get
@@ -141,22 +141,22 @@ public enum SupportedCurve : Swift.String {
 public protocol Hashing {
   func hash(data: Foundation.Data) -> Foundation.Data
 }
-public struct Secp256k1 : VCCrypto.Signing {
+public struct Secp256k1 : Signing {
   public init()
-  public func sign(message: Foundation.Data, withSecret secret: any VCCrypto.VCCryptoSecret) throws -> Foundation.Data
-  public func isValidSignature(signature: Foundation.Data, forMessage message: Foundation.Data, usingPublicKey publicKey: any VCCrypto.PublicKey) throws -> Swift.Bool
-  public func createPublicKey(forSecret secret: any VCCrypto.VCCryptoSecret) throws -> any VCCrypto.PublicKey
-  public func createKeyPair(forSecret secret: any VCCrypto.VCCryptoSecret) throws -> (VCCrypto.EphemeralSecret, VCCrypto.Secp256k1PublicKey)
-  public func createPublicKey(forPrivateKey privateKey: VCCrypto.EphemeralSecret) throws -> VCCrypto.Secp256k1PublicKey
+  public func sign(message: Foundation.Data, withSecret secret: any VCCryptoSecret) throws -> Foundation.Data
+  public func isValidSignature(signature: Foundation.Data, forMessage message: Foundation.Data, usingPublicKey publicKey: any PublicKey) throws -> Swift.Bool
+  public func createPublicKey(forSecret secret: any VCCryptoSecret) throws -> any PublicKey
+  public func createKeyPair(forSecret secret: any VCCryptoSecret) throws -> (EphemeralSecret, Secp256k1PublicKey)
+  public func createPublicKey(forPrivateKey privateKey: EphemeralSecret) throws -> Secp256k1PublicKey
 }
 public struct Aes {
   public init()
-  public func wrap(key: any VCCrypto.VCCryptoSecret, with kek: any VCCrypto.VCCryptoSecret) throws -> Foundation.Data
-  public func unwrap(wrapped: Foundation.Data, using kek: any VCCrypto.VCCryptoSecret) throws -> any VCCrypto.VCCryptoSecret
-  public func encrypt(data: Foundation.Data, with key: any VCCrypto.VCCryptoSecret, iv: Foundation.Data) throws -> Foundation.Data
-  public func decrypt(data: Foundation.Data, with key: any VCCrypto.VCCryptoSecret, iv: Foundation.Data) throws -> Foundation.Data
+  public func wrap(key: any VCCryptoSecret, with kek: any VCCryptoSecret) throws -> Foundation.Data
+  public func unwrap(wrapped: Foundation.Data, using kek: any VCCryptoSecret) throws -> any VCCryptoSecret
+  public func encrypt(data: Foundation.Data, with key: any VCCryptoSecret, iv: Foundation.Data) throws -> Foundation.Data
+  public func decrypt(data: Foundation.Data, with key: any VCCryptoSecret, iv: Foundation.Data) throws -> Foundation.Data
 }
-public class Secp256k1PublicKey : VCCrypto.PublicKey {
+public class Secp256k1PublicKey : PublicKey {
   final public let x: Foundation.Data
   final public let y: Foundation.Data
   final public let algorithm: Swift.String
@@ -168,17 +168,17 @@ public class Secp256k1PublicKey : VCCrypto.PublicKey {
   @objc deinit
 }
 public protocol Signing {
-  func sign(message: Foundation.Data, withSecret secret: any VCCrypto.VCCryptoSecret) throws -> Foundation.Data
-  func isValidSignature(signature: Foundation.Data, forMessage message: Foundation.Data, usingPublicKey publicKey: any VCCrypto.PublicKey) throws -> Swift.Bool
-  func createPublicKey(forSecret secret: any VCCrypto.VCCryptoSecret) throws -> any VCCrypto.PublicKey
+  func sign(message: Foundation.Data, withSecret secret: any VCCryptoSecret) throws -> Foundation.Data
+  func isValidSignature(signature: Foundation.Data, forMessage message: Foundation.Data, usingPublicKey publicKey: any PublicKey) throws -> Swift.Bool
+  func createPublicKey(forSecret secret: any VCCryptoSecret) throws -> any PublicKey
 }
 public struct HmacSha2AesCbc {
   public init(methodName: Swift.String) throws
-  public func encrypt(plainText: Foundation.Data, using aad: Foundation.Data, iv: Foundation.Data, with keys: (mac: VCCrypto.EphemeralSecret, enc: VCCrypto.EphemeralSecret)) throws -> (Foundation.Data, Foundation.Data)
-  public func decrypt(_ input: (cipherText: Foundation.Data, mac: Foundation.Data), using aad: Foundation.Data, iv: Foundation.Data, with keys: (mac: VCCrypto.EphemeralSecret, enc: VCCrypto.EphemeralSecret)) throws -> Foundation.Data
+  public func encrypt(plainText: Foundation.Data, using aad: Foundation.Data, iv: Foundation.Data, with keys: (mac: EphemeralSecret, enc: EphemeralSecret)) throws -> (Foundation.Data, Foundation.Data)
+  public func decrypt(_ input: (cipherText: Foundation.Data, mac: Foundation.Data), using aad: Foundation.Data, iv: Foundation.Data, with keys: (mac: EphemeralSecret, enc: EphemeralSecret)) throws -> Foundation.Data
   public static func props(for methodName: Swift.String) throws -> (Swift.Int, Swift.Int)
 }
-public class ED25519PublicKey : VCCrypto.PublicKey {
+public class ED25519PublicKey : PublicKey {
   final public let algorithm: Swift.String
   final public let uncompressedValue: Foundation.Data
   public init?(x: Foundation.Data)
@@ -194,21 +194,21 @@ final public class EphemeralSecret {
   }
   public init(with data: Foundation.Data, id: Foundation.UUID? = nil, accessGroup: Swift.String? = nil)
   public init(size: Swift.Int = 32) throws
-  public init(with secret: any VCCrypto.VCCryptoSecret) throws
+  public init(with secret: any VCCryptoSecret) throws
   final public func withUnsafeBytes(_ body: (Swift.UnsafeRawBufferPointer) throws -> Swift.Void) throws
   final public func isValidKey() throws
   final public func migrateKey(fromAccessGroup currentAccessGroup: Swift.String?) throws
-  final public func prefix(_ maxLength: Swift.Int) -> VCCrypto.EphemeralSecret
-  final public func suffix(_ maxLength: Swift.Int) -> VCCrypto.EphemeralSecret
+  final public func prefix(_ maxLength: Swift.Int) -> EphemeralSecret
+  final public func suffix(_ maxLength: Swift.Int) -> EphemeralSecret
   @objc deinit
 }
-extension VCCrypto.SupportedHashAlgorithm : Swift.Equatable {}
-extension VCCrypto.SupportedHashAlgorithm : Swift.Hashable {}
-extension VCCrypto.CryptoOperationsError : Swift.Equatable {}
-extension VCCrypto.CryptoOperationsError : Swift.Hashable {}
-extension VCCrypto.SupportedSigningOperations : Swift.Equatable {}
-extension VCCrypto.SupportedSigningOperations : Swift.Hashable {}
-extension VCCrypto.SupportedCurve : Swift.Equatable {}
-extension VCCrypto.SupportedCurve : Swift.Hashable {}
-extension VCCrypto.SupportedCurve : Swift.RawRepresentable {}
-extension VCCrypto.EphemeralSecret : VCCrypto.VCCryptoSecret {}
+extension SupportedHashAlgorithm : Swift.Equatable {}
+extension SupportedHashAlgorithm : Swift.Hashable {}
+extension CryptoOperationsError : Swift.Equatable {}
+extension CryptoOperationsError : Swift.Hashable {}
+extension SupportedSigningOperations : Swift.Equatable {}
+extension SupportedSigningOperations : Swift.Hashable {}
+extension SupportedCurve : Swift.Equatable {}
+extension SupportedCurve : Swift.Hashable {}
+extension SupportedCurve : Swift.RawRepresentable {}
+extension EphemeralSecret : VCCryptoSecret {}

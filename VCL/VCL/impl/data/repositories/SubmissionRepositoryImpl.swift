@@ -58,10 +58,11 @@ class SubmissionRepositoryImpl: SubmissionRepository {
     }
     
     private func parseExchange(_ exchangeJsonDict: [String: Any]?) -> VCLExchange {
-        return VCLExchange(id: exchangeJsonDict?[VCLExchange.CodingKeys.KeyId] as? String,
-                           type: exchangeJsonDict?[VCLExchange.CodingKeys.KeyType] as? String,
-                           disclosureComplete: exchangeJsonDict?[VCLExchange.CodingKeys.KeyDisclosureComplete] as? Bool,
-                           exchangeComplete: exchangeJsonDict?[VCLExchange.CodingKeys.KeyExchangeComplete] as? Bool
+        return VCLExchange(
+            id: exchangeJsonDict?[VCLExchange.CodingKeys.KeyId] as? String,
+            type: exchangeJsonDict?[VCLExchange.CodingKeys.KeyType] as? String,
+            disclosureComplete: exchangeJsonDict?[VCLExchange.CodingKeys.KeyDisclosureComplete] as? Bool,
+            exchangeComplete: exchangeJsonDict?[VCLExchange.CodingKeys.KeyExchangeComplete] as? Bool
         )
     }
 }
