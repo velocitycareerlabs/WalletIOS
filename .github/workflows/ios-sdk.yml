@@ -12,7 +12,7 @@ jobs:
     runs-on: macos-13 
     env:
       #Xcode config
-      XC_VERSION: "14.2"
+      XC_VERSION: "15.1"
       #Certs
       ENCRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz.gpg"
       DECRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz"
