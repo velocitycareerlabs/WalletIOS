@@ -7,11 +7,6 @@ on:
       - main
       - rc
       - dev
-  pull_request:
-    branches:
-      - main
-      - rc
-      - dev
 
 jobs:
   tests-ios-sdk:
