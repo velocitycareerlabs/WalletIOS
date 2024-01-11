@@ -1,0 +1,25 @@
+name: WalletIOS-SDK Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - rc
+      - dev
+
+jobs:
+  tests-ios-sdk:
+    runs-on: macos-13 
+    env:
+      #Xcode config
+      XC_VERSION: "15.1"
+    steps:
+      # Git clone repository
+      - name: Git clone repository
+        uses: actions/checkout@v4
+      # Select latest Xcode
+      - name: Select latest Xcode
+        run: "sudo xcode-select -s /Applications/Xcode_${{ env.XC_VERSION }}.app"
+      - name: Run tests
+        run: xcodebuild test -project VCL.xcodeproj -scheme VCL -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2'
+        working-directory: VCL
