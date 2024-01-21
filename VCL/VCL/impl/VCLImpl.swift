@@ -312,7 +312,8 @@ public class VCLImpl: VCL {
     ) {
         let identificationSubmission = VCLIdentificationSubmission(
             credentialManifest: generateOffersDescriptor.credentialManifest,
-            verifiableCredentials: generateOffersDescriptor.identificationVerifiableCredentials
+            verifiableCredentials: generateOffersDescriptor.identificationVerifiableCredentials,
+            iss: didJwk?.kid
         )
         identificationSubmissionUseCase.submit(
             submission: identificationSubmission,

@@ -15,13 +15,14 @@ public class VCLPresentationSubmission: VCLSubmission {
 
     public init(
         presentationRequest: VCLPresentationRequest,
-        verifiableCredentials: [VCLVerifiableCredential]
+        verifiableCredentials: [VCLVerifiableCredential],
+        iss: String? = nil
     ) {
         self.progressUri = presentationRequest.progressUri
         
         super.init(
             submitUri: presentationRequest.submitPresentationUri,
-            iss: presentationRequest.iss,
+            iss: iss ?? "",
             exchangeId: presentationRequest.exchangeId,
             presentationDefinitionId: presentationRequest.presentationDefinitionId,
             verifiableCredentials: verifiableCredentials,

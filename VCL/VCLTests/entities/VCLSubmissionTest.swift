@@ -12,36 +12,53 @@ import XCTest
 @testable import VCL
 
 final class VCLSubmissionTest: XCTestCase {
-    private var subject: VCLSubmission!
+    private var subjectPresentationSubmission: VCLSubmission!
+    private var subjectIdentificationSubmission: VCLSubmission!
 
     override func setUp() {
-        subject = VCLPresentationSubmission(
+        subjectPresentationSubmission = VCLPresentationSubmission(
             presentationRequest: PresentationSubmissionMocks.PresentationRequest,
-            verifiableCredentials: PresentationSubmissionMocks.SelectionsList
+            verifiableCredentials: PresentationSubmissionMocks.SelectionsList,
+            iss: "inspection iss"
+        )
+        
+        subjectIdentificationSubmission = VCLIdentificationSubmission(
+            credentialManifest: VCLCredentialManifest(
+                jwt: CommonMocks.JWT,
+                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+            ),
+            verifiableCredentials: PresentationSubmissionMocks.SelectionsList,
+            iss: "issuing iss"
         )
     }
 
     func testPayload() {
-        assert(subject.payload[VCLSubmission.CodingKeys.KeyJti] as! String == subject.jti)
+        let pl = subjectPresentationSubmission.payload
+        let iss = subjectPresentationSubmission.payload[VCLSubmission.CodingKeys.KeyIss] as? String
+        assert(subjectPresentationSubmission.payload[VCLSubmission.CodingKeys.KeyJti] as? String == subjectPresentationSubmission.jti)
+        assert(subjectPresentationSubmission.payload[VCLSubmission.CodingKeys.KeyIss] as? String == subjectPresentationSubmission.iss)
+
+        assert(subjectIdentificationSubmission.payload[VCLSubmission.CodingKeys.KeyJti] as? String == subjectIdentificationSubmission.jti)
+        assert(subjectIdentificationSubmission.payload[VCLSubmission.CodingKeys.KeyIss] as? String == subjectIdentificationSubmission.iss)
     }
 
     func testPushDelegate() {
-        assert(subject.pushDelegate!.pushUrl == PresentationSubmissionMocks.PushDelegate.pushUrl)
-        assert(subject.pushDelegate!.pushToken == PresentationSubmissionMocks.PushDelegate.pushToken)
+        assert(subjectPresentationSubmission.pushDelegate!.pushUrl == PresentationSubmissionMocks.PushDelegate.pushUrl)
+        assert(subjectPresentationSubmission.pushDelegate!.pushToken == PresentationSubmissionMocks.PushDelegate.pushToken)
     }
 
     func testRequestBody() {
-        let requestBodyJsonObj = subject.generateRequestBody(jwt: JwtServiceMocks.JWT)
-        assert(requestBodyJsonObj[VCLSubmission.CodingKeys.KeyExchangeId] as! String == subject.exchangeId)
-        assert(requestBodyJsonObj[VCLSubmission.CodingKeys.KeyContext] as! [String] == VCLSubmission.CodingKeys.ValueContextList)
+        let requestBodyJsonObj = subjectPresentationSubmission.generateRequestBody(jwt: JwtServiceMocks.JWT)
+        assert(requestBodyJsonObj[VCLSubmission.CodingKeys.KeyExchangeId] as? String == subjectPresentationSubmission.exchangeId)
+        assert(requestBodyJsonObj[VCLSubmission.CodingKeys.KeyContext] as? [String] == VCLSubmission.CodingKeys.ValueContextList)
 
         let pushDelegateBodyJsonObj = requestBodyJsonObj[VCLSubmission.CodingKeys.KeyPushDelegate] as! [String: Any]
 
-        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushUrl] as! String == PresentationSubmissionMocks.PushDelegate.pushUrl)
-        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushToken] as! String == PresentationSubmissionMocks.PushDelegate.pushToken)
+        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushUrl] as? String == PresentationSubmissionMocks.PushDelegate.pushUrl)
+        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushToken] as? String == PresentationSubmissionMocks.PushDelegate.pushToken)
 
-        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushUrl] as! String == subject.pushDelegate!.pushUrl)
-        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushToken] as! String == subject.pushDelegate!.pushToken)
+        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushUrl] as? String == subjectPresentationSubmission.pushDelegate!.pushUrl)
+        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushToken] as? String == subjectPresentationSubmission.pushDelegate!.pushToken)
     }
     
     func testContext() {

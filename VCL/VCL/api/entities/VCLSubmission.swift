@@ -44,6 +44,7 @@ public class VCLSubmission {
     private func generatePayload() -> [String: Any] {
         var retVal = [String: Any]()
         retVal[CodingKeys.KeyJti] = self.jti
+        retVal[CodingKeys.KeyIss] = self.iss
         var vp = [String: Any]()
         vp[CodingKeys.KeyType] = CodingKeys.ValueVerifiablePresentation
         var presentationSubmissionDict = [String: Any]()
