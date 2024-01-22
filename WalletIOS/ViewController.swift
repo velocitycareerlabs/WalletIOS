@@ -122,8 +122,7 @@ class ViewController: UIViewController {
     private func submitPresentation(presentationRequest: VCLPresentationRequest)  {
         let presentationSubmission = VCLPresentationSubmission(
             presentationRequest: presentationRequest,
-            verifiableCredentials: Constants.PresentationSelectionsList,
-            iss: didJwk?.did
+            verifiableCredentials: Constants.PresentationSelectionsList
         )
         submitPresentation(presentationSubmission: presentationSubmission)
     }
