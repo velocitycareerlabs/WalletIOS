@@ -15,8 +15,7 @@ public class VCLPresentationSubmission: VCLSubmission {
 
     public init(
         presentationRequest: VCLPresentationRequest,
-        verifiableCredentials: [VCLVerifiableCredential],
-        iss: String? = nil
+        verifiableCredentials: [VCLVerifiableCredential]
     ) {
         self.progressUri = presentationRequest.progressUri
         

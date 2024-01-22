@@ -14,12 +14,14 @@ import XCTest
 final class VCLSubmissionTest: XCTestCase {
     private var subjectPresentationSubmission: VCLSubmission!
     private var subjectIdentificationSubmission: VCLSubmission!
+    
+    private let issuingIss = "issuing iss"
+    private let inspectionIss = "inspection iss"
 
     override func setUp() {
         subjectPresentationSubmission = VCLPresentationSubmission(
             presentationRequest: PresentationSubmissionMocks.PresentationRequest,
-            verifiableCredentials: PresentationSubmissionMocks.SelectionsList,
-            iss: "inspection iss"
+            verifiableCredentials: PresentationSubmissionMocks.SelectionsList
         )
         
         subjectIdentificationSubmission = VCLIdentificationSubmission(
@@ -27,19 +29,18 @@ final class VCLSubmissionTest: XCTestCase {
                 jwt: CommonMocks.JWT,
                 verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
             ),
-            verifiableCredentials: PresentationSubmissionMocks.SelectionsList,
-            iss: "issuing iss"
+            verifiableCredentials: PresentationSubmissionMocks.SelectionsList
         )
     }
 
     func testPayload() {
-        let pl = subjectPresentationSubmission.payload
-        let iss = subjectPresentationSubmission.payload[VCLSubmission.CodingKeys.KeyIss] as? String
-        assert(subjectPresentationSubmission.payload[VCLSubmission.CodingKeys.KeyJti] as? String == subjectPresentationSubmission.jti)
-        assert(subjectPresentationSubmission.payload[VCLSubmission.CodingKeys.KeyIss] as? String == subjectPresentationSubmission.iss)
+        let presentationSubmissionPayload = subjectPresentationSubmission.generatePayload(iss: inspectionIss)
+        assert(presentationSubmissionPayload[VCLSubmission.CodingKeys.KeyJti] as? String == subjectPresentationSubmission.jti)
+        assert(presentationSubmissionPayload[VCLSubmission.CodingKeys.KeyIss] as? String == inspectionIss)
 
-        assert(subjectIdentificationSubmission.payload[VCLSubmission.CodingKeys.KeyJti] as? String == subjectIdentificationSubmission.jti)
-        assert(subjectIdentificationSubmission.payload[VCLSubmission.CodingKeys.KeyIss] as? String == subjectIdentificationSubmission.iss)
+        let identificationSubmissionPayload = subjectIdentificationSubmission.generatePayload(iss: issuingIss)
+        assert(identificationSubmissionPayload[VCLSubmission.CodingKeys.KeyJti] as? String == subjectIdentificationSubmission.jti)
+        assert(identificationSubmissionPayload[VCLSubmission.CodingKeys.KeyIss] as? String == issuingIss)
     }
 
     func testPushDelegate() {
