@@ -17,7 +17,6 @@ class VCLIdentificationSubmission: VCLSubmission {
     ) {
         super.init(
             submitUri: credentialManifest.submitPresentationUri,
-            iss: credentialManifest.iss,
             exchangeId: credentialManifest.exchangeId,
             presentationDefinitionId: credentialManifest.presentationDefinitionId,
             verifiableCredentials: verifiableCredentials,
