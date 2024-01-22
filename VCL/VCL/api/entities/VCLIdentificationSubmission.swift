@@ -13,12 +13,10 @@ class VCLIdentificationSubmission: VCLSubmission {
     
     init(
         credentialManifest: VCLCredentialManifest,
-        verifiableCredentials: [VCLVerifiableCredential]? = nil,
-        iss: String? = nil
+        verifiableCredentials: [VCLVerifiableCredential]? = nil
     ) {
         super.init(
             submitUri: credentialManifest.submitPresentationUri,
-            iss: iss ?? "",
             exchangeId: credentialManifest.exchangeId,
             presentationDefinitionId: credentialManifest.presentationDefinitionId,
             verifiableCredentials: verifiableCredentials,

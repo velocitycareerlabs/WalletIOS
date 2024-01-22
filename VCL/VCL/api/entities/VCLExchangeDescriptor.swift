@@ -14,7 +14,6 @@ public struct VCLExchangeDescriptor {
     public let submissionResult: VCLSubmissionResult
     
     public var processUri: String { get { presentationSubmission.progressUri } }
-    public var did: String { get { presentationSubmission.iss } }
     public var exchangeId: String? { get { submissionResult.exchange.id } }
     public var sessionToken: VCLToken { get { submissionResult.sessionToken } }
     

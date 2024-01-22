@@ -11,7 +11,6 @@ import Foundation
 
 public class VCLSubmission {
     public let submitUri: String
-    public let iss: String
     public let exchangeId: String
     public let presentationDefinitionId: String
     public let verifiableCredentials: [VCLVerifiableCredential]?
@@ -23,7 +22,6 @@ public class VCLSubmission {
     
     public init(
         submitUri: String,
-        iss: String,
         exchangeId: String,
         presentationDefinitionId: String,
         verifiableCredentials: [VCLVerifiableCredential]? = nil,
@@ -31,20 +29,17 @@ public class VCLSubmission {
         vendorOriginContext: String? = nil
     ) {
         self.submitUri = submitUri
-        self.iss = iss
         self.exchangeId = exchangeId
         self.presentationDefinitionId = presentationDefinitionId
         self.verifiableCredentials = verifiableCredentials
         self.pushDelegate = pushDelegate
         self.vendorOriginContext = vendorOriginContext
     }
-    
-    public var payload: [String: Any] { get { return generatePayload() } }
-    
-    private func generatePayload() -> [String: Any] {
+        
+    internal func generatePayload(iss: String?) -> [String: Any] {
         var retVal = [String: Any]()
         retVal[CodingKeys.KeyJti] = self.jti
-        retVal[CodingKeys.KeyIss] = self.iss
+        retVal[CodingKeys.KeyIss] = iss
         var vp = [String: Any]()
         vp[CodingKeys.KeyType] = CodingKeys.ValueVerifiablePresentation
         var presentationSubmissionDict = [String: Any]()
