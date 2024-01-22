@@ -36,9 +36,9 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
                 kid: didJwk?.kid,
                 jwtDescriptor: VCLJwtDescriptor(
                     keyId: didJwk?.keyId,
-                    payload: submission.payload,
+                    payload: submission.generatePayload(iss: didJwk?.did),
                     jti: submission.jti,
-                    iss: submission.iss
+                    iss: didJwk?.did ?? ""
                 ),
                 remoteCryptoServicesToken: remoteCryptoServicesToken
             ) { signedJwtResult in
