@@ -11,7 +11,7 @@ import Foundation
 import VCToken
 
 public class VCLDidJwk {
-    /// The did in jwk format encoded to Base64 format
+    /// The did in jwk format encoded to Base64 format -  - the holder did
     public let did: String
     /// The public JWK
     public let publicJwk: VCLPublicJwk

@@ -21,7 +21,6 @@ public class VCLPresentationSubmission: VCLSubmission {
         
         super.init(
             submitUri: presentationRequest.submitPresentationUri,
-            iss: presentationRequest.iss,
             exchangeId: presentationRequest.exchangeId,
             presentationDefinitionId: presentationRequest.presentationDefinitionId,
             verifiableCredentials: verifiableCredentials,
