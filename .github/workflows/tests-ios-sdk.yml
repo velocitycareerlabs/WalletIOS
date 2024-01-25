@@ -4,8 +4,7 @@ on:
   pull_request:
     branches:
       - main
-      - rc
-      - dev
+      - release/**
 
 jobs:
   tests-ios-sdk:
