@@ -14,7 +14,7 @@ on:
         options:
           - dev
           - rc
-          - main
+          - prod
 env:
   GLOBAL_ENV: ${{ github.event_name == 'push' && format('{0}', 'dev') || inputs.environment }}
 
@@ -48,7 +48,7 @@ jobs:
       GLOBAL_ENV: ${{ steps.environment.outputs.GLOBAL_ENV }}
 
   build-ios-sdk:
-    if: needs.set-environment.outputs.GLOBAL_ENV == 'main' || needs.set-environment.outputs.GLOBAL_ENV == 'rc'
+    if: needs.set-environment.outputs.GLOBAL_ENV == 'prod' || needs.set-environment.outputs.GLOBAL_ENV == 'rc'
     needs:
       - tests-ios-sdk
       - set-environment
@@ -110,7 +110,7 @@ jobs:
         run: echo "FRAMEWORK_VERSION=$(cat VCL.xcodeproj/project.pbxproj | grep 'Release' -B 8 | grep PRODUCT_BUNDLE_IDENTIFIER -B 1 | grep MARKETING_VERSION | cut -d'=' -f2 | sed -e 's/^[ \t]*//;s/;//')${{ env.RELEASE_TAG }}" >> $GITHUB_ENV
         working-directory: VCL
         env: 
-          RELEASE_TAG: ${{ env.GLOBAL_ENV != 'main' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
+          RELEASE_TAG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
       # Clone Additional repos
       - name: Clone Additional repos
         run: |
@@ -134,4 +134,4 @@ jobs:
            gh release create ${{ env.FRAMEWORK_VERSION }} --title "VCL-${{ env.FRAMEWORK_VERSION }}" ${{ env.RELEASE_ARG }}
         working-directory: VCL-Swift
         env: 
-          RELEASE_ARG: ${{ env.GLOBAL_ENV != 'main' && format('{0}', '--prerelease' ) || format('{0}', '--latest') }}
+          RELEASE_ARG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}', '--prerelease' ) || format('{0}', '--latest') }}
