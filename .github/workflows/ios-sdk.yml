@@ -1,12 +1,22 @@
 name: WalletIOS-SDK
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
-      - rc
-      - dev
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Configuration environment
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - rc
+          - prod
+env:
+  GLOBAL_ENV: ${{ github.event_name == 'push' && format('{0}', 'dev') || inputs.environment }}
 
 jobs:
   tests-ios-sdk:
@@ -25,10 +35,23 @@ jobs:
         run: xcodebuild test -project VCL.xcodeproj -scheme VCL -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.2'
         working-directory: VCL
 
+  set-environment:
+    runs-on: ubuntu-latest
+    steps:
+      - id: environment
+        name: Set Environment
+        run: |
+          echo "GLOBAL_ENV=${{ env.GLOBAL_ENV }}" >> "$GITHUB_OUTPUT"
+        env:
+          SCHEME: ${{ env.GLOBAL_ENV }}
+    outputs:
+      GLOBAL_ENV: ${{ steps.environment.outputs.GLOBAL_ENV }}
+
   build-ios-sdk:
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/rc'
+    if: needs.set-environment.outputs.GLOBAL_ENV == 'prod' || needs.set-environment.outputs.GLOBAL_ENV == 'rc'
     needs:
       - tests-ios-sdk
+      - set-environment
     runs-on: macos-13 
     env:
       #Xcode config
@@ -37,13 +60,11 @@ jobs:
       ENCRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz.gpg"
       DECRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz"
       CERTS_FILE_PATH: "./certs.p12"
-      CERTS_ENCRYPTION_PWD: ${{ secrets.CERTS_ENCRYPTION_PWD }}
-      CERT_VCL_APPLE_EXPORT_PWD: ${{ secrets.CERTS_ENCRYPTION_PWD }}
-      APPLE_CERTS_BASE64: ${{ secrets.APPLE_CERTS_BASE64 }}
       # Recomends to use separated PAT token to access to another repos
       PAT_TOKEN: ${{ secrets.VCL_SDK_POD_ACCESS_TOKEN }}
       KEYCHAIN: "velocity.keychain"
       RC_SUFFIX: 'rc'
+      GLOBAL_ENV: ${{ needs.set-environment.outputs.GLOBAL_ENV }}
     steps:
       # Git clone repository
       - name: Git clone repository
@@ -57,7 +78,7 @@ jobs:
         run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')" >> $GITHUB_ENV
       # Certificate
       - name: Certificate
-        run: "echo ${{ env.APPLE_CERTS_BASE64 }} | base64 -d > ${{ env.ENCRYPTED_CERTS_FILE_PATH }}"
+        run: "echo ${{ secrets.APPLE_CERTS_BASE64 }} | base64 -d > ${{ env.ENCRYPTED_CERTS_FILE_PATH }}"
       # Configure keychain and code signing
       - name: Configure keychain and code signing
         run: |
@@ -71,7 +92,7 @@ jobs:
           gpg -d -o "${{ env.DECRYPTED_CERTS_FILE_PATH }}" --pinentry-mode=loopback --passphrase "${{ secrets.CERTS_ENCRYPTION_PWD }}" "${{ env.ENCRYPTED_CERTS_FILE_PATH }}"
           tar xzvf ${{ env.DECRYPTED_CERTS_FILE_PATH }}
 
-          security import "${{ env.CERTS_FILE_PATH }}" -k "${{ env.KEYCHAIN }}" -P "${{ env.CERT_VCL_APPLE_EXPORT_PWD }}" -A
+          security import "${{ env.CERTS_FILE_PATH }}" -k "${{ env.KEYCHAIN }}" -P "${{ secrets.CERTS_ENCRYPTION_PWD }}" -A
           security set-key-partition-list -S apple-tool:,apple: -s -k "" "${{ env.KEYCHAIN }}"
 
           security find-identity -p codesigning -v
@@ -89,7 +110,7 @@ jobs:
         run: echo "FRAMEWORK_VERSION=$(cat VCL.xcodeproj/project.pbxproj | grep 'Release' -B 8 | grep PRODUCT_BUNDLE_IDENTIFIER -B 1 | grep MARKETING_VERSION | cut -d'=' -f2 | sed -e 's/^[ \t]*//;s/;//')${{ env.RELEASE_TAG }}" >> $GITHUB_ENV
         working-directory: VCL
         env: 
-          RELEASE_TAG: ${{ github.ref != 'refs/heads/main' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
+          RELEASE_TAG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
       # Clone Additional repos
       - name: Clone Additional repos
         run: |
@@ -113,4 +134,4 @@ jobs:
            gh release create ${{ env.FRAMEWORK_VERSION }} --title "VCL-${{ env.FRAMEWORK_VERSION }}" ${{ env.RELEASE_ARG }}
         working-directory: VCL-Swift
         env: 
-          RELEASE_ARG: ${{ github.ref != 'refs/heads/main' && format('{0}', '--prerelease' ) || format('{0}', '--latest') }}
+          RELEASE_ARG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}', '--prerelease' ) || format('{0}', '--latest') }}
