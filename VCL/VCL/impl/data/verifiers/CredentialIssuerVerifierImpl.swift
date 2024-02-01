@@ -262,7 +262,11 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                 let activeContext = (((completeContext[CodingKeys.KeyContext] as? [String: Any])?[credentialSubjectType] as? [String: Any]))?[CodingKeys.KeyContext] as? [String: Any] ?? completeContext
                 if let K = findKeyForPrimaryOrganizationValue(activeContext) {
                     if let did = Utils.getIdentifier(K, credentialSubject) {
-                        if (jwtCredential.iss == did) {
+//                            Comparing issuer.id instead of iss
+//                            https://velocitycareerlabs.atlassian.net/browse/VL-6178?focusedCommentId=46933
+//                            https://velocitycareerlabs.atlassian.net/browse/VL-6988
+//                            if (jwtCredential.iss == did)
+                        if (Utils.getCredentialIssuerId(jwtCredential: jwtCredential) == did) {
                             isCredentialVerified = true
                             completeConetxDispatcher.leave()
                         } else {

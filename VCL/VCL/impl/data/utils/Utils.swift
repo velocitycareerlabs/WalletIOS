@@ -28,15 +28,15 @@ class Utils {
         var identifier: String? = nil
         var stack = [[String: Any]]()
         stack.append(jsonObject)
-
+        
         while (stack.isEmpty == false) {
             let obj = stack.remove(at: stack.count - 1)
-
+            
             identifier = getPrimaryIdentifier(obj[primaryOrgProp!])
             if (identifier != nil) {
                 break
             }
-
+            
             obj.forEach { _, value in
                 if let valueDict = value as? [String: Any] {
                     stack.append(valueDict)
@@ -53,15 +53,19 @@ class Utils {
             return credentialSubject as? String
         }
         return (credentialSubject as? [String: Any])?["identifier"] as? String
-            ?? (credentialSubject as? [String: Any])?["id"] as? String
+        ?? (credentialSubject as? [String: Any])?["id"] as? String
     }
     
     static func offersFromJsonArray(offersJsonArray: [[String: Any]]) -> [VCLOffer] {
         var allOffers = [VCLOffer]()
-        offersJsonArray.forEach { 
+        offersJsonArray.forEach {
             allOffers.append(VCLOffer(payload: $0))
         }
         return allOffers
     }
-
+    
+    static func getCredentialIssuerId(jwtCredential: VCLJwt) -> String? {
+        let vc: [String: Any]? = jwtCredential.payload?["vc"] as? [String: Any]
+        return (vc?["issuer"] as? [String: Any])?["id"] as? String ?? vc?["issuer"] as? String
+    }
 }
