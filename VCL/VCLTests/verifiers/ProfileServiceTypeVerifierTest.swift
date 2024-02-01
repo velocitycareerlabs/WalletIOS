@@ -13,10 +13,15 @@ import XCTest
 
 class ProfileServiceTypeVerifierTest: XCTestCase {
 
-    private var subject: ProfileServiceTypeVerifier!
+    private var subject1: ProfileServiceTypeVerifier!
+    private var subject2: ProfileServiceTypeVerifier!
+    private var subject3: ProfileServiceTypeVerifier!
+    private var subject4: ProfileServiceTypeVerifier!
+    private var subject5: ProfileServiceTypeVerifier!
+    private var subject6: ProfileServiceTypeVerifier!
 
-    func testVerificationSuccess1() {
-        subject = ProfileServiceTypeVerifier(
+    override func setUp() {
+        subject1 = ProfileServiceTypeVerifier(
             verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
@@ -24,21 +29,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 ExecutorImpl()
             )
         )
-
-        subject.verifyServiceTypeOfVerifiedProfile(
-            verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
-            expectedServiceTypes: VCLServiceTypes(issuingType: VCLIssuingType.Career),
-            successHandler: {_ in
-                assert(true)
-            },
-            errorHandler: {_ in
-                assert(false)
-            }
-        )
-    }
-
-    func testVerificationSuccess2() {
-        subject = ProfileServiceTypeVerifier(
+        subject2 = ProfileServiceTypeVerifier(
             verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileInspectorJsonStr)
@@ -46,21 +37,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 ExecutorImpl()
             )
         )
-
-        subject.verifyServiceTypeOfVerifiedProfile(
-            verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
-            expectedServiceTypes: VCLServiceTypes(serviceType: VCLServiceType.Inspector),
-            successHandler: {_ in
-                assert(true)
-            },
-            errorHandler: {_ in
-                assert(false)
-            }
-        )
-    }
-
-    func testVerificationSuccess3() {
-        subject = ProfileServiceTypeVerifier(
+        subject3 = ProfileServiceTypeVerifier(
             verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
@@ -68,34 +45,77 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 ExecutorImpl()
             )
         )
-
-        subject.verifyServiceTypeOfVerifiedProfile(
+        subject4 = ProfileServiceTypeVerifier(
+            verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
+                VerifiedProfileRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
+                ),
+                ExecutorImpl()
+            )
+        )
+        subject5 = ProfileServiceTypeVerifier(
+            verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
+                VerifiedProfileRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1)
+                ),
+                ExecutorImpl()
+            )
+        )
+        subject6 = ProfileServiceTypeVerifier(
+            verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
+                VerifiedProfileRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
+                ),
+                ExecutorImpl()
+            )
+        )
+    }
+    
+    func testVerificationSuccess1() {
+        subject1.verifyServiceTypeOfVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
             expectedServiceTypes: VCLServiceTypes(issuingType: VCLIssuingType.Career),
             successHandler: {_ in
                 assert(true)
             },
-            errorHandler: {_ in
-                assert(false)
+            errorHandler: { error in
+                XCTFail("\(error)")
+            }
+        )
+    }
+
+    func testVerificationSuccess2() {
+        subject2.verifyServiceTypeOfVerifiedProfile(
+            verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
+            expectedServiceTypes: VCLServiceTypes(serviceType: VCLServiceType.Inspector),
+            successHandler: {_ in
+                assert(true)
+            },
+            errorHandler: { error in
+                XCTFail("\(error)")
+            }
+        )
+    }
+
+    func testVerificationSuccess3() {
+        subject3.verifyServiceTypeOfVerifiedProfile(
+            verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
+            expectedServiceTypes: VCLServiceTypes(issuingType: VCLIssuingType.Career),
+            successHandler: {_ in
+                assert(true)
+            },
+            errorHandler: { error in
+                XCTFail("\(error)")
             }
         )
     }
 
     func testVerificationFailure1() {
-        subject = ProfileServiceTypeVerifier(
-            verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
-                VerifiedProfileRepositoryImpl(
-                    NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
-                ),
-                ExecutorImpl()
-            )
-        )
-
-        subject.verifyServiceTypeOfVerifiedProfile(
+        subject4.verifyServiceTypeOfVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
             expectedServiceTypes: VCLServiceTypes(issuingType: VCLIssuingType.Identity),
             successHandler: {_ in
-                assert(false)
+                XCTFail()
             },
             errorHandler: { error in
                 assert(error.statusCode == VCLStatusCode.VerificationError.rawValue)
@@ -105,20 +125,11 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
     }
 
     func testVerificationFailure2() {
-        subject = ProfileServiceTypeVerifier(
-            verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
-                VerifiedProfileRepositoryImpl(
-                    NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1)
-                ),
-                ExecutorImpl()
-            )
-        )
-
-        subject.verifyServiceTypeOfVerifiedProfile(
+        subject5.verifyServiceTypeOfVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
             expectedServiceTypes: VCLServiceTypes(issuingType: VCLIssuingType.Identity),
             successHandler: {_ in
-                assert(false)
+                XCTFail()
             },
             errorHandler: { error in
                 assert(error.statusCode == VCLStatusCode.VerificationError.rawValue)
@@ -128,20 +139,11 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
     }
 
     func testVerificationFailure3() {
-        subject = ProfileServiceTypeVerifier(
-            verifiedProfileUseCase: VerifiedProfileUseCaseImpl(
-                VerifiedProfileRepositoryImpl(
-                    NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
-                ),
-                ExecutorImpl()
-            )
-        )
-
-        subject.verifyServiceTypeOfVerifiedProfile(
+        subject6.verifyServiceTypeOfVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: ""),
             expectedServiceTypes: VCLServiceTypes(serviceType: VCLServiceType.Undefined),
             successHandler: {_ in
-                assert(false)
+                XCTFail()
             },
             errorHandler: { error in
                 assert(error.statusCode == VCLStatusCode.VerificationError.rawValue)

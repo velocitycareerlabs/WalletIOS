@@ -13,7 +13,19 @@ import XCTest
 
 class CredentialIssuerVerifierTest: XCTestCase {
 
-    private var subject: CredentialIssuerVerifier!
+    private var subject1: CredentialIssuerVerifier!
+    private var subject2: CredentialIssuerVerifier!
+    private var subject3: CredentialIssuerVerifier!
+    private var subject4: CredentialIssuerVerifier!
+    private var subject5: CredentialIssuerVerifier!
+    private var subject6: CredentialIssuerVerifier!
+    private var subject7: CredentialIssuerVerifier!
+    private var subject8: CredentialIssuerVerifier!
+    private var subject9: CredentialIssuerVerifier!
+    private var subject10: CredentialIssuerVerifier!
+    private var subject11: CredentialIssuerVerifier!
+    private var subject12: CredentialIssuerVerifier!
+    private var subject13: CredentialIssuerVerifier!
 
     private let OffersMock = VCLOffers(payload: [:], all: [], responseCode: 1, sessionToken: VCLToken(value: ""), challenge: "")
 
@@ -30,6 +42,11 @@ class CredentialIssuerVerifierTest: XCTestCase {
     private var credentialManifestFromIdentityIssuer: VCLCredentialManifest!
 
     override func setUp() {
+        setUpSubjectProperties()
+        setUpSubjects()
+    }
+    
+    func setUpSubjectProperties() {
         credentialManifestWithoutPermittedServices = VCLCredentialManifest(
             jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromNotaryIssuer),
             verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileWithoutServices.toDictionary()!)
@@ -74,16 +91,121 @@ class CredentialIssuerVerifierTest: XCTestCase {
             rejectedOfferIds: []
         )
     }
-
-    func testVerifyNotaryIssuerSuccess() {
-        subject = CredentialIssuerVerifierImpl(
+    
+    func setUpSubjects() {
+        subject1 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryIssuer
             ),
             NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
         )
+        subject2 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+        )
+        subject3 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+        )
+        subject4 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+        )
+        subject5 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+        )
+        subject6 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+        )
+        subject7 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+        )
+        subject8 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+        )
+        subject9 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.IssuerCategoryIdDocumentIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+        )
+        subject10 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryContactIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+        )
+        subject11 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+        )
+        subject12 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
+            ),
+            NetworkServiceSuccess(validResponse: "")
+        )
+        subject13 = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10JsonldWithoutPrimaryOrganization)
+        )
+    }
+    
+//    func testVerifyOpenBadgeCredentialSuccess() {
+//        subject1.verifyCredentials(
+//            jwtCredentials: CredentialMocks.JwtCredentialsOpenBadgeValid.toJwtList()!,
+//            finalizeOffersDescriptor: finalizeOffersDescriptorOfNotaryIssuer
+//        ) {
+//            do {
+//                let isVerified = try $0.get()
+//                assert(isVerified)
+//            } catch {
+//                XCTFail("\(error)")
+//            }
+//        }
+//    }
+   
+//    @Test
+//    fun testVerifyOpenBadgeCredentialError() {
+//        subject2.verifyCredentials(
+//            jwtCredentials = CredentialMocks.JwtCredentialsOpenBadgeInvalid.toJwtList()!!,
+//            finalizeOffersDescriptor = finalizeOffersDescriptorOfRegularIssuer,
+//        ) { verificationResult ->
+//            verificationResult.handleResult(
+//                successHandler = {
+//                    assert(it)
+//                },
+//                errorHandler = { error ->
+//                    assert(false) { "${error.toJsonObject()}" }
+//                }
+//            )
+//        }
+//    }
 
-        subject.verifyCredentials(
+    func testVerifyNotaryIssuerSuccess() {
+        subject3.verifyCredentials(
             jwtCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfNotaryIssuer
         ) {
@@ -97,14 +219,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     }
 
     func testVerifyNotaryIssuerMissingSubjectSuccess() {
-        subject = CredentialIssuerVerifierImpl(
-            CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryIssuer
-            ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-        )
-
-        subject.verifyCredentials(
+        subject4.verifyCredentials(
             jwtCredentials: CredentialMocks.JwtCredentialsWithoutSubject.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfNotaryIssuer
         ) {
@@ -118,14 +233,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     }
 
     func testVerifyRegularIssuerSuccess() {
-        subject = CredentialIssuerVerifierImpl(
-            CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
-            ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-        )
-
-        subject.verifyCredentials(
+        subject5.verifyCredentials(
             jwtCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
@@ -139,14 +247,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     }
     
     func testVerifyRegularIssuerWrongDidFailed() {
-        subject = CredentialIssuerVerifierImpl(
-            CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
-            ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-        )
-
-        subject.verifyCredentials(
+        subject6.verifyCredentials(
             jwtCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
@@ -160,14 +261,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     }
 
     func testVerifyIssuerWithoutServicesFailed() {
-        subject = CredentialIssuerVerifierImpl(
-            CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryIssuer
-            ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-        )
-
-        subject.verifyCredentials(
+        subject7.verifyCredentials(
             jwtCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorWithoutPermittedServices
         ) {
@@ -181,14 +275,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     }
 
     func testVerifyRegularIssuerMissingSubjectFailed() {
-        subject = CredentialIssuerVerifierImpl(
-            CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
-            ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-        )
-
-        subject.verifyCredentials(
+        subject8.verifyCredentials(
             jwtCredentials: CredentialMocks.JwtCredentialsWithoutSubject.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
@@ -202,14 +289,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     }
 
     func testVerifyIdentityIssuerSuccess() {
-        subject = CredentialIssuerVerifierImpl(
-            CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.IssuerCategoryIdDocumentIssuer
-            ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-        )
-
-        subject.verifyCredentials(
+        subject9.verifyCredentials(
             jwtCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfIdentityIssuer
         ) {
@@ -223,14 +303,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     }
 
     func testVerifyEmptyCredentialsSuccess() {
-        subject = CredentialIssuerVerifierImpl(
-            CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryContactIssuer
-            ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-        )
-
-        subject.verifyCredentials(
+        subject10.verifyCredentials(
             jwtCredentials: CredentialMocks.JwtEmptyCredentials.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfIdentityIssuer
         ) {
@@ -244,14 +317,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     }
 
     func testVerifyIdentityIssuerFailedWithoutIdentityService() {
-        subject = CredentialIssuerVerifierImpl(
-            CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
-            ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-        )
-
-        subject.verifyCredentials(
+        subject11.verifyCredentials(
             jwtCredentials: CredentialMocks.JwtCredentialsFromIdentityIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfIdentityIssuer
         ) {
@@ -265,14 +331,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     }
 
     func testVerifyIssuerWithoutServicesFailedCompleteContextNotFound() {
-        subject = CredentialIssuerVerifierImpl(
-            CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
-            ),
-            NetworkServiceSuccess(validResponse: "")
-        )
-
-        subject.verifyCredentials(
+        subject12.verifyCredentials(
             jwtCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
@@ -286,14 +345,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     }
 
     func testVerifyIssuerPrimaryOrganizationNotFound() {
-        subject = CredentialIssuerVerifierImpl(
-            CredentialTypesModelMock(
-                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
-            ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10JsonldWithoutPrimaryOrganization)
-        )
-
-        subject.verifyCredentials(
+        subject13.verifyCredentials(
             jwtCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toJwtList()!,
             finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer
         ) {
