@@ -108,11 +108,12 @@ jobs:
       # Get Version
       - name: Get Version
         run: |
-          echo "FRAMEWORK_VERSION=$(cat VCL.xcodeproj/project.pbxproj | grep PRODUCT_BUNDLE_IDENTIFIER -B 1 | grep MARKETING_VERSION | cut -d'=' -f2 | uniq | sed -e 's/^[ \t]*//;s/;//')${{ env.RELEASE_TAG }}" >> $GITHUB_ENV
-          echo $FRAMEWORK_VERSION
+          echo "FRAMEWORK_VERSION=$(cat VCL.xcodeproj/project.pbxproj | grep PRODUCT_BUNDLE_IDENTIFIER -B 1 | grep MARKETING_VERSION | cut -d'=' -f2 | uniq | sed -e 's/^[ \t]*//;s/;//')${{ env.RELEASE_TAG }}" >> $GITHUB_ENV      
         working-directory: VCL
         env: 
           RELEASE_TAG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
+      - name: Debug
+        run: env
       # # Clone Additional repos
       # - name: Clone Additional repos
       #   run: |
