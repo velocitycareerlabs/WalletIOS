@@ -48,7 +48,7 @@ public struct VCLCredentialManifest {
         (jwt.payload?[VCLCredentialManifest.CodingKeys.KeyMetadata] as? [String: Any])?[VCLCredentialManifest.CodingKeys.KeySubmitIdentificationUri] as? String ?? "" } }
 
     private func retrieveAud() -> String {
-        let url = (jwt.payload?[CodingKeys.KeyMetadata] as? [String: String])?[CodingKeys.KeyFinalizeOffersUri] ?? ""
+        let url = ((jwt.payload?[CodingKeys.KeyMetadata] as? [String: Any])?[CodingKeys.KeyFinalizeOffersUri] as? String) ?? ""
         if let range = url.range(of: "/issue/") {
             return String(url[..<range.lowerBound])
         }
