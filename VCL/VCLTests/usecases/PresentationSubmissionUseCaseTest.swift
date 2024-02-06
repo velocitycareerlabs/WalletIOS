@@ -14,19 +14,7 @@ import XCTest
 final class PresentationSubmissionUseCaseTest: XCTestCase {
     
     private var subject: PresentationSubmissionUseCase!
-    
-    private var didJwk: VCLDidJwk!
     private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
-    
-    override func setUp() {
-        keyService.generateDidJwk() { [weak self] didJwkResult in
-            do {
-                self!.didJwk = try didJwkResult.get()
-            } catch {
-                XCTFail("\(error)")
-            }
-        }
-    }
     
     func testSubmitPresentationSuccess() {
         subject = PresentationSubmissionUseCaseImpl(
@@ -54,9 +42,7 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
         )
         
         subject.submit(
-            submission: presentationSubmission,
-            didJwk: didJwk,
-            remoteCryptoServicesToken: nil
+            submission: presentationSubmission
         ) {
             do {
                 let presentationSubmissionResult = try $0.get()

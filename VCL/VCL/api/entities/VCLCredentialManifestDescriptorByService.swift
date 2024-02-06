@@ -15,14 +15,18 @@ public class VCLCredentialManifestDescriptorByService: VCLCredentialManifestDesc
         service: VCLService,
         issuingType: VCLIssuingType = VCLIssuingType.Career,
         credentialTypes: [String]? = nil,
-        pushDelegate: VCLPushDelegate? = nil
+        pushDelegate: VCLPushDelegate? = nil,
+        didJwk: VCLDidJwk? = nil,
+        remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.service = service
         super.init(
             uri: service.serviceEndpoint,
             issuingType: issuingType,
             credentialTypes: credentialTypes,
-            pushDelegate: pushDelegate
+            pushDelegate: pushDelegate,
+            didJwk: didJwk,
+            remoteCryptoServicesToken: remoteCryptoServicesToken
         )
     }
     

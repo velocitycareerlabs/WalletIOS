@@ -14,9 +14,7 @@ import XCTest
 final class FinalizeOffersUseCaseTest: XCTestCase {
     
     private var subject: FinalizeOffersUseCase!
-    
     private var token: VCLToken!
-    private var didJwk: VCLDidJwk!
     private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     private var credentialManifestFailed: VCLCredentialManifest!
     private var credentialManifestPassed: VCLCredentialManifest!
@@ -27,13 +25,6 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
     private let credentialsAmount = CredentialMocks.JwtCredentialsFromRegularIssuer.toList()?.count
     
     override func setUp() {
-        keyService.generateDidJwk { [weak self] didJwkResult in
-            do {
-                self?.didJwk = try didJwkResult.get()
-            } catch {
-                assert(false, "Failed to generate did:jwk \(error)" )
-            }
-        }
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
                 jwt: CommonMocks.JWT,
@@ -108,9 +99,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
         
         subject.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptorFailed,
-            didJwk: didJwk,
-            sessionToken: VCLToken(value: ""),
-            remoteCryptoServicesToken: nil
+            sessionToken: VCLToken(value: "")
         ) {
             do {
                 let finalizeOffers = try $0.get()
@@ -154,9 +143,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
         
         subject.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptorPassed,
-            didJwk: didJwk,
-            sessionToken: VCLToken(value: ""),
-            remoteCryptoServicesToken: nil
+            sessionToken: VCLToken(value: "")
         ) {
             do {
                 let finalizeOffers = try $0.get()
@@ -200,9 +187,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
         
         subject.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptorPassed,
-            didJwk: didJwk,
-            sessionToken: VCLToken(value: ""),
-            remoteCryptoServicesToken: nil
+            sessionToken: VCLToken(value: "")
         ) {
             do {
                 let finalizeOffers = try $0.get()
@@ -236,9 +221,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
         
         subject.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptorPassed,
-            didJwk: didJwk,
-            sessionToken: VCLToken(value: ""),
-            remoteCryptoServicesToken: nil
+            sessionToken: VCLToken(value: "")
         ) {
             do  {
                 let _ = try $0.get()

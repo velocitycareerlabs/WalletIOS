@@ -21,15 +21,12 @@ public protocol VCL {
     
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLPresentationRequest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
     
     func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
-        didJwk: VCLDidJwk?,
-        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -48,15 +45,12 @@ public protocol VCL {
     
     func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLCredentialManifest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
     
     func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        didJwk: VCLDidJwk?,
-        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -70,9 +64,7 @@ public protocol VCL {
     
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        didJwk: VCLDidJwk?,
         sessionToken: VCLToken,
-        remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) 
@@ -114,13 +106,11 @@ public protocol VCL {
 extension VCL {
     public func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLPresentationRequest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         getPresentationRequest(
             presentationRequestDescriptor: presentationRequestDescriptor,
-            remoteCryptoServicesToken: remoteCryptoServicesToken,
             successHandler: successHandler,
             errorHandler: errorHandler
         )
@@ -128,15 +118,11 @@ extension VCL {
     
     public func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
-        didJwk: VCLDidJwk? = nil,
-        remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         submitPresentation(
             presentationSubmission: presentationSubmission,
-            didJwk: didJwk,
-            remoteCryptoServicesToken: remoteCryptoServicesToken,
             successHandler: successHandler,
             errorHandler: errorHandler
         )
@@ -144,13 +130,11 @@ extension VCL {
     
     public func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLCredentialManifest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptor,
-            remoteCryptoServicesToken: remoteCryptoServicesToken,
             successHandler: successHandler,
             errorHandler: errorHandler
         )
@@ -158,15 +142,11 @@ extension VCL {
     
     public func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        didJwk: VCLDidJwk? = nil,
-        remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            didJwk: didJwk,
-            remoteCryptoServicesToken: remoteCryptoServicesToken,
             successHandler: successHandler,
             errorHandler: errorHandler
         )
@@ -174,17 +154,13 @@ extension VCL {
     
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        didJwk: VCLDidJwk? = nil,
         sessionToken: VCLToken,
-        remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
-            didJwk: didJwk,
             sessionToken: sessionToken,
-            remoteCryptoServicesToken: remoteCryptoServicesToken,
             successHandler:successHandler,
             errorHandler: errorHandler
         )

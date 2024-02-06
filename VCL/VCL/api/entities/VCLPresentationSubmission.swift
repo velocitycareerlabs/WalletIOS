@@ -25,7 +25,9 @@ public class VCLPresentationSubmission: VCLSubmission {
             presentationDefinitionId: presentationRequest.presentationDefinitionId,
             verifiableCredentials: verifiableCredentials,
             pushDelegate: presentationRequest.pushDelegate,
-            vendorOriginContext: presentationRequest.vendorOriginContext
+            vendorOriginContext: presentationRequest.vendorOriginContext,
+            didJwk: presentationRequest.didJwk,
+            remoteCryptoServicesToken: presentationRequest.remoteCryptoServicesToken
         )
     }
 }

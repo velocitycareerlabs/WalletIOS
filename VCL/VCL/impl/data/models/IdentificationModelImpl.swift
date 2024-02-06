@@ -20,14 +20,10 @@ class IdentificationModelImpl: IdentificationModel {
     
     func submit(
         identificationSubmission: VCLIdentificationSubmission,
-        didJwk: VCLDidJwk,
-        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         identificationSubmissionUseCase.submit(
-            submission: identificationSubmission,
-            didJwk: didJwk,
-            remoteCryptoServicesToken: remoteCryptoServicesToken
+            submission: identificationSubmission
         ) { [weak self] result in
             do {
                 self?.data = try result.get().sessionToken

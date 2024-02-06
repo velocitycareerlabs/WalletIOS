@@ -14,14 +14,18 @@ public class VCLCredentialManifestDescriptorByDeepLink: VCLCredentialManifestDes
     public init(
         deepLink: VCLDeepLink,
         issuingType: VCLIssuingType = VCLIssuingType.Career,
-        pushDelegate: VCLPushDelegate? = nil
+        pushDelegate: VCLPushDelegate? = nil,
+        didJwk: VCLDidJwk? = nil,
+        remoteCryptoServicesToken: VCLToken? = nil
     ) {
         super.init(
             uri: deepLink.requestUri,
             issuingType: issuingType,
             pushDelegate: pushDelegate,
             vendorOriginContext: deepLink.vendorOriginContext,
-            deepLink: deepLink
+            deepLink: deepLink,
+            didJwk: didJwk,
+            remoteCryptoServicesToken: remoteCryptoServicesToken
         )
     }
 }

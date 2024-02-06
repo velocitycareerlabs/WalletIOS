@@ -14,8 +14,17 @@ import XCTest
 final class CredentialManifestUseCaseTest: XCTestCase {
     
     private var subject: CredentialManifestUseCase!
+    private var didJwk: VCLDidJwk!
+    private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
 
     override func setUp() {
+        keyService.generateDidJwk { [weak self] didJwkResult in
+            do {
+                self?.didJwk = try didJwkResult.get()
+            } catch {
+                assert(false, "Failed to generate did:jwk \(error)" )
+            }
+        }
     }
 
     func testGetCredentialManifestSuccess() {
@@ -37,12 +46,13 @@ final class CredentialManifestUseCaseTest: XCTestCase {
         subject.getCredentialManifest(
             credentialManifestDescriptor: VCLCredentialManifestDescriptorByDeepLink(
                 deepLink: DeepLinkMocks.CredentialManifestDeepLinkDevNet,
-                issuingType: VCLIssuingType.Career
+                issuingType: VCLIssuingType.Career,
+                didJwk: didJwk,
+                remoteCryptoServicesToken: VCLToken(value: "some token")
             ),
             verifiedProfile: VCLVerifiedProfile(
                 payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!
-            ),
-            remoteCryptoServicesToken: nil
+            )
         ) {
             do {
                 let credentialManifest = try $0.get()
@@ -57,6 +67,8 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                         .sorted()
                 ) // removed $ to compare
                 assert(credentialManifest.jwt.signature == CredentialManifestMocks.Signature)
+                assert(credentialManifest.didJwk?.did == self.didJwk.did)
+                assert(credentialManifest.remoteCryptoServicesToken?.value == "some token")
             } catch {
                 XCTFail("\(error)")
             }
@@ -86,8 +98,7 @@ final class CredentialManifestUseCaseTest: XCTestCase {
             ),
             verifiedProfile: VCLVerifiedProfile(
                 payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!
-            ),
-            remoteCryptoServicesToken: nil
+            )
         ) {
             do {
                 let _ = try $0.get()

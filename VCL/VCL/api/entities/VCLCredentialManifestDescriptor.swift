@@ -17,6 +17,8 @@ public class VCLCredentialManifestDescriptor {
     public let did: String?
     public let vendorOriginContext: String?
     public let deepLink: VCLDeepLink?
+    public let didJwk: VCLDidJwk?
+    public let remoteCryptoServicesToken: VCLToken?
     
     public init(
         uri: String?,
@@ -24,7 +26,9 @@ public class VCLCredentialManifestDescriptor {
         credentialTypes: [String]? = nil,
         pushDelegate: VCLPushDelegate? = nil,
         vendorOriginContext: String? = nil,
-        deepLink: VCLDeepLink? = nil
+        deepLink: VCLDeepLink? = nil,
+        didJwk: VCLDidJwk? = nil,
+        remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.uri = uri
         self.issuingType = issuingType
@@ -33,6 +37,8 @@ public class VCLCredentialManifestDescriptor {
         self.did = uri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix)
         self.vendorOriginContext = vendorOriginContext
         self.deepLink = deepLink
+        self.didJwk = didJwk
+        self.remoteCryptoServicesToken = remoteCryptoServicesToken
     }
     
     public var endpoint: String? { get {

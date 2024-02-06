@@ -14,6 +14,18 @@ import XCTest
 final class PresentationRequestUseCaseTest: XCTestCase {
     
     private var subject: PresentationRequestUseCase!
+    private var didJwk: VCLDidJwk!
+    private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
+    
+    override func setUp() {
+        keyService.generateDidJwk { [weak self] didJwkResult in
+            do {
+                self?.didJwk = try didJwkResult.get()
+            } catch {
+                assert(false, "Failed to generate did:jwk \(error)" )
+            }
+        }
+    }
     
     func testGetPresentationRequestSuccess() {
         let pushUrl = "push_url"
@@ -38,9 +50,10 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 pushDelegate: VCLPushDelegate(
                     pushUrl: pushUrl,
                     pushToken: pushToken
-                )
-            ),
-            remoteCryptoServicesToken: nil
+                ),
+                didJwk: self.didJwk,
+                remoteCryptoServicesToken: VCLToken(value: "some token")
+            )
         ) {
             do {
                 let presentationRequest = try $0.get()
@@ -52,6 +65,8 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 assert(presentationRequest.jwt.payload! == PresentationRequestMocks.PresentationRequestJwt.payload!)
                 assert(presentationRequest.pushDelegate!.pushUrl == pushUrl)
                 assert(presentationRequest.pushDelegate!.pushToken == pushToken)
+                assert(presentationRequest.didJwk?.did == self.didJwk.did)
+                assert(presentationRequest.remoteCryptoServicesToken?.value == "some token")
             } catch {
                 XCTFail("\(error)")
             }
@@ -76,8 +91,7 @@ final class PresentationRequestUseCaseTest: XCTestCase {
         subject.getPresentationRequest(
             presentationRequestDescriptor: VCLPresentationRequestDescriptor(
                 deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet
-            ),
-            remoteCryptoServicesToken: nil
+            )
         ) {
             do  {
                 let _ = try $0.get()
