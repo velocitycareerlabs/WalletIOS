@@ -17,7 +17,7 @@ protocol JwtServiceUseCase {
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
     func generateSignedJwt(
-        kid: String?,
+        didJwk: VCLDidJwk,
         nonce: String?,
         jwtDescriptor: VCLJwtDescriptor,
         remoteCryptoServicesToken: VCLToken?,
@@ -27,14 +27,14 @@ protocol JwtServiceUseCase {
 
 extension JwtServiceUseCase {
     func generateSignedJwt(
-        kid: String? = nil,
+        didJwk: VCLDidJwk,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
         remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         generateSignedJwt(
-            kid: kid, 
+            didJwk: didJwk,
             nonce: nonce,
             jwtDescriptor: jwtDescriptor,
             remoteCryptoServicesToken: remoteCryptoServicesToken,

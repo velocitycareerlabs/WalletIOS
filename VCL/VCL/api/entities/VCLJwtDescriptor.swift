@@ -10,8 +10,6 @@
 import Foundation
 
 public class VCLJwtDescriptor {
-    /// The Id of the existing private key to sign with
-    public let keyId: String?
     /// Json formatted payload
     public let payload: [String: Any]?
     /// JWT ID
@@ -22,13 +20,11 @@ public class VCLJwtDescriptor {
     public let aud: String?
     
     public init(
-        keyId: String? = nil,
         payload: [String : Any]? = nil,
         jti: String = UUID().uuidString,
         iss: String,
         aud: String? = nil
     ) {
-        self.keyId = keyId
         self.payload = payload
         self.jti = jti
         self.iss = iss

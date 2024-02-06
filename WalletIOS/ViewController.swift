@@ -28,7 +28,7 @@ class ViewController: UIViewController {
     
     private let environment = VCLEnvironment.Dev
     private let vcl = VCLProvider.vclInstance()
-    private var didJwk: VCLDidJwk? = nil
+    private var didJwk: VCLDidJwk!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +46,7 @@ class ViewController: UIViewController {
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
                 environment: environment,
-                xVnfProtocolVersion: .XVnfProtocolVersion2
+                xVnfProtocolVersion: .XVnfProtocolVersion1
 //                cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
 //                    cryptoServiceType: .Remote,
 //                    remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
@@ -359,8 +359,8 @@ class ViewController: UIViewController {
     
     @objc private func generateSignedJwt() {
         vcl.generateSignedJwt(
+            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
-                keyId: didJwk?.keyId,
                 payload: Constants.SomePayload,
                 jti: "jti123",
                 iss: "iss123"
