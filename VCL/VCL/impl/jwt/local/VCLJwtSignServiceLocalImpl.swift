@@ -22,7 +22,7 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     }
     
     func sign(
-        kid: String? = nil,
+        didJwk: VCLDidJwk,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
         remoteCryptoServicesToken: VCLToken? = nil,
@@ -30,7 +30,7 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     ) {
             let secp256k1Signer = Secp256k1Signer()
             getSecretReference(
-                keyId: jwtDescriptor.keyId,
+                keyId: didJwk.keyId,
                 completionBlock: { [weak self] secretResult in
                     do {
                         let secret = try secretResult.get()
@@ -43,15 +43,9 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
                                     var header = Header(
                                         type: GlobalConfig.TypeJwt,
                                         algorithm: GlobalConfig.AlgES256K,
-                                        jsonWebKey: publicJwk
+                                        jsonWebKey: publicJwk,
+                                        keyId: didJwk.kid
                                     )
-                                    if let kid = kid {
-                                        header = Header(
-                                            type: GlobalConfig.TypeJwt,
-                                            algorithm: GlobalConfig.AlgES256K,
-                                            keyId: kid
-                                        )
-                                    }
                                     let claims = VCLClaims(all: self?.generateClaims(nonce: nonce, jwtDescriptor: jwtDescriptor) ?? [:])
                                     
                                     let protectedMessage = try? self?.createProtectedMessage(headers: header, claims: claims)

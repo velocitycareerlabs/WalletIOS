@@ -14,6 +14,8 @@ import XCTest
 class VCLFinalizeOffersDescriptorTest: XCTestCase {
     
     private var subject: VCLFinalizeOffersDescriptor!
+    private var didJwk: VCLDidJwk!
+    private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     
     private let offers = VCLOffers(
         payload: [String: Any](),
@@ -32,6 +34,13 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     private let rejectedOfferIds = ["rejectedOfferId1", "rejectedOfferId2"]
     
     override func setUp() {
+        keyService.generateDidJwk() { [weak self] didJwkResult in
+            do {
+                self!.didJwk = try didJwkResult.get()
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
         
         let credentialManifest = VCLCredentialManifest(
             jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
@@ -50,6 +59,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
         let payload = "{\"key1\": \"value1\"}".toDictionary()!
         
         VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)).sign(
+            didJwk: didJwk,
             nonce: nonceMock,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payload,

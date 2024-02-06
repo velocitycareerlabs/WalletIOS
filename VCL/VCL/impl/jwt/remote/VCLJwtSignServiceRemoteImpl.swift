@@ -20,7 +20,7 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
     }
     
     func sign(
-        kid: String? = nil,
+        didJwk: VCLDidJwk,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
         remoteCryptoServicesToken: VCLToken? = nil,
@@ -28,7 +28,7 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
     ) {
         networkService.sendRequest(
             endpoint: jwtSignServiceUrl,
-            body: generateJwtPayloadToSign(kid: kid, nonce: nonce, jwtDescriptor: jwtDescriptor).toJsonString(),
+            body: generateJwtPayloadToSign(didJwk: didJwk, nonce: nonce, jwtDescriptor: jwtDescriptor).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
             headers: [
@@ -49,7 +49,7 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
     }
     
     internal func generateJwtPayloadToSign(
-        kid: String?,
+        didJwk: VCLDidJwk,
         nonce: String?,
         jwtDescriptor: VCLJwtDescriptor
     ) -> [String: Any] {
@@ -58,11 +58,12 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
         var options = [String: Any]()
         var payload = jwtDescriptor.payload ?? [:]
         
-//        Base assumption:
+//        HeaderValues.XVnfProtocolVersion == VCLXVnfProtocolVersion.XVnfProtocolVersion1
+        header[CodingKeys.KeyJwk] = didJwk.publicJwk.valueDict
 //        HeaderValues.XVnfProtocolVersion == VCLXVnfProtocolVersion.XVnfProtocolVersion2
-        header[CodingKeys.KeyKid] = kid
-
-        options[CodingKeys.KeyKeyId] = jwtDescriptor.keyId
+        header[CodingKeys.KeyKid] = didJwk.kid
+        
+        options[CodingKeys.KeyKeyId] = didJwk.keyId
         
         payload[CodingKeys.KeyNonce] = nonce
         payload[CodingKeys.KeyAud] = jwtDescriptor.aud
@@ -78,6 +79,7 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
 
     public struct CodingKeys {
         public static let KeyKeyId = "keyId"
+        public static let KeyJwk = "jwk"
         public static let KeyKid = "kid"
         public static let KeyIss = "iss"
         public static let KeyAud = "aud"

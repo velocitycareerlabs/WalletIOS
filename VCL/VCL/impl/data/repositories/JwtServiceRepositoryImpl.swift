@@ -37,14 +37,14 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
     }
     
     func generateSignedJwt(
-        kid: String? = nil,
+        didJwk: VCLDidJwk,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
         remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         jwtSignService.sign(
-            kid: kid,
+            didJwk: didJwk,
             nonce: nonce,
             jwtDescriptor: jwtDescriptor,
             remoteCryptoServicesToken: remoteCryptoServicesToken,

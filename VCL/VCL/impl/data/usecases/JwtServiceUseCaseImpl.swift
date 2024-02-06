@@ -40,7 +40,7 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
     }
     
     func generateSignedJwt(
-        kid: String? = nil,
+        didJwk: VCLDidJwk,
         nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
         remoteCryptoServicesToken: VCLToken?,
@@ -48,7 +48,7 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
     ) {
         executor.runOnBackground { [weak self] in
             self?.jwtServiceRepository.generateSignedJwt(
-                kid: kid,
+                didJwk: didJwk,
                 nonce: nonce,
                 jwtDescriptor: jwtDescriptor,
                 remoteCryptoServicesToken: remoteCryptoServicesToken

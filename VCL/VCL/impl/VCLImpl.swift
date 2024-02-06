@@ -211,7 +211,7 @@ public class VCLImpl: VCL {
     
     public func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
-        didJwk: VCLDidJwk? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
@@ -305,7 +305,7 @@ public class VCLImpl: VCL {
     
     public func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        didJwk: VCLDidJwk? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
@@ -378,7 +378,7 @@ public class VCLImpl: VCL {
     
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        didJwk: VCLDidJwk? = nil,
+        didJwk: VCLDidJwk,
         sessionToken: VCLToken,
         remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
@@ -463,12 +463,14 @@ public class VCLImpl: VCL {
     }
     
     public func generateSignedJwt(
+        didJwk: VCLDidJwk,
         jwtDescriptor: VCLJwtDescriptor,
         remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLJwt) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         jwtServiceUseCase.generateSignedJwt(
+            didJwk: didJwk,
             jwtDescriptor: jwtDescriptor,
             remoteCryptoServicesToken: remoteCryptoServicesToken
         ) {

@@ -14,9 +14,18 @@ import XCTest
 final class JwtServiceUseCaseTest: XCTestCase {
     
     private var subject: JwtServiceUseCase!
-    private var keyService: VCLKeyService!
+    private var didJwk: VCLDidJwk!
+    private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     
     override func setUp() {
+        keyService.generateDidJwk() { [weak self] didJwkResult in
+            do {
+                self!.didJwk = try didJwkResult.get()
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+        
         subject = JwtServiceUseCaseImpl(
             JwtServiceRepositoryImpl(
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
@@ -24,11 +33,11 @@ final class JwtServiceUseCaseTest: XCTestCase {
             ),
             EmptyExecutor()
         )
-        keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     }
     
     func testSign() {
         subject.generateSignedJwt(
+            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: JwtServiceMocks.Json.toDictionary()!,
                 jti: "some jti",
@@ -49,6 +58,7 @@ final class JwtServiceUseCaseTest: XCTestCase {
     
     func testSignVerify() {
         subject.generateSignedJwt(
+            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: JwtServiceMocks.Json.toDictionary()!,
                 jti: "some jti",
@@ -82,8 +92,8 @@ final class JwtServiceUseCaseTest: XCTestCase {
                 let didJwk = try didJwkResult.get()
                 
                 self!.subject.generateSignedJwt(
+                    didJwk: didJwk,
                     jwtDescriptor: VCLJwtDescriptor(
-                        keyId: didJwk.keyId,
                         payload: JwtServiceMocks.Json.toDictionary()!,
                         jti: "some jti",
                         iss: "some iss"

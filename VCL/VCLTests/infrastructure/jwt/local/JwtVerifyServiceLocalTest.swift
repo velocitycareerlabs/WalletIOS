@@ -13,15 +13,14 @@ class JwtVerifyServiceLocalTest: XCTestCase {
     private var subject: VCLJwtVerifyService!
     private var jwtSignService: VCLJwtSignService!
     private var didJwk: VCLDidJwk!
-    
+    private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
+
     private let payloadMock = "{\"key1\":\"value1\",\"key2\":\"value2\"}".toDictionary()
     private let jtiMock = "some jti"
     private let issMock = "some iss"
     private let audMock = "some sud"
     private let nonceMock = "some nonce"
-    
-    private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
-    
+        
     override func setUp() {
         keyService.generateDidJwk() { [weak self] didJwkResult in
             do {
@@ -36,10 +35,9 @@ class JwtVerifyServiceLocalTest: XCTestCase {
     
     func testSignAndVerify() {
         jwtSignService.sign(
-            kid: didJwk.kid,
+            didJwk: didJwk,
             nonce: nonceMock,
             jwtDescriptor: VCLJwtDescriptor(
-                keyId: didJwk.keyId,
                 payload: payloadMock,
                 jti: jtiMock,
                 iss: issMock,
