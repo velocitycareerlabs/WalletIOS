@@ -14,7 +14,7 @@ public struct VCLCredentialManifest {
     public let vendorOriginContext: String?
     public let verifiedProfile: VCLVerifiedProfile
     public let deepLink: VCLDeepLink?
-    public let didJwk: VCLDidJwk?
+    public let didJwk: VCLDidJwk
     public let remoteCryptoServicesToken: VCLToken?
     
     public init(
@@ -22,7 +22,7 @@ public struct VCLCredentialManifest {
         vendorOriginContext: String? = nil,
         verifiedProfile: VCLVerifiedProfile,
         deepLink: VCLDeepLink? = nil,
-        didJwk: VCLDidJwk? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.jwt = jwt

@@ -22,9 +22,9 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     }
     
     func sign(
-        didJwk: VCLDidJwk,
-        nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
+        nonce: String? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
@@ -46,7 +46,7 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
                                         jsonWebKey: publicJwk,
                                         keyId: didJwk.kid
                                     )
-                                    let claims = VCLClaims(all: self?.generateClaims(nonce: nonce, jwtDescriptor: jwtDescriptor) ?? [:])
+                                    let claims = VCLClaims(all: self?.generateClaims(jwtDescriptor: jwtDescriptor, nonce: nonce) ?? [:])
                                     
                                     let protectedMessage = try? self?.createProtectedMessage(headers: header, claims: claims)
                                     
@@ -93,8 +93,8 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     }
     
     private func generateClaims(
-        nonce: String?,
-        jwtDescriptor: VCLJwtDescriptor
+        jwtDescriptor: VCLJwtDescriptor,
+        nonce: String?
     ) -> [String: Any] {
         var retVal = jwtDescriptor.payload ?? [String: Any]()
         retVal[CodingKeys.KeyIss] = jwtDescriptor.iss

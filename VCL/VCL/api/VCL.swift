@@ -90,8 +90,8 @@ public protocol VCL {
     )
     
     func generateSignedJwt(
-        didJwk: VCLDidJwk,
         jwtDescriptor: VCLJwtDescriptor,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken?,
         successHandler: @escaping (VCLJwt) -> Void,
         errorHandler: @escaping (VCLError) -> Void
@@ -191,8 +191,8 @@ extension VCL {
         errorHandler: @escaping (VCLError) -> Void
     ) {
         generateSignedJwt(
-            didJwk: didJwk,
             jwtDescriptor: jwtDescriptor,
+            didJwk: didJwk,
             remoteCryptoServicesToken: remoteCryptoServicesToken,
             successHandler: successHandler,
             errorHandler: errorHandler

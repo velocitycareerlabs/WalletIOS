@@ -39,7 +39,7 @@ public struct VCLFinalizeOffersDescriptor {
     public var exchangeId: String { get { credentialManifest.exchangeId } }
     public var finalizeOffersUri: String { get { credentialManifest.finalizeOffersUri } }
     public var serviceTypes: VCLServiceTypes { get { credentialManifest.verifiedProfile.serviceTypes } }
-    public var didJwk: VCLDidJwk? { get { credentialManifest.didJwk } }
+    public var didJwk: VCLDidJwk { get { credentialManifest.didJwk } }
     public var remoteCryptoServicesToken: VCLToken? { get { credentialManifest.remoteCryptoServicesToken } }
     
     public func generateRequestBody(jwt: VCLJwt) -> [String: Any?] {

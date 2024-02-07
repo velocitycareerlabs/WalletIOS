@@ -41,13 +41,12 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     ) {
         executor.runOnBackground { [weak self] in
             self?.jwtServiceRepository.generateSignedJwt(
-                kid: finalizeOffersDescriptor.didJwk?.kid,
-                nonce: finalizeOffersDescriptor.offers.challenge,
                 jwtDescriptor: VCLJwtDescriptor(
-                    keyId: finalizeOffersDescriptor.didJwk?.keyId,
-                    iss: finalizeOffersDescriptor.didJwk?.did ?? UUID().uuidString,
+                    iss: finalizeOffersDescriptor.didJwk.did,
                     aud: finalizeOffersDescriptor.aud
                 ),
+                nonce: finalizeOffersDescriptor.offers.challenge,
+                didJwk: finalizeOffersDescriptor.didJwk,
                 remoteCryptoServicesToken: finalizeOffersDescriptor.remoteCryptoServicesToken
             ) { proofJwtResult in
                 do {

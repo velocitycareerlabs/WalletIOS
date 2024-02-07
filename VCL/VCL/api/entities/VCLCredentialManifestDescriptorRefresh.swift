@@ -16,7 +16,7 @@ public class VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescri
         service: VCLService,
         issuingType: VCLIssuingType = VCLIssuingType.Refresh,
         credentialIds:[String],
-        didJwk: VCLDidJwk? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.credentialIds = credentialIds

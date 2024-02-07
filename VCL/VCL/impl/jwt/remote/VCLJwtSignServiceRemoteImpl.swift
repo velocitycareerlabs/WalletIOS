@@ -20,15 +20,15 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
     }
     
     func sign(
-        didJwk: VCLDidJwk,
-        nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
+        nonce: String? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: jwtSignServiceUrl,
-            body: generateJwtPayloadToSign(didJwk: didJwk, nonce: nonce, jwtDescriptor: jwtDescriptor).toJsonString(),
+            body: generateJwtPayloadToSign(jwtDescriptor: jwtDescriptor, nonce: nonce, didJwk: didJwk).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
             headers: [
@@ -49,9 +49,9 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
     }
     
     internal func generateJwtPayloadToSign(
-        didJwk: VCLDidJwk,
+        jwtDescriptor: VCLJwtDescriptor,
         nonce: String?,
-        jwtDescriptor: VCLJwtDescriptor
+        didJwk: VCLDidJwk
     ) -> [String: Any] {
         var retVal = [String: Any]()
         var header = [String: Any]()

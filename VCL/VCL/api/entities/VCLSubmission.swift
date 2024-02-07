@@ -16,7 +16,7 @@ public class VCLSubmission {
     public let verifiableCredentials: [VCLVerifiableCredential]?
     public let pushDelegate: VCLPushDelegate?
     public let vendorOriginContext: String?
-    public let didJwk: VCLDidJwk?
+    public let didJwk: VCLDidJwk
     public let remoteCryptoServicesToken: VCLToken?
     
     public let jti = UUID().uuidString
@@ -29,7 +29,7 @@ public class VCLSubmission {
         verifiableCredentials: [VCLVerifiableCredential]? = nil,
         pushDelegate: VCLPushDelegate? = nil,
         vendorOriginContext: String? = nil,
-        didJwk: VCLDidJwk? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.submitUri = submitUri

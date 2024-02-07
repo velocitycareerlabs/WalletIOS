@@ -17,7 +17,7 @@ public class VCLCredentialManifestDescriptor {
     public let did: String?
     public let vendorOriginContext: String?
     public let deepLink: VCLDeepLink?
-    public let didJwk: VCLDidJwk?
+    public let didJwk: VCLDidJwk
     public let remoteCryptoServicesToken: VCLToken?
     
     public init(
@@ -27,7 +27,7 @@ public class VCLCredentialManifestDescriptor {
         pushDelegate: VCLPushDelegate? = nil,
         vendorOriginContext: String? = nil,
         deepLink: VCLDeepLink? = nil,
-        didJwk: VCLDidJwk? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.uri = uri

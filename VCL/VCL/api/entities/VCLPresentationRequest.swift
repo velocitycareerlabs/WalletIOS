@@ -14,7 +14,7 @@ public struct VCLPresentationRequest {
     public let publicJwk: VCLPublicJwk
     public let deepLink: VCLDeepLink
     public let pushDelegate: VCLPushDelegate?
-    public let didJwk: VCLDidJwk?
+    public let didJwk: VCLDidJwk
     public let remoteCryptoServicesToken: VCLToken?
     
     public init(
@@ -22,7 +22,7 @@ public struct VCLPresentationRequest {
         publicJwk: VCLPublicJwk,
         deepLink: VCLDeepLink,
         pushDelegate: VCLPushDelegate? = nil,
-        didJwk: VCLDidJwk? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.jwt = jwt

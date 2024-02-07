@@ -16,7 +16,7 @@ public class VCLCredentialManifestDescriptorByService: VCLCredentialManifestDesc
         issuingType: VCLIssuingType = VCLIssuingType.Career,
         credentialTypes: [String]? = nil,
         pushDelegate: VCLPushDelegate? = nil,
-        didJwk: VCLDidJwk? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.service = service

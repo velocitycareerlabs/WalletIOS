@@ -15,7 +15,7 @@ public class VCLCredentialManifestDescriptorByDeepLink: VCLCredentialManifestDes
         deepLink: VCLDeepLink,
         issuingType: VCLIssuingType = VCLIssuingType.Career,
         pushDelegate: VCLPushDelegate? = nil,
-        didJwk: VCLDidJwk? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
         super.init(
