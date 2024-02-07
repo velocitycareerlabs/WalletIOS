@@ -22,7 +22,8 @@ final class VCLCredentialManifestDescriptorByDeepLinkTest: XCTestCase {
         subject = VCLCredentialManifestDescriptorByDeepLink(
             deepLink: CredentialManifestDescriptorMocks.DeepLink,
             issuingType: VCLIssuingType.Career,
-            pushDelegate: VCLPushDelegate(pushUrl: "some_url", pushToken: "some_token")
+            pushDelegate: VCLPushDelegate(pushUrl: "some_url", pushToken: "some_token"),
+            didJwk: DidJwkMocks.DidJwk
         )
         
         assert(subject.endpoint?.decode()?.isUrlEquivalentTo(

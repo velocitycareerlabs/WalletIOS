@@ -46,7 +46,7 @@ class ViewController: UIViewController {
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
                 environment: environment,
-                xVnfProtocolVersion: .XVnfProtocolVersion1
+                xVnfProtocolVersion: .XVnfProtocolVersion2
 //                cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
 //                    cryptoServiceType: .Remote,
 //                    remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(

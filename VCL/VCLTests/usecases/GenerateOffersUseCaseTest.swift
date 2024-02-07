@@ -13,10 +13,12 @@ import XCTest
 
 final class GenerateOffersUseCaseTest: XCTestCase {
     
-    private var subject: GenerateOffersUseCase!
+    private var subject1: GenerateOffersUseCase!
+    private var subject2: GenerateOffersUseCase!
+    private var subject3: GenerateOffersUseCase!
     
     func testGenerateOffers() {
-        subject = GenerateOffersUseCaseImpl(
+        subject1 = GenerateOffersUseCaseImpl(
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffers)
             ),
@@ -26,9 +28,10 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
                 jwt: CommonMocks.JWT,
-                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!),
+                didJwk: DidJwkMocks.DidJwk
         ))
-        subject.generateOffers(
+        subject1.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
             sessionToken: VCLToken(value: "")
         ) {
@@ -44,7 +47,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
     }
     
     func testGenerateOffersEmptyJsonObj() {
-        subject = GenerateOffersUseCaseImpl(
+        subject2 = GenerateOffersUseCaseImpl(
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonObj)
             ),
@@ -54,10 +57,11 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
                 jwt: CommonMocks.JWT,
-                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!),
+                didJwk: DidJwkMocks.DidJwk
             ))
 
-        subject.generateOffers( 
+        subject2.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
             sessionToken: VCLToken(value: "")
         ) {
@@ -72,7 +76,7 @@ final class GenerateOffersUseCaseTest: XCTestCase {
     }
     
     func testGenerateOffersEmptyJsonArr() {
-        subject = GenerateOffersUseCaseImpl(
+        subject3 = GenerateOffersUseCaseImpl(
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonArr)
             ),
@@ -82,10 +86,11 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
                 jwt: CommonMocks.JWT,
-                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!),
+                didJwk: DidJwkMocks.DidJwk
             ))
 
-        subject.generateOffers(
+        subject3.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
             sessionToken: VCLToken(value: "")
         ) {

@@ -15,9 +15,6 @@ final class VCLDeepLinkTest: XCTestCase {
     
     private var subject: VCLDeepLink!
     
-    override func setUp() {
-    }
-    
     func testOpenidInitiateIssuance() {
         subject = VCLDeepLink(value: DeepLinkMocks.OpenidInitiateIssuanceStrDev)
 
@@ -91,8 +88,5 @@ final class VCLDeepLinkTest: XCTestCase {
 //        assert(subject.requestUri?.isUrlEquivalentTo(url: DeepLinkMocks.CredentialManifestRequestDecodedUriStr) == true)
         assert(subject.vendorOriginContext == nil)
         assert(subject.did == DeepLinkMocks.IssuerDid)
-    }
-    
-    override func tearDown() {
     }
 }

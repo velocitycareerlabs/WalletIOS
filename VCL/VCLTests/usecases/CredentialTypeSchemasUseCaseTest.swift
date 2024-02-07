@@ -15,9 +15,6 @@ final class CredentialTypeSchemasUseCaseTest: XCTestCase {
     
     private var subject: CredentialTypeSchemasUseCase!
     
-    override func setUp() {
-    }
-    
     func testGetCredentialTypeSchemasSuccess() {
         subject = CredentialTypeSchemasUseCaseImpl(
             CredentialTypeSchemaRepositoryImpl(
@@ -37,8 +34,5 @@ final class CredentialTypeSchemasUseCaseTest: XCTestCase {
                 XCTFail("\(error)")
             }
         }
-    }
-    
-    override func tearDown() {
     }
 }

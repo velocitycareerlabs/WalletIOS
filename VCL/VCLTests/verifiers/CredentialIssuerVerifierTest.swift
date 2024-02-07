@@ -49,7 +49,8 @@ class CredentialIssuerVerifierTest: XCTestCase {
     func setUpSubjectProperties() {
         credentialManifestWithoutPermittedServices = VCLCredentialManifest(
             jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromNotaryIssuer),
-            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileWithoutServices.toDictionary()!)
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileWithoutServices.toDictionary()!),
+            didJwk: DidJwkMocks.DidJwk
         )
         finalizeOffersDescriptorWithoutPermittedServices = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifestWithoutPermittedServices,
@@ -60,7 +61,8 @@ class CredentialIssuerVerifierTest: XCTestCase {
 
         credentialManifestFromNotaryIssuer = VCLCredentialManifest(
             jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromNotaryIssuer),
-            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfNotaryIssuer.toDictionary()!)
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfNotaryIssuer.toDictionary()!),
+            didJwk: DidJwkMocks.DidJwk
         )
         finalizeOffersDescriptorOfNotaryIssuer = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifestFromNotaryIssuer,
@@ -71,7 +73,8 @@ class CredentialIssuerVerifierTest: XCTestCase {
 
         credentialManifestFromRegularIssuer = VCLCredentialManifest(
             jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromRegularIssuer),
-            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfRegularIssuer.toDictionary()!)
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfRegularIssuer.toDictionary()!),
+            didJwk: DidJwkMocks.DidJwk
         )
         finalizeOffersDescriptorOfRegularIssuer = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifestFromRegularIssuer,
@@ -82,7 +85,8 @@ class CredentialIssuerVerifierTest: XCTestCase {
 
         credentialManifestFromIdentityIssuer = VCLCredentialManifest(
             jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromRegularIssuer),
-            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfIdentityIssuer.toDictionary()!)
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfIdentityIssuer.toDictionary()!),
+            didJwk: DidJwkMocks.DidJwk
         )
         finalizeOffersDescriptorOfIdentityIssuer = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifestFromIdentityIssuer,

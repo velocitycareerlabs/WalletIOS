@@ -24,7 +24,7 @@ class JwtVerifyServiceLocalTest: XCTestCase {
     override func setUp() {
         keyService.generateDidJwk() { [weak self] didJwkResult in
             do {
-                self!.didJwk = try didJwkResult.get()
+                self?.didJwk = try didJwkResult.get()
             } catch {
                 XCTFail("\(error)")
             }
@@ -35,14 +35,14 @@ class JwtVerifyServiceLocalTest: XCTestCase {
     
     func testSignAndVerify() {
         jwtSignService.sign(
-            didJwk: didJwk,
-            nonce: nonceMock,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payloadMock,
                 jti: jtiMock,
                 iss: issMock,
                 aud: audMock
-            )
+            ),
+            nonce: nonceMock,
+            didJwk: didJwk
         ) { jwtResult in
             do {
                 let jwt = try jwtResult.get()

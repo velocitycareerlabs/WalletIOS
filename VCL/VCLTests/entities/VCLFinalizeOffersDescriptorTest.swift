@@ -36,7 +36,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     override func setUp() {
         keyService.generateDidJwk() { [weak self] didJwkResult in
             do {
-                self!.didJwk = try didJwkResult.get()
+                self?.didJwk = try didJwkResult.get()
             } catch {
                 XCTFail("\(error)")
             }
@@ -44,7 +44,8 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
         
         let credentialManifest = VCLCredentialManifest(
             jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
-            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!),
+            didJwk: DidJwkMocks.DidJwk
         )
         
         subject = VCLFinalizeOffersDescriptor(
@@ -59,14 +60,15 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
         let payload = "{\"key1\": \"value1\"}".toDictionary()!
         
         VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)).sign(
-            didJwk: didJwk,
-            nonce: nonceMock,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payload,
                 jti: jtiMock,
                 iss: issMock,
                 aud: audMock
-            )) { [weak self] jwtResult in
+            ),
+            nonce: nonceMock,
+            didJwk: didJwk
+        ) { [weak self] jwtResult in
                 do {
                     let jwt = try jwtResult.get()
                     let requestBody = self!.subject.generateRequestBody(jwt: jwt)

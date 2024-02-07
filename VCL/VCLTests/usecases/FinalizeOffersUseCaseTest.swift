@@ -14,6 +14,7 @@ import XCTest
 final class FinalizeOffersUseCaseTest: XCTestCase {
     
     private var subject: FinalizeOffersUseCase!
+    private var didJwk: VCLDidJwk!
     private var token: VCLToken!
     private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     private var credentialManifestFailed: VCLCredentialManifest!
@@ -25,10 +26,19 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
     private let credentialsAmount = CredentialMocks.JwtCredentialsFromRegularIssuer.toList()?.count
     
     override func setUp() {
+        keyService.generateDidJwk() { [weak self] didJwkResult in
+            do {
+                self?.didJwk = try didJwkResult.get()
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+        
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: VCLCredentialManifest(
                 jwt: CommonMocks.JWT,
-                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr2.toDictionary()!)
+                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr2.toDictionary()!),
+                didJwk: didJwk
             )
         )
         GenerateOffersUseCaseImpl(
@@ -51,11 +61,13 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 
                 self.credentialManifestFailed = VCLCredentialManifest(
                     jwt: self.vclJwtFailed,
-                    verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr2.toDictionary()!)
+                    verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr2.toDictionary()!),
+                    didJwk: self.didJwk
                 )
                 self.credentialManifestPassed = VCLCredentialManifest(
                     jwt: self.vclJwtPassed,
-                    verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr2.toDictionary()!)
+                    verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr2.toDictionary()!),
+                    didJwk: self.didJwk
                 )
                 
                 self.finalizeOffersDescriptorFailed = VCLFinalizeOffersDescriptor(
@@ -77,7 +89,6 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
     }
     
     func testFailedCredentials() {
-        // Arrange
         subject = FinalizeOffersUseCaseImpl(
             FinalizeOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialMocks.JwtCredentialsFromRegularIssuer)

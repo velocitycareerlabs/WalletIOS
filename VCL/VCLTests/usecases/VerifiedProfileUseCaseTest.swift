@@ -13,16 +13,20 @@ import XCTest
 
 final class VerifiedProfileUseCaseTest: XCTestCase {
     
-    private var subject: VerifiedProfileUseCase!
+    private var subject1: VerifiedProfileUseCase!
+    private var subject2: VerifiedProfileUseCase!
+    private var subject3: VerifiedProfileUseCase!
+    private var subject4: VerifiedProfileUseCase!
+    private var subject5: VerifiedProfileUseCase!
     
     func testGetVerifiedProfileIssuerSuccess() {
-        subject = VerifiedProfileUseCaseImpl(
+        subject1 = VerifiedProfileUseCaseImpl(
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1)
             ),
             EmptyExecutor()
         )
-        subject.getVerifiedProfile(
+        subject1.getVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
                 did: "did123"
             )
@@ -40,14 +44,14 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
     }
 
     func testGetVerifiedProfileIssuerInspector1Success() {
-        subject = VerifiedProfileUseCaseImpl(
+        subject2 = VerifiedProfileUseCaseImpl(
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
             ),
             EmptyExecutor()
         )
 
-        subject.getVerifiedProfile(
+        subject2.getVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
                 did: "did123"
             )
@@ -65,14 +69,14 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
     }
 
     func testGetVerifiedProfileIssuerInspector2Success() {
-        subject = VerifiedProfileUseCaseImpl(
+        subject3 = VerifiedProfileUseCaseImpl(
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
             ),
             EmptyExecutor()
         )
 
-        subject.getVerifiedProfile(
+        subject3.getVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
                 did: "did123"
             )
@@ -90,14 +94,14 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
     }
 
     func testGetVerifiedProfileIssuerNotaryIssuer2Success() {
-        subject = VerifiedProfileUseCaseImpl(
+        subject4 = VerifiedProfileUseCaseImpl(
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
             ),
             EmptyExecutor()
         )
         
-        subject.getVerifiedProfile(
+        subject4.getVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
                 did: "did123"
             )
@@ -115,14 +119,14 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
     }
 
     func testGetVerifiedProfileIssuerNotaryIssuerSuccess() {
-        subject = VerifiedProfileUseCaseImpl(
+        subject5 = VerifiedProfileUseCaseImpl(
             VerifiedProfileRepositoryImpl(
                 NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
             ),
             EmptyExecutor()
         )
         
-        subject.getVerifiedProfile(
+        subject5.getVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
                 did: "did123"
             )

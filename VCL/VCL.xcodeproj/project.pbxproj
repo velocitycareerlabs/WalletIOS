@@ -291,6 +291,7 @@
 		28F1A626299E64D6001A151F /* ProfileServiceTypeVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F1A625299E64D6001A151F /* ProfileServiceTypeVerifier.swift */; };
 		28F1A628299E9AD6001A151F /* VCLIssuingTypeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F1A627299E9AD6001A151F /* VCLIssuingTypeTest.swift */; };
 		28F1A62B299EA70D001A151F /* ProfileServiceTypeVerifierTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F1A62A299EA70D001A151F /* ProfileServiceTypeVerifierTest.swift */; };
+		28F2D9FC2B73B311007E4583 /* DidJwkMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F2D9FB2B73B311007E4583 /* DidJwkMocks.swift */; };
 		28F6093B27678B5C00EBDEC5 /* CountriesUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F6093A27678B5C00EBDEC5 /* CountriesUseCaseTest.swift */; };
 		28FA80E626789CA2000A3C7F /* JwtServiceUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FA80E526789CA2000A3C7F /* JwtServiceUseCase.swift */; };
 		28FA80E826789D25000A3C7F /* JwtServiceUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FA80E726789D25000A3C7F /* JwtServiceUseCaseImpl.swift */; };
@@ -581,6 +582,7 @@
 		28F1A625299E64D6001A151F /* ProfileServiceTypeVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceTypeVerifier.swift; sourceTree = "<group>"; };
 		28F1A627299E9AD6001A151F /* VCLIssuingTypeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLIssuingTypeTest.swift; sourceTree = "<group>"; };
 		28F1A62A299EA70D001A151F /* ProfileServiceTypeVerifierTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceTypeVerifierTest.swift; sourceTree = "<group>"; };
+		28F2D9FB2B73B311007E4583 /* DidJwkMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DidJwkMocks.swift; sourceTree = "<group>"; };
 		28F6093A27678B5C00EBDEC5 /* CountriesUseCaseTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesUseCaseTest.swift; sourceTree = "<group>"; };
 		28FA80E526789CA2000A3C7F /* JwtServiceUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JwtServiceUseCase.swift; sourceTree = "<group>"; };
 		28FA80E726789D25000A3C7F /* JwtServiceUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JwtServiceUseCaseImpl.swift; sourceTree = "<group>"; };
@@ -1243,6 +1245,7 @@
 				281E504C26CA9D6F00D0FB4F /* DeepLinkMocks.swift */,
 				283BCF7129B921BA0023B219 /* ErrorMocks.swift */,
 				28C15C9926CA8D3C00E248C3 /* ExchangeProgressMocks.swift */,
+				28F2D9FB2B73B311007E4583 /* DidJwkMocks.swift */,
 				285D153B26CA90E200532E1C /* GenerateOffersMocks.swift */,
 				284D72242A670E0C00298DB9 /* JsonLdMocks.swift */,
 				28A595B726CA724900D6E176 /* JwtServiceMocks.swift */,
@@ -1647,6 +1650,7 @@
 				287B13EA2B38785C00421A29 /* TokenMocks.swift in Sources */,
 				28C52808293DF98500D5D7FF /* VCLPresentationRequestDescriptorTest.swift in Sources */,
 				28576F4C2AD16971008E6A48 /* EmptyExecutor.swift in Sources */,
+				28F2D9FC2B73B311007E4583 /* DidJwkMocks.swift in Sources */,
 				2801D1CA2A31EF4F00B659B4 /* VCLJwtTest.swift in Sources */,
 				289A53AB264D64E500B84389 /* CredentialManifestUseCaseTest.swift in Sources */,
 				28C15C9226CA8AA000E248C3 /* CredentialTypesMocks.swift in Sources */,
@@ -1892,7 +1896,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 125;
+				CURRENT_PROJECT_VERSION = 126;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1905,7 +1909,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1922,7 +1926,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 125;
+				CURRENT_PROJECT_VERSION = 126;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1935,7 +1939,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

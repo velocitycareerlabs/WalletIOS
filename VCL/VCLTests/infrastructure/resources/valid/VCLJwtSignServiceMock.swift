@@ -12,9 +12,10 @@ import Foundation
 
 class VCLJwtSignServiceMock: VCLJwtSignService {
     func sign(
-        kid: String?,
-        nonce: String?,
         jwtDescriptor: VCLJwtDescriptor,
+        nonce: String?,
+        didJwk: VCLDidJwk,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         completionBlock(.success(VCLJwt(encodedJwt: "")))

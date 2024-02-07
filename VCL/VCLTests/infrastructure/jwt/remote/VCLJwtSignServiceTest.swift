@@ -19,7 +19,7 @@ class VCLJwtSignServiceTest: XCTestCase {
     override func setUp() {
         keyService.generateDidJwk() { [weak self] didJwkResult in
             do {
-                self!.didJwk = try didJwkResult.get()
+                self?.didJwk = try didJwkResult.get()
             } catch {
                 XCTFail("\(error)")
             }
@@ -33,14 +33,14 @@ class VCLJwtSignServiceTest: XCTestCase {
 
     func testGenerateJwtPayloadToSign() {
         let payloadToSign = subject.generateJwtPayloadToSign(
-            didJwk: didJwk,
-            nonce: "nonce 1",
             jwtDescriptor: VCLJwtDescriptor(
                 payload: "{\"payload\": \"payload 1\"}".toDictionary(),
                 jti: "jti 1",
                 iss: "iss 1",
                 aud: "aud 1"
-            )
+            ),
+            nonce: "nonce 1",
+            didJwk: didJwk
         )
         let header = payloadToSign["header"] as? [String: Any]
         let options = payloadToSign["options"] as? [String: Any]

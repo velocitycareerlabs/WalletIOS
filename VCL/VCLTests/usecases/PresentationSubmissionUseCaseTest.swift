@@ -14,7 +14,18 @@ import XCTest
 final class PresentationSubmissionUseCaseTest: XCTestCase {
     
     private var subject: PresentationSubmissionUseCase!
+    private var didJwk: VCLDidJwk!
     private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
+
+    override func setUp() {
+        keyService.generateDidJwk() { [weak self] didJwkResult in
+            do {
+                self?.didJwk = try didJwkResult.get()
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+    }
     
     func testSubmitPresentationSuccess() {
         subject = PresentationSubmissionUseCaseImpl(
@@ -31,7 +42,8 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
             presentationRequest: VCLPresentationRequest(
                 jwt: CommonMocks.JWT,
                 publicJwk: VCLPublicJwk(valueStr: "{}"),
-                deepLink: VCLDeepLink(value: "")
+                deepLink: VCLDeepLink(value: ""),
+                didJwk: didJwk
             ),
             verifiableCredentials: [VCLVerifiableCredential]()
         )
@@ -74,8 +86,5 @@ final class PresentationSubmissionUseCaseTest: XCTestCase {
             disclosureComplete: (exchangeJsonDict[VCLExchange.CodingKeys.KeyDisclosureComplete] as! Bool),
             exchangeComplete: (exchangeJsonDict[VCLExchange.CodingKeys.KeyExchangeComplete] as! Bool)
         )
-    }
-    
-    override func tearDown() {
     }
 }
