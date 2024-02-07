@@ -447,12 +447,14 @@ public class VCLImpl: VCL {
     }
     
     public func generateSignedJwt(
+        didJwk: VCLDidJwk,
         jwtDescriptor: VCLJwtDescriptor,
         remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLJwt) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         jwtServiceUseCase.generateSignedJwt(
+            didJwk: didJwk,
             jwtDescriptor: jwtDescriptor,
             remoteCryptoServicesToken: remoteCryptoServicesToken
         ) {

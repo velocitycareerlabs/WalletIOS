@@ -38,10 +38,9 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignFullParams() {
         subject.sign(
-            kid: didJwk.kid,
+            didJwk: didJwk,
             nonce: nonceMock,
             jwtDescriptor: VCLJwtDescriptor(
-                keyId: didJwk.keyId,
                 payload: payloadMock,
                 jti: jtiMock,
                 iss: issMock,
@@ -69,9 +68,9 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignPartialParams1() {
         subject.sign(
+            didJwk: didJwk,
             nonce: nonceMock,
             jwtDescriptor: VCLJwtDescriptor(
-                keyId: didJwk.keyId,
                 payload: payloadMock,
                 jti: jtiMock,
                 iss: issMock,
@@ -99,8 +98,8 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignPartialParams2() {
         subject.sign(
+            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
-                keyId: didJwk.keyId,
                 payload: payloadMock,
                 jti: jtiMock,
                 iss: issMock,
@@ -128,6 +127,7 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignPartialParams3() {
         subject.sign(
+            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payloadMock,
                 iss: issMock,
@@ -155,6 +155,7 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignPartialParams4() {
         subject.sign(
+            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payloadMock,
                 iss: issMock
@@ -181,6 +182,7 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignPartParams5() {
         subject.sign(
+            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
                 iss: issMock
             )
