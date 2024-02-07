@@ -13,7 +13,12 @@ import XCTest
 
 final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
     
-    private var subject: CredentialTypesUIFormSchemaUseCase!
+    private var subject1: CredentialTypesUIFormSchemaUseCase!
+    private var subject2: CredentialTypesUIFormSchemaUseCase!
+    private var subject3: CredentialTypesUIFormSchemaUseCase!
+    private var subject4: CredentialTypesUIFormSchemaUseCase!
+    private var subject5: CredentialTypesUIFormSchemaUseCase!
+    
     private var mockedCountries: VCLCountries!
     
     override func setUp() {
@@ -21,7 +26,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
     }
     
     func testCredentialTypesFormSchemaFull() {
-        subject = CredentialTypesUIFormSchemaUseCaseImpl(
+        subject1 = CredentialTypesUIFormSchemaUseCaseImpl(
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypesUIFormSchemaMocks.UISchemaFormJsonFull)
             ),
@@ -29,7 +34,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             DispatcherImpl()
         )
 
-        subject.getCredentialTypesUIFormSchema(
+        subject1.getCredentialTypesUIFormSchema(
             credentialTypesUIFormSchemaDescriptor:VCLCredentialTypesUIFormSchemaDescriptor(
                 credentialType: "some type", countryCode: VCLCountries.Codes.CA
             ),
@@ -46,7 +51,6 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
                 let expectedAddressRegionCodes = addressRegionJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiEnum] as! [String]
                 let expectedAddressRegionNames = addressRegionJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiNames] as! [String]
                 
-                //        Assert
                 assert(expectedAddressCountryCodes == CredentialTypesUIFormSchemaMocks.CountryCodes.toList()!)
                 assert(expectedAddressCountryNames == CredentialTypesUIFormSchemaMocks.CountryNames.toList()!)
                 assert(expectedAddressRegionCodes == CredentialTypesUIFormSchemaMocks.CanadaRegionCodes.toList()!)
@@ -58,7 +62,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
     }
     
     func testCredentialTypesFormSchemaOnlyCountries() {
-        subject = CredentialTypesUIFormSchemaUseCaseImpl(
+        subject2 = CredentialTypesUIFormSchemaUseCaseImpl(
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypesUIFormSchemaMocks.UISchemaFormJsonOnlyCountries)
             ),
@@ -66,7 +70,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             DispatcherImpl()
         )
 
-        subject.getCredentialTypesUIFormSchema(
+        subject2.getCredentialTypesUIFormSchema(
             credentialTypesUIFormSchemaDescriptor:VCLCredentialTypesUIFormSchemaDescriptor(
                 credentialType: "some type", countryCode: VCLCountries.Codes.CA
             ),
@@ -83,7 +87,6 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
                 let expectedAddressRegionCodes = addressRegionJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiEnum] as? [String]
                 let expectedAddressRegionNames = addressRegionJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiNames] as? [String]
                 
-                //        Assert
                 assert(expectedAddressCountryCodes == CredentialTypesUIFormSchemaMocks.CountryCodes.toList()!)
                 assert(expectedAddressCountryNames == CredentialTypesUIFormSchemaMocks.CountryNames.toList()!)
                 assert(expectedAddressRegionCodes == nil)
@@ -95,8 +98,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
     }
     
     func testCredentialTypesFormSchemaOnlyRegions() {
-        //        Arrange
-        subject = CredentialTypesUIFormSchemaUseCaseImpl(
+        subject3 = CredentialTypesUIFormSchemaUseCaseImpl(
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypesUIFormSchemaMocks.UISchemaFormJsonOnlyRegions)
             ),
@@ -104,7 +106,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             DispatcherImpl()
         )
         
-        subject.getCredentialTypesUIFormSchema(
+        subject3.getCredentialTypesUIFormSchema(
             credentialTypesUIFormSchemaDescriptor:VCLCredentialTypesUIFormSchemaDescriptor(
                 credentialType: "some type", countryCode: VCLCountries.Codes.CA
             ),
@@ -121,7 +123,6 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
                 let expectedAddressRegionCodes = addressRegionJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiEnum] as! [String]
                 let expectedAddressRegionNames = addressRegionJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiNames] as! [String]
                 
-                //        Assert
                 assert(expectedAddressCountryCodes == nil)
                 assert(expectedAddressCountryNames == nil)
                 assert(expectedAddressRegionCodes == CredentialTypesUIFormSchemaMocks.CanadaRegionCodes.toList()!)
@@ -133,7 +134,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
     }
     
     func testCredentialTypesFormSchemaOnlyEnums() {
-        subject = CredentialTypesUIFormSchemaUseCaseImpl(
+        subject4 = CredentialTypesUIFormSchemaUseCaseImpl(
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialTypesUIFormSchemaMocks.UISchemaFormJsonOnlyEnums)
             ),
@@ -141,7 +142,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             DispatcherImpl()
         )
 
-        subject.getCredentialTypesUIFormSchema(
+        subject4.getCredentialTypesUIFormSchema(
             credentialTypesUIFormSchemaDescriptor:VCLCredentialTypesUIFormSchemaDescriptor(
                 credentialType: "some type", countryCode: VCLCountries.Codes.CA
             ),
@@ -158,7 +159,6 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
                 let expectedAddressRegionCodes = addressRegionJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiEnum] as! [String]
                 let expectedAddressRegionNames = addressRegionJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiNames] as? [String]
                 
-                //        Assert
                 assert(expectedAddressCountryCodes == CredentialTypesUIFormSchemaMocks.CountryCodes.toList()!)
                 assert(expectedAddressCountryNames == nil)
                 assert(expectedAddressRegionCodes == CredentialTypesUIFormSchemaMocks.CanadaRegionCodes.toList()!)
@@ -170,7 +170,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
     }
     
     func testCredentialTypesFormSchemaFailure() {
-        subject = CredentialTypesUIFormSchemaUseCaseImpl(
+        subject5 = CredentialTypesUIFormSchemaUseCaseImpl(
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceSuccess(validResponse: "wrong payload")
             ),
@@ -178,7 +178,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             DispatcherImpl()
         )
         
-        subject.getCredentialTypesUIFormSchema(
+        subject5.getCredentialTypesUIFormSchema(
             credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor(
                 credentialType: "some type", countryCode: VCLCountries.Codes.CA
             ),

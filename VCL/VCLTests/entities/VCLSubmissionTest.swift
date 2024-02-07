@@ -27,7 +27,8 @@ final class VCLSubmissionTest: XCTestCase {
         subjectIdentificationSubmission = VCLIdentificationSubmission(
             credentialManifest: VCLCredentialManifest(
                 jwt: CommonMocks.JWT,
-                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!)
+                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!),
+                didJwk: DidJwkMocks.DidJwk
             ),
             verifiableCredentials: PresentationSubmissionMocks.SelectionsList
         )

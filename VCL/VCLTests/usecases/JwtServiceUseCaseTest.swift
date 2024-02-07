@@ -20,7 +20,7 @@ final class JwtServiceUseCaseTest: XCTestCase {
     override func setUp() {
         keyService.generateDidJwk() { [weak self] didJwkResult in
             do {
-                self!.didJwk = try didJwkResult.get()
+                self?.didJwk = try didJwkResult.get()
             } catch {
                 XCTFail("\(error)")
             }
@@ -37,12 +37,12 @@ final class JwtServiceUseCaseTest: XCTestCase {
     
     func testSign() {
         subject.generateSignedJwt(
-            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: JwtServiceMocks.Json.toDictionary()!,
                 jti: "some jti",
                 iss: "some iss"
             ),
+            didJwk: didJwk,
             remoteCryptoServicesToken: nil
         ) {
             do {
@@ -58,12 +58,12 @@ final class JwtServiceUseCaseTest: XCTestCase {
     
     func testSignVerify() {
         subject.generateSignedJwt(
-            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: JwtServiceMocks.Json.toDictionary()!,
                 jti: "some jti",
                 iss: "some iss"
             ),
+            didJwk: didJwk,
             remoteCryptoServicesToken: nil
         ) {
             do {
@@ -92,12 +92,12 @@ final class JwtServiceUseCaseTest: XCTestCase {
                 let didJwk = try didJwkResult.get()
                 
                 self!.subject.generateSignedJwt(
-                    didJwk: didJwk,
                     jwtDescriptor: VCLJwtDescriptor(
                         payload: JwtServiceMocks.Json.toDictionary()!,
                         jti: "some jti",
                         iss: "some iss"
                     ),
+                    didJwk: didJwk,
                     remoteCryptoServicesToken: nil
                 ) {
                     do {

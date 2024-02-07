@@ -11,9 +11,9 @@ import Foundation
 
 public protocol VCLJwtSignService {
     func sign(
-        didJwk: VCLDidJwk,
-        nonce: String?,
         jwtDescriptor: VCLJwtDescriptor,
+        nonce: String?,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     )
@@ -21,16 +21,16 @@ public protocol VCLJwtSignService {
 
 extension VCLJwtSignService {
     func sign(
-        didJwk: VCLDidJwk,
-        nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
+        nonce: String? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         sign(
-            didJwk: didJwk,
-            nonce: nonce,
             jwtDescriptor: jwtDescriptor,
+            nonce: nonce,
+            didJwk: didJwk,
             remoteCryptoServicesToken: remoteCryptoServicesToken,
             completionBlock: completionBlock
         )

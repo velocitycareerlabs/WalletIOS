@@ -20,7 +20,9 @@ class VCLIdentificationSubmission: VCLSubmission {
             exchangeId: credentialManifest.exchangeId,
             presentationDefinitionId: credentialManifest.presentationDefinitionId,
             verifiableCredentials: verifiableCredentials,
-            vendorOriginContext: credentialManifest.vendorOriginContext
+            vendorOriginContext: credentialManifest.vendorOriginContext,
+            didJwk: credentialManifest.didJwk,
+            remoteCryptoServicesToken: credentialManifest.remoteCryptoServicesToken
         )
     }
 }

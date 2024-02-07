@@ -12,7 +12,6 @@ import Foundation
 protocol PresentationRequestUseCase {
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     )
 }

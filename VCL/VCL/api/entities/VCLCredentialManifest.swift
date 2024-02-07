@@ -14,17 +14,23 @@ public struct VCLCredentialManifest {
     public let vendorOriginContext: String?
     public let verifiedProfile: VCLVerifiedProfile
     public let deepLink: VCLDeepLink?
+    public let didJwk: VCLDidJwk
+    public let remoteCryptoServicesToken: VCLToken?
     
     public init(
         jwt: VCLJwt,
         vendorOriginContext: String? = nil,
         verifiedProfile: VCLVerifiedProfile,
-        deepLink: VCLDeepLink? = nil
+        deepLink: VCLDeepLink? = nil,
+        didJwk: VCLDidJwk,
+        remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.jwt = jwt
         self.vendorOriginContext = vendorOriginContext
         self.verifiedProfile = verifiedProfile
         self.deepLink = deepLink
+        self.didJwk = didJwk
+        self.remoteCryptoServicesToken = remoteCryptoServicesToken
     }
     
     public var iss: String { get { return jwt.payload?[CodingKeys.KeyIss] as? String ?? "" } }

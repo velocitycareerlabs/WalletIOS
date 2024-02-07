@@ -34,7 +34,6 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         verifiedProfile: VCLVerifiedProfile,
-        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
@@ -48,9 +47,10 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                             jwt: VCLJwt(encodedJwt: try credentialManifestResult.get()),
                             vendorOriginContext: credentialManifestDescriptor.vendorOriginContext,
                             verifiedProfile: verifiedProfile,
-                            deepLink: credentialManifestDescriptor.deepLink
+                            deepLink: credentialManifestDescriptor.deepLink,
+                            didJwk: credentialManifestDescriptor.didJwk,
+                            remoteCryptoServicesToken: credentialManifestDescriptor.remoteCryptoServicesToken
                         ),
-                        remoteCryptoServicesToken,
                         completionBlock
                     )
                 } catch {
@@ -62,18 +62,17 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onGetCredentialManifestSuccess(
         _ credentialManifest: VCLCredentialManifest,
-        _ remoteCryptoServicesToken: VCLToken?,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if let deepLink = credentialManifest.deepLink {
             credentialManifestByDeepLinkVerifier.verifyCredentialManifest(
-                credentialManifest: credentialManifest, deepLink: deepLink
+                credentialManifest: credentialManifest, 
+                deepLink: deepLink
             ) { [weak self] isVerifiedRes in
                 do {
                     VCLLog.d("Credential manifest deep link verification result: \(try isVerifiedRes.get())")
                     self?.onCredentialManifestDidVerificationSuccess(
                         credentialManifest,
-                        remoteCryptoServicesToken,
                         completionBlock
                     )
                 }
@@ -85,7 +84,6 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
             VCLLog.d("Deep link was not provided => nothing to verify")
             onCredentialManifestDidVerificationSuccess(
                 credentialManifest,
-                remoteCryptoServicesToken,
                 completionBlock
             )
         }
@@ -93,7 +91,6 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onCredentialManifestDidVerificationSuccess(
         _ credentialManifest: VCLCredentialManifest,
-        _ remoteCryptoServicesToken: VCLToken?,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if let kid = credentialManifest.jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
@@ -104,7 +101,6 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                     self?.onResolvePublicKeySuccess(
                         publicKey,
                         credentialManifest,
-                        remoteCryptoServicesToken,
                         completionBlock
                     )
                 } catch {
@@ -121,13 +117,12 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     private func onResolvePublicKeySuccess(
         _ publicJwk: VCLPublicJwk,
         _ credentialManifest: VCLCredentialManifest,
-        _ remoteCryptoServicesToken: VCLToken?,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         self.jwtServiceRepository.verifyJwt(
             jwt: credentialManifest.jwt,
             publicJwk: publicJwk,
-            remoteCryptoServicesToken: remoteCryptoServicesToken
+            remoteCryptoServicesToken: credentialManifest.remoteCryptoServicesToken
         ) {
             [weak self] isVerifiedResult in
             do {

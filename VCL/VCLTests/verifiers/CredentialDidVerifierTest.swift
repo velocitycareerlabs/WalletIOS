@@ -28,7 +28,8 @@ class CredentialDidVerifierTest: XCTestCase {
         override func setUp() {
             credentialManifestFromNotaryIssuer = VCLCredentialManifest(
                 jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromNotaryIssuer),
-                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfNotaryIssuer.toDictionary()!)
+                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfNotaryIssuer.toDictionary()!),
+                didJwk: DidJwkMocks.DidJwk
             )
             finalizeOffersDescriptorOfNotaryIssuer = VCLFinalizeOffersDescriptor(
                 credentialManifest: credentialManifestFromNotaryIssuer,
@@ -39,7 +40,8 @@ class CredentialDidVerifierTest: XCTestCase {
 
             credentialManifestFromRegularIssuer = VCLCredentialManifest(
                 jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromRegularIssuer),
-                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfRegularIssuer.toDictionary()!)
+                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfRegularIssuer.toDictionary()!),
+                didJwk: DidJwkMocks.DidJwk
             )
             finalizeOffersDescriptorOfRegularIssuer = VCLFinalizeOffersDescriptor(
                 credentialManifest: credentialManifestFromRegularIssuer,

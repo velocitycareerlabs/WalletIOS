@@ -23,7 +23,9 @@ final class CountriesUseCaseTest: XCTestCase {
             CountriesRepositoryImpl(
                 NetworkServiceSuccess(
                     validResponse: CountriesMocks.CountriesJson
-                ), EmptyCacheService()            ),
+                ), 
+                EmptyCacheService()
+            ),
             ExecutorImpl()
         )
         

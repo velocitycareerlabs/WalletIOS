@@ -15,13 +15,17 @@ public class VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescri
     public init(
         service: VCLService,
         issuingType: VCLIssuingType = VCLIssuingType.Refresh,
-        credentialIds:[String]
+        credentialIds:[String],
+        didJwk: VCLDidJwk,
+        remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.credentialIds = credentialIds
         
         super.init(
             uri: service.serviceEndpoint,
-            issuingType: issuingType
+            issuingType: issuingType,
+            didJwk: didJwk,
+            remoteCryptoServicesToken: remoteCryptoServicesToken
         )
     }
 

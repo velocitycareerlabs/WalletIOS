@@ -25,7 +25,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
             service: service,
             issuingType: VCLIssuingType.Career,
             credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList,
-            pushDelegate: CredentialManifestDescriptorMocks.PushDelegate
+            pushDelegate: CredentialManifestDescriptorMocks.PushDelegate,
+            didJwk: DidJwkMocks.DidJwk
         )
         
         let credentialTypesQuery =
@@ -47,7 +48,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
             service: service,
             issuingType: VCLIssuingType.Identity,
             credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList,
-            pushDelegate: CredentialManifestDescriptorMocks.PushDelegate
+            pushDelegate: CredentialManifestDescriptorMocks.PushDelegate,
+            didJwk: DidJwkMocks.DidJwk
         )
         
         let credentialTypesQuery =
@@ -68,7 +70,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
             subject = VCLCredentialManifestDescriptorByService(
                 service: service,
                 issuingType: VCLIssuingType.Career,
-                pushDelegate: CredentialManifestDescriptorMocks.PushDelegate
+                pushDelegate: CredentialManifestDescriptorMocks.PushDelegate,
+                didJwk: DidJwkMocks.DidJwk
             )
 
             let credentialTypesQuery =
@@ -87,7 +90,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
             subject = VCLCredentialManifestDescriptorByService(
                 service: service,
                 issuingType: VCLIssuingType.Career,
-                credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList
+                credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList,
+                didJwk: DidJwkMocks.DidJwk
             )
 
             let credentialTypesQuery =
@@ -106,7 +110,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
             subject = VCLCredentialManifestDescriptorByService(
                 service: service,
                 issuingType: VCLIssuingType.Career,
-                pushDelegate: CredentialManifestDescriptorMocks.PushDelegate
+                pushDelegate: CredentialManifestDescriptorMocks.PushDelegate,
+                didJwk: DidJwkMocks.DidJwk
             )
 
             let credentialTypesQuery =
@@ -124,7 +129,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
             VCLServiceCredentialAgentIssuer(payload: CredentialManifestDescriptorMocks.IssuingServiceWithParamJsonStr.toDictionary()!)
             subject = VCLCredentialManifestDescriptorByService(
                 service: service,
-                issuingType: VCLIssuingType.Career
+                issuingType: VCLIssuingType.Career,
+                didJwk: DidJwkMocks.DidJwk
             )
             let mockEndpoint = CredentialManifestDescriptorMocks.IssuingServiceWithParamEndPoint
 
@@ -136,7 +142,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
             let service =
             VCLServiceCredentialAgentIssuer(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
             subject = VCLCredentialManifestDescriptorByService(
-                service: service
+                service: service,
+                didJwk: DidJwkMocks.DidJwk
             )
             let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint)
 

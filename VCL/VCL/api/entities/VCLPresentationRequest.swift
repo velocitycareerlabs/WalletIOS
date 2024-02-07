@@ -14,17 +14,23 @@ public struct VCLPresentationRequest {
     public let publicJwk: VCLPublicJwk
     public let deepLink: VCLDeepLink
     public let pushDelegate: VCLPushDelegate?
+    public let didJwk: VCLDidJwk
+    public let remoteCryptoServicesToken: VCLToken?
     
     public init(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         deepLink: VCLDeepLink,
-        pushDelegate: VCLPushDelegate? = nil
+        pushDelegate: VCLPushDelegate? = nil,
+        didJwk: VCLDidJwk,
+        remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.jwt = jwt
         self.publicJwk = publicJwk
         self.deepLink = deepLink
         self.pushDelegate = pushDelegate
+        self.didJwk = didJwk
+        self.remoteCryptoServicesToken = remoteCryptoServicesToken
     }
     
     public var iss: String { get { jwt.payload?[CodingKeys.KeyIss] as? String ?? "" } }

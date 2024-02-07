@@ -21,7 +21,8 @@ final class VCLPresentationRequestDescriptorTest: XCTestCase {
     func testPresentationRequestDescriptorWithPushDelegateSuccess() {
         subject = VCLPresentationRequestDescriptor(
             deepLink: PresentationRequestDescriptorMocks.DeepLink,
-            pushDelegate: PresentationRequestDescriptorMocks.PushDelegate
+            pushDelegate: PresentationRequestDescriptorMocks.PushDelegate,
+            didJwk: DidJwkMocks.DidJwk
         )
 
         let queryParams =
@@ -37,7 +38,8 @@ final class VCLPresentationRequestDescriptorTest: XCTestCase {
 
     func testPresentationRequestDescriptorWithoutPushDelegateOnlySuccess() {
         subject = VCLPresentationRequestDescriptor(
-            deepLink: PresentationRequestDescriptorMocks.DeepLink
+            deepLink: PresentationRequestDescriptorMocks.DeepLink,
+            didJwk: DidJwkMocks.DidJwk
         )
 
         assert(subject.endpoint?.decode()?.isUrlEquivalentTo(url: PresentationRequestDescriptorMocks.RequestUri.decode() ?? "") == true)
@@ -48,7 +50,8 @@ final class VCLPresentationRequestDescriptorTest: XCTestCase {
     func testPresentationRequestDescriptorWithQParamsWithPushDelegateSuccess() {
         subject = VCLPresentationRequestDescriptor(
             deepLink: PresentationRequestDescriptorMocks.DeepLinkWithQParams,
-            pushDelegate: PresentationRequestDescriptorMocks.PushDelegate
+            pushDelegate: PresentationRequestDescriptorMocks.PushDelegate,
+            didJwk: DidJwkMocks.DidJwk
         )
 
         let queryParams =
@@ -66,7 +69,8 @@ final class VCLPresentationRequestDescriptorTest: XCTestCase {
 
     func testPresentationRequestDescriptorWithQParamsWithoutPushDelegateOnlySuccess() {
         subject = VCLPresentationRequestDescriptor(
-            deepLink: PresentationRequestDescriptorMocks.DeepLinkWithQParams
+            deepLink: PresentationRequestDescriptorMocks.DeepLinkWithQParams,
+            didJwk: DidJwkMocks.DidJwk
         )
 
         let mockEndpoint =

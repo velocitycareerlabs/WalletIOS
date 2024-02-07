@@ -12,13 +12,11 @@ import XCTest
 @testable import VCL
 
 final class CredentialTypesUseCaseTest: XCTestCase {
-    private var subject: CredentialTypesUseCase!
-    
-    override func setUp() {
-    }
+    private var subject1: CredentialTypesUseCase!
+    private var subject2: CredentialTypesUseCase!
     
     func testGetCredentialTypesSuccess() {
-        subject = CredentialTypesUseCaseImpl(
+        subject1 = CredentialTypesUseCaseImpl(
             CredentialTypesRepositoryImpl(
                 NetworkServiceSuccess(
                     validResponse: CredentialTypesMocks.CredentialTypesJson
@@ -27,7 +25,7 @@ final class CredentialTypesUseCaseTest: XCTestCase {
             EmptyExecutor()
         )
         
-        subject.getCredentialTypes(cacheSequence: 1) { [weak self] in
+        subject1.getCredentialTypes(cacheSequence: 1) { [weak self] in
             do {
                 self?.compareCredentialTypes(
                     credentialTypesArr1: try $0.get().all!,
@@ -44,7 +42,7 @@ final class CredentialTypesUseCaseTest: XCTestCase {
     }
     
     func testGetCredentialTypesFailure() {
-        subject = CredentialTypesUseCaseImpl(
+        subject2 = CredentialTypesUseCaseImpl(
             CredentialTypesRepositoryImpl(
                 NetworkServiceSuccess(
                     validResponse: "wront payload"
@@ -53,7 +51,7 @@ final class CredentialTypesUseCaseTest: XCTestCase {
             EmptyExecutor()
         )
         
-        subject.getCredentialTypes(cacheSequence: 1) {
+        subject2.getCredentialTypes(cacheSequence: 1) {
             do  {
                 let _ = try $0.get()
                 XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
@@ -126,8 +124,5 @@ final class CredentialTypesUseCaseTest: XCTestCase {
                 recommended: true
             ))
         return credentialTypesArr
-    }
-    
-    override func tearDown() {
     }
 }

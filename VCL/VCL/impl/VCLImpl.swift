@@ -175,7 +175,6 @@ public class VCLImpl: VCL {
     
     public func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLPresentationRequest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
@@ -185,8 +184,7 @@ public class VCLImpl: VCL {
                 expectedServiceTypes: VCLServiceTypes(serviceType: VCLServiceType.Inspector),
                 successHandler: { [weak self] _ in
                     self?.presentationRequestUseCase.getPresentationRequest(
-                        presentationRequestDescriptor: presentationRequestDescriptor, 
-                        remoteCryptoServicesToken: remoteCryptoServicesToken
+                        presentationRequestDescriptor: presentationRequestDescriptor
                     ) { presentationRequestResult in
                         
                         do {
@@ -211,15 +209,11 @@ public class VCLImpl: VCL {
     
     public func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
-        didJwk: VCLDidJwk,
-        remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         presentationSubmissionUseCase.submit(
-            submission: presentationSubmission,
-            didJwk: didJwk,
-            remoteCryptoServicesToken: remoteCryptoServicesToken
+            submission: presentationSubmission
         ) {
             [weak self] presentationSubmissionResult in
             do {
@@ -267,7 +261,6 @@ public class VCLImpl: VCL {
     
     public func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLCredentialManifest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
@@ -279,8 +272,7 @@ public class VCLImpl: VCL {
                 successHandler: { [weak self] verifiedProfile in
                     self?.credentialManifestUseCase.getCredentialManifest(
                         credentialManifestDescriptor: credentialManifestDescriptor,
-                        verifiedProfile: verifiedProfile,
-                        remoteCryptoServicesToken: remoteCryptoServicesToken
+                        verifiedProfile: verifiedProfile
                     ) { [weak self] credentialManifestResult in
                         do {
                             successHandler(try credentialManifestResult.get())
@@ -305,8 +297,6 @@ public class VCLImpl: VCL {
     
     public func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        didJwk: VCLDidJwk,
-        remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
@@ -315,9 +305,7 @@ public class VCLImpl: VCL {
             verifiableCredentials: generateOffersDescriptor.identificationVerifiableCredentials
         )
         identificationSubmissionUseCase.submit(
-            submission: identificationSubmission,
-            didJwk: didJwk,
-            remoteCryptoServicesToken: remoteCryptoServicesToken
+            submission: identificationSubmission
         ) {
             [weak self] identificationSubmissionResult in
             do {
@@ -344,7 +332,7 @@ public class VCLImpl: VCL {
     
     public func checkForOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-                sessionToken: VCLToken,
+        sessionToken: VCLToken,
         successHandler: @escaping (VCLOffers) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
@@ -378,17 +366,13 @@ public class VCLImpl: VCL {
     
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        didJwk: VCLDidJwk,
         sessionToken: VCLToken,
-        remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         finalizeOffersUseCase.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
-            didJwk: didJwk,
-            sessionToken: sessionToken,
-            remoteCryptoServicesToken: remoteCryptoServicesToken
+            sessionToken: sessionToken
         ) {
             [weak self] jwtVerifiableCredentials in
             do {
@@ -463,15 +447,15 @@ public class VCLImpl: VCL {
     }
     
     public func generateSignedJwt(
-        didJwk: VCLDidJwk,
         jwtDescriptor: VCLJwtDescriptor,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
         successHandler: @escaping (VCLJwt) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         jwtServiceUseCase.generateSignedJwt(
+            jwtDescriptor: jwtDescriptor, 
             didJwk: didJwk,
-            jwtDescriptor: jwtDescriptor,
             remoteCryptoServicesToken: remoteCryptoServicesToken
         ) {
             [weak self] jwtResult in

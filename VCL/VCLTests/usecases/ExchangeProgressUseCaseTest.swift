@@ -13,13 +13,11 @@ import XCTest
 
 final class ExchangeProgressUseCaseTest: XCTestCase {
     
-    private var subject: ExchangeProgressUseCase!
-    
-    override func setUp() {
-    }
+    private var subject1: ExchangeProgressUseCase!
+    private var subject2: ExchangeProgressUseCase!
     
     func testGetExchangeProgressSucces() {
-        subject = ExchangeProgressUseCaseImpl(
+        subject1 = ExchangeProgressUseCaseImpl(
             ExchangeProgressRepositoryImpl(
                 NetworkServiceSuccess(validResponse: ExchangeProgressMocks.ExchangeProgressJson)
             ),
@@ -33,7 +31,7 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
             ), submissionResult: submissionResult
         )
 
-        subject.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) { [weak self] in
+        subject1.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) { [weak self] in
             do {
                 let exchange = try $0.get()
                 assert(exchange == self?.expectedExchange(exchangeJsonDict: ExchangeProgressMocks.ExchangeProgressJson.toDictionary()!))
@@ -44,7 +42,7 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
     }
     
     func testGetExchangeProgressFailuer() {
-        subject = ExchangeProgressUseCaseImpl(
+        subject2 = ExchangeProgressUseCaseImpl(
             ExchangeProgressRepositoryImpl(
                 NetworkServiceSuccess(validResponse: "wrong payload")
             ),
@@ -58,7 +56,7 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
             ), submissionResult: submissionResult
         )
 
-        subject.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) {
+        subject2.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) {
             do  {
                 let _ = try $0.get()
                 XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
@@ -74,8 +72,5 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
                            type: (exchangeJsonDict[VCLExchange.CodingKeys.KeyType] as! String),
                            disclosureComplete: (exchangeJsonDict[VCLExchange.CodingKeys.KeyDisclosureComplete] as! Bool),
                            exchangeComplete: (exchangeJsonDict[VCLExchange.CodingKeys.KeyExchangeComplete] as! Bool))
-    }
-    
-    override func tearDown() {
     }
 }

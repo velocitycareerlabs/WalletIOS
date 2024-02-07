@@ -38,14 +38,14 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignFullParams() {
         subject.sign(
-            didJwk: didJwk,
-            nonce: nonceMock,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payloadMock,
                 jti: jtiMock,
                 iss: issMock,
                 aud: audMock
-            )
+            ),
+            nonce: nonceMock,
+            didJwk: didJwk
         ) { [weak self] jwtResult in
             do {
                 let jwt = try jwtResult.get()
@@ -68,14 +68,14 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignPartialParams1() {
         subject.sign(
-            didJwk: didJwk,
-            nonce: nonceMock,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payloadMock,
                 jti: jtiMock,
                 iss: issMock,
                 aud: audMock
-            )
+            ),
+            nonce: nonceMock,
+            didJwk: didJwk
         ) { [weak self] jwtResult in
             do {
                 let jwt = try jwtResult.get()
@@ -98,13 +98,13 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignPartialParams2() {
         subject.sign(
-            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payloadMock,
                 jti: jtiMock,
                 iss: issMock,
                 aud: audMock
-            )
+            ),
+            didJwk: didJwk
         ) { [weak self] jwtResult in
             do {
                 let jwt = try jwtResult.get()
@@ -127,12 +127,12 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignPartialParams3() {
         subject.sign(
-            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payloadMock,
                 iss: issMock,
                 aud: audMock
-            )
+            ),
+            didJwk: didJwk
         ) { [weak self] jwtResult in
             do {
                 let jwt = try jwtResult.get()
@@ -155,11 +155,11 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignPartialParams4() {
         subject.sign(
-            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
                 payload: payloadMock,
                 iss: issMock
-            )
+            ),
+            didJwk: didJwk
         ) { [weak self] jwtResult in
             do {
                 let jwt = try jwtResult.get()
@@ -182,10 +182,11 @@ class JwtSignServiceLocalTest: XCTestCase {
 
     func testSignPartParams5() {
         subject.sign(
-            didJwk: didJwk,
             jwtDescriptor: VCLJwtDescriptor(
                 iss: issMock
-            )
+            ),
+            didJwk: didJwk
+
         ) { [weak self] jwtResult in
             do {
                 let jwt = try jwtResult.get()

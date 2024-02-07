@@ -17,9 +17,9 @@ protocol JwtServiceRepository {
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
     func generateSignedJwt(
-        didJwk: VCLDidJwk,
-        nonce: String?, // nonce == challenge
         jwtDescriptor: VCLJwtDescriptor,
+        nonce: String?, // nonce == challenge
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     )
@@ -27,16 +27,16 @@ protocol JwtServiceRepository {
 
 extension JwtServiceRepository {
     func generateSignedJwt(
-        didJwk: VCLDidJwk,
-        nonce: String? = nil,
         jwtDescriptor: VCLJwtDescriptor,
+        nonce: String? = nil,
+        didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         generateSignedJwt(
-            didJwk: didJwk,
-            nonce: nonce,
             jwtDescriptor: jwtDescriptor,
+            nonce: nonce,
+            didJwk: didJwk,
             remoteCryptoServicesToken: remoteCryptoServicesToken,
             completionBlock: completionBlock
         )

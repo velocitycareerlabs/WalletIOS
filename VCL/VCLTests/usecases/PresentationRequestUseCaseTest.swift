@@ -13,12 +13,13 @@ import XCTest
 
 final class PresentationRequestUseCaseTest: XCTestCase {
     
-    private var subject: PresentationRequestUseCase!
+    private var subject1: PresentationRequestUseCase!
+    private var subject2: PresentationRequestUseCase!
     
     func testGetPresentationRequestSuccess() {
         let pushUrl = "push_url"
         let pushToken = "push_token"
-        subject = PresentationRequestUseCaseImpl(
+        subject1 = PresentationRequestUseCaseImpl(
             PresentationRequestRepositoryImpl(
                 NetworkServiceSuccess(validResponse: PresentationRequestMocks.EncodedPresentationRequestResponse)
             ),
@@ -32,15 +33,16 @@ final class PresentationRequestUseCaseTest: XCTestCase {
             PresentationRequestByDeepLinkVerifierImpl(),
             EmptyExecutor()
         )
-        subject.getPresentationRequest(
+        subject1.getPresentationRequest(
             presentationRequestDescriptor: VCLPresentationRequestDescriptor(
                 deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet,
                 pushDelegate: VCLPushDelegate(
                     pushUrl: pushUrl,
                     pushToken: pushToken
-                )
-            ),
-            remoteCryptoServicesToken: nil
+                ),
+                didJwk: DidJwkMocks.DidJwk,
+                remoteCryptoServicesToken: VCLToken(value: "some token")
+            )
         ) {
             do {
                 let presentationRequest = try $0.get()
@@ -52,6 +54,8 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 assert(presentationRequest.jwt.payload! == PresentationRequestMocks.PresentationRequestJwt.payload!)
                 assert(presentationRequest.pushDelegate!.pushUrl == pushUrl)
                 assert(presentationRequest.pushDelegate!.pushToken == pushToken)
+                assert(presentationRequest.didJwk.did == DidJwkMocks.DidJwk.did)
+                assert(presentationRequest.remoteCryptoServicesToken?.value == "some token")
             } catch {
                 XCTFail("\(error)")
             }
@@ -59,7 +63,7 @@ final class PresentationRequestUseCaseTest: XCTestCase {
     }
     
     func testGetPresentationRequestFailure() {
-        subject = PresentationRequestUseCaseImpl(
+        subject2 = PresentationRequestUseCaseImpl(
             PresentationRequestRepositoryImpl(
                 NetworkServiceSuccess(validResponse: "wrong payload")
             ),
@@ -73,11 +77,11 @@ final class PresentationRequestUseCaseTest: XCTestCase {
             PresentationRequestByDeepLinkVerifierImpl(),
             EmptyExecutor()
         )
-        subject.getPresentationRequest(
+        subject2.getPresentationRequest(
             presentationRequestDescriptor: VCLPresentationRequestDescriptor(
-                deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet
-            ),
-            remoteCryptoServicesToken: nil
+                deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet,
+                didJwk: DidJwkMocks.DidJwk
+            )
         ) {
             do  {
                 let _ = try $0.get()

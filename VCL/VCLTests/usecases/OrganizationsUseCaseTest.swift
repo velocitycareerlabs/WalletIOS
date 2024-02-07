@@ -14,9 +14,6 @@ import XCTest
 final class OrganizationsUseCaseTest: XCTestCase {
     
     private var subject: OrganizationsUseCase!
-    
-    override func setUp() {
-    }
 
     func testCountryCodesSuccess() {
         subject = OrganizationsUseCaseImpl(
@@ -41,8 +38,5 @@ final class OrganizationsUseCaseTest: XCTestCase {
                 XCTFail("\(error)")
             }
         }
-    }
-    
-    override func tearDown() {
     }
 }

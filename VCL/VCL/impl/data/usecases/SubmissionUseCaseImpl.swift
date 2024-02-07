@@ -27,19 +27,17 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
     
     func submit(
         submission: VCLSubmission,
-        didJwk: VCLDidJwk,
-        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         executor.runOnBackground  { [weak self] in
             self?.jwtServiceRepository.generateSignedJwt(
-                didJwk: didJwk,
                 jwtDescriptor: VCLJwtDescriptor(
-                    payload: submission.generatePayload(iss: didJwk.did),
+                    payload: submission.generatePayload(iss: submission.didJwk.did),
                     jti: submission.jti,
-                    iss: didJwk.did
-                ),
-                remoteCryptoServicesToken: remoteCryptoServicesToken
+                    iss: submission.didJwk.did
+                ), 
+                didJwk: submission.didJwk,
+                remoteCryptoServicesToken: submission.remoteCryptoServicesToken
             ) { signedJwtResult in
                     do {
                         let jwt = try signedJwtResult.get()

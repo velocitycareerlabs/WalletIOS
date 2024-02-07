@@ -14,7 +14,7 @@ class VCLJwtVerifyServiceMock: VCLJwtVerifyService {
     func verify(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
-        remoteCryptoServicesToken: VCLToken? = nil,
+        remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         completionBlock(.success(true))

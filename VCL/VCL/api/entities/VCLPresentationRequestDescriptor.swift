@@ -10,13 +10,19 @@ import Foundation
 public class VCLPresentationRequestDescriptor {
     public let deepLink: VCLDeepLink
     public let pushDelegate: VCLPushDelegate?
+    public let didJwk: VCLDidJwk
+    public let remoteCryptoServicesToken: VCLToken?
     
     public init(
         deepLink: VCLDeepLink,
-        pushDelegate: VCLPushDelegate? = nil
+        pushDelegate: VCLPushDelegate? = nil,
+        didJwk: VCLDidJwk,
+        remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.deepLink = deepLink
         self.pushDelegate = pushDelegate
+        self.didJwk = didJwk
+        self.remoteCryptoServicesToken = remoteCryptoServicesToken
     }
     
     var endpoint: String? { get {

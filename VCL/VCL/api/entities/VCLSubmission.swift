@@ -16,6 +16,8 @@ public class VCLSubmission {
     public let verifiableCredentials: [VCLVerifiableCredential]?
     public let pushDelegate: VCLPushDelegate?
     public let vendorOriginContext: String?
+    public let didJwk: VCLDidJwk
+    public let remoteCryptoServicesToken: VCLToken?
     
     public let jti = UUID().uuidString
     public let submissionId = UUID().uuidString
@@ -26,7 +28,9 @@ public class VCLSubmission {
         presentationDefinitionId: String,
         verifiableCredentials: [VCLVerifiableCredential]? = nil,
         pushDelegate: VCLPushDelegate? = nil,
-        vendorOriginContext: String? = nil
+        vendorOriginContext: String? = nil,
+        didJwk: VCLDidJwk,
+        remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.submitUri = submitUri
         self.exchangeId = exchangeId
@@ -34,6 +38,8 @@ public class VCLSubmission {
         self.verifiableCredentials = verifiableCredentials
         self.pushDelegate = pushDelegate
         self.vendorOriginContext = vendorOriginContext
+        self.didJwk = didJwk
+        self.remoteCryptoServicesToken = remoteCryptoServicesToken
     }
         
     internal func generatePayload(iss: String?) -> [String: Any] {

@@ -46,7 +46,7 @@ class ViewController: UIViewController {
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
                 environment: environment,
-                xVnfProtocolVersion: .XVnfProtocolVersion1
+                xVnfProtocolVersion: .XVnfProtocolVersion2
 //                cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
 //                    cryptoServiceType: .Remote,
 //                    remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
@@ -106,7 +106,8 @@ class ViewController: UIViewController {
                 pushDelegate: VCLPushDelegate(
                     pushUrl: "pushUrl",
                     pushToken: "pushToken"
-                )
+                ),
+                didJwk: self.didJwk
             ),
             successHandler: { [weak self] presentationRequest in
                 NSLog("VCL Presentation request received: \(presentationRequest.jwt.payload?.toJson() ?? "")")
@@ -130,7 +131,6 @@ class ViewController: UIViewController {
     private func submitPresentation(presentationSubmission: VCLPresentationSubmission)  {
         vcl.submitPresentation(
             presentationSubmission: presentationSubmission,
-            didJwk: self.didJwk,
             successHandler: { [weak self] presentationSubmissionResult in
                 NSLog("VCL Presentation Submission result: \(presentationSubmissionResult)")
                 self?.vcl.getExchangeProgress(
@@ -182,13 +182,14 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorRefresh =
         VCLCredentialManifestDescriptorRefresh(
             service: service,
-            credentialIds: Constants.CredentialIdsToRefresh
+            credentialIds: Constants.CredentialIdsToRefresh,
+            didJwk: self.didJwk
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorRefresh,
             successHandler: { credentialManifest in
                 NSLog("VCL Vredentials refreshed, credential manifest: \(credentialManifest.jwt.payload?.toJson() ?? "")")
-                //                 NSLog("VCL Credential Manifest received")
+//                 NSLog("VCL Credential Manifest received")
             },
             errorHandler: { error in
                 NSLog("VCL Refresh credentials failed: \(error)")
@@ -200,8 +201,9 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorByOrganization =
         VCLCredentialManifestDescriptorByService(
             service: serviceCredentialAgentIssuer,
-            //            issuingType: VCLIssuingType.Career,
-            credentialTypes: serviceCredentialAgentIssuer.credentialTypes // Can come from any where
+//            issuingType: VCLIssuingType.Career,
+            credentialTypes: serviceCredentialAgentIssuer.credentialTypes, // Can come from any where
+            didJwk: self.didJwk
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorByOrganization,
@@ -224,8 +226,9 @@ class ViewController: UIViewController {
         
         let credentialManifestDescriptorByDeepLink =
         VCLCredentialManifestDescriptorByDeepLink(
-            deepLink: deepLink//,
-            //            issuingType: VCLIssuingType.Identity
+            deepLink: deepLink,
+//            issuingType: VCLIssuingType.Identity
+            didJwk: self.didJwk
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorByDeepLink,
@@ -247,7 +250,6 @@ class ViewController: UIViewController {
         )
         vcl.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            didJwk: self.didJwk,
             successHandler: { [weak self] offers in
                 NSLog("VCL Generated Offers: \(offers.all)")
                 NSLog("VCL Generated Offers Response Code: \(offers.responseCode)")
@@ -304,7 +306,6 @@ class ViewController: UIViewController {
         )
         vcl.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
-            didJwk: self.didJwk,
             sessionToken: offers.sessionToken,
             successHandler: { verifiableCredentials in
                 NSLog("VCL finalized Offers")
