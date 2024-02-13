@@ -46,19 +46,20 @@ class ViewController: UIViewController {
         vcl.initialize(
             initializationDescriptor: VCLInitializationDescriptor(
                 environment: environment,
-                xVnfProtocolVersion: .XVnfProtocolVersion2
-//                cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
-//                    cryptoServiceType: .Remote,
-//                    remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
-//                        keyServiceUrls: VCLKeyServiceUrls(
-//                            createDidKeyServiceUrl: Constants.getCreateDidKeyServiceUrl(environment: environment)
-//                        ),
-//                        jwtServiceUrls: VCLJwtServiceUrls(
-//                            jwtSignServiceUrl: Constants.getJwtSignServiceUrl(environment: environment),
-//                            jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment: environment)
-//                          )
-//                    )
-//                )
+                xVnfProtocolVersion: .XVnfProtocolVersion2,
+                cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
+                    cryptoServiceType: .Remote,
+                    signatureAlgorithm: VCLSignatureAlgorithm.ES256,
+                    remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
+                        keyServiceUrls: VCLKeyServiceUrls(
+                            createDidKeyServiceUrl: Constants.getCreateDidKeyServiceUrl(environment: environment)
+                        ),
+                        jwtServiceUrls: VCLJwtServiceUrls(
+                            jwtSignServiceUrl: Constants.getJwtSignServiceUrl(environment: environment),
+                            jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment: environment)
+                          )
+                    )
+                )
             ),
             successHandler: { [weak self] in
                 NSLog("VCL Initialization succeed!")

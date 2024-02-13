@@ -42,12 +42,14 @@ public struct VCLFinalizeOffersDescriptor {
     public var didJwk: VCLDidJwk { get { credentialManifest.didJwk } }
     public var remoteCryptoServicesToken: VCLToken? { get { credentialManifest.remoteCryptoServicesToken } }
     
-    public func generateRequestBody(jwt: VCLJwt) -> [String: Any?] {
+    func generateRequestBody(proof: VCLJwt?) -> [String: Any?] {
         var retVal = self.payload
-        retVal[CodingKeys.KeyProof] = [
-            CodingKeys.KeyProofType: CodingKeys.KeyJwt,
-            CodingKeys.KeyJwt: jwt.encodedJwt
-        ]
+        if let proof = proof {
+            retVal[CodingKeys.KeyProof] = [
+                CodingKeys.KeyProofType: CodingKeys.KeyJwt,
+                CodingKeys.KeyJwt: proof.encodedJwt
+            ]
+        }
         return retVal
     }
     

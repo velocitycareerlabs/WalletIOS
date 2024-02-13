@@ -14,14 +14,14 @@ public struct VCLOffers {
     public let all: [VCLOffer]
     public let responseCode: Int
     public let sessionToken: VCLToken
-    public let challenge: String
+    public let challenge: String?
     
     public init(
         payload: [String: Any],
         all: [VCLOffer],
         responseCode: Int,
         sessionToken: VCLToken,
-        challenge: String
+        challenge: String? = nil
     ) {
         self.payload = payload
         self.all = all

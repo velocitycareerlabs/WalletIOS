@@ -286,6 +286,7 @@
 		28D4D61B2A0CEDFC00059A87 /* VCLKeyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D4D61A2A0CEDFC00059A87 /* VCLKeyService.swift */; };
 		28E658962A66BF7D00F7CB4E /* CredentialTypesModelMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E658952A66BF7D00F7CB4E /* CredentialTypesModelMock.swift */; };
 		28E658982A66C35A00F7CB4E /* CredentialMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E658972A66C35A00F7CB4E /* CredentialMocks.swift */; };
+		28EBDD972B7B855E0043012B /* VCLSignatureAlgorithm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28EBDD962B7B855E0043012B /* VCLSignatureAlgorithm.swift */; };
 		28ED882C2670B490005D3A9E /* VCLClaims.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED88252670B490005D3A9E /* VCLClaims.swift */; };
 		28F1A624299E3956001A151F /* VCLIssuingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F1A623299E3956001A151F /* VCLIssuingType.swift */; };
 		28F1A626299E64D6001A151F /* ProfileServiceTypeVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F1A625299E64D6001A151F /* ProfileServiceTypeVerifier.swift */; };
@@ -577,6 +578,7 @@
 		28DBF9CE27DA3C7900D2F71E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		28E658952A66BF7D00F7CB4E /* CredentialTypesModelMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTypesModelMock.swift; sourceTree = "<group>"; };
 		28E658972A66C35A00F7CB4E /* CredentialMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialMocks.swift; sourceTree = "<group>"; };
+		28EBDD962B7B855E0043012B /* VCLSignatureAlgorithm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLSignatureAlgorithm.swift; sourceTree = "<group>"; };
 		28ED88252670B490005D3A9E /* VCLClaims.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VCLClaims.swift; sourceTree = "<group>"; };
 		28F1A623299E3956001A151F /* VCLIssuingType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLIssuingType.swift; sourceTree = "<group>"; };
 		28F1A625299E64D6001A151F /* ProfileServiceTypeVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceTypeVerifier.swift; sourceTree = "<group>"; };
@@ -959,6 +961,7 @@
 				289DFDC826F2190F00052CA8 /* VCLEnvironment.swift */,
 				2801D1C32A31E55900B659B4 /* VCLCryptoServiceType.swift */,
 				2864158D264D65E2006C1AA3 /* VCLProvider.swift */,
+				28EBDD962B7B855E0043012B /* VCLSignatureAlgorithm.swift */,
 				28429A392A6944F600496342 /* VCLXVnfProtocolVersion.swift */,
 			);
 			path = api;
@@ -1604,6 +1607,7 @@
 				286415B4264D65E2006C1AA3 /* PresentationRequestRepositoryImpl.swift in Sources */,
 				2829747926C11863008CE30A /* VCLOrganization.swift in Sources */,
 				28641601264D65E2006C1AA3 /* VCLJwtVerifiableCredentials.swift in Sources */,
+				28EBDD972B7B855E0043012B /* VCLSignatureAlgorithm.swift in Sources */,
 				28C9B24A2A0CFFA300AC87BD /* KeyServiceRepositoryImpl.swift in Sources */,
 				286415EB264D65E2006C1AA3 /* PresentationRequestUseCase.swift in Sources */,
 				28648A642AA8736D002FD0E2 /* VCLInjectedCryptoServicesDescriptor.swift in Sources */,
@@ -1896,7 +1900,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 126;
+				CURRENT_PROJECT_VERSION = 127;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1909,7 +1913,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1926,7 +1930,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 126;
+				CURRENT_PROJECT_VERSION = 127;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1939,7 +1943,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

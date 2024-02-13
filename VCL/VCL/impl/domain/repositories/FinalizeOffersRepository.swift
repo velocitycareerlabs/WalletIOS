@@ -13,7 +13,7 @@ protocol FinalizeOffersRepository {
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
-        proof: VCLJwt,
+        proof: VCLJwt?,
         completionBlock: @escaping (VCLResult<[VCLJwt]>) -> Void
     )
 }

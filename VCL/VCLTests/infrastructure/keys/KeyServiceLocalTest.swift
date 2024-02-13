@@ -19,7 +19,7 @@ class KeyServiceLocalTest: XCTestCase {
         subject = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     }
     
-    func testGenerateDidJwk() {
+    func testGenerateDidJwkSecp256k1() {
         subject.generateDidJwk() { didJwkResult in
             do {
                 let didJwk = try didJwkResult.get()
@@ -32,7 +32,7 @@ class KeyServiceLocalTest: XCTestCase {
                 
                 assert(jwkDict["kty"] as? String == "EC")
                 assert(jwkDict["use"] as? String == "sig")
-                assert(jwkDict["crv"] as? String == "secp256k1")
+                assert(jwkDict["crv"] as? String == VCLSignatureAlgorithm.SECP256k1.curve)
                 assert(jwkDict["use"] as? String == "sig")
                 assert(jwkDict["x"] as? String != nil)
                 assert(jwkDict["y"] as? String != nil)
