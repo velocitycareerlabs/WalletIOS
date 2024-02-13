@@ -14,7 +14,8 @@ struct GlobalConfig {
     
     static var CurrentEnvironment = VCLEnvironment.Prod
     static var XVnfProtocolVersion = VCLXVnfProtocolVersion.XVnfProtocolVersion1
-    
+    static var SignatureAlgorithm = VCLSignatureAlgorithm.ES256
+        
     static var KeycahinAccessGroupIdentifier: String? = nil
     
     #if DEBUG
@@ -30,6 +31,5 @@ struct GlobalConfig {
 
     static var IsLoggerOn: Bool { get { (CurrentEnvironment != VCLEnvironment.Staging && CurrentEnvironment != VCLEnvironment.Prod) || IsDebugOn } }
     
-    static let AlgES256K = "ES256K"
     static let TypeJwt = "JWT"
 }

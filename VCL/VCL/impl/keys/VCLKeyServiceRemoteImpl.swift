@@ -62,13 +62,12 @@ class VCLKeyServiceRemoteImpl: VCLKeyService {
     
     private func generatePayloadToCreateDidJwk() -> String {
         return [
-            CodingKeys.KeyCrv: "secp256k1",
+            CodingKeys.KeyCrv: GlobalConfig.SignatureAlgorithm.curve,
         ].toJsonString() ?? ""
     }
     
     public struct CodingKeys {
         public static let KeyCrv = "crv"
-        public static let ValueCrv = "secp256k1"
 
         public static let KeyDid = "did"
         public static let KeyKid = "kid"

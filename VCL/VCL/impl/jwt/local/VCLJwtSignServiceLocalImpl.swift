@@ -42,7 +42,7 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
                                     
                                     var header = Header(
                                         type: GlobalConfig.TypeJwt,
-                                        algorithm: GlobalConfig.AlgES256K,
+                                        algorithm: GlobalConfig.SignatureAlgorithm.jwsAlgorithm,
                                         jsonWebKey: publicJwk,
                                         keyId: didJwk.kid
                                     )

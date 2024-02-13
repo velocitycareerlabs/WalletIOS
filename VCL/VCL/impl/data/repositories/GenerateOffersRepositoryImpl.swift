@@ -54,7 +54,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
                 all: Utils.offersFromJsonArray(offersJsonArray: (payload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]] ?? [])),
                 responseCode: offersResponse.code,
                 sessionToken: sessionToken,
-                challenge: (payload[VCLOffers.CodingKeys.KeyChallenge] as? String) ?? ""
+                challenge: (payload[VCLOffers.CodingKeys.KeyChallenge] as? String)
             )
         } // VCLXVnfProtocolVersion.XVnfProtocolVersion1
         else if let offersJsonArray = offersResponse.payload.toList() as? [[String: Any]] {
@@ -62,8 +62,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
                 payload: [:],
                 all: Utils.offersFromJsonArray(offersJsonArray: offersJsonArray),
                 responseCode: offersResponse.code,
-                sessionToken: sessionToken,
-                challenge: ""
+                sessionToken: sessionToken
             )
         } // No offers
         else {
@@ -71,8 +70,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
                 payload: [:],
                 all: [],
                 responseCode: offersResponse.code,
-                sessionToken: sessionToken,
-                challenge: ""
+                sessionToken: sessionToken
             )
         }
     }

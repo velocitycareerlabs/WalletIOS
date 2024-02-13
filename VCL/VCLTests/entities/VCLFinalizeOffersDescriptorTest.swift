@@ -71,7 +71,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
         ) { [weak self] jwtResult in
                 do {
                     let jwt = try jwtResult.get()
-                    let requestBody = self!.subject.generateRequestBody(jwt: jwt)
+                    let requestBody = self!.subject.generateRequestBody(proof: jwt)
                     
                     assert((requestBody["exchangeId"] as! String) == "645e315309237c760ac022b1")
                     assert(requestBody["approvedOfferIds"] as? [String] == self!.approvedOfferIds)

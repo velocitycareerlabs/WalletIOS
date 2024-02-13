@@ -163,6 +163,7 @@ public class VCLImpl: VCL {
     private func initGlobalConfigurations() {
         GlobalConfig.CurrentEnvironment = initializationDescriptor.environment
         GlobalConfig.XVnfProtocolVersion = initializationDescriptor.xVnfProtocolVersion
+        GlobalConfig.SignatureAlgorithm = initializationDescriptor.cryptoServicesDescriptor.signatureAlgorithm
         GlobalConfig.KeycahinAccessGroupIdentifier = initializationDescriptor.keycahinAccessGroupIdentifier
         GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
     }

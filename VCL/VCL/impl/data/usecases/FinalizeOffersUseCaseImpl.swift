@@ -40,61 +40,86 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            self?.jwtServiceRepository.generateSignedJwt(
-                jwtDescriptor: VCLJwtDescriptor(
-                    iss: finalizeOffersDescriptor.didJwk.did,
-                    aud: finalizeOffersDescriptor.aud
-                ),
-                nonce: finalizeOffersDescriptor.offers.challenge,
-                didJwk: finalizeOffersDescriptor.didJwk,
-                remoteCryptoServicesToken: finalizeOffersDescriptor.remoteCryptoServicesToken
-            ) { proofJwtResult in
-                do {
-                    let proof = try proofJwtResult.get()
-                    self?.finalizeOffersRepository.finalizeOffers(
-                        finalizeOffersDescriptor: finalizeOffersDescriptor,
-                        sessionToken: sessionToken,
-                        proof: proof
-                    ) { jwtCredentialsListResult in
-                        do {
-                            let jwtCredentials = try jwtCredentialsListResult.get()
-                            self?.verifyCredentialsByDeepLink(
-                                jwtCredentials,
-                                finalizeOffersDescriptor
-                            ) { verifyCredentialsByDeepLinkResult in
-                                do {
-                                    _ = try verifyCredentialsByDeepLinkResult.get()
-                                    self?.verifyCredentialsByIssuer(
-                                        jwtCredentials,
-                                        finalizeOffersDescriptor
-                                    ) { verifyCredentialsByIssuerResult in
-                                        do {
-                                            let _ = try verifyCredentialsByIssuerResult.get()
-                                            self?.verifyCredentialByDid(
-                                                jwtCredentials,
-                                                finalizeOffersDescriptor
-                                            ) { jwtVerifiableCredentialsResult in
-                                                self?.executor.runOnMain {
-                                                    completionBlock(
-                                                        jwtVerifiableCredentialsResult
-                                                    )
-                                                }
-                                            }
-                                        } catch {
-                                            self?.onError(VCLError(error: error), completionBlock)
-                                        }
-                                    }
-                                } catch {
-                                    self?.onError(VCLError(error: error), completionBlock)            
-                                }
-                            }
-                        } catch {
-                            self?.onError(VCLError(error: error), completionBlock)              
-                        }
+            if let challenge = finalizeOffersDescriptor.offers.challenge {
+                self?.jwtServiceRepository.generateSignedJwt(
+                    jwtDescriptor: VCLJwtDescriptor(
+                        iss: finalizeOffersDescriptor.didJwk.did,
+                        aud: finalizeOffersDescriptor.aud
+                    ),
+                    nonce: challenge,
+                    didJwk: finalizeOffersDescriptor.didJwk,
+                    remoteCryptoServicesToken: finalizeOffersDescriptor.remoteCryptoServicesToken
+                ) { proofJwtResult in
+                    do {
+                        let proof = try proofJwtResult.get()
+                        self?.finalizeOffersInvoke(
+                            weakSelf: self,
+                            finalizeOffersDescriptor: finalizeOffersDescriptor,
+                            sessionToken: sessionToken,
+                            proof: proof,
+                            completionBlock: completionBlock
+                        )
+                    } catch {
+                        self?.onError(VCLError(error: error), completionBlock)
                     }
-                } catch {
-                    self?.onError(VCLError(error: error), completionBlock)          
                 }
+            } else {
+                self?.finalizeOffersInvoke(
+                    weakSelf: self,
+                    finalizeOffersDescriptor: finalizeOffersDescriptor,
+                    sessionToken: sessionToken,
+                    completionBlock: completionBlock
+                )
+            }
+        }
+    }
+    
+    private func finalizeOffersInvoke(
+        weakSelf: FinalizeOffersUseCaseImpl?,
+        finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
+        sessionToken: VCLToken,
+        proof: VCLJwt? = nil,
+        completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+    ) {
+        weakSelf?.finalizeOffersRepository.finalizeOffers(
+            finalizeOffersDescriptor: finalizeOffersDescriptor,
+            sessionToken: sessionToken,
+            proof: proof
+        ) { jwtCredentialsListResult in
+            do {
+                let jwtCredentials = try jwtCredentialsListResult.get()
+                weakSelf?.verifyCredentialsByDeepLink(
+                    jwtCredentials,
+                    finalizeOffersDescriptor
+                ) { verifyCredentialsByDeepLinkResult in
+                    do {
+                        _ = try verifyCredentialsByDeepLinkResult.get()
+                        weakSelf?.verifyCredentialsByIssuer(
+                            jwtCredentials,
+                            finalizeOffersDescriptor
+                        ) { verifyCredentialsByIssuerResult in
+                            do {
+                                let _ = try verifyCredentialsByIssuerResult.get()
+                                weakSelf?.verifyCredentialByDid(
+                                    jwtCredentials,
+                                    finalizeOffersDescriptor
+                                ) { jwtVerifiableCredentialsResult in
+                                    weakSelf?.executor.runOnMain {
+                                        completionBlock(
+                                            jwtVerifiableCredentialsResult
+                                        )
+                                    }
+                                }
+                            } catch {
+                                weakSelf?.onError(VCLError(error: error), completionBlock)
+                            }
+                        }
+                    } catch {
+                        weakSelf?.onError(VCLError(error: error), completionBlock)
+                    }
+                }
+            } catch {
+                weakSelf?.onError(VCLError(error: error), completionBlock)
             }
         }
     }

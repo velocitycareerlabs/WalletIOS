@@ -64,10 +64,6 @@ class GlobalConfigTest: XCTestCase {
         assert(GlobalConfig.VclPackage == "io.velocitycareerlabs")
     }
     
-    func testAlgES256K() {
-        assert(GlobalConfig.AlgES256K == "ES256K")
-    }
-    
     func testTypeJwt() {
         assert(GlobalConfig.TypeJwt == "JWT")
     }

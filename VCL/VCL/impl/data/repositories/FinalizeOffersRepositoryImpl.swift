@@ -22,12 +22,12 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
-        proof: VCLJwt,
+        proof: VCLJwt? = nil,
         completionBlock: @escaping (VCLResult<[VCLJwt]>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: finalizeOffersDescriptor.finalizeOffersUri,
-            body: finalizeOffersDescriptor.generateRequestBody(jwt: proof).toJsonString(),
+            body: finalizeOffersDescriptor.generateRequestBody(proof: proof).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
             headers:[
