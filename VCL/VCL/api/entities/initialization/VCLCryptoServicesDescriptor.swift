@@ -17,7 +17,7 @@ public struct VCLCryptoServicesDescriptor {
     
     public init(
         cryptoServiceType: VCLCryptoServiceType = VCLCryptoServiceType.Local,
-        signatureAlgorithm: VCLSignatureAlgorithm = VCLSignatureAlgorithm.ES256,
+        signatureAlgorithm: VCLSignatureAlgorithm = VCLSignatureAlgorithm.SECP256k1,
         injectedCryptoServicesDescriptor: VCLInjectedCryptoServicesDescriptor? = nil,
         remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor? = nil
     ) {

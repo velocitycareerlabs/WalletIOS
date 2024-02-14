@@ -12,7 +12,6 @@ import Foundation
 public enum VCLSignatureAlgorithm: String {
     case ES256 = "P-256"
     case SECP256k1 = "secp256k1"
-//    "ES256K" // The only algorithm supported locally
     
     public var jwsAlgorithm: String { get {
         return "ES256K" // The only algorithm supported locally
@@ -29,7 +28,7 @@ public enum VCLSignatureAlgorithm: String {
         case VCLSignatureAlgorithm.SECP256k1.rawValue:
             return .SECP256k1
         default:
-            return .ES256
+            return .SECP256k1
         }
     }
 }

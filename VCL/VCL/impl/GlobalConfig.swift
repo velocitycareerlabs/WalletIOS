@@ -14,7 +14,7 @@ struct GlobalConfig {
     
     static var CurrentEnvironment = VCLEnvironment.Prod
     static var XVnfProtocolVersion = VCLXVnfProtocolVersion.XVnfProtocolVersion1
-    static var SignatureAlgorithm = VCLSignatureAlgorithm.ES256
+    static var SignatureAlgorithm = VCLSignatureAlgorithm.SECP256k1
         
     static var KeycahinAccessGroupIdentifier: String? = nil
     
