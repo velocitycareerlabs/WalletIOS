@@ -163,7 +163,6 @@ public class VCLImpl: VCL {
     private func initGlobalConfigurations() {
         GlobalConfig.CurrentEnvironment = initializationDescriptor.environment
         GlobalConfig.XVnfProtocolVersion = initializationDescriptor.xVnfProtocolVersion
-        GlobalConfig.SignatureAlgorithm = initializationDescriptor.cryptoServicesDescriptor.signatureAlgorithm
         GlobalConfig.KeycahinAccessGroupIdentifier = initializationDescriptor.keycahinAccessGroupIdentifier
         GlobalConfig.IsDebugOn = initializationDescriptor.isDebugOn
     }
@@ -470,12 +469,12 @@ public class VCLImpl: VCL {
     }
     
     public func generateDidJwk(
-        remoteCryptoServicesToken: VCLToken? = nil,
+        didJwkDescriptor: VCLDidJwkDescriptor = VCLDidJwkDescriptor(),
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         keyServiceUseCase.generateDidJwk(
-            remoteCryptoServicesToken: remoteCryptoServicesToken
+            didJwkDescriptor: didJwkDescriptor
         ) {
             [weak self] didJwkResult in
             do {

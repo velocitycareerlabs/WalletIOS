@@ -22,17 +22,17 @@ class VCLKeyServiceRemoteImpl: VCLKeyService {
     }
     
     func generateDidJwk(
-        remoteCryptoServicesToken: VCLToken? = nil,
+        didJwkDescriptor: VCLDidJwkDescriptor = VCLDidJwkDescriptor(),
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     )  {
         networkService.sendRequest(
             endpoint: keyServiceUrls.createDidKeyServiceUrl,
-            body: generatePayloadToCreateDidJwk(),
+            body: generatePayloadToCreateDidJwk(signatureAlgorithm: didJwkDescriptor.signatureAlgorithm).toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
             headers: [
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion),
-                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(remoteCryptoServicesToken?.value ?? "")")
+                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(didJwkDescriptor.remoteCryptoServicesToken?.value ?? "")")
             ]
         ) { [weak self] didJwkResult in
             do {
@@ -60,10 +60,12 @@ class VCLKeyServiceRemoteImpl: VCLKeyService {
         }
     }
     
-    private func generatePayloadToCreateDidJwk() -> String {
+    private func generatePayloadToCreateDidJwk(
+        signatureAlgorithm: VCLSignatureAlgorithm
+    ) -> [String: Any] {
         return [
-            CodingKeys.KeyCrv: GlobalConfig.SignatureAlgorithm.curve,
-        ].toJsonString() ?? ""
+            CodingKeys.KeyCrv: signatureAlgorithm.curve,
+        ]
     }
     
     public struct CodingKeys {

@@ -14,19 +14,28 @@ import VCCrypto
 
 class VCLKeyServiceMock: VCLKeyService {
     func generateDidJwk(
-        remoteCryptoServicesToken: VCLToken? = nil,
+        didJwkDescriptor: VCLDidJwkDescriptor,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
         completionBlock(.success(VCLDidJwk(did: "", publicJwk: VCLPublicJwk(valueStr: ""), kid: "", keyId: "")))
     }
     
-    func generateSecret(completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void) {
+    func generateSecret(
+        signatureAlgorithm: VCLSignatureAlgorithm,
+        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+    ) {
     }
     
-    func retrieveSecretReference(keyId: String, completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void) {
+    func retrieveSecretReference(
+        keyId: String,
+        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+    ) {
     }
     
-    func retrievePublicJwk(secret: VCCrypto.VCCryptoSecret, completionBlock: @escaping (VCLResult<VCToken.ECPublicJwk>) -> Void) {
+    func retrievePublicJwk(
+        secret: VCCrypto.VCCryptoSecret,
+        completionBlock: @escaping (VCLResult<VCToken.ECPublicJwk>) -> Void
+    ) {
     }
     
 }

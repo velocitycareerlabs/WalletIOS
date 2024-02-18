@@ -98,7 +98,7 @@ public protocol VCL {
     )
     
     func generateDidJwk(
-        remoteCryptoServicesToken: VCLToken?,
+        didJwkDescriptor: VCLDidJwkDescriptor,
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -200,12 +200,12 @@ extension VCL {
     }
     
     public func generateDidJwk(
-        remoteCryptoServicesToken: VCLToken? = nil,
+        didJwkDescriptor: VCLDidJwkDescriptor = VCLDidJwkDescriptor(),
         successHandler: @escaping (VCLDidJwk) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         generateDidJwk(
-            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            didJwkDescriptor: didJwkDescriptor,
             successHandler: successHandler,
             errorHandler: errorHandler
         )

@@ -18,11 +18,11 @@ class KeyServiceRepositoryImpl: KeyServiceRepository {
     }
     
     func generateDidJwk(
-        remoteCryptoServicesToken: VCLToken?,
+        didJwkDescriptor: VCLDidJwkDescriptor,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
         keyService.generateDidJwk(
-            remoteCryptoServicesToken: remoteCryptoServicesToken,
+            didJwkDescriptor: didJwkDescriptor,
             completionBlock: completionBlock
         )
     }

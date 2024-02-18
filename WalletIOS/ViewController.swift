@@ -27,9 +27,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
     private let environment = VCLEnvironment.Dev
+    
     private let vcl = VCLProvider.vclInstance()
     private var didJwk: VCLDidJwk!
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -49,7 +50,6 @@ class ViewController: UIViewController {
                 xVnfProtocolVersion: .XVnfProtocolVersion2,
                 cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
                     cryptoServiceType: .Remote,
-                    signatureAlgorithm: VCLSignatureAlgorithm.ES256,
                     remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
                         keyServiceUrls: VCLKeyServiceUrls(
                             createDidKeyServiceUrl: Constants.getCreateDidKeyServiceUrl(environment: environment)
@@ -65,6 +65,7 @@ class ViewController: UIViewController {
                 NSLog("VCL Initialization succeed!")
                 
                 self?.vcl.generateDidJwk(
+                    didJwkDescriptor: VCLDidJwkDescriptor(signatureAlgorithm: VCLSignatureAlgorithm.ES256),
                     successHandler: { didJwk in
                         self?.didJwk = didJwk
                         NSLog(
@@ -378,6 +379,7 @@ class ViewController: UIViewController {
     
     @objc private func generateDidJwk() {
         vcl.generateDidJwk(
+            didJwkDescriptor: VCLDidJwkDescriptor(signatureAlgorithm: VCLSignatureAlgorithm.ES256),
             successHandler: { [weak self] didJwk in
                 self?.didJwk = didJwk
                 NSLog(

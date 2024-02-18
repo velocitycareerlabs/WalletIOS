@@ -13,10 +13,11 @@ import VCCrypto
 
 public protocol VCLKeyService {
     func generateDidJwk(
-        remoteCryptoServicesToken: VCLToken?,
+        didJwkDescriptor: VCLDidJwkDescriptor,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     )
     func generateSecret(
+        signatureAlgorithm: VCLSignatureAlgorithm,
         completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
     )
     func retrieveSecretReference(
@@ -47,6 +48,7 @@ extension VCLKeyService {
 
     /// implemented for local crypto services only
     func generateSecret(
+        signatureAlgorithm: VCLSignatureAlgorithm,
         completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
     ) {
         completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))

@@ -25,7 +25,9 @@ final class KeyServiceUseCaseTest: XCTestCase {
     }
 
     func testGenerateJwk() {
-        subject.generateDidJwk(remoteCryptoServicesToken: nil) {
+        subject.generateDidJwk(
+            didJwkDescriptor: VCLDidJwkDescriptor(signatureAlgorithm: VCLSignatureAlgorithm.SECP256k1)
+        ) {
             do {
                 let didJwk = try $0.get()
                 let jwkDict = didJwk.publicJwk.valueDict
@@ -34,7 +36,7 @@ final class KeyServiceUseCaseTest: XCTestCase {
                 
                 assert(jwkDict["kty"] as? String == "EC")
                 assert(jwkDict["use"] as? String == "sig")
-                assert(jwkDict["crv"] as? String == "secp256k1")
+                assert(jwkDict["crv"] as? String == VCLSignatureAlgorithm.SECP256k1.curve)
                 assert(jwkDict["use"] as? String == "sig")
                 assert(jwkDict["x"] as? String != nil)
                 assert(jwkDict["y"] as? String != nil)
@@ -47,11 +49,13 @@ final class KeyServiceUseCaseTest: XCTestCase {
     
     func testGenerateDifferentJwks() {
         subject.generateDidJwk(
-            remoteCryptoServicesToken: nil
+            didJwkDescriptor: VCLDidJwkDescriptor(signatureAlgorithm: VCLSignatureAlgorithm.SECP256k1)
         ) { [weak self] in
             do {
                 let didJwk1 = try $0.get()
-                self?.subject.generateDidJwk(remoteCryptoServicesToken: nil) {
+                self?.subject.generateDidJwk(
+                    didJwkDescriptor: VCLDidJwkDescriptor(signatureAlgorithm: VCLSignatureAlgorithm.SECP256k1)
+                ) {
                     do {
                         let didJwk2 = try $0.get()
                         

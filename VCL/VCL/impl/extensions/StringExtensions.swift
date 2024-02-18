@@ -228,6 +228,15 @@ extension String {
         jwtCredentials.wait()
         return vclJwtList
     }
+    
+    
+    internal func toPublicJwk() -> VCLPublicJwk {
+        return VCLPublicJwk(
+            valueStr:self.removePrefix(VCLDidJwk.DidJwkPrefix)
+                .removeFirstSuffix(VCLDidJwk.DidJwkSuffix)
+                .decodeBase64() ?? ""
+        )
+    }
 }
 
 func randomString(length: Int) -> String {

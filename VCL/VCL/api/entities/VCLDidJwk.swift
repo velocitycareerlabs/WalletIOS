@@ -20,6 +20,8 @@ public class VCLDidJwk {
     /// The id of private key save in secure enclave
     public let keyId: String
     
+    public var curve: String { get { publicJwk.curve } }
+    
     public static let DidJwkPrefix = "did:jwk:"
     public static let DidJwkSuffix = "#0"
     

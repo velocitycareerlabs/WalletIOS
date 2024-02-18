@@ -22,6 +22,8 @@ public struct VCLPublicJwk {
         self.valueDict = valueDict
     }
     
+    public var curve: String { get { valueDict["crv"] as? String ?? "" } }
+    
     enum Format: String {
         case jwk = "jwk"
         case hex = "hex"
