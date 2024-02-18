@@ -11,7 +11,7 @@ import Foundation
 
 protocol KeyServiceRepository {
     func generateDidJwk(
-        remoteCryptoServicesToken: VCLToken?,
+        didJwkDescriptor: VCLDidJwkDescriptor,
         completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     )
 }

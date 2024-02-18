@@ -42,7 +42,7 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
                                     
                                     var header = Header(
                                         type: GlobalConfig.TypeJwt,
-                                        algorithm: GlobalConfig.SignatureAlgorithm.jwsAlgorithm,
+                                        algorithm: VCLSignatureAlgorithm.fromString(value: didJwk.publicJwk.curve).jwsAlgorithm,
                                         jsonWebKey: publicJwk,
                                         keyId: didJwk.kid
                                     )
@@ -82,14 +82,10 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     }
     
     private func getSecretReference(
-        keyId: String?,
+        keyId: String,
         completionBlock: @escaping (VCLResult<VCCryptoSecret>) -> Void
     ) {
-        if let keyId = keyId {
-            keyService.retrieveSecretReference(keyId: keyId, completionBlock: completionBlock)
-        } else {
-            keyService.generateSecret(completionBlock: completionBlock)
-        }
+        keyService.retrieveSecretReference(keyId: keyId, completionBlock: completionBlock)
     }
     
     private func generateClaims(

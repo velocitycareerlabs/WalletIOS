@@ -87,7 +87,9 @@ final class JwtServiceUseCaseTest: XCTestCase {
     }
     
     func testSignByExistingKey() {
-        keyService.generateDidJwk(remoteCryptoServicesToken: nil) { [weak self] didJwkResult in
+        keyService.generateDidJwk(
+            didJwkDescriptor: VCLDidJwkDescriptor(signatureAlgorithm: VCLSignatureAlgorithm.SECP256k1)
+        ) { [weak self] didJwkResult in
             do {
                 let didJwk = try didJwkResult.get()
                 
