@@ -26,6 +26,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     private var subject11: CredentialIssuerVerifier!
     private var subject12: CredentialIssuerVerifier!
     private var subject13: CredentialIssuerVerifier!
+    private var subjectQa: CredentialIssuerVerifier!
 
     private let OffersMock = VCLOffers(payload: [:], all: [], responseCode: 1, sessionToken: VCLToken(value: ""), challenge: "")
 
@@ -40,6 +41,10 @@ class CredentialIssuerVerifierTest: XCTestCase {
 
     private var finalizeOffersDescriptorOfIdentityIssuer: VCLFinalizeOffersDescriptor!
     private var credentialManifestFromIdentityIssuer: VCLCredentialManifest!
+    
+    private var finalizeOffersDescriptorOfMicrosoftQa: VCLFinalizeOffersDescriptor!
+    private var CredentialManifestForValidCredentialMicrsoftQa: VCLCredentialManifest!
+    private var CredentialManifestForInvalidCredentialMicrsoftQa: VCLCredentialManifest!
 
     override func setUp() {
         setUpSubjectProperties()
@@ -90,6 +95,23 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
         finalizeOffersDescriptorOfIdentityIssuer = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifestFromIdentityIssuer,
+            offers: OffersMock,
+            approvedOfferIds: [],
+            rejectedOfferIds: []
+        )
+        
+        CredentialManifestForValidCredentialMicrsoftQa = VCLCredentialManifest(
+            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestForValidCredentialMicrsoftQa),
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerInspectorMicrosoftQa.toDictionary()!),
+            didJwk: DidJwkMocks.DidJwk
+        )
+        CredentialManifestForInvalidCredentialMicrsoftQa = VCLCredentialManifest(
+            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestForInvalidCredentialMicrsoftQa),
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerInspectorMicrosoftQa.toDictionary()!),
+            didJwk: DidJwkMocks.DidJwk
+        )
+        finalizeOffersDescriptorOfMicrosoftQa = VCLFinalizeOffersDescriptor(
+            credentialManifest: CredentialManifestForValidCredentialMicrsoftQa,
             offers: OffersMock,
             approvedOfferIds: [],
             rejectedOfferIds: []
@@ -175,6 +197,40 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10JsonldWithoutPrimaryOrganization)
         )
+        subjectQa = CredentialIssuerVerifierImpl(
+            CredentialTypesModelMock(
+                issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
+            ),
+            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10JsonldQa)
+        )
+    }
+    
+    func testVerifyMicrosoftValidCredentialQa() {
+        subjectQa.verifyCredentials(
+            jwtCredentials: CredentialMocks.JwtValidEmploymentCredentialsFromMicrosoftQa.toJwtList()!,
+            finalizeOffersDescriptor: finalizeOffersDescriptorOfMicrosoftQa
+        ) {
+            do {
+                let isVerified = try $0.get()
+                assert(isVerified)
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+    }
+
+    func testVerifyMicrosoftInvalidCredentialQa() {
+        subjectQa.verifyCredentials(
+            jwtCredentials: CredentialMocks.JwtInvalidEmploymentCredentialsFromMicrosoftQa.toJwtList()!,
+            finalizeOffersDescriptor: finalizeOffersDescriptorOfMicrosoftQa
+        ) {
+            do {
+                let _ = try $0.get()
+                XCTFail("\(VCLErrorCode.IssuerRequiresNotaryPermission.rawValue) error code is expected")
+            } catch {
+                assert((error as! VCLError).errorCode == VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
+            }
+        }
     }
     
 //    func testVerifyOpenBadgeCredentialSuccess() {
