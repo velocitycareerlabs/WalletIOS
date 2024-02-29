@@ -262,11 +262,13 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                 let activeContext = (((completeContext[CodingKeys.KeyContext] as? [String: Any])?[credentialSubjectType] as? [String: Any]))?[CodingKeys.KeyContext] as? [String: Any] ?? completeContext
                 if let K = findKeyForPrimaryOrganizationValue(activeContext) {
                     if let did = Utils.getIdentifier(K, credentialSubject) {
-//                            Comparing issuer.id instead of iss
-//                            https://velocitycareerlabs.atlassian.net/browse/VL-6178?focusedCommentId=46933
-//                            https://velocitycareerlabs.atlassian.net/browse/VL-6988
-//                            if (jwtCredential.iss == did)
-                        if (Utils.getCredentialIssuerId(jwtCredential: jwtCredential) == did) {
+//                        Comparing issuer.id instead of iss
+//                        https://velocitycareerlabs.atlassian.net/browse/VL-6178?focusedCommentId=46933
+//                        https://velocitycareerlabs.atlassian.net/browse/VL-6988
+//                        if (jwtCredential.iss == did)
+                        let credentialIssuerId = Utils.getCredentialIssuerId(jwtCredential: jwtCredential)
+                        VCLLog.d("Comparing credentialIssuerId: \(credentialIssuerId ?? "") with did: \(did)")
+                        if (credentialIssuerId == did) {
                             isCredentialVerified = true
                             completeConetxDispatcher.leave()
                         } else {
@@ -277,12 +279,18 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                     } else {
                         globalError =
                         VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
+                        
+                        VCLLog.e("DID NOT FOUND for K = \(K) and credentialSubject = \(credentialSubject)")
+                        
                         completeConetxDispatcher.leave()
                     }
                 } else {
 //                    When K is null, the credential will pass these checks:
 //                    https://velocitycareerlabs.atlassian.net/browse/VL-6181?focusedCommentId=44343
                     isCredentialVerified = true
+                    
+                    VCLLog.d("Key for primary organization NOT FOUND for active context:\n\(activeContext)")
+                    
                     completeConetxDispatcher.leave()
                 }
             }
