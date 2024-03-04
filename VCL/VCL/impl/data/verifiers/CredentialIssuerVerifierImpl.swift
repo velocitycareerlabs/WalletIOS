@@ -250,7 +250,7 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ _self: CredentialIssuerVerifierImpl?,
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if let credentialSubjectType = (credentialSubject[CodingKeys.KeyType] as? String) {
+        if let credentialSubjectType = (((credentialSubject[CodingKeys.KeyType] as? [Any])?[0] as? String) ?? credentialSubject[CodingKeys.KeyType] as? String) {
             var globalError: VCLError? = nil
             var isCredentialVerified = false
             self.completeConetxBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish completeConetxBackgroundTaskIdentifier") {
