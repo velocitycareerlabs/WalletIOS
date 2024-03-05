@@ -295,10 +295,17 @@ class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                 }
             }
             completeConetxDispatcher.notify(queue: DispatchQueue.global(), execute: {
-                if isCredentialVerified {
-                    completionBlock(.success(true))
+                
+                if let globalError = globalError {
+                    completionBlock(.failure(globalError))
                 } else {
-                    completionBlock(.failure(globalError ?? VCLError(errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure.rawValue)))
+                    if (isCredentialVerified) {
+                        completionBlock(.success(true))
+                    } else {
+                        completionBlock(
+                            .failure(VCLError(errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure.rawValue))
+                        )
+                    }
                 }
             })
             
