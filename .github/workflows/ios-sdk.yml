@@ -122,6 +122,8 @@ jobs:
           cp -r VCL/0.6.0 VCL/${{ env.FRAMEWORK_VERSION }}
           sed -i '' 's/0\.6\.0/${{ env.FRAMEWORK_VERSION }}/g' VCL/${{ env.FRAMEWORK_VERSION }}/VCL.podspec
           git add VCL/${{ env.FRAMEWORK_VERSION }} && git commit -am "sdk ${{ env.FRAMEWORK_VERSION }}" && git push
+        env:
+          GITHUB_TOKEN: ${{ env.PAT_TOKEN }}
         working-directory: Specs
       # Publish to VCL-Swift
       - name: Publish to VCL-Swift
