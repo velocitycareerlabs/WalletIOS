@@ -61,7 +61,7 @@ jobs:
       DECRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz"
       CERTS_FILE_PATH: "./certs.p12"
       # Recomends to use separated PAT token to access to another repos
-      PAT_TOKEN: ${{ secrets.VCL_SDK_POD_ACCESS_TOKEN }}
+      PAT_TOKEN: ${{ secrets.VCL_RW_ACCESS_TOKEN }}
       KEYCHAIN: "velocity.keychain"
       RC_SUFFIX: 'rc'
       GLOBAL_ENV: ${{ needs.set-environment.outputs.GLOBAL_ENV }}
