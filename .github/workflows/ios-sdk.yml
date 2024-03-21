@@ -111,7 +111,7 @@ jobs:
         working-directory: VCL
         env: 
           # RELEASE_TAG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
-          RELEASE_TAG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}{1}') || '' }}
+          RELEASE_TAG: ${{ '' }}
       # Clone Additional repos
       - name: Clone Additional repos
         run: |
