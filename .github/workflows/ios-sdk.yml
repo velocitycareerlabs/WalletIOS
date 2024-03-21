@@ -20,10 +20,10 @@ env:
 
 jobs:
   tests-ios-sdk:
-    runs-on: macos-13 
+    runs-on: macos-14
     env:
       #Xcode config
-      XC_VERSION: "15.1"
+      XC_VERSION: "15.2"
     steps:
       # Git clone repository
       - name: Git clone repository
@@ -52,10 +52,10 @@ jobs:
     needs:
       - tests-ios-sdk
       - set-environment
-    runs-on: macos-13 
+    runs-on: macos-14
     env:
       #Xcode config
-      XC_VERSION: "15.1"
+      XC_VERSION: "15.2"
       #Certs
       ENCRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz.gpg"
       DECRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz"
