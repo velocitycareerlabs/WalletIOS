@@ -182,11 +182,11 @@ public class VCLImpl: VCL {
             profileServiceTypeVerifier?.verifyServiceTypeOfVerifiedProfile(
                 verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: did),
                 expectedServiceTypes: VCLServiceTypes(serviceType: VCLServiceType.Inspector),
-                successHandler: { [weak self] verifiedProfile in
+                successHandler: { [weak self] _ in
                     self?.presentationRequestUseCase.getPresentationRequest(
-                        presentationRequestDescriptor: presentationRequestDescriptor, 
-                        verifiedProfile: verifiedProfile
+                        presentationRequestDescriptor: presentationRequestDescriptor
                     ) { presentationRequestResult in
+                        
                         do {
                             successHandler(try presentationRequestResult.get())
                         } catch {

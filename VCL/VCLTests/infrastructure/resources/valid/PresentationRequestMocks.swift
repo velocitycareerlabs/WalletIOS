@@ -24,9 +24,12 @@ class PresentationRequestMocks {
     static let JWK =
         "{\"alg\":\"ES256K\",\"use\":\"sig\",\"kid\":\"uemn6l5ro6hLNrgiPRl1Dy51V9whez4tu4hlwsNOTVk\",\"crv\":\"secp256k1\",\"x\":\"oLYCa-AlnVpW8Rq9iST_1eY_XoyvGRry7y1xS4vU4qo\",\"y\":\"PUMAsawZ24WaSnRIdDb_wNbShAvfsGF71ke1DcJGxlM\",\"kty\":\"EC\"}\n"
 
+
+    static let PublicJwk = VCLPublicJwk(valueStr: JWK)
+
     static let PresentationRequest = VCLPresentationRequest(
         jwt: PresentationRequestJwt,
-        verifiedProfile: VCLVerifiedProfile(payload: [:]),
+        publicJwk: PublicJwk,
         deepLink: VCLDeepLink(value: ""),
         didJwk: DidJwkMocks.DidJwk
     )

@@ -11,7 +11,7 @@ import Foundation
 
 public struct VCLPresentationRequest {
     public let jwt: VCLJwt
-    public let verifiedProfile: VCLVerifiedProfile
+    public let publicJwk: VCLPublicJwk
     public let deepLink: VCLDeepLink
     public let pushDelegate: VCLPushDelegate?
     public let didJwk: VCLDidJwk
@@ -19,14 +19,14 @@ public struct VCLPresentationRequest {
     
     public init(
         jwt: VCLJwt,
-        verifiedProfile: VCLVerifiedProfile,
+        publicJwk: VCLPublicJwk,
         deepLink: VCLDeepLink,
         pushDelegate: VCLPushDelegate? = nil,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.jwt = jwt
-        self.verifiedProfile = verifiedProfile
+        self.publicJwk = publicJwk
         self.deepLink = deepLink
         self.pushDelegate = pushDelegate
         self.didJwk = didJwk
