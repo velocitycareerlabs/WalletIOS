@@ -33,6 +33,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
+        verifiedProfile: VCLVerifiedProfile,
         completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
@@ -40,9 +41,15 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                 presentationRequestDescriptor: presentationRequestDescriptor
             ) { encodedJwtStrResult in
                 do {
-                    self?.onPresentationRequestSuccess(
-                        VCLJwt(encodedJwt: try encodedJwtStrResult.get()),
-                        presentationRequestDescriptor,
+                    self?.onGetPresentationRequestSuccess(
+                        VCLPresentationRequest(
+                            jwt: VCLJwt(encodedJwt: try encodedJwtStrResult.get()),
+                            verifiedProfile: verifiedProfile,
+                            deepLink: presentationRequestDescriptor.deepLink,
+                            pushDelegate: presentationRequestDescriptor.pushDelegate,
+                            didJwk: presentationRequestDescriptor.didJwk,
+                            remoteCryptoServicesToken: presentationRequestDescriptor.remoteCryptoServicesToken
+                        ),
                         completionBlock
                     )
                 } catch {
@@ -52,20 +59,18 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         }
     }
     
-    private func onPresentationRequestSuccess(
-        _ jwt: VCLJwt,
-        _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
+    private func onGetPresentationRequestSuccess(
+        _ presentationRequest: VCLPresentationRequest,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
-        if let kid = jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
+        if let kid = presentationRequest.jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
             self.resolveKidRepository.getPublicKey(kid: kid) {
                 [weak self] publicKeyResult in
                 do {
                     let publicKey = try publicKeyResult.get()
                     self?.onResolvePublicKeySuccess(
                         publicKey,
-                        jwt,
-                        presentationRequestDescriptor,
+                        presentationRequest,
                         completionBlock
                     )
                 }
@@ -80,21 +85,12 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
     private func onResolvePublicKeySuccess(
         _ publicJwk: VCLPublicJwk,
-        _ jwt: VCLJwt,
-        _ presentationRequestDescriptor: VCLPresentationRequestDescriptor,
+        _ presentationRequest: VCLPresentationRequest,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
-        let presentationRequest = VCLPresentationRequest(
-            jwt: jwt,
-            publicJwk: publicJwk,
-            deepLink: presentationRequestDescriptor.deepLink,
-            pushDelegate: presentationRequestDescriptor.pushDelegate,
-            didJwk: presentationRequestDescriptor.didJwk,
-            remoteCryptoServicesToken: presentationRequestDescriptor.remoteCryptoServicesToken
-        )
         self.jwtServiceRepository.verifyJwt(
             jwt: presentationRequest.jwt,
-            publicJwk: presentationRequest.publicJwk,
+            publicJwk: publicJwk,
             remoteCryptoServicesToken: presentationRequest.remoteCryptoServicesToken
         ) {
             [weak self] jwtVerificationRes in
