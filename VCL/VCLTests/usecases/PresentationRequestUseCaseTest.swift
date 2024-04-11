@@ -42,13 +42,11 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 ),
                 didJwk: DidJwkMocks.DidJwk,
                 remoteCryptoServicesToken: VCLToken(value: "some token")
-            )
+            ), verifiedProfile: VCLVerifiedProfile(payload: [:])
         ) {
             do {
                 let presentationRequest = try $0.get()
                 
-                assert(presentationRequest.publicJwk.valueStr.sorted() == VCLPublicJwk(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueStr.sorted())
-                assert(presentationRequest.publicJwk.valueDict == VCLPublicJwk(valueDict: PresentationRequestMocks.JWK.toDictionary()!).valueDict)
                 assert(presentationRequest.jwt.encodedJwt == PresentationRequestMocks.PresentationRequestJwt.encodedJwt)
                 assert(presentationRequest.jwt.header! == PresentationRequestMocks.PresentationRequestJwt.header!)
                 assert(presentationRequest.jwt.payload! == PresentationRequestMocks.PresentationRequestJwt.payload!)
@@ -81,7 +79,8 @@ final class PresentationRequestUseCaseTest: XCTestCase {
             presentationRequestDescriptor: VCLPresentationRequestDescriptor(
                 deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet,
                 didJwk: DidJwkMocks.DidJwk
-            )
+            ), 
+            verifiedProfile: VCLVerifiedProfile(payload: [:])
         ) {
             do  {
                 let _ = try $0.get()
