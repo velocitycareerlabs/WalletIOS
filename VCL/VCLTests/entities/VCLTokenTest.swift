@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 @testable import VCL
 
-class VCLTokenTest: XCTest {
+class VCLTokenTest: XCTestCase {
     var subject: VCLToken!
     
     func testToken1() {

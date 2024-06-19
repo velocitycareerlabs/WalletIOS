@@ -46,6 +46,10 @@ extension Data {
         return String(data: self, encoding: .utf8).flatMap(Bool.init)
     }
     
+    func toString() -> String? {
+        return String(data: self, encoding: .utf8)
+    }
+    
     func toJwtList() -> [VCLJwt]? {
         if let jsonArray = try? JSONSerialization.jsonObject(with: self) as? [String] {
             var jwtCredentials = [VCLJwt]()

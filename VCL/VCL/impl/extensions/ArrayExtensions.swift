@@ -9,6 +9,17 @@
 
 import Foundation
 
+extension Array {
+    func toJsonArrayString() -> String? {
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: self, options: [])
+            return String(data: jsonData, encoding: .utf8)
+        } catch {
+            return nil
+        }
+    }
+}
+
 public func == (lhs: [Any], rhs: [Any] ) -> Bool {
     return NSArray(array: lhs).isEqual(to: rhs)
 }
