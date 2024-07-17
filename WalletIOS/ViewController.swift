@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
-    private let environment = VCLEnvironment.Dev
+    private let environment = VCLEnvironment.Staging
     
     private let vcl = VCLProvider.vclInstance()
     private var didJwk: VCLDidJwk!
@@ -38,6 +38,7 @@ class ViewController: UIViewController {
         receivingCredentialsByDeepLinkBtn.addTarget(self, action: #selector(getCredentialManifestByDeepLink), for: .touchUpInside)
         receivingCredentialsByServicesBtn.addTarget(self, action: #selector(getOrganizationsThenCredentialManifestByService), for: .touchUpInside)
         selfReportingCredentialsBtn.addTarget(self, action: #selector(getCredentialTypesUIFormSchema), for: .touchUpInside)
+        refreshCredentialsBtn.isEnabled = false
         refreshCredentialsBtn.addTarget(self, action: #selector(refreshCredentials), for: .touchUpInside)
         verifiedProfileBtn.addTarget(self, action: #selector(getVerifiedProfile), for: .touchUpInside)
         verifyJwtBtn.addTarget(self, action: #selector(verifyJwt), for: .touchUpInside)
@@ -125,7 +126,7 @@ class ViewController: UIViewController {
     private func submitPresentation(presentationRequest: VCLPresentationRequest)  {
         let presentationSubmission = VCLPresentationSubmission(
             presentationRequest: presentationRequest,
-            verifiableCredentials: Constants.PresentationSelectionsList
+            verifiableCredentials: Constants.getIdentificationList(environment)
         )
         submitPresentation(presentationSubmission: presentationSubmission)
     }
@@ -184,7 +185,7 @@ class ViewController: UIViewController {
         let credentialManifestDescriptorRefresh =
         VCLCredentialManifestDescriptorRefresh(
             service: service,
-            credentialIds: Constants.CredentialIdsToRefresh,
+            credentialIds: Constants.getCredentialIdsToRefresh(environment),
             didJwk: self.didJwk
         )
         vcl.getCredentialManifest(
@@ -248,7 +249,7 @@ class ViewController: UIViewController {
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
             credentialManifest: credentialManifest,
             types: Constants.CredentialTypes,
-            identificationVerifiableCredentials: Constants.IdentificationList
+            identificationVerifiableCredentials: Constants.getIdentificationList(environment)
         )
         vcl.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
@@ -337,7 +338,7 @@ class ViewController: UIViewController {
     
     @objc private func getVerifiedProfile() {
         vcl.getVerifiedProfile(
-            verifiedProfileDescriptor: Constants.VerifiedProfileDescriptor,
+            verifiedProfileDescriptor: Constants.getVerifiedProfileDescriptor(environment),
             successHandler: { verifiedProfile in
                 NSLog("VCL Verified Profile: \(verifiedProfile.payload)")
             },
