@@ -45,23 +45,27 @@ class ViewController: UIViewController {
         generateSignedJwtBtn.addTarget(self, action: #selector(generateSignedJwt), for: .touchUpInside)
         generateDidJwkBtn.addTarget(self, action: #selector(generateDidJwk), for: .touchUpInside)
         
+//        let initializationDescriptor = VCLInitializationDescriptor(
+//            environment: environment,
+//            xVnfProtocolVersion: .XVnfProtocolVersion2,
+//            cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
+//                cryptoServiceType: .Remote,
+//                remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
+//                    keyServiceUrls: VCLKeyServiceUrls(
+//                        createDidKeyServiceUrl: Constants.getCreateDidKeyServiceUrl(environment: environment)
+//                    ),
+//                    jwtServiceUrls: VCLJwtServiceUrls(
+//                        jwtSignServiceUrl: Constants.getJwtSignServiceUrl(environment: environment),
+//                        jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment: environment)
+//                      )
+//                )
+//            )
+//        )
+        let initializationDescriptor = VCLInitializationDescriptor(
+            environment: environment
+        )
         vcl.initialize(
-            initializationDescriptor: VCLInitializationDescriptor(
-                environment: environment,
-                xVnfProtocolVersion: .XVnfProtocolVersion2,
-                cryptoServicesDescriptor: VCLCryptoServicesDescriptor(
-                    cryptoServiceType: .Remote,
-                    remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor(
-                        keyServiceUrls: VCLKeyServiceUrls(
-                            createDidKeyServiceUrl: Constants.getCreateDidKeyServiceUrl(environment: environment)
-                        ),
-                        jwtServiceUrls: VCLJwtServiceUrls(
-                            jwtSignServiceUrl: Constants.getJwtSignServiceUrl(environment: environment),
-                            jwtVerifyServiceUrl: Constants.getJwtVerifyServiceUrl(environment: environment)
-                          )
-                    )
-                )
-            ),
+            initializationDescriptor: initializationDescriptor,
             successHandler: { [weak self] in
                 NSLog("VCL Initialization succeed!")
                 
