@@ -33,13 +33,13 @@ final class GenerateOffersUseCaseTest: XCTestCase {
         ))
         subject1.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            sessionToken: VCLToken(value: "")
+            sessionToken: CommonMocks.Token
         ) {
             do {
                 let offers = try $0.get()
-//            TODO: FIX
-//                assert(offers.all == GenerateOffersMocks.Offers.toListOfDictionaries()!)
+                assert(offers.all.map { $0.payload } == GenerateOffersMocks.Offers.toListOfDictionaries()!)
                 assert(offers.challenge == GenerateOffersMocks.Challenge)
+                assert(offers.sessionToken.value == CommonMocks.Token.value)
             } catch {
                 XCTFail("\(error)")
             }
@@ -63,11 +63,12 @@ final class GenerateOffersUseCaseTest: XCTestCase {
 
         subject2.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            sessionToken: VCLToken(value: "")
+            sessionToken: CommonMocks.Token
         ) {
             do {
                 let offers = try $0.get()
                 assert(offers.all == "[]".toListOfDictionaries()!)
+                assert(offers.sessionToken.value == CommonMocks.Token.value)
             } catch {
                 XCTFail("\(error)")
             }
@@ -92,11 +93,12 @@ final class GenerateOffersUseCaseTest: XCTestCase {
 
         subject3.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
-            sessionToken: VCLToken(value: "")
+            sessionToken: CommonMocks.Token
         ) {
             do {
                 let offers = try $0.get()
                 assert(offers.all == GenerateOffersMocks.GeneratedOffersEmptyJsonArr.toListOfDictionaries()!)
+                assert(offers.sessionToken.value == CommonMocks.Token.value)
             } catch {
                 XCTFail("\(error)")
             }
