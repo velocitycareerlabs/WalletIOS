@@ -33,7 +33,7 @@ class CredentialDidVerifierTest: XCTestCase {
             )
             finalizeOffersDescriptorOfNotaryIssuer = VCLFinalizeOffersDescriptor(
                 credentialManifest: credentialManifestFromNotaryIssuer,
-                offers: OffersMock,
+                challenge: OffersMock.challenge,
                 approvedOfferIds: [],
                 rejectedOfferIds: []
             )
@@ -45,7 +45,7 @@ class CredentialDidVerifierTest: XCTestCase {
             )
             finalizeOffersDescriptorOfRegularIssuer = VCLFinalizeOffersDescriptor(
                 credentialManifest: credentialManifestFromRegularIssuer,
-                offers: OffersMock,
+                challenge: OffersMock.challenge,
                 approvedOfferIds: [],
                 rejectedOfferIds: []
             )

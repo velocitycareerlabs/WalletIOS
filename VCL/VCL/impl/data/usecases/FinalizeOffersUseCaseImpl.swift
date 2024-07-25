@@ -40,7 +40,7 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
         completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            if let challenge = finalizeOffersDescriptor.offers.challenge {
+            if let challenge = finalizeOffersDescriptor.challenge {
                 self?.jwtServiceRepository.generateSignedJwt(
                     jwtDescriptor: VCLJwtDescriptor(
                         iss: finalizeOffersDescriptor.didJwk.did,
