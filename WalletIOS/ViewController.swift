@@ -307,7 +307,7 @@ class ViewController: UIViewController {
         let approvedRejectedOfferIds = Utils.getApprovedRejectedOfferIdsMock(offers: offers)
         let finalizeOffersDescriptor = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifest,
-            offers: offers,
+            challenge: offers.challenge,
             approvedOfferIds: approvedRejectedOfferIds.0,
             rejectedOfferIds: approvedRejectedOfferIds.1
         )

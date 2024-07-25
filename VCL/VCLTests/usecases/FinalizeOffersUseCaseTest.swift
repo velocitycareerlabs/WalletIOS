@@ -72,13 +72,13 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 
                 self.finalizeOffersDescriptorFailed = VCLFinalizeOffersDescriptor(
                     credentialManifest: self.credentialManifestFailed,
-                    offers: offers,
+                    challenge: offers.challenge,
                     approvedOfferIds: [],
                     rejectedOfferIds: []
                 )
                 self.finalizeOffersDescriptorPassed = VCLFinalizeOffersDescriptor(
                     credentialManifest: self.credentialManifestPassed!,
-                    offers: offers,
+                    challenge: offers.challenge,
                     approvedOfferIds: [],
                     rejectedOfferIds: []
                 )

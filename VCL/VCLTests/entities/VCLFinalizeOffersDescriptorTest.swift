@@ -50,7 +50,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
         
         subject = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifest,
-            offers: offers,
+            challenge: offers.challenge,
             approvedOfferIds: approvedOfferIds,
             rejectedOfferIds: rejectedOfferIds
         )

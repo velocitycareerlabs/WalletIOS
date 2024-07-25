@@ -11,18 +11,18 @@ import Foundation
 
 public struct VCLFinalizeOffersDescriptor {
     public let credentialManifest: VCLCredentialManifest
-    public let offers: VCLOffers
+    public let challenge: String?
     public let approvedOfferIds: [String]
     public let rejectedOfferIds: [String]
     
     public init(
         credentialManifest: VCLCredentialManifest,
-        offers: VCLOffers,
+        challenge: String? = nil,
         approvedOfferIds: [String],
         rejectedOfferIds: [String]
     ) {
         self.credentialManifest = credentialManifest
-        self.offers = offers
+        self.challenge = challenge
         self.approvedOfferIds = approvedOfferIds
         self.rejectedOfferIds = rejectedOfferIds
     }

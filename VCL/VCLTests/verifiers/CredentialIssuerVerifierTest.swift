@@ -59,7 +59,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
         finalizeOffersDescriptorWithoutPermittedServices = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifestWithoutPermittedServices,
-            offers: OffersMock,
+            challenge: OffersMock.challenge,
             approvedOfferIds: [],
             rejectedOfferIds: []
         )
@@ -71,7 +71,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
         finalizeOffersDescriptorOfNotaryIssuer = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifestFromNotaryIssuer,
-            offers: OffersMock,
+            challenge: OffersMock.challenge,
             approvedOfferIds: [],
             rejectedOfferIds: []
         )
@@ -83,7 +83,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
         finalizeOffersDescriptorOfRegularIssuer = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifestFromRegularIssuer,
-            offers: OffersMock,
+            challenge: OffersMock.challenge,
             approvedOfferIds: [],
             rejectedOfferIds: []
         )
@@ -95,7 +95,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
         finalizeOffersDescriptorOfIdentityIssuer = VCLFinalizeOffersDescriptor(
             credentialManifest: credentialManifestFromIdentityIssuer,
-            offers: OffersMock,
+            challenge: OffersMock.challenge,
             approvedOfferIds: [],
             rejectedOfferIds: []
         )
@@ -112,7 +112,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
         finalizeOffersDescriptorOfMicrosoftQa = VCLFinalizeOffersDescriptor(
             credentialManifest: CredentialManifestForValidCredentialMicrsoftQa,
-            offers: OffersMock,
+            challenge: OffersMock.challenge,
             approvedOfferIds: [],
             rejectedOfferIds: []
         )
