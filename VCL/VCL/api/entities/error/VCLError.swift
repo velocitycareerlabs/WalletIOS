@@ -13,6 +13,7 @@ public struct VCLError: Error {
     public let payload: String?
     public let error: String?
     public let errorCode: String
+    public let requestId: String?
     public let message: String?
     public let statusCode: Int?
 
@@ -20,24 +21,27 @@ public struct VCLError: Error {
         payload: String? = nil,
         error: String? = nil,
         errorCode: String = VCLErrorCode.SdkError.rawValue,
+        requestId: String? = nil,
         message: String? = nil,
         statusCode: Int? = nil
     ) {
         self.payload = payload
         self.error = error
         self.errorCode = errorCode
+        self.requestId = requestId
         self.message = message
         self.statusCode = statusCode
     }
 
     public init(
         payload: String?,
-        errorCode: String = VCLErrorCode.SdkError.rawValue
+        errorCode: String? = nil
     ) {
         let payloadJson = payload?.toDictionary()
         self.payload = payload
         self.error = payloadJson?[CodingKeys.KeyError] as? String
-        self.errorCode = payloadJson?[CodingKeys.KeyErrorCode] as? String ?? errorCode
+        self.errorCode = (errorCode ?? payloadJson?[CodingKeys.KeyErrorCode] as? String) ?? VCLErrorCode.SdkError.rawValue
+        self.requestId = payloadJson?[CodingKeys.KeyRequestId] as? String
         self.message = payloadJson?[CodingKeys.KeyMessage] as? String
         self.statusCode = payloadJson?[CodingKeys.KeyStatusCode] as? Int
     }
@@ -51,12 +55,14 @@ public struct VCLError: Error {
             self.payload = vclError.payload
             self.error = vclError.error
             self.errorCode = vclError.errorCode
+            self.requestId = vclError.requestId
             self.message = vclError.message
             self.statusCode = vclError.statusCode ?? statusCode
         } else {
             self.payload = nil
             self.error = nil
             self.errorCode = errorCode
+            self.requestId = nil
             self.message = "\(String(describing: error))"
             self.statusCode = statusCode
         }
@@ -67,6 +73,7 @@ public struct VCLError: Error {
             CodingKeys.KeyPayload: payload,
             CodingKeys.KeyError: error,
             CodingKeys.KeyErrorCode: errorCode,
+            CodingKeys.KeyRequestId: requestId,
             CodingKeys.KeyMessage: message,
             CodingKeys.KeyStatusCode: statusCode
         ]
@@ -76,6 +83,7 @@ public struct VCLError: Error {
         public static let KeyPayload = "payload"
         public static let KeyError = "error"
         public static let KeyErrorCode = "errorCode"
+        public static let KeyRequestId = "requestId"
         public static let KeyMessage = "message"
         public static let KeyStatusCode = "statusCode"
     }

@@ -10,15 +10,15 @@
 import Foundation
 
 class NetworkServiceImpl: NetworkService {
-
+    
     func sendRequest(
-            endpoint: String,
-            body: String? = nil,
-            contentType: Request.ContentType = .ApplicationJson,
-            method: Request.HttpMethod,
-            headers: Array<(String, String)>? = nil,
-            cachePolicy: NSURLRequest.CachePolicy,
-            completionBlock: @escaping (VCLResult<Response>) -> Void
+        endpoint: String,
+        body: String? = nil,
+        contentType: Request.ContentType = .ApplicationJson,
+        method: Request.HttpMethod,
+        headers: Array<(String, String)>? = nil,
+        cachePolicy: NSURLRequest.CachePolicy,
+        completionBlock: @escaping (VCLResult<Response>) -> Void
     ) {
         sendRequest(
             request: Request.Builder()
@@ -37,7 +37,7 @@ class NetworkServiceImpl: NetworkService {
         logRequest(request)
         guard let urlRequest = createUrlRequest(request: request) else {
             completionBlock(.failure(VCLError(message: "Request error: \(request.stringify())")))
-          return
+            return
         }
         let task = URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             if let taskError = error {
@@ -67,16 +67,16 @@ class NetworkServiceImpl: NetworkService {
         task.resume()
     }
     
-//    private func createSession(request: Request) -> URLSession {
-//        let config = URLSessionConfiguration.default
-//        config.timeoutIntervalForRequest = TimeInterval(request.timeoutIntervalForRequest)
-//        config.requestCachePolicy = request.cachePolicy
-//        return URLSession(configuration: config) // Load configuration into Session
-//    }
+    //    private func createSession(request: Request) -> URLSession {
+    //        let config = URLSessionConfiguration.default
+    //        config.timeoutIntervalForRequest = TimeInterval(request.timeoutIntervalForRequest)
+    //        config.requestCachePolicy = request.cachePolicy
+    //        return URLSession(configuration: config) // Load configuration into Session
+    //    }
     
     private func createUrlRequest(request: Request) -> URLRequest? {
         guard let url = URL(string: request.endpoint) else {
-          return nil
+            return nil
         }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = request.method.rawValue
@@ -85,7 +85,7 @@ class NetworkServiceImpl: NetworkService {
         }
         urlRequest.setValue(request.contentType.rawValue, forHTTPHeaderField: "Content-Type")
         guard let headers = request.headers else {
-          return urlRequest
+            return urlRequest
         }
         for header in headers {
             urlRequest.addValue(header.1, forHTTPHeaderField: header.0)
