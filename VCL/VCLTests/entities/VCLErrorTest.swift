@@ -19,6 +19,7 @@ class VCLErrorTes: XCTestCase {
         assert(error.payload == ErrorMocks.Payload)
         assert(error.error == ErrorMocks.Error)
         assert(error.errorCode == ErrorMocks.ErrorCode)
+        assert(error.requestId == ErrorMocks.RequestId)
         assert(error.message == ErrorMocks.Message)
         assert(error.statusCode == ErrorMocks.StatusCode)
     }
@@ -27,6 +28,7 @@ class VCLErrorTes: XCTestCase {
         let error = VCLError(
             error: ErrorMocks.Error,
             errorCode: ErrorMocks.ErrorCode,
+            requestId: ErrorMocks.RequestId,
             message: ErrorMocks.Message,
             statusCode: ErrorMocks.StatusCode
         )
@@ -34,6 +36,7 @@ class VCLErrorTes: XCTestCase {
         assert(error.payload == nil)
         assert(error.error == ErrorMocks.Error)
         assert(error.errorCode == ErrorMocks.ErrorCode)
+        assert(error.requestId == ErrorMocks.RequestId)
         assert(error.message == ErrorMocks.Message)
         assert(error.statusCode == ErrorMocks.StatusCode)
     }
@@ -42,6 +45,7 @@ class VCLErrorTes: XCTestCase {
         let error = VCLError(
             error: ErrorMocks.Error,
             errorCode: ErrorMocks.ErrorCode,
+            requestId: ErrorMocks.RequestId,
             message: ErrorMocks.Message,
             statusCode: ErrorMocks.StatusCode
         )
@@ -50,6 +54,7 @@ class VCLErrorTes: XCTestCase {
         assert(error.payload == errorFromError.payload)
         assert(error.error == errorFromError.error)
         assert(error.errorCode == errorFromError.errorCode)
+        assert(error.requestId == errorFromError.requestId)
         assert(error.message == errorFromError.message)
         assert(error.statusCode == errorFromError.statusCode)
     }
@@ -58,6 +63,7 @@ class VCLErrorTes: XCTestCase {
         let error = VCLError(
             error: ErrorMocks.Error,
             errorCode: ErrorMocks.ErrorCode,
+            requestId: ErrorMocks.RequestId,
             message: ErrorMocks.Message
         )
         let errorFromError = VCLError(error: error)
@@ -65,6 +71,7 @@ class VCLErrorTes: XCTestCase {
         assert(errorFromError.payload == error.payload)
         assert(errorFromError.error == error.error)
         assert(errorFromError.errorCode == error.errorCode)
+        assert(errorFromError.requestId == error.requestId)
         assert(errorFromError.message == error.message)
     }
 
@@ -75,6 +82,7 @@ class VCLErrorTes: XCTestCase {
         assert(errorDictionary[VCLError.CodingKeys.KeyPayload] as? String == ErrorMocks.Payload)
         assert(errorDictionary[VCLError.CodingKeys.KeyError] as? String == ErrorMocks.Error)
         assert(errorDictionary[VCLError.CodingKeys.KeyErrorCode] as? String == ErrorMocks.ErrorCode)
+        assert(errorDictionary[VCLError.CodingKeys.KeyRequestId] as? String == ErrorMocks.RequestId)
         assert(errorDictionary[VCLError.CodingKeys.KeyMessage] as? String == ErrorMocks.Message)
         assert(errorDictionary[VCLError.CodingKeys.KeyStatusCode] as? Int == ErrorMocks.StatusCode)
     }
@@ -83,6 +91,7 @@ class VCLErrorTes: XCTestCase {
         let error = VCLError(
             error: ErrorMocks.Error,
             errorCode: ErrorMocks.ErrorCode,
+            requestId: ErrorMocks.RequestId,
             message: ErrorMocks.Message,
             statusCode : ErrorMocks.StatusCode
         )
@@ -91,6 +100,7 @@ class VCLErrorTes: XCTestCase {
         assert(errorDictionary[VCLError.CodingKeys.KeyPayload] as? String == nil)
         assert(errorDictionary[VCLError.CodingKeys.KeyError] as? String == ErrorMocks.Error)
         assert(errorDictionary[VCLError.CodingKeys.KeyErrorCode] as? String == ErrorMocks.ErrorCode)
+        assert(errorDictionary[VCLError.CodingKeys.KeyRequestId] as? String == ErrorMocks.RequestId)
         assert(errorDictionary[VCLError.CodingKeys.KeyMessage] as? String == ErrorMocks.Message)
         assert(errorDictionary[VCLError.CodingKeys.KeyStatusCode] as? Int == ErrorMocks.StatusCode)
     }
