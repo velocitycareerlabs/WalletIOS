@@ -9,7 +9,7 @@ target 'WalletIOS' do
 
   # Pods for WalletIOS
 
-  pod 'VCL', '1.0.0'
+  pod 'VCL', '1.23.4'
 
   target 'WalletIOSTests' do
     inherit! :search_paths
