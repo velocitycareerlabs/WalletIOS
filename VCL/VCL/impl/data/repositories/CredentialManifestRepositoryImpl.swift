@@ -9,15 +9,17 @@
 
 import Foundation
 
-class CredentialManifestRepositoryImpl: CredentialManifestRepository {
+final class CredentialManifestRepositoryImpl: CredentialManifestRepository {
     private let networkService: NetworkService
     
     init(_ networkService: NetworkService) {
         self.networkService = networkService
     }
     
-    func getCredentialManifest(credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-                               completionBlock: @escaping (VCLResult<String>) -> Void) {
+    func getCredentialManifest(
+        credentialManifestDescriptor: VCLCredentialManifestDescriptor,
+        completionBlock: @escaping @Sendable (VCLResult<String>) -> Void
+    ) {
         if let endpoint = credentialManifestDescriptor.endpoint {
             networkService.sendRequest(
                 endpoint: endpoint,

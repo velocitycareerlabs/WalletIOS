@@ -9,7 +9,7 @@
 
 import Foundation
 
-class ProfileServiceTypeVerifier {
+final class ProfileServiceTypeVerifier: Sendable {
     
     private let verifiedProfileUseCase: VerifiedProfileUseCase
 
@@ -20,11 +20,12 @@ class ProfileServiceTypeVerifier {
     func verifyServiceTypeOfVerifiedProfile(
         verifiedProfileDescriptor: VCLVerifiedProfileDescriptor,
         expectedServiceTypes: VCLServiceTypes,
-        successHandler: @escaping (VCLVerifiedProfile) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLVerifiedProfile) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         verifiedProfileUseCase.getVerifiedProfile(verifiedProfileDescriptor: verifiedProfileDescriptor) {
             [weak self] verifiedProfileResult in
+            guard let _self = self else { return }
             do {
                 let verifiedProfile = try verifiedProfileResult.get()
                 self?.verifyServiceType(
@@ -46,8 +47,8 @@ class ProfileServiceTypeVerifier {
     private func verifyServiceType(
         verifiedProfile: VCLVerifiedProfile,
         expectedServiceTypes: VCLServiceTypes,
-        successHandler: @escaping () -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable () -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         if (verifiedProfile.serviceTypes.containsAtLeastOneOf(serviceTypes: expectedServiceTypes)) {
             successHandler()

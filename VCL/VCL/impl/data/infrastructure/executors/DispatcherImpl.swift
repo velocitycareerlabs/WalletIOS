@@ -9,7 +9,7 @@
 
 import Foundation
 
-class DispatcherImpl: Dispatcher {
+final class DispatcherImpl: Dispatcher {
     private let dispatchGroup: DispatchGroup
     
     init() {

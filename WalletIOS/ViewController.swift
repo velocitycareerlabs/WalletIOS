@@ -168,13 +168,15 @@ class ViewController: UIViewController {
         vcl.searchForOrganizations(
             organizationsSearchDescriptor: organizationDescriptor,
             successHandler: { [weak self] organizations in
+                guard let self = self else { return }
+                
                 NSLog("VCL Organizations received: \(organizations.all)")
                 
                 // choosing services[0] for testing purposes
                 if organizations.all.count == 0 || organizations.all[0].serviceCredentialAgentIssuers.isEmpty {
                     NSLog("VCL Organizations error, issuing service not found")
                 } else {
-                    self?.getCredentialManifestByService(serviceCredentialAgentIssuer: organizations.all[0].serviceCredentialAgentIssuers[0])
+                    self.getCredentialManifestByService(serviceCredentialAgentIssuer: organizations.all[0].serviceCredentialAgentIssuers[0])
                 }
             },
             errorHandler: { error in
@@ -204,7 +206,7 @@ class ViewController: UIViewController {
         )
     }
     
-    private func getCredentialManifestByService(serviceCredentialAgentIssuer: VCLServiceCredentialAgentIssuer) {
+    private func getCredentialManifestByService(serviceCredentialAgentIssuer: VCLService) {
         let credentialManifestDescriptorByOrganization =
         VCLCredentialManifestDescriptorByService(
             service: serviceCredentialAgentIssuer,
@@ -216,7 +218,7 @@ class ViewController: UIViewController {
             credentialManifestDescriptor: credentialManifestDescriptorByOrganization,
             successHandler: { [weak self] credentialManifest in
                 NSLog("VCL Credential Manifest received: \(credentialManifest.jwt.payload?.toJson() ?? "")")
-                //                NSLog("VCL Credential Manifest received")
+                // NSLog("VCL Credential Manifest received")
                 
                 self?.generateOffers(credentialManifest: credentialManifest)
             },
@@ -262,7 +264,7 @@ class ViewController: UIViewController {
                 NSLog("VCL Generated Offers Response Code: \(offers.responseCode)")
                 NSLog("VCL Generated Offers Issuing Token: \(offers.sessionToken)")
                 
-                //                Check offers invoked after the push notification is notified the app that offers are ready:
+                // Check offers invoked after the push notification is notified the app that offers are ready:
                 self?.checkForOffers(
                     credentialManifest: credentialManifest,
                     generateOffersDescriptor: generateOffersDescriptor,

@@ -9,8 +9,19 @@
 
 import Foundation
 
-public class VCLCredentialManifestDescriptorByService: VCLCredentialManifestDescriptor {
+public struct VCLCredentialManifestDescriptorByService: VCLCredentialManifestDescriptor {
+    public var uri: String?
+    public var issuingType: VCLIssuingType
+    public var credentialTypes: [String]?
+    public var pushDelegate: VCLPushDelegate?
+    public var did: String? { get { return retrieveDid() } }
+    public var vendorOriginContext: String?
+    public var deepLink: VCLDeepLink?
+    public var didJwk: VCLDidJwk
+    public var remoteCryptoServicesToken: VCLToken?
+    public var endpoint: String? { get { return retrieveEndpoint() } }
     private let service: VCLService // for log
+    
     public init(
         service: VCLService,
         issuingType: VCLIssuingType = VCLIssuingType.Career,
@@ -20,19 +31,23 @@ public class VCLCredentialManifestDescriptorByService: VCLCredentialManifestDesc
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.service = service
-        super.init(
-            uri: service.serviceEndpoint,
-            issuingType: issuingType,
-            credentialTypes: credentialTypes,
-            pushDelegate: pushDelegate,
-            didJwk: didJwk,
-            remoteCryptoServicesToken: remoteCryptoServicesToken
-        )
+        
+        self.uri = service.serviceEndpoint
+        self.issuingType = issuingType
+        self.credentialTypes = credentialTypes
+        self.pushDelegate = pushDelegate
+        self.didJwk = didJwk
+        self.remoteCryptoServicesToken = remoteCryptoServicesToken
     }
     
-    public override func toPropsString() -> String {
-        var propsString = super.toPropsString()
-            propsString += "\nservice: \(service.toPropsString())"
-            return propsString
+    public func toPropsString() -> String {
+        var propsString = "\nuri: \(uri ?? "")"
+        propsString += "\ndid: \(did ?? "")"
+        propsString += "\nissuingType: \(issuingType)"
+        propsString += "\ncredentialTypes: \(String(describing: credentialTypes))"
+        propsString += "\npushDelegate: \(pushDelegate?.toPropsString() ?? "")"
+        propsString += "\nvendorOriginContext: \(vendorOriginContext ?? "")"
+        propsString += "\nservice: \(service.toPropsString())"
+        return propsString
     }
 }

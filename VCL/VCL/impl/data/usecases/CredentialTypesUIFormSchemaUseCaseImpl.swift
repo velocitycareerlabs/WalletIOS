@@ -9,7 +9,7 @@
 
 import Foundation
 
-class CredentialTypesUIFormSchemaUseCaseImpl: CredentialTypesUIFormSchemaUseCase {
+final class CredentialTypesUIFormSchemaUseCaseImpl: CredentialTypesUIFormSchemaUseCase {
         
     private let credentialTypesUIFormSchemaRepository: CredentialTypesUIFormSchemaRepository
     private let executor: Executor
@@ -26,14 +26,14 @@ class CredentialTypesUIFormSchemaUseCaseImpl: CredentialTypesUIFormSchemaUseCase
     func getCredentialTypesUIFormSchema(
         credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor,
         countries: VCLCountries,
-        completionBlock: @escaping (VCLResult<VCLCredentialTypesUIFormSchema>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypesUIFormSchema>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             self?.credentialTypesUIFormSchemaRepository.getCredentialTypesUIFormSchema(
                 credentialTypesUIFormSchemaDescriptor: credentialTypesUIFormSchemaDescriptor,
                 countries: countries
-            ) {
-                result in
+            ) { [weak self] result in
+                guard let _ = self else { return }
                 self?.executor.runOnMain {
                     completionBlock(result)
                 }

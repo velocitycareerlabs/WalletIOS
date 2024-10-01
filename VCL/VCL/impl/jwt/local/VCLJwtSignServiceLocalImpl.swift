@@ -8,10 +8,10 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import VCToken
-import VCCrypto
+@preconcurrency import VCToken
+@preconcurrency import VCCrypto
 
-class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
+final class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     
     private let keyService: VCLKeyService
     private let tokenSigning: TokenSigning
@@ -26,15 +26,16 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
         nonce: String? = nil,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLJwt>) -> Void
     ) {
             let secp256k1Signer = Secp256k1Signer()
             getSecretReference(
                 keyId: didJwk.keyId,
                 completionBlock: { [weak self] secretResult in
+                    guard let self = self else { return }
                     do {
                         let secret = try secretResult.get()
-                        self?.keyService.retrievePublicJwk(
+                        self.keyService.retrievePublicJwk(
                             secret: secret,
                             completionBlock: { publicJwkResult in
                                 do {
@@ -46,9 +47,9 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
                                         jsonWebKey: publicJwk,
                                         keyId: didJwk.kid
                                     )
-                                    let claims = VCLClaims(all: self?.generateClaims(jwtDescriptor: jwtDescriptor, nonce: nonce) ?? [:])
+                                    let claims = VCLClaims(all: self.generateClaims(jwtDescriptor: jwtDescriptor, nonce: nonce))
                                     
-                                    let protectedMessage = try? self?.createProtectedMessage(headers: header, claims: claims)
+                                    let protectedMessage = try?self.createProtectedMessage(headers: header, claims: claims)
                                     
                                     guard let jwsToken = JwsToken(
                                         headers: header,
@@ -83,7 +84,7 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     
     private func getSecretReference(
         keyId: String,
-        completionBlock: @escaping (VCLResult<VCCryptoSecret>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCCryptoSecret>) -> Void
     ) {
         keyService.retrieveSecretReference(keyId: keyId, completionBlock: completionBlock)
     }
@@ -91,8 +92,8 @@ class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     private func generateClaims(
         jwtDescriptor: VCLJwtDescriptor,
         nonce: String?
-    ) -> [String: Any] {
-        var retVal = jwtDescriptor.payload ?? [String: Any]()
+    ) -> [String: Sendable] {
+        var retVal = jwtDescriptor.payload ?? [String: Sendable]()
         retVal[CodingKeys.KeyIss] = jwtDescriptor.iss
         retVal[CodingKeys.KeyAud] = jwtDescriptor.aud
         retVal[CodingKeys.KeySub] = randomString(length: 10)

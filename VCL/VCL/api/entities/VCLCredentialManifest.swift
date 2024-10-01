@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLCredentialManifest {
+public struct VCLCredentialManifest: Sendable {
     public let jwt: VCLJwt
     public let vendorOriginContext: String?
     public let verifiedProfile: VCLVerifiedProfile

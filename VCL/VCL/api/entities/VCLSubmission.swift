@@ -4,102 +4,90 @@
 //
 //  Created by Michael Avoyan on 09/08/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-public class VCLSubmission {
-    public let submitUri: String
-    public let exchangeId: String
-    public let presentationDefinitionId: String
-    public let verifiableCredentials: [VCLVerifiableCredential]?
-    public let pushDelegate: VCLPushDelegate?
-    public let vendorOriginContext: String?
-    public let didJwk: VCLDidJwk
-    public let remoteCryptoServicesToken: VCLToken?
-    
-    public let jti = UUID().uuidString
-    public let submissionId = UUID().uuidString
-    
-    public init(
-        submitUri: String,
-        exchangeId: String,
-        presentationDefinitionId: String,
-        verifiableCredentials: [VCLVerifiableCredential]? = nil,
-        pushDelegate: VCLPushDelegate? = nil,
-        vendorOriginContext: String? = nil,
-        didJwk: VCLDidJwk,
-        remoteCryptoServicesToken: VCLToken? = nil
-    ) {
-        self.submitUri = submitUri
-        self.exchangeId = exchangeId
-        self.presentationDefinitionId = presentationDefinitionId
-        self.verifiableCredentials = verifiableCredentials
-        self.pushDelegate = pushDelegate
-        self.vendorOriginContext = vendorOriginContext
-        self.didJwk = didJwk
-        self.remoteCryptoServicesToken = remoteCryptoServicesToken
-    }
-        
-    internal func generatePayload(iss: String?) -> [String: Any] {
-        var retVal = [String: Any]()
-        retVal[CodingKeys.KeyJti] = self.jti
-        retVal[CodingKeys.KeyIss] = iss
-        var vp = [String: Any]()
-        vp[CodingKeys.KeyType] = CodingKeys.ValueVerifiablePresentation
-        var presentationSubmissionDict = [String: Any]()
-        presentationSubmissionDict[CodingKeys.KeyId] = self.submissionId
-        presentationSubmissionDict[CodingKeys.KeyDefinitionId] = presentationDefinitionId
+protocol PayloadGeneratable {
+    func generatePayload(iss: String?) -> [String: Sendable]
+}
+
+protocol RequestBodyGeneratable {
+    func generateRequestBody(jwt: VCLJwt) -> [String: Sendable]
+}
+
+public protocol VCLSubmission: Sendable {
+    var submitUri: String { get }
+    var exchangeId: String { get }
+    var presentationDefinitionId: String { get }
+    var verifiableCredentials: [VCLVerifiableCredential]? { get }
+    var pushDelegate: VCLPushDelegate? { get }
+    var vendorOriginContext: String? { get }
+    var didJwk: VCLDidJwk { get }
+    var remoteCryptoServicesToken: VCLToken? { get }
+    var jti: String { get }
+    var submissionId: String { get }
+}
+
+extension VCLSubmission {
+    func generatePayload(iss: String?) -> [String: Sendable] {
+        var retVal = [String: Sendable]()
+        retVal[SubmissionCodingKeys.KeyJti] = self.jti
+        retVal[SubmissionCodingKeys.KeyIss] = iss
+        var vp = [String: Sendable]()
+        vp[SubmissionCodingKeys.KeyType] = SubmissionCodingKeys.ValueVerifiablePresentation
+        var presentationSubmissionDict = [String: Sendable]()
+        presentationSubmissionDict[SubmissionCodingKeys.KeyId] = self.submissionId
+        presentationSubmissionDict[SubmissionCodingKeys.KeyDefinitionId] = presentationDefinitionId
         var descriptorMap = [[String: String]]()
         for (index, credential) in (self.verifiableCredentials ?? [VCLVerifiableCredential]()).enumerated() {
             var res = [String: String]()
-            res[CodingKeys.KeyId] = credential.inputDescriptor
-            res[CodingKeys.KeyPath] = "$.verifiableCredential[\(index)]"
-            res[CodingKeys.KeyFormat] = CodingKeys.ValueJwtVcFormat
+            res[SubmissionCodingKeys.KeyId] = credential.inputDescriptor
+            res[SubmissionCodingKeys.KeyPath] = "$.verifiableCredential[\(index)]"
+            res[SubmissionCodingKeys.KeyFormat] = SubmissionCodingKeys.ValueJwtVcFormat
             descriptorMap.append(res)
         }
-        vp[CodingKeys.KeyVerifiableCredential] = self.verifiableCredentials?.map{ credential in credential.jwtVc }
-        presentationSubmissionDict[CodingKeys.KeyDescriptorMap] = descriptorMap
-        vp[CodingKeys.KeyPresentationSubmission] = presentationSubmissionDict
-        if let voc = vendorOriginContext { vp[VCLSubmission.CodingKeys.KeyVendorOriginContext] = voc }
-        retVal[CodingKeys.KeyVp] = vp
+        vp[SubmissionCodingKeys.KeyVerifiableCredential] = self.verifiableCredentials?.map { credential in credential.jwtVc }
+        presentationSubmissionDict[SubmissionCodingKeys.KeyDescriptorMap] = descriptorMap
+        vp[SubmissionCodingKeys.KeyPresentationSubmission] = presentationSubmissionDict
+        if let voc = vendorOriginContext {
+            vp[SubmissionCodingKeys.KeyVendorOriginContext] = voc
+        }
+        retVal[SubmissionCodingKeys.KeyVp] = vp
         return retVal
     }
-    
-    func generateRequestBody(jwt: VCLJwt) -> [String: Any] {
-        var retVal = [String: Any] ()
-        retVal[CodingKeys.KeyExchangeId] = exchangeId
-        retVal[CodingKeys.KeyJwtVp] = jwt.encodedJwt
-        retVal[CodingKeys.KeyPushDelegate] = pushDelegate?.toDictionary()
-        retVal[CodingKeys.KeyContext] = CodingKeys.ValueContextList
+
+    func generateRequestBody(jwt: VCLJwt) -> [String: Sendable] {
+        var retVal = [String: Sendable]()
+        retVal[SubmissionCodingKeys.KeyExchangeId] = exchangeId
+        retVal[SubmissionCodingKeys.KeyJwtVp] = jwt.encodedJwt
+        retVal[SubmissionCodingKeys.KeyPushDelegate] = pushDelegate?.toDictionary()
+        retVal[SubmissionCodingKeys.KeyContext] = SubmissionCodingKeys.ValueContextList
         return retVal
     }
-    
-    public struct CodingKeys {
-        public static let KeyJti = "jti"
-        public static let KeyIss = "iss"
-        public static let KeyId = "id"
-        public static let KeyVp = "vp"
-        public static let KeyDid = "did"
-        public static let KeyPushDelegate = "push_delegate"
-        
-        public static let KeyType = "type"
-        public static let KeyPresentationSubmission = "presentation_submission"
-        public static let KeyDefinitionId = "definition_id"
-        public static let KeyDescriptorMap = "descriptor_map"
-        public static let KeyExchangeId = "exchange_id"
-        public static let KeyJwtVp = "jwt_vp"
-        public static let KeyPath = "path"
-        public static let KeyFormat = "format"
-        public static let KeyVerifiableCredential = "verifiableCredential"
-        public static let KeyVendorOriginContext = "vendorOriginContext"
-        public static let KeyInputDescriptor = "input_descriptor"
-        
-        public static let ValueVerifiablePresentation = "VerifiablePresentation"
-        public static let ValueJwtVcFormat = "jwt_vc"
-        
-        public static let KeyContext = "@context"
-        public static let ValueContextList = ["https://www.w3.org/2018/credentials/v1"]
-    }
+}
+
+public struct SubmissionCodingKeys {
+    public static let KeyJti = "jti"
+    public static let KeyIss = "iss"
+    public static let KeyId = "id"
+    public static let KeyVp = "vp"
+    public static let KeyDid = "did"
+    public static let KeyPushDelegate = "push_delegate"
+    public static let KeyType = "type"
+    public static let KeyPresentationSubmission = "presentation_submission"
+    public static let KeyDefinitionId = "definition_id"
+    public static let KeyDescriptorMap = "descriptor_map"
+    public static let KeyExchangeId = "exchange_id"
+    public static let KeyJwtVp = "jwt_vp"
+    public static let KeyPath = "path"
+    public static let KeyFormat = "format"
+    public static let KeyVerifiableCredential = "verifiableCredential"
+    public static let KeyVendorOriginContext = "vendorOriginContext"
+    public static let KeyInputDescriptor = "input_descriptor"
+    public static let ValueVerifiablePresentation = "VerifiablePresentation"
+    public static let ValueJwtVcFormat = "jwt_vc"
+    public static let KeyContext = "@context"
+    public static let ValueContextList = ["https://www.w3.org/2018/credentials/v1"]
 }

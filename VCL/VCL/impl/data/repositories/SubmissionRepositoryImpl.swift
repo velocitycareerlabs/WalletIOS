@@ -9,7 +9,7 @@
 
 import Foundation
 
-class SubmissionRepositoryImpl: SubmissionRepository {
+final class SubmissionRepositoryImpl: SubmissionRepository {
     
     private let networkService: NetworkService
     
@@ -22,7 +22,7 @@ class SubmissionRepositoryImpl: SubmissionRepository {
     func submit(
         submission: VCLSubmission,
         jwt: VCLJwt,
-        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         self.networkService.sendRequest(
             endpoint: submission.submitUri,
@@ -31,11 +31,11 @@ class SubmissionRepositoryImpl: SubmissionRepository {
             method: .POST,
             headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)],
             completionBlock: { [weak self] result in
-                if let _self = self {
+                if let self = self {
                     do {
                         let submissionResponse = try result.get()
                         let jsonDict = submissionResponse.payload.toDictionary()
-                        let submissionResult = _self.parse(jsonDict, submission.jti, submission.submissionId)
+                        let submissionResult = self.parse(jsonDict, submission.jti, submission.submissionId)
                         completionBlock(.success(submissionResult))
                     }
                     catch {

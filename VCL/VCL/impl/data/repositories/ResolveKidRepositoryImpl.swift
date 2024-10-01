@@ -9,7 +9,7 @@
 
 import Foundation
 
-class ResolveKidRepositoryImpl: ResolveKidRepository {
+final class ResolveKidRepositoryImpl: ResolveKidRepository {
     
     private let networkService: NetworkService
     
@@ -17,7 +17,7 @@ class ResolveKidRepositoryImpl: ResolveKidRepository {
         self.networkService = networkService
     }
     
-    func getPublicKey(kid: String, completionBlock: @escaping (VCLResult<VCLPublicJwk>) -> Void) {
+    func getPublicKey(kid: String, completionBlock: @escaping @Sendable (VCLResult<VCLPublicJwk>) -> Void) {
         networkService.sendRequest(
             endpoint: Urls.ResolveKid + kid + "?format=\(VCLPublicJwk.Format.jwk)",
             contentType: Request.ContentType.ApplicationJson,

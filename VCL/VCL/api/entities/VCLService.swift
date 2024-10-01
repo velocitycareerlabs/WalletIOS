@@ -1,38 +1,51 @@
 //
-//  VCLService.swift
+//  VCLServiceCredentialAgentIssuer.swift
 //  VCL
 //
-//  Created by Michael Avoyan on 18/08/2021.
+//  Created by Michael Avoyan on 25/08/2021.
 //
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-public class VCLService {
-    public let payload: [String: Any]
+public struct VCLService: Sendable {
+    public let payload: [String: Sendable]
+    public var id: String { retrieveId() }
+    public var type: String { retrieveType()  }
+    public var serviceEndpoint: String { retrieveServiceEndpoint() }
     
-    public init(payload: [String: Any]) {
+    public init(payload: [String: Sendable]) {
         self.payload = payload
     }
     
-    public var id: String { get { payload[CodingKeys.KeyId] as? String ?? "" } }
-    public var type: String { get { payload[CodingKeys.KeyType] as? String ?? "" } }
-    public var serviceEndpoint: String { get { payload[CodingKeys.KeyServiceEndpoint] as? String ?? "" } }
+    public var credentialTypes: [String]? { get { payload[CodingKeys.KeyCredentialTypes] as? [String] } }
     
-    open func toPropsString() -> String {
-        var propsString = ""
-        propsString += "\npayload: \(payload)"
+    func retrieveId() -> String {
+        return payload[CodingKeys.KeyId] as? String ?? ""
+    }
+    
+    func retrieveType() -> String {
+        return payload[CodingKeys.KeyType] as? String ?? ""
+    }
+    
+    func retrieveServiceEndpoint() -> String {
+        return payload[CodingKeys.KeyServiceEndpoint] as? String ?? ""
+    }
+    
+    public func toPropsString() -> String {
+        var propsString = "\npayload: \(payload)"
         propsString += "\nid: \(id)"
         propsString += "\ntype: \(type)"
         propsString += "\nserviceEndpoint: \(serviceEndpoint)"
+        propsString += "\ncredentialTypes: \(String(describing: credentialTypes))"
         return propsString
     }
     
-    enum CodingKeys {
-        static let KeyId = "id"
-        static let KeyType = "type"
-        static let KeyCredentialTypes = "credentialTypes"
-        static let KeyServiceEndpoint = "serviceEndpoint"
+    public struct CodingKeys {
+        public static let KeyId = "id"
+        public static let KeyType = "type"
+        public static let KeyCredentialTypes = "credentialTypes"
+        public static let KeyServiceEndpoint = "serviceEndpoint"
     }
 }

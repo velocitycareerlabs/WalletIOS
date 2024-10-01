@@ -9,7 +9,7 @@
 
 import Foundation
 
-class OrganizationsUseCaseImpl: OrganizationsUseCase {
+final class OrganizationsUseCaseImpl: OrganizationsUseCase {
         
     private let organizationsRepository: OrganizationsRepository
     private let executor: Executor
@@ -22,12 +22,15 @@ class OrganizationsUseCaseImpl: OrganizationsUseCase {
         self.executor = executor
     }
     
-    func searchForOrganizations(organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
-                                completionBlock: @escaping (VCLResult<VCLOrganizations>) -> Void) {
+    func searchForOrganizations(
+        organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
+        completionBlock: @escaping @Sendable (VCLResult<VCLOrganizations>) -> Void
+    ) {
         executor.runOnBackground { [weak self] in
-            self?.organizationsRepository.searchForOrganizations(organizationsSearchDescriptor: organizationsSearchDescriptor) {
+            guard let self = self else { return }
+            self.organizationsRepository.searchForOrganizations(organizationsSearchDescriptor: organizationsSearchDescriptor) {
                 organizations in
-                self?.executor.runOnMain { completionBlock(organizations) }
+                self.executor.runOnMain { completionBlock(organizations) }
             }
         }
     }

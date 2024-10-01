@@ -9,7 +9,7 @@
 
 import Foundation
 
-class VerifiedProfileUseCaseImpl: VerifiedProfileUseCase {
+final class VerifiedProfileUseCaseImpl: VerifiedProfileUseCase {
     
     private let verifiedProfileRepository: VerifiedProfileRepository
     private let executor: Executor
@@ -24,13 +24,14 @@ class VerifiedProfileUseCaseImpl: VerifiedProfileUseCase {
     
     func getVerifiedProfile(
         verifiedProfileDescriptor: VCLVerifiedProfileDescriptor,
-        completionBlock: @escaping (VCLResult<VCLVerifiedProfile>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLVerifiedProfile>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            self?.verifiedProfileRepository.getVerifiedProfile(
+            guard let self = self else { return }
+            self.verifiedProfileRepository.getVerifiedProfile(
                 verifiedProfileDescriptor: verifiedProfileDescriptor
             ) { result in
-                self?.executor.runOnMain {
+                self.executor.runOnMain {
                     completionBlock(result)
                 }
             }

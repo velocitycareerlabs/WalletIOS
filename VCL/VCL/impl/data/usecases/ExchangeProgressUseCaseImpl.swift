@@ -9,7 +9,7 @@
 
 import Foundation
 
-class ExchangeProgressUseCaseImpl: ExchangeProgressUseCase {
+final class ExchangeProgressUseCaseImpl: ExchangeProgressUseCase {
         
     private let exchangeProgressRepository: ExchangeProgressRepository
     private let executor: Executor
@@ -24,11 +24,12 @@ class ExchangeProgressUseCaseImpl: ExchangeProgressUseCase {
     
     func getExchangeProgress(
         exchangeDescriptor: VCLExchangeDescriptor,
-        completionBlock: @escaping (VCLResult<VCLExchange>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLExchange>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            self?.exchangeProgressRepository.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) { submissionResult in
-                self?.executor.runOnMain { completionBlock(submissionResult) }
+            guard let self = self else { return }
+            self.exchangeProgressRepository.getExchangeProgress(exchangeDescriptor: exchangeDescriptor) { submissionResult in
+                self.executor.runOnMain { completionBlock(submissionResult) }
             }
         }
     }

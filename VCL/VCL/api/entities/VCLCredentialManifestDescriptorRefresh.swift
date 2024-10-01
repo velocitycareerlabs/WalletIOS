@@ -4,12 +4,23 @@
 //
 //  Created by Michael Avoyan on 11/04/2022.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-public class VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescriptor {
+public struct VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescriptor {
+    public let uri: String?
+    public let issuingType: VCLIssuingType
+    public let credentialTypes: [String]?
+    public let pushDelegate: VCLPushDelegate?
+    public var did: String? { get { return retrieveDid() } }
+    public let vendorOriginContext: String?
+    public let deepLink: VCLDeepLink?
+    public let didJwk: VCLDidJwk
+    public let remoteCryptoServicesToken: VCLToken?
+    public var endpoint: String? { get { return retrieveEndpoint() } }
+
     let credentialIds:[String]
     
     public init(
@@ -21,23 +32,25 @@ public class VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescri
     ) {
         self.credentialIds = credentialIds
         
-        super.init(
-            uri: service.serviceEndpoint,
-            issuingType: issuingType,
-            didJwk: didJwk,
-            remoteCryptoServicesToken: remoteCryptoServicesToken
-        )
+        self.uri = service.serviceEndpoint
+        self.issuingType = issuingType
+        self.didJwk = didJwk
+        self.remoteCryptoServicesToken = remoteCryptoServicesToken
+        self.credentialTypes = nil
+        self.pushDelegate = nil
+        self.deepLink = nil
+        self.vendorOriginContext = nil
     }
 
-    public override var endpoint: String? { get {
+    public func retrieveEndpoint() -> String? {
         if let queryParams = generateQueryParams() {
-            return uri?.appendQueryParams(queryParams: "\(CodingKeys.KeyRefresh)=\(true)&\(queryParams)")
+            return uri?.appendQueryParams(queryParams: "\(CredentialManifestDescriptorCodingKeys.KeyRefresh)=\(true)&\(queryParams)")
         }
-        return uri?.appendQueryParams(queryParams: "\(CodingKeys.KeyRefresh)=\(true)")
-    }}
+        return uri?.appendQueryParams(queryParams: "\(CredentialManifestDescriptorCodingKeys.KeyRefresh)=\(true)")
+    }
     
-    override func generateQueryParams() -> String? {
-        let pCredentialIds = "\(self.credentialIds.map{ id in "\(CodingKeys.KeyCredentialId)=\(id.encode() ?? "")" }.joined(separator: "&"))"
+   public func generateQueryParams() -> String? {
+        let pCredentialIds = "\(self.credentialIds.map{ id in "\(CredentialManifestDescriptorCodingKeys.KeyCredentialId)=\(id.encode() ?? "")" }.joined(separator: "&"))"
 
         let qParams = [pCredentialIds].compactMap{ $0 }.filter { !$0.isEmpty }
         if qParams.isEmpty { return nil }

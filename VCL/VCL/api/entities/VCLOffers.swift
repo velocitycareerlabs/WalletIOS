@@ -9,15 +9,15 @@
 
 import Foundation
 
-public struct VCLOffers {
-    public let payload: [String: Any]
+public struct VCLOffers: Sendable {
+    public let payload: [String: Sendable]
     public let all: [VCLOffer]
     public let responseCode: Int
     public let sessionToken: VCLToken
     public let challenge: String?
     
     public init(
-        payload: [String: Any],
+        payload: [String: Sendable],
         all: [VCLOffer],
         responseCode: Int,
         sessionToken: VCLToken,
@@ -39,7 +39,7 @@ public struct VCLOffers {
             // VCLXVnfProtocolVersion.XVnfProtocolVersion2
             return VCLOffers(
                 payload: offersDictionary,
-                all: offersFromJsonArray(offersDictionary[VCLOffers.CodingKeys.KeyOffers] as? [[String : Any]] ?? []),
+                all: offersFromJsonArray(offersDictionary[VCLOffers.CodingKeys.KeyOffers] as? [[String : Sendable]] ?? []),
                 responseCode: responseCode,
                 sessionToken: sessionToken,
                 challenge: offersDictionary[VCLOffers.CodingKeys.KeyChallenge] as? String
@@ -64,7 +64,7 @@ public struct VCLOffers {
         }
     }
 
-    static func offersFromJsonArray(_ offersJsonArray: [[String: Any]]) -> [VCLOffer] {
+    static func offersFromJsonArray(_ offersJsonArray: [[String: Sendable]]) -> [VCLOffer] {
         var allOffers = [VCLOffer]()
         for i in 0..<offersJsonArray.count {
             allOffers.append(VCLOffer(payload: offersJsonArray[i]))

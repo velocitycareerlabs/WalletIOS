@@ -8,19 +8,19 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import VCToken
+@preconcurrency import VCToken
 
-public struct VCLJwt {
-    public private(set) var header: [String: Any]? = nil
-    public private(set) var payload: [String: Any]? = nil
+public struct VCLJwt: Sendable {
+    public private(set) var header: [String: Sendable]? = nil
+    public private(set) var payload: [String: Sendable]? = nil
     public private(set) var signature: String? = nil
     public private(set) var encodedJwt: String = ""
     
     public private(set) var jwsToken: JwsToken<VCLClaims>? = nil
     
     public init(
-        header: [String: Any]?,
-        payload: [String: Any]?,
+        header: [String: Sendable]?,
+        payload: [String: Sendable]?,
         signature: String?,
         encodedJwt: String
     ) {
@@ -44,8 +44,8 @@ public struct VCLJwt {
     }
     
     private mutating func initialize(
-        header: [String: Any]? = nil,
-        payload: [String: Any]? = nil,
+        header: [String: Sendable]? = nil,
+        payload: [String: Sendable]? = nil,
         signature: String? = nil,
         encodedJwt: String
     ) {

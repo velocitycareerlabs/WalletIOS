@@ -9,7 +9,7 @@
 
 import Foundation
 
-public enum VCLSignatureAlgorithm: String {
+public enum VCLSignatureAlgorithm: String, Sendable {
     case ES256 = "P-256"
     case SECP256k1 = "secp256k1"
     

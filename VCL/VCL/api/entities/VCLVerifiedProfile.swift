@@ -4,16 +4,16 @@
 //
 //  Created by Michael Avoyan on 28/10/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-public struct VCLVerifiedProfile {
+public struct VCLVerifiedProfile: Sendable {
     
-    public let payload: [String: Any]
+    public let payload: [String: Sendable]
     
-    public init(payload: [String: Any]) {
+    public init(payload: [String: Sendable]) {
         self.payload = payload
     }
     

@@ -9,19 +9,27 @@
 
 import Foundation
 
+import Foundation
+
 class DsptchQueueImpl: DsptchQueue {
     
     private let dispatchQueue: DispatchQueue
     
-    init(_ sufix: String) {
+    init(_ suffix: String) {
         self.dispatchQueue = DispatchQueue(
-            label: "\(GlobalConfig.VclPackage)." + sufix,
+            label: "\(GlobalConfig.VclPackage)." + suffix,
             attributes: .concurrent)
     }
     
-    func _async(flags: DispatchWorkItemFlags, _ block: @escaping () -> Void) {
+    func async(flags: DispatchWorkItemFlags, _ block: @escaping @Sendable () -> Void) {
         self.dispatchQueue.async(flags: flags) {
             block()
+        }
+    }
+    
+    func sync<T>(_ block: @escaping @Sendable () -> T) -> T {
+        return self.dispatchQueue.sync {
+            return block()
         }
     }
 }

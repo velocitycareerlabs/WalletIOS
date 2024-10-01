@@ -7,7 +7,7 @@
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
-public class VCLImpl: VCL {
+public final class VCLImpl: @unchecked Sendable, VCL {
     
     private static let ModelsToInitializeAmount = 3
     
@@ -35,8 +35,8 @@ public class VCLImpl: VCL {
     
     public func initialize(
         initializationDescriptor: VCLInitializationDescriptor,
-        successHandler: @escaping () -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable () -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         
         self.initializationDescriptor = initializationDescriptor
@@ -108,8 +108,8 @@ public class VCLImpl: VCL {
     
     private func cacheRemoteData(
         cacheSequence: Int,
-        successHandler: @escaping () -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable () -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         credentialTypesModel = VclBlocksProvider.provideCredentialTypesModel()
         
@@ -129,22 +129,23 @@ public class VCLImpl: VCL {
         }
         credentialTypesModel.initialize(cacheSequence: cacheSequence) { [weak self] result in
             do {
+                guard let self = self else { return }
                 _ = try result.get()
-                if self?.initializationWatcher.onInitializedModel(error: nil) == true {
-                    self?.completionHandler(successHandler, errorHandler)
+                if self.initializationWatcher.onInitializedModel(error: nil) == true {
+                    self.completionHandler(successHandler, errorHandler)
                 }
                 else {
-                    if let credentialTypes = self?.credentialTypesModel.data {
-                        self?.credentialTypeSchemasModel = VclBlocksProvider.provideCredentialTypeSchemasModel(credenctiialTypes: credentialTypes)
-                        self?.credentialTypeSchemasModel?.initialize(cacheSequence: cacheSequence) { result in
+                    if let credentialTypes = self.credentialTypesModel.data {
+                        self.credentialTypeSchemasModel = VclBlocksProvider.provideCredentialTypeSchemasModel(credenctiialTypes: credentialTypes)
+                        self.credentialTypeSchemasModel?.initialize(cacheSequence: cacheSequence) { result in
                             do {
                                 _ = try result.get()
-                                if self?.initializationWatcher.onInitializedModel(error: nil) == true {
-                                    self?.completionHandler(successHandler, errorHandler)
+                                if self.initializationWatcher.onInitializedModel(error: nil) == true {
+                                    self.completionHandler(successHandler, errorHandler)
                                 }
                             } catch {
-                                if self?.initializationWatcher.onInitializedModel(error: error as? VCLError) == true {
-                                    self?.completionHandler(successHandler, errorHandler)
+                                if self.initializationWatcher.onInitializedModel(error: error as? VCLError) == true {
+                                    self.completionHandler(successHandler, errorHandler)
                                 }
                             }
                         }
@@ -175,22 +176,23 @@ public class VCLImpl: VCL {
     
     public func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        successHandler: @escaping (VCLPresentationRequest) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLPresentationRequest) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         if let did = presentationRequestDescriptor.did {
             profileServiceTypeVerifier?.verifyServiceTypeOfVerifiedProfile(
                 verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: did),
                 expectedServiceTypes: VCLServiceTypes(serviceType: VCLServiceType.Inspector),
                 successHandler: { [weak self] verifiedProfile in
-                    self?.presentationRequestUseCase.getPresentationRequest(
-                        presentationRequestDescriptor: presentationRequestDescriptor, 
+                    guard let self = self else { return }
+                    self.presentationRequestUseCase.getPresentationRequest(
+                        presentationRequestDescriptor: presentationRequestDescriptor,
                         verifiedProfile: verifiedProfile
                     ) { presentationRequestResult in
                         do {
                             successHandler(try presentationRequestResult.get())
                         } catch {
-                            self?.logError(message: "getPresentationRequest", error: error)
+                            self.logError(message: "getPresentationRequest", error: error)
                             errorHandler(VCLError(error: error))
                         }
                     }
@@ -209,8 +211,8 @@ public class VCLImpl: VCL {
     
     public func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
-        successHandler: @escaping (VCLSubmissionResult) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLSubmissionResult) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         presentationSubmissionUseCase.submit(
             submission: presentationSubmission
@@ -227,8 +229,8 @@ public class VCLImpl: VCL {
     
     public func getExchangeProgress(
         exchangeDescriptor: VCLExchangeDescriptor,
-        successHandler: @escaping (VCLExchange) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLExchange) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         exchangeProgressUseCase.getExchangeProgress(
             exchangeDescriptor: exchangeDescriptor
@@ -245,8 +247,8 @@ public class VCLImpl: VCL {
     
     public func searchForOrganizations(
         organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
-        successHandler: @escaping (VCLOrganizations) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLOrganizations) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         organizationsUseCase.searchForOrganizations(organizationsSearchDescriptor: organizationsSearchDescriptor) {
             [weak self] organizationsResult in
@@ -261,8 +263,8 @@ public class VCLImpl: VCL {
     
     public func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        successHandler: @escaping (VCLCredentialManifest) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLCredentialManifest) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         VCLLog.d("credentialManifestDescriptor: \(credentialManifestDescriptor.toPropsString())")
         if let did = credentialManifestDescriptor.did {
@@ -297,8 +299,8 @@ public class VCLImpl: VCL {
     
     public func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        successHandler: @escaping (VCLOffers) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLOffers) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         let identificationSubmission = VCLIdentificationSubmission(
             credentialManifest: generateOffersDescriptor.credentialManifest,
@@ -308,9 +310,10 @@ public class VCLImpl: VCL {
             submission: identificationSubmission
         ) {
             [weak self] identificationSubmissionResult in
+            guard let self = self else { return }
             do {
                 let identificationSubmission = try identificationSubmissionResult.get()
-                self?.generateOffersUseCase.generateOffers(
+                self.generateOffersUseCase.generateOffers(
                     generateOffersDescriptor: generateOffersDescriptor,
                     sessionToken: identificationSubmission.sessionToken
                 ) {
@@ -318,13 +321,13 @@ public class VCLImpl: VCL {
                     do {
                         successHandler(try vnOffersResult.get())
                     } catch {
-                        self?.logError(message: "submit identification", error: error)
+                        self.logError(message: "submit identification", error: error)
                         errorHandler(error as? VCLError ?? VCLError(error: error))
                     }
                 }
                 
             } catch {
-                self?.logError(message: "submit identification", error: error)
+                self.logError(message: "submit identification", error: error)
                 errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }
@@ -333,8 +336,8 @@ public class VCLImpl: VCL {
     public func checkForOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
         sessionToken: VCLToken,
-        successHandler: @escaping (VCLOffers) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLOffers) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         invokeGenerateOffersUseCase(
             generateOffersDescriptor: generateOffersDescriptor,
@@ -347,8 +350,8 @@ public class VCLImpl: VCL {
     private func invokeGenerateOffersUseCase(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
         sessionToken: VCLToken,
-        successHandler: @escaping (VCLOffers) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLOffers) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         generateOffersUseCase.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
@@ -367,8 +370,8 @@ public class VCLImpl: VCL {
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
-        successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLJwtVerifiableCredentials) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         finalizeOffersUseCase.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
@@ -386,8 +389,8 @@ public class VCLImpl: VCL {
     
     public func getCredentialTypesUIFormSchema(
         credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor,
-        successHandler: @escaping (VCLCredentialTypesUIFormSchema) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLCredentialTypesUIFormSchema) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         if let countries = countriesModel.data {
             credentialTypesUIFormSchemaUseCase.getCredentialTypesUIFormSchema(
@@ -410,8 +413,8 @@ public class VCLImpl: VCL {
     
     public func getVerifiedProfile(
         verifiedProfileDescriptor: VCLVerifiedProfileDescriptor,
-        successHandler: @escaping (VCLVerifiedProfile) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLVerifiedProfile) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         verifiedProfileUseCase.getVerifiedProfile(verifiedProfileDescriptor: verifiedProfileDescriptor) {
             [weak self] verifiedProfileResult in
@@ -428,8 +431,8 @@ public class VCLImpl: VCL {
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        successHandler: @escaping (Bool) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (Bool) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         jwtServiceUseCase.verifyJwt(
             jwt: jwt,
@@ -450,8 +453,8 @@ public class VCLImpl: VCL {
         jwtDescriptor: VCLJwtDescriptor,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        successHandler: @escaping (VCLJwt) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLJwt) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         jwtServiceUseCase.generateSignedJwt(
             jwtDescriptor: jwtDescriptor, 
@@ -470,8 +473,8 @@ public class VCLImpl: VCL {
     
     public func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor = VCLDidJwkDescriptor(),
-        successHandler: @escaping (VCLDidJwk) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLDidJwk) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         keyServiceUseCase.generateDidJwk(
             didJwkDescriptor: didJwkDescriptor

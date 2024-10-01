@@ -4,12 +4,12 @@
 //
 //  Created by Michael Avoyan on 13/06/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSchemaRepository {
+final class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSchemaRepository {
     private let networkService: NetworkService
     
     init(_ networkService: NetworkService) {
@@ -19,7 +19,7 @@ class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSchemaRepo
     func getCredentialTypesUIFormSchema(
         credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor,
         countries: VCLCountries,
-        completionBlock: @escaping (VCLResult<VCLCredentialTypesUIFormSchema>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypesUIFormSchema>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: Urls.CredentialTypesFormSchema.replacingOccurrences(of: Params.CredentialType, with: credentialTypesUIFormSchemaDescriptor.credentialType),
@@ -29,12 +29,12 @@ class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSchemaRepo
         ) { [weak self] response in
                 do {
                     let credentialTypesUiFoermResponse = try response.get()
-                    if let _self = self, let credentialTypesUiFoerm = credentialTypesUiFoermResponse.payload.toDictionary() {
+                    if let self = self, let credentialTypesUiFoerm = credentialTypesUiFoermResponse.payload.toDictionary() {
                         let regions = countries.countryByCode(code: credentialTypesUIFormSchemaDescriptor.countryCode)?.regions
                         completionBlock(.success(
                             VCLCredentialTypesUIFormSchema(
                                 payload:
-                                    _self.parseCredentialTypesUIFormSchema(
+                                    self.parseCredentialTypesUIFormSchema(
                                         credentialTypesUIFormSchemaDescriptor,
                                         countries,
                                         regions,
@@ -54,11 +54,11 @@ class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSchemaRepo
         _ credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor,
         _ countries: VCLCountries,
         _ regions: VCLRegions?,
-        _ formSchemaDict: [String: Any]
-    ) -> [String: Any] {
+        _ formSchemaDict: [String: Sendable]
+    ) -> [String: Sendable] {
         var formSchemaDictCP = formSchemaDict
         for (key, value) in formSchemaDictCP {
-            if let valueDict = value as? [String: Any] {
+            if let valueDict = value as? [String: Sendable] {
                 if key == VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressCountry {
                     if let allCountries = countries.all {
                         formSchemaDictCP = updateAddressEnums(
@@ -93,9 +93,9 @@ class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSchemaRepo
     private func updateAddressEnums(
         _ places: [VCLPlace],
         _ key: String,
-        _ valueDict: [String: Any],
-        _ formSchemaDict: [String: Any]
-    ) -> [String: Any] {
+        _ valueDict: [String: Sendable],
+        _ formSchemaDict: [String: Sendable]
+    ) -> [String: Sendable] {
         var formSchemaDictCP = formSchemaDict
         var valueDictCP = valueDict
         let valueDictHasKeyUiEnum = valueDictCP[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiEnum] != nil

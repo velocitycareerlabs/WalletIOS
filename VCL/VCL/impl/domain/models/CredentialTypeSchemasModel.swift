@@ -13,6 +13,6 @@ protocol CredentialTypeSchemasModel: Model {
     var data: VCLCredentialTypeSchemas? { get }
     func initialize(
         cacheSequence: Int,
-        completionBlock: @escaping (VCLResult<VCLCredentialTypeSchemas>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypeSchemas>) -> Void
     )
 }

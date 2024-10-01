@@ -11,7 +11,7 @@ import Foundation
 import VCToken
 import VCCrypto
 
-class VCLKeyServiceRemoteImpl: VCLKeyService {
+final class VCLKeyServiceRemoteImpl: VCLKeyService {
     
     private let networkService: NetworkService
     private let keyServiceUrls: VCLKeyServiceUrls
@@ -23,7 +23,7 @@ class VCLKeyServiceRemoteImpl: VCLKeyService {
     
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor = VCLDidJwkDescriptor(),
-        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLDidJwk>) -> Void
     )  {
         networkService.sendRequest(
             endpoint: keyServiceUrls.createDidKeyServiceUrl,
@@ -41,7 +41,7 @@ class VCLKeyServiceRemoteImpl: VCLKeyService {
                         .success(
                             VCLDidJwk(
                                 did: didJwkJson[CodingKeys.KeyDid] as? String ?? "",
-                                publicJwk: VCLPublicJwk(valueDict: didJwkJson[CodingKeys.KeyPublicJwk]as? [String: Any] ?? [:]),
+                                publicJwk: VCLPublicJwk(valueDict: didJwkJson[CodingKeys.KeyPublicJwk]as? [String: Sendable] ?? [:]),
                                 kid: didJwkJson[CodingKeys.KeyKid] as? String ?? "",
                                 keyId: didJwkJson[CodingKeys.KeyKeyId] as? String ?? ""
                             )
@@ -62,7 +62,7 @@ class VCLKeyServiceRemoteImpl: VCLKeyService {
     
     private func generatePayloadToCreateDidJwk(
         signatureAlgorithm: VCLSignatureAlgorithm
-    ) -> [String: Any] {
+    ) -> [String: Sendable] {
         return [
             CodingKeys.KeyCrv: signatureAlgorithm.curve,
         ]

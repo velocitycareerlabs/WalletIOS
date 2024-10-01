@@ -4,12 +4,12 @@
 //
 //  Created by Michael Avoyan on 09/08/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-public struct VCLSubmissionResult {
+public struct VCLSubmissionResult: Sendable {
     
     public let sessionToken: VCLToken
     public let exchange: VCLExchange

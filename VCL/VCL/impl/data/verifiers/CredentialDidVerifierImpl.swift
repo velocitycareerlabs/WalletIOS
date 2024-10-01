@@ -9,14 +9,14 @@
 
 import Foundation
 
-class CredentialDidVerifierImpl: CredentialDidVerifier {
+final class CredentialDidVerifierImpl: CredentialDidVerifier {
     
     let dispatcher = DispatcherImpl()
     
     func verifyCredentials(
         jwtCredentials: [VCLJwt],
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         var passedCredentials = [VCLJwt]()
         var failedCredentials = [VCLJwt]()

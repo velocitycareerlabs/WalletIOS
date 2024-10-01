@@ -4,12 +4,12 @@
 //
 //  Created by Michael Avoyan on 18/03/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-public enum VCLResult<Value> {
+public enum VCLResult<Value: Sendable>: Sendable {
     case success(Value)
     case failure(VCLError)
 }

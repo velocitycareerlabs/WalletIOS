@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLVerifiedProfileDescriptor {
+public struct VCLVerifiedProfileDescriptor: Sendable {
     
     public let did: String
     

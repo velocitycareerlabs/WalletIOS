@@ -9,7 +9,7 @@
 
 import Foundation
 
-public enum VCLIssuingType: String {
+public enum VCLIssuingType: String, Sendable {
     case Career = "Career"
     case Identity = "Identity"
     case Refresh = "Refresh"

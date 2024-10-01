@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLPresentationRequest {
+public struct VCLPresentationRequest: Sendable {
     public let jwt: VCLJwt
     public let verifiedProfile: VCLVerifiedProfile
     public let deepLink: VCLDeepLink

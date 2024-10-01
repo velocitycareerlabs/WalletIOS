@@ -10,13 +10,13 @@
 import Foundation
 @testable import VCL
 
-class EmptyExecutor: Executor {
+final class EmptyExecutor: Executor {
     
-    func runOnMain(_ block: @escaping () -> Void) {
+    func runOnMain(_ block: @escaping @Sendable () -> Void) {
         block()
     }
     
-    func runOnBackground(_ block: @escaping () -> Void) {
+    func runOnBackground(_ block: @escaping @Sendable () -> Void) {
         block()
     }
 }

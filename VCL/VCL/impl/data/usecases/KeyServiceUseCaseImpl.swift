@@ -9,7 +9,7 @@
 
 import Foundation
 
-class KeyServiceUseCaseImpl: KeyServiceUseCase {
+final class KeyServiceUseCaseImpl: KeyServiceUseCase {
     
     private let keyServiceRepository: KeyServiceRepository
     private let executor: Executor
@@ -24,13 +24,14 @@ class KeyServiceUseCaseImpl: KeyServiceUseCase {
     
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor,
-        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLDidJwk>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            self?.keyServiceRepository.generateDidJwk(
+            guard let self = self else { return }
+            self.keyServiceRepository.generateDidJwk(
                 didJwkDescriptor: didJwkDescriptor
             ) { didJwkResult in
-                self?.executor.runOnMain { completionBlock(didJwkResult) }
+                self.executor.runOnMain { completionBlock(didJwkResult) }
             }
         }
     }

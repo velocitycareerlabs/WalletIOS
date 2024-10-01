@@ -9,9 +9,9 @@
 
 import Foundation
 
-public class VCLJwtDescriptor {
+public struct VCLJwtDescriptor: Sendable {
     /// Json formatted payload
-    public let payload: [String: Any]?
+    public let payload: [String: Sendable]?
     /// JWT ID
     public let jti: String
     /// The did of the wallet owner
@@ -20,7 +20,7 @@ public class VCLJwtDescriptor {
     public let aud: String?
     
     public init(
-        payload: [String : Any]? = nil,
+        payload: [String : Sendable]? = nil,
         jti: String = UUID().uuidString,
         iss: String,
         aud: String? = nil

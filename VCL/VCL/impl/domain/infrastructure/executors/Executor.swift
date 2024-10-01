@@ -9,7 +9,7 @@
 
 import Foundation
 
-protocol Executor {
-    func runOnMain(_ block: @escaping () -> Void)
-    func runOnBackground(_ block: @escaping () -> Void)
+protocol Executor: Sendable {
+    func runOnMain(_ block: @escaping @Sendable () -> Void)
+    func runOnBackground(_ block: @escaping @Sendable () -> Void)
 }

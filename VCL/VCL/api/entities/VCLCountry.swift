@@ -9,13 +9,13 @@
 
 import Foundation
 
-public struct VCLCountry: VCLPlace {
-    public let payload: [String: Any]
+public struct VCLCountry: Sendable, VCLPlace {
+    public let payload: [String: Sendable]
     public let code: String
     public let name: String
     public let regions: VCLRegions?
     
-    public init(payload: [String: Any], code: String, name: String, regions: VCLRegions?) {
+    public init(payload: [String: Sendable], code: String, name: String, regions: VCLRegions?) {
         self.payload = payload
         self.code = code
         self.name = name

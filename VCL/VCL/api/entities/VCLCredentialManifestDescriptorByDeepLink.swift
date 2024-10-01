@@ -4,12 +4,23 @@
 //
 //  Created by Michael Avoyan on 08/08/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-public class VCLCredentialManifestDescriptorByDeepLink: VCLCredentialManifestDescriptor {
+public struct VCLCredentialManifestDescriptorByDeepLink: VCLCredentialManifestDescriptor {
+    public let uri: String?
+    public let issuingType: VCLIssuingType
+    public let credentialTypes: [String]?
+    public let pushDelegate: VCLPushDelegate?
+    public var did: String? { get { return retrieveDid() } }
+    public let vendorOriginContext: String?
+    public let deepLink: VCLDeepLink?
+    public let didJwk: VCLDidJwk
+    public let remoteCryptoServicesToken: VCLToken?
+    public var endpoint: String? { get { return retrieveEndpoint() } }
+
     
     public init(
         deepLink: VCLDeepLink,
@@ -18,14 +29,13 @@ public class VCLCredentialManifestDescriptorByDeepLink: VCLCredentialManifestDes
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
-        super.init(
-            uri: deepLink.requestUri,
-            issuingType: issuingType,
-            pushDelegate: pushDelegate,
-            vendorOriginContext: deepLink.vendorOriginContext,
-            deepLink: deepLink,
-            didJwk: didJwk,
-            remoteCryptoServicesToken: remoteCryptoServicesToken
-        )
+        self.uri = deepLink.requestUri
+        self.issuingType = issuingType
+        self.pushDelegate = pushDelegate
+        self.vendorOriginContext = deepLink.vendorOriginContext
+        self.deepLink = deepLink
+        self.didJwk = didJwk
+        self.remoteCryptoServicesToken = remoteCryptoServicesToken
+        self.credentialTypes = nil
     }
 }

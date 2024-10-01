@@ -9,7 +9,7 @@
 
 import Foundation
 
-class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
+final class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
     
     private let networkService: NetworkService
     
@@ -19,7 +19,7 @@ class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
     
     func getVerifiedProfile(
         verifiedProfileDescriptor: VCLVerifiedProfileDescriptor,
-        completionBlock: @escaping (VCLResult<VCLVerifiedProfile>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLVerifiedProfile>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: Urls.VerifiedProfile.replacingOccurrences(of: Params.Did, with: verifiedProfileDescriptor.did),

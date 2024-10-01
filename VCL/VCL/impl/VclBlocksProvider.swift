@@ -116,8 +116,7 @@ class VclBlocksProvider {
                 ),
                 credenctiialTypes,
                 ExecutorImpl(),
-                DispatcherImpl(),
-                DsptchQueueImpl("CredentialTypeSchemas")
+                DispatcherImpl()
             )
         )
     }
@@ -239,7 +238,8 @@ class VclBlocksProvider {
         if (isDirectIssuerCheckOn) {
             credentialIssuerVerifier = CredentialIssuerVerifierImpl(
                 credentialTypesModel,
-                NetworkServiceImpl()
+                NetworkServiceImpl(),
+                ExecutorImpl()
             )
         }
         return FinalizeOffersUseCaseImpl(

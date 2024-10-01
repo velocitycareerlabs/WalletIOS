@@ -9,7 +9,7 @@
 
 import Foundation
 
-class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
+final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private let credentialManifestRepository: CredentialManifestRepository
     private let resolveKidRepository: ResolveKidRepository
@@ -34,15 +34,16 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         verifiedProfile: VCLVerifiedProfile,
-        completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             self?.credentialManifestRepository.getCredentialManifest(
                 credentialManifestDescriptor: credentialManifestDescriptor
             ) {
-                credentialManifestResult in
+                [weak self] credentialManifestResult in
+                guard let self = self else { return }
                 do {
-                    self?.onGetCredentialManifestSuccess(
+                    self.onGetCredentialManifestSuccess(
                         VCLCredentialManifest(
                             jwt: VCLJwt(encodedJwt: try credentialManifestResult.get()),
                             vendorOriginContext: credentialManifestDescriptor.vendorOriginContext,
@@ -54,7 +55,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                         completionBlock
                     )
                 } catch {
-                    self?.onError(error, completionBlock)
+                    self.onError(error, completionBlock)
                 }
             }
         }
@@ -62,7 +63,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onGetCredentialManifestSuccess(
         _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if let deepLink = credentialManifest.deepLink {
             credentialManifestByDeepLinkVerifier.verifyCredentialManifest(
@@ -91,7 +92,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onCredentialManifestDidVerificationSuccess(
         _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if let kid = credentialManifest.jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
             self.resolveKidRepository.getPublicKey(kid: kid) {
@@ -117,7 +118,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     private func onResolvePublicKeySuccess(
         _ publicJwk: VCLPublicJwk,
         _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         self.jwtServiceRepository.verifyJwt(
             jwt: credentialManifest.jwt,
@@ -141,7 +142,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     private func onVerificationSuccess(
         _ isVerified: Bool,
         _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if (isVerified) {
             executor.runOnMain {
@@ -157,7 +158,7 @@ class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onError(
         _ error: Error,
-        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         executor.runOnMain {
             completionBlock(.failure(VCLError(error: error)))

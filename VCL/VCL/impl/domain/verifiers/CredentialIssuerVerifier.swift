@@ -9,10 +9,10 @@
 
 import Foundation
 
-protocol CredentialIssuerVerifier {
+protocol CredentialIssuerVerifier: Sendable {
     func verifyCredentials(
         jwtCredentials: [VCLJwt],
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     )
 }

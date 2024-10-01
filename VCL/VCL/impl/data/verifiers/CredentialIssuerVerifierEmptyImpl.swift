@@ -9,11 +9,11 @@
 
 import Foundation
 
-class CredentialIssuerVerifierEmptyImpl: CredentialIssuerVerifier {
+final class CredentialIssuerVerifierEmptyImpl: CredentialIssuerVerifier {
     func verifyCredentials(
         jwtCredentials: [VCLJwt],
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     ) {
         VCLLog.d("Empty implementation - credential issuer is always approved...")
         completionBlock(.success(true))

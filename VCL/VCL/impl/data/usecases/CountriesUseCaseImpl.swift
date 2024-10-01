@@ -9,7 +9,7 @@
 
 import Foundation
 
-class CountriesUseCaseImpl: CountriesUseCase  {
+final class CountriesUseCaseImpl: CountriesUseCase  {
         
     private let countriesRepository: CountriesRepository
     private let executor: Executor
@@ -24,11 +24,12 @@ class CountriesUseCaseImpl: CountriesUseCase  {
     
     func getCountries(
         cacheSequence: Int,
-        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCountries>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            self?.countriesRepository.getCountries(cacheSequence: cacheSequence) { result in
-                self?.executor.runOnMain {
+            guard let self = self else { return }
+            self.countriesRepository.getCountries(cacheSequence: cacheSequence) { result in
+                self.executor.runOnMain {
                     completionBlock(result)
                 }
             }
