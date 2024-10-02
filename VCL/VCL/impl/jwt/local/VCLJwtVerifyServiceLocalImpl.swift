@@ -10,12 +10,12 @@
 import Foundation
 import VCToken
 
-class VCLJwtVerifyServiceLocalImpl: VCLJwtVerifyService {
+final class VCLJwtVerifyServiceLocalImpl: VCLJwtVerifyService {
     func verify(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     ) {
         do {
             let pubKey = ECPublicJwk(

@@ -8,10 +8,10 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import VCToken
-import VCCrypto
+@preconcurrency import VCToken
+@preconcurrency import VCCrypto
 
-class VCLKeyServiceLocalImpl: VCLKeyService {
+final class VCLKeyServiceLocalImpl: VCLKeyService {
 
     private let secretStore: SecretStoring?
     private let tokenSigning: TokenSigning
@@ -27,7 +27,7 @@ class VCLKeyServiceLocalImpl: VCLKeyService {
 
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor = VCLDidJwkDescriptor(),
-        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLDidJwk>) -> Void
     ) {
         generateSecret { [weak self] secretResult in
             do {
@@ -52,7 +52,7 @@ class VCLKeyServiceLocalImpl: VCLKeyService {
     }
     
     func generateSecret(
-        completionBlock: @escaping (VCLResult<VCCryptoSecret>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCCryptoSecret>) -> Void
     ) {
         do {
             completionBlock(.success(try keyManagementOperations.generateKey()))
@@ -63,7 +63,7 @@ class VCLKeyServiceLocalImpl: VCLKeyService {
     
     func retrieveSecretReference(
         keyId: String,
-        completionBlock: @escaping (VCLResult<VCCryptoSecret>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCCryptoSecret>) -> Void
     ) {
         if let keyId = UUID(uuidString: keyId) {
             completionBlock(.success(keyManagementOperations.retrieveKeyFromStorage(withId: keyId)))
@@ -74,7 +74,7 @@ class VCLKeyServiceLocalImpl: VCLKeyService {
     
     func retrievePublicJwk(
         secret: VCCryptoSecret,
-        completionBlock: @escaping (VCLResult<ECPublicJwk>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<ECPublicJwk>) -> Void
     ) {
         do {
             completionBlock(.success(try tokenSigning.getPublicJwk(from: secret, withKeyId: secret.id.uuidString)))

@@ -9,10 +9,10 @@
 
 import Foundation
 
-public struct VCLOffer {
-    public let payload: [String: Any]
+public struct VCLOffer: Sendable {
+    public let payload: [String: Sendable]
     
-    public init(payload: [String : Any]) {
+    public init(payload: [String : Sendable]) {
         self.payload = payload
     }
     

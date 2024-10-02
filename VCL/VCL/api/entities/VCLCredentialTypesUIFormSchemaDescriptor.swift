@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLCredentialTypesUIFormSchemaDescriptor {
+public struct VCLCredentialTypesUIFormSchemaDescriptor: Sendable {
     
     public let credentialType: String
     public let countryCode: String

@@ -9,7 +9,7 @@
 
 import Foundation
 
-class JwtServiceUseCaseImpl: JwtServiceUseCase {
+final class JwtServiceUseCaseImpl: JwtServiceUseCase {
     
     private let jwtServiceRepository: JwtServiceRepository
     private let executor: Executor
@@ -26,15 +26,16 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            self?.jwtServiceRepository.verifyJwt(
-                jwt: jwt, 
+            guard let self = self else { return }
+            self.jwtServiceRepository.verifyJwt(
+                jwt: jwt,
                 publicJwk: publicJwk,
                 remoteCryptoServicesToken: remoteCryptoServicesToken
             ) { isVeriviedResult in
-                self?.executor.runOnMain { completionBlock(isVeriviedResult) }
+                self.executor.runOnMain { completionBlock(isVeriviedResult) }
             }
         }
     }
@@ -44,16 +45,17 @@ class JwtServiceUseCaseImpl: JwtServiceUseCase {
         nonce: String? = nil,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLJwt>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            self?.jwtServiceRepository.generateSignedJwt(
+            guard let self = self else { return }
+            self.jwtServiceRepository.generateSignedJwt(
                 jwtDescriptor: jwtDescriptor,
                 nonce: nonce,
                 didJwk: didJwk,
                 remoteCryptoServicesToken: remoteCryptoServicesToken
             ) { jwtResult in
-                self?.executor.runOnMain { completionBlock(jwtResult) }
+                self.executor.runOnMain { completionBlock(jwtResult) }
             }
         }
     }

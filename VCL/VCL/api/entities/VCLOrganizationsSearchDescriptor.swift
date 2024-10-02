@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLOrganizationsSearchDescriptor {
+public struct VCLOrganizationsSearchDescriptor: Sendable {
     public let filter: VCLFilter?
     public let page: VCLPage?
     /// A array of tuples indicating the field to sort by
@@ -71,7 +71,7 @@ public struct VCLOrganizationsSearchDescriptor {
         else { return qParams.joined(separator: "&") }
     }
     
-    private struct CodingKeys {
+    private struct CodingKeys: Sendable {
         public static let KeyQueryQ = "q"
 
         public static let KeySort = "sort"
@@ -85,7 +85,7 @@ public struct VCLOrganizationsSearchDescriptor {
     }
 }
 
-public struct VCLFilter {
+public struct VCLFilter: Sendable {
     /// Filters organizations based on DIDs
     let did: String?
     /// Filters organizations based on Service Types e.g. [VCLServiceType]
@@ -104,7 +104,7 @@ public struct VCLFilter {
     }
 }
 
-public struct VCLPage {
+public struct VCLPage: Sendable {
     /// The number of records to retrieve
     let size: String?
     /// The objectId to skip

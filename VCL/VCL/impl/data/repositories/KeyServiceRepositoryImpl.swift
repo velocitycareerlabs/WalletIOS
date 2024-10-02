@@ -9,7 +9,7 @@
 
 import Foundation
 
-class KeyServiceRepositoryImpl: KeyServiceRepository {
+final class KeyServiceRepositoryImpl: KeyServiceRepository {
     
     private let keyService: VCLKeyService
     
@@ -19,7 +19,7 @@ class KeyServiceRepositoryImpl: KeyServiceRepository {
     
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor,
-        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLDidJwk>) -> Void
     ) {
         keyService.generateDidJwk(
             didJwkDescriptor: didJwkDescriptor,

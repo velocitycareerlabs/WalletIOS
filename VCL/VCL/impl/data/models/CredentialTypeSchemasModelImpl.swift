@@ -4,10 +4,10 @@
 //
 //  Created by Michael Avoyan on 22/03/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
-class CredentialTypeSchemasModelImpl: CredentialTypeSchemasModel {
+class CredentialTypeSchemasModelImpl: @unchecked Sendable, CredentialTypeSchemasModel {
     
     private(set) var data: VCLCredentialTypeSchemas?
     let credentialTypeSchemasUseCase: CredentialTypeSchemasUseCase
@@ -18,7 +18,7 @@ class CredentialTypeSchemasModelImpl: CredentialTypeSchemasModel {
     
     func initialize(
         cacheSequence: Int,
-        completionBlock: @escaping (VCLResult<VCLCredentialTypeSchemas>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypeSchemas>) -> Void
     ) {
         credentialTypeSchemasUseCase.getCredentialTypeSchemas(cacheSequence: cacheSequence) { [weak self] result in
             do {

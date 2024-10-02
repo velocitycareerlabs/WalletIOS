@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLInjectedCryptoServicesDescriptor {
+public struct VCLInjectedCryptoServicesDescriptor: Sendable {
     public let keyService: VCLKeyService
     public let jwtSignService: VCLJwtSignService
     public let jwtVerifyService: VCLJwtVerifyService?

@@ -26,9 +26,9 @@ final class VCLCredentialManifestDescriptorRefreshTest: XCTestCase {
             didJwk: DidJwkMocks.DidJwk
         )
         
-        let credentialTypesQuery = "\(VCLCredentialManifestDescriptor.CodingKeys.KeyRefresh)=\(true)" +
-        "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialId)=\(CredentialManifestDescriptorMocks.CredentialId1.encode()!)" +
-        "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialId)=\(CredentialManifestDescriptorMocks.CredentialId2.encode()!)"
+        let credentialTypesQuery = "\(CredentialManifestDescriptorCodingKeys.KeyRefresh)=\(true)" +
+        "&\(CredentialManifestDescriptorCodingKeys.KeyCredentialId)=\(CredentialManifestDescriptorMocks.CredentialId1.encode()!)" +
+        "&\(CredentialManifestDescriptorCodingKeys.KeyCredentialId)=\(CredentialManifestDescriptorMocks.CredentialId2.encode()!)"
         let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
         
         assert(subject.endpoint == mockEndpoint)
@@ -42,8 +42,8 @@ final class VCLCredentialManifestDescriptorRefreshTest: XCTestCase {
             credentialIds: [CredentialManifestDescriptorMocks.CredentialId1],
             didJwk: DidJwkMocks.DidJwk
         )
-        let credentialTypesQuery = "\(VCLCredentialManifestDescriptor.CodingKeys.KeyRefresh)=\(true)" +
-        "&\(VCLCredentialManifestDescriptor.CodingKeys.KeyCredentialId)=\(CredentialManifestDescriptorMocks.CredentialId1.encode()!)"
+        let credentialTypesQuery = "\(CredentialManifestDescriptorCodingKeys.KeyRefresh)=\(true)" +
+        "&\(CredentialManifestDescriptorCodingKeys.KeyCredentialId)=\(CredentialManifestDescriptorMocks.CredentialId1.encode()!)"
         let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
         
         assert(subject.endpoint == mockEndpoint)
@@ -57,7 +57,7 @@ final class VCLCredentialManifestDescriptorRefreshTest: XCTestCase {
             credentialIds: [],
             didJwk: DidJwkMocks.DidJwk
         )
-        let credentialTypesQuery = "\(VCLCredentialManifestDescriptor.CodingKeys.KeyRefresh)=\(true)"
+        let credentialTypesQuery = "\(CredentialManifestDescriptorCodingKeys.KeyRefresh)=\(true)"
         let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
         
         assert(subject.endpoint == mockEndpoint)

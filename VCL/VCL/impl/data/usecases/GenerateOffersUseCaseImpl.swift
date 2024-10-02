@@ -9,7 +9,7 @@
 
 import Foundation
 
-class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
+final class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
     
     private let generateOffersRepository: GenerateOffersRepository
     private let offersByDeepLinkVerifier: OffersByDeepLinkVerifier
@@ -28,13 +28,14 @@ class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
     func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
         sessionToken: VCLToken,
-        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLOffers>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             self?.generateOffersRepository.generateOffers(
                 generateOffersDescriptor: generateOffersDescriptor,
                 sessionToken: sessionToken
-            ) { offersResult in
+            ) { [weak self] offersResult in
+                guard let _ = self else { return }
                 do {
                     let offers = try offersResult.get()
                     self?.verifyOffersByDeepLink(
@@ -52,7 +53,7 @@ class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
     private func verifyOffersByDeepLink(
         offers: VCLOffers,
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLOffers>) -> Void
     ) {
         if let deepLink = generateOffersDescriptor.credentialManifest.deepLink {
             offersByDeepLinkVerifier.verifyOffers(offers: offers, deepLink: deepLink) {
@@ -77,7 +78,7 @@ class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
     
     private func onError<T>(
         _ error: VCLError,
-        _ completionBlock: @escaping (VCLResult<T>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<T>) -> Void
     ) {
         executor.runOnMain { completionBlock(VCLResult.failure(error)) }
     }

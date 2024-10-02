@@ -9,7 +9,7 @@
 
 import Foundation
 
-class VCLJwtVerifyServiceRemoteImpl: VCLJwtVerifyService {
+final class VCLJwtVerifyServiceRemoteImpl: VCLJwtVerifyService {
     
     private let networkService: NetworkService
     private let jwtVerifyServiceUrl: String
@@ -23,7 +23,7 @@ class VCLJwtVerifyServiceRemoteImpl: VCLJwtVerifyService {
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: jwtVerifyServiceUrl,

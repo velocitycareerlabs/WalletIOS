@@ -9,10 +9,10 @@
 
 import Foundation
 
-protocol PresentationRequestUseCase {
+protocol PresentationRequestUseCase: Sendable {
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         verifiedProfile: VCLVerifiedProfile,
-        completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLPresentationRequest>) -> Void
     )
 }

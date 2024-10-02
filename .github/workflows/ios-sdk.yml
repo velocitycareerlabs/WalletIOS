@@ -23,7 +23,7 @@ jobs:
     runs-on: macos-14
     env:
       #Xcode config
-      XC_VERSION: "15.2"
+      XC_VERSION: "16.0"
     steps:
       # Git clone repository
       - name: Git clone repository
@@ -55,7 +55,7 @@ jobs:
     runs-on: macos-14
     env:
       #Xcode config
-      XC_VERSION: "15.2"
+      XC_VERSION: "16.0"
       #Certs
       ENCRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz.gpg"
       DECRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz"

@@ -9,13 +9,13 @@
 
 import Foundation
 
-class CacheServiceImpl: CacheService {
+final class CacheServiceImpl: @unchecked Sendable, CacheService {
     
     private static let KEY_CACHE_SEQUENCE_COUNTRIES = "KEY_CACHE_SEQUENCE_COUNTRIES"
     private static let KEY_CACHE_SEQUENCE_CREDENTIAL_TYPES = "KEY_CACHE_SEQUENCE_CREDENTIAL_TYPES"
     private static let KEY_CACHE_SEQUENCE_CREDENTIAL_TYPE_SCHEMA = "KEY_CACHE_SEQUENCE_CREDENTIAL_TYPE_SCHEMA"
 
-    private var defaults: UserDefaults = UserDefaults()
+    private let defaults: UserDefaults = UserDefaults()
 
     private func getData(key: String) -> Data? {
         return defaults.data(forKey: key)

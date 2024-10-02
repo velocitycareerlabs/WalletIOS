@@ -9,7 +9,7 @@
 
 import Foundation
 
-class OrganizationsRepositoryImpl: OrganizationsRepository {
+final class OrganizationsRepositoryImpl: OrganizationsRepository {
     
     private let networkService: NetworkService
     
@@ -17,8 +17,10 @@ class OrganizationsRepositoryImpl: OrganizationsRepository {
         self.networkService = networkService
     }
     
-    func searchForOrganizations(organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
-                               completionBlock: @escaping (VCLResult<VCLOrganizations>) -> Void) {
+    func searchForOrganizations(
+        organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
+        completionBlock: @escaping @Sendable (VCLResult<VCLOrganizations>) -> Void
+    ) {
         var endpoint = Urls.Organizations
         if let qp = organizationsSearchDescriptor.queryParams {
             endpoint += "?" + qp
@@ -43,9 +45,9 @@ class OrganizationsRepositoryImpl: OrganizationsRepository {
         }
     }
     
-    private func parse(organizationDict: [String: Any]?) -> VCLOrganizations {
+    private func parse(organizationDict: [String: Sendable]?) -> VCLOrganizations {
         var organizations = [VCLOrganization]()
-        if let organizationsJsonArray = organizationDict?[VCLOrganizations.CodingKeys.KeyResult] as? [[String: Any]] {
+        if let organizationsJsonArray = organizationDict?[VCLOrganizations.CodingKeys.KeyResult] as? [[String: Sendable]] {
             for i in 0..<organizationsJsonArray.count {
                 organizations.append(VCLOrganization(payload: organizationsJsonArray[i]))
             }

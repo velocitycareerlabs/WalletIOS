@@ -49,10 +49,10 @@ extension String {
         return urlVars.isEmpty ? "" : "?" + urlVars.joined(separator: "&")
     }
     
-    func toDictionary() -> [String: Any]? {
+    func toDictionary() -> [String: Sendable]? {
         if let data = self.data(using: .utf8) {
             do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Sendable]
             } catch {
 //                VCLLog.e(error)
             }
@@ -60,10 +60,10 @@ extension String {
         return nil
     }
     
-    func toList() -> [Any]? {
+    func toList() -> [Sendable]? {
         if let data = self.data(using: .utf8) {
             do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? [Any]
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [Sendable]
             } catch {
 //                VCLLog.error(error)
             }
@@ -71,10 +71,10 @@ extension String {
         return nil
     }
     
-    func toListOfDictionaries() -> [[String: Any]]? {
+    func toListOfDictionaries() -> [[String: Sendable]]? {
         if let data = self.data(using: .utf8) {
             do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Sendable]]
             } catch {
 //                VCLLog.error(error)
             }
@@ -209,24 +209,33 @@ extension String {
         }
     }
     
+//    func toJwtList() -> [VCLJwt]? {
+//        guard let encodedCredentialList = self.toList() else {
+//            return nil
+//        }
+//
+//        let jwtCredentials = DispatchGroup()
+//        var vclJwtList = [VCLJwt]()
+//
+//        encodedCredentialList.forEach { jwtEncodedCredential in
+//            jwtCredentials.enter()
+//            DispatchQueue.global().async {
+//                vclJwtList.append(VCLJwt(encodedJwt: jwtEncodedCredential as? String ?? ""))
+//                jwtCredentials.leave()
+//            }
+//        }
+//
+//        jwtCredentials.wait()
+//        return vclJwtList
+//    }
     func toJwtList() -> [VCLJwt]? {
         guard let encodedCredentialList = self.toList() else {
             return nil
         }
 
-        let jwtCredentials = DispatchGroup()
-        var vclJwtList = [VCLJwt]()
-
-        encodedCredentialList.forEach { jwtEncodedCredential in
-            jwtCredentials.enter()
-            DispatchQueue.global().async {
-                vclJwtList.append(VCLJwt(encodedJwt: jwtEncodedCredential as? String ?? ""))
-                jwtCredentials.leave()
-            }
+        return encodedCredentialList.map { jwtEncodedCredential in
+            VCLJwt(encodedJwt: jwtEncodedCredential as? String ?? "")
         }
-
-        jwtCredentials.wait()
-        return vclJwtList
     }
     
     

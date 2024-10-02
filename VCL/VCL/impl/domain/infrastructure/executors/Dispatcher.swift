@@ -9,7 +9,7 @@
 
 import Foundation
 
-protocol Dispatcher {
+protocol Dispatcher: Sendable {
     func enter()
     func leave()
     func notify(qos: DispatchQoS, flags: DispatchWorkItemFlags, queue: DispatchQueue, execute work: @escaping @convention(block) () -> Void)

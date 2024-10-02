@@ -9,7 +9,7 @@
 
 import Foundation
 
-class CredentialTypesRepositoryImpl: CredentialTypesRepository {
+final class CredentialTypesRepositoryImpl: CredentialTypesRepository {
     
     private let networkService: NetworkService
     private let cacheService: CacheService
@@ -21,14 +21,14 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
     
     func getCredentialTypes(
         cacheSequence: Int,
-        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypes>) -> Void
     ) {
         let endpoint = Urls.CredentialTypes
         if(cacheService.isResetCacheCredentialTypes(cacheSequence: cacheSequence)) {
             fetchCredentialTypes(endpoint: endpoint, cacheSequence: cacheSequence, completionBlock: completionBlock)
         } else {
             if let credentialTypes = cacheService.getCredentialTypes(key: endpoint) {
-                if let credentialTypesList = credentialTypes.toList() as? [[String: Any]?] {
+                if let credentialTypesList = credentialTypes.toList() as? [[String: Sendable]?] {
                     completionBlock(.success(self.parse(credentialTypesList)))
                 } else {
                     completionBlock(.failure(VCLError(message: "Failed to parse VCLCredentialTypes)")))
@@ -42,7 +42,7 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
     private func fetchCredentialTypes(
         endpoint: String,
         cacheSequence: Int,
-        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypes>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: endpoint,
@@ -55,8 +55,8 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
             do {
                 let payload = try res.get().payload
                 self?.cacheService.setCredentialTypes(key: endpoint, value: payload, cacheSequence: cacheSequence)
-                if let credentialTypesList = payload.toList() as? [[String: Any]?], let _self = self {
-                    completionBlock(.success(_self.parse(credentialTypesList)))
+                if let credentialTypesList = payload.toList() as? [[String: Sendable]?], let self = self {
+                    completionBlock(.success(self.parse(credentialTypesList)))
                 } else {
                     completionBlock(.failure(VCLError(message: "Failed to parse VCLCredentialTypes)")))
                 }
@@ -66,7 +66,7 @@ class CredentialTypesRepositoryImpl: CredentialTypesRepository {
         }
     }
     
-    private func parse(_ credentialTypesList: [[String: Any]?]) -> VCLCredentialTypes {
+    private func parse(_ credentialTypesList: [[String: Sendable]?]) -> VCLCredentialTypes {
         var credentialTypesArr = [VCLCredentialType]()
         for i in 0..<credentialTypesList.count {
             if let payload = credentialTypesList[i] {

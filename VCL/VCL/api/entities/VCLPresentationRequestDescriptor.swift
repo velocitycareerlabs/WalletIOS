@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class VCLPresentationRequestDescriptor {
+public struct VCLPresentationRequestDescriptor: Sendable {
     public let deepLink: VCLDeepLink
     public let pushDelegate: VCLPushDelegate?
     public let didJwk: VCLDidJwk

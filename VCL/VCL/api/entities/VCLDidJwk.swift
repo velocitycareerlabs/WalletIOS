@@ -10,7 +10,7 @@
 import Foundation
 import VCToken
 
-public class VCLDidJwk {
+public struct VCLDidJwk: Sendable {
     /// The did in jwk format encoded to Base64 format -  - the holder did
     public let did: String
     /// The public JWK

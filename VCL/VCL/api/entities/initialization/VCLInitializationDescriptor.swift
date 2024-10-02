@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLInitializationDescriptor {
+public struct VCLInitializationDescriptor: Sendable {
     public let environment: VCLEnvironment
     public let xVnfProtocolVersion: VCLXVnfProtocolVersion
     public let cacheSequence: Int

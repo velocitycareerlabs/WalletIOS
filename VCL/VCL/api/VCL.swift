@@ -7,12 +7,12 @@
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
-public protocol VCL {
+public protocol VCL: Sendable {
     
     func initialize(
         initializationDescriptor: VCLInitializationDescriptor,
-        successHandler: @escaping () -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable () -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     var countries: VCLCountries? { get }
@@ -21,94 +21,94 @@ public protocol VCL {
     
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        successHandler: @escaping (VCLPresentationRequest) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLPresentationRequest) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
-        successHandler: @escaping (VCLSubmissionResult) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLSubmissionResult) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     func getExchangeProgress(
         exchangeDescriptor: VCLExchangeDescriptor,
-        successHandler: @escaping (VCLExchange) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLExchange) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     func searchForOrganizations(
         organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
-        successHandler: @escaping (VCLOrganizations) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLOrganizations) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        successHandler: @escaping (VCLCredentialManifest) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLCredentialManifest) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        successHandler: @escaping (VCLOffers) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLOffers) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     func checkForOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
         sessionToken: VCLToken,
-        successHandler: @escaping (VCLOffers) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLOffers) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
-        successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
-    ) 
+        successHandler: @escaping @Sendable (VCLJwtVerifiableCredentials) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
+    )
     
     func getCredentialTypesUIFormSchema(
         credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor,
-        successHandler: @escaping (VCLCredentialTypesUIFormSchema) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLCredentialTypesUIFormSchema) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     func getVerifiedProfile(
         verifiedProfileDescriptor: VCLVerifiedProfileDescriptor,
-        successHandler: @escaping (VCLVerifiedProfile) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLVerifiedProfile) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     func verifyJwt(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken?,
-        successHandler: @escaping (Bool) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (Bool) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     func generateSignedJwt(
         jwtDescriptor: VCLJwtDescriptor,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken?,
-        successHandler: @escaping (VCLJwt) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLJwt) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
     
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor,
-        successHandler: @escaping (VCLDidJwk) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLDidJwk) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     )
 }
 
 extension VCL {
     public func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        successHandler: @escaping (VCLPresentationRequest) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLPresentationRequest) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         getPresentationRequest(
             presentationRequestDescriptor: presentationRequestDescriptor,
@@ -119,8 +119,8 @@ extension VCL {
     
     public func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
-        successHandler: @escaping (VCLSubmissionResult) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLSubmissionResult) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         submitPresentation(
             presentationSubmission: presentationSubmission,
@@ -131,8 +131,8 @@ extension VCL {
     
     public func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        successHandler: @escaping (VCLCredentialManifest) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLCredentialManifest) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptor,
@@ -143,8 +143,8 @@ extension VCL {
     
     public func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        successHandler: @escaping (VCLOffers) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLOffers) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
@@ -156,8 +156,8 @@ extension VCL {
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
-        successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLJwtVerifiableCredentials) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
@@ -171,8 +171,8 @@ extension VCL {
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        successHandler: @escaping (Bool) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (Bool) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         verifyJwt(
             jwt: jwt,
@@ -187,8 +187,8 @@ extension VCL {
         didJwk: VCLDidJwk,
         jwtDescriptor: VCLJwtDescriptor,
         remoteCryptoServicesToken: VCLToken? = nil,
-        successHandler: @escaping (VCLJwt) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLJwt) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         generateSignedJwt(
             jwtDescriptor: jwtDescriptor,
@@ -201,8 +201,8 @@ extension VCL {
     
     public func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor = VCLDidJwkDescriptor(),
-        successHandler: @escaping (VCLDidJwk) -> Void,
-        errorHandler: @escaping (VCLError) -> Void
+        successHandler: @escaping @Sendable (VCLDidJwk) -> Void,
+        errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         generateDidJwk(
             didJwkDescriptor: didJwkDescriptor,

@@ -8,77 +8,87 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import UIKit
 
-class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
+actor CredentialTypeSchemasMapStorage {
+    private var credentialTypeSchemasMap: [String: VCLCredentialTypeSchema] = [:]
     
-    private var backgroundTaskIdentifier: UIBackgroundTaskIdentifier!
+    func add(schemaName: String, schema: VCLCredentialTypeSchema) {
+        credentialTypeSchemasMap[schemaName] = schema
+    }
+    
+    func isEmpty() -> Bool {
+        return credentialTypeSchemasMap.isEmpty
+    }
+    
+    func get() -> [String: VCLCredentialTypeSchema] {
+        return credentialTypeSchemasMap
+    }
+}
+
+final class CredentialTypeSchemasUseCaseImpl: Sendable, CredentialTypeSchemasUseCase {
     
     private let credentialTypeSchemasRepository: CredentialTypeSchemaRepository
-    private let credenctiialTypes: VCLCredentialTypes
+    private let credentialTypes: VCLCredentialTypes
     private let executor: Executor
     private let dispatcher: Dispatcher
-    private let dsptchQueue: DsptchQueue
     
-    init(_ credentialTypeSchemasRepository: CredentialTypeSchemaRepository,
-         _ credenctiialTypes: VCLCredentialTypes,
-         _ executor: Executor,
-         _ dispatcher: Dispatcher,
-         _ dsptchQueue: DsptchQueue) {
+    // Actor to manage the state of credentialTypeSchemasMap safely across threads
+    private let credentialTypeSchemasStorage = CredentialTypeSchemasMapStorage()
+    
+    init(
+        _ credentialTypeSchemasRepository: CredentialTypeSchemaRepository,
+        _ credentialTypes: VCLCredentialTypes,
+        _ executor: Executor,
+       _  dispatcher: Dispatcher
+    ) {
         self.credentialTypeSchemasRepository = credentialTypeSchemasRepository
-        self.credenctiialTypes = credenctiialTypes
+        self.credentialTypes = credentialTypes
         self.executor = executor
         self.dispatcher = dispatcher
-        self.dsptchQueue = dsptchQueue
     }
     
     func getCredentialTypeSchemas(
         cacheSequence: Int,
-        completionBlock: @escaping (VCLResult<VCLCredentialTypeSchemas>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypeSchemas>) -> Void
     ) {
-        var credentialTypeSchemasMap = [String: VCLCredentialTypeSchema]()
-        var credentialTypeSchemasMapIsEmpty = true
-        
-        executor.runOnBackground { [weak self] in
-            if let _self = self {
-                _self.backgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask (withName: "Finish \(CredentialTypeSchemasUseCase.self)") {
-                    UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                    _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-                }
+        let schemaNamesArr = self.credentialTypes.all?.compactMap { $0.schemaName } ?? []
                 
-                let schemaNamesArr =
-                _self.credenctiialTypes.all?.filter { $0.schemaName != nil }.map { $0.schemaName! } ?? Array()
-                
-                schemaNamesArr.forEach { schemaName in
-                    _self.dispatcher.enter()
-                    _self.credentialTypeSchemasRepository.getCredentialTypeSchema(
-                        schemaName: schemaName,
-                        cacheSequence: cacheSequence,
-                        completionBlock: { result in
-                            do {
-                                let credentialTypeSchema = try result.get()
-                                _self.dsptchQueue._async(flags: .barrier) {
-                                    credentialTypeSchemasMap.updateValue(credentialTypeSchema, forKey: schemaName)
-                                    credentialTypeSchemasMapIsEmpty = credentialTypeSchemasMap.isEmpty
-                                }
-                            } catch {
-                                // no need to handle
-                            }
-                            _self.dispatcher.leave()
+        schemaNamesArr.forEach { schemaName in
+            dispatcher.enter()
+            executor.runOnBackground {
+                self.credentialTypeSchemasRepository.getCredentialTypeSchema(
+                    schemaName: schemaName,
+                    cacheSequence: cacheSequence
+                ) {
+                    [weak self] result in
+                    
+                    guard let self = self else { return }
+                    
+                    switch result {
+                    case .success(let credentialTypeSchema):
+                        Task {
+                            // Safely update the actor-managed map
+                            await self.credentialTypeSchemasStorage.add(schemaName: schemaName, schema: credentialTypeSchema)
                         }
-                    )
-                }
-                _self.dispatcher.notify(queue: DispatchQueue.main, execute: {
-                    if(credentialTypeSchemasMapIsEmpty) {
-                        VCLLog.e("Failed to fetch credential type schemas")
+                    case .failure:
+                        // Ignore errors
+                        break
                     }
-                    completionBlock(.success(VCLCredentialTypeSchemas(all: credentialTypeSchemasMap)))
-                })
-                
-                UIApplication.shared.endBackgroundTask(_self.backgroundTaskIdentifier!)
-                _self.backgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-            } else {
-                completionBlock(.failure(VCLError(message: "self is nil")))
+                    dispatcher.leave()
+                }
+            }
+        }
+        
+        dispatcher.notify(queue: .main) { [weak self] in
+            guard let self = self else { return }
+            self.executor.runOnMain {
+                Task { [weak self] in
+                    guard let self = self else { return }
+                    if await self.credentialTypeSchemasStorage.isEmpty() {
+                        VCLLog.e("Credential type schemas were not found.")
+                    }
+                    completionBlock(VCLResult.success(VCLCredentialTypeSchemas(all: await self.credentialTypeSchemasStorage.get())))
+                }
             }
         }
     }

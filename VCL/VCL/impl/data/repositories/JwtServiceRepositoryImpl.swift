@@ -9,7 +9,7 @@
 
 import Foundation
 
-class JwtServiceRepositoryImpl: JwtServiceRepository {
+final class JwtServiceRepositoryImpl: JwtServiceRepository {
     
     public let jwtSignService: VCLJwtSignService
     public let jwtVerifyService: VCLJwtVerifyService
@@ -26,7 +26,7 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     ) {
         jwtVerifyService.verify(
             jwt: jwt,
@@ -41,7 +41,7 @@ class JwtServiceRepositoryImpl: JwtServiceRepository {
         nonce: String? = nil,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLJwt>) -> Void
     ) {
         jwtSignService.sign(
             jwtDescriptor: jwtDescriptor,

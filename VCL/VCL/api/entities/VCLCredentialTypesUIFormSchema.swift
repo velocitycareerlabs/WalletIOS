@@ -9,10 +9,10 @@
 
 import Foundation
 
-public struct VCLCredentialTypesUIFormSchema {
-    public let payload: [String: Any]
+public struct VCLCredentialTypesUIFormSchema: Sendable {
+    public let payload: [String: Sendable]
     
-    public init(payload: [String: Any]) {
+    public init(payload: [String: Sendable]) {
         self.payload = payload
     }
     

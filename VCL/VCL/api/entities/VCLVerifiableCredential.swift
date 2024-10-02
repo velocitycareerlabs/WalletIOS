@@ -4,12 +4,12 @@
 //
 //  Created by Michael Avoyan on 26/04/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-public struct VCLVerifiableCredential {
+public struct VCLVerifiableCredential: Sendable {
     public let inputDescriptor: String
     public let jwtVc: String
     

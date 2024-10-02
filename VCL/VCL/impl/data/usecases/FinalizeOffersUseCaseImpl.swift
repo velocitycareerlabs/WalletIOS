@@ -9,7 +9,7 @@
 
 import Foundation
 
-class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
+final class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     
     private let finalizeOffersRepository: FinalizeOffersRepository
     private let jwtServiceRepository: JwtServiceRepository
@@ -37,7 +37,7 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
-        completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             if let challenge = finalizeOffersDescriptor.challenge {
@@ -49,10 +49,11 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
                     nonce: challenge,
                     didJwk: finalizeOffersDescriptor.didJwk,
                     remoteCryptoServicesToken: finalizeOffersDescriptor.remoteCryptoServicesToken
-                ) { proofJwtResult in
+                ) { [weak self] proofJwtResult in
+                    guard let self = self else { return }
                     do {
                         let proof = try proofJwtResult.get()
-                        self?.finalizeOffersInvoke(
+                        self.finalizeOffersInvoke(
                             weakSelf: self,
                             finalizeOffersDescriptor: finalizeOffersDescriptor,
                             sessionToken: sessionToken,
@@ -60,11 +61,12 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
                             completionBlock: completionBlock
                         )
                     } catch {
-                        self?.onError(VCLError(error: error), completionBlock)
+                        self.onError(VCLError(error: error), completionBlock)
                     }
                 }
             } else {
-                self?.finalizeOffersInvoke(
+                guard let self = self else { return }
+                self.finalizeOffersInvoke(
                     weakSelf: self,
                     finalizeOffersDescriptor: finalizeOffersDescriptor,
                     sessionToken: sessionToken,
@@ -79,7 +81,7 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
         proof: VCLJwt? = nil,
-        completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         weakSelf?.finalizeOffersRepository.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
@@ -127,7 +129,7 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     private func verifyCredentialsByDeepLink(
         _ jwtCredentials: [VCLJwt],
         _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        _ completionBlock: @escaping (VCLResult<Bool>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     ) {
         if let deepLink = finalizeOffersDescriptor.credentialManifest.deepLink {
             credentialsByDeepLinkVerifier.verifyCredentials(
@@ -150,7 +152,7 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     private func verifyCredentialsByIssuer(
         _ jwtCredentials: [VCLJwt],
         _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        _ completionBlock: @escaping (VCLResult<Bool>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     ) {
         credentialIssuerVerifier.verifyCredentials(
             jwtCredentials: jwtCredentials,
@@ -167,7 +169,7 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     private func verifyCredentialByDid(
         _ jwtCredentials: [VCLJwt],
         _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        _ completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         credentialDidVerifier.verifyCredentials(
             jwtCredentials: jwtCredentials,
@@ -183,7 +185,7 @@ class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
 
     private func onError<T>(
         _ error: VCLError,
-        _ completionBlock: @escaping (VCLResult<T>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<T>) -> Void
     ) {
         executor.runOnMain { completionBlock(VCLResult.failure(error)) }
     }

@@ -4,15 +4,15 @@
 //
 //  Created by Michael Avoyan on 09/05/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-protocol CredentialManifestUseCase {
+protocol CredentialManifestUseCase: Sendable {
     func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         verifiedProfile: VCLVerifiedProfile,
-        completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
     )
 }

@@ -9,11 +9,11 @@
 
 import Foundation
 
-class CredentialManifestByDeepLinkVerifierImpl: CredentialManifestByDeepLinkVerifier {
+final class CredentialManifestByDeepLinkVerifierImpl: CredentialManifestByDeepLinkVerifier {
     func verifyCredentialManifest(
         credentialManifest: VCLCredentialManifest,
         deepLink: VCLDeepLink, 
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     ) {
         if credentialManifest.issuerId == deepLink.did {
             completionBlock(.success(true))

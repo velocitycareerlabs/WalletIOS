@@ -4,10 +4,10 @@
 //
 //  Created by Michael Avoyan on 18/03/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
-class CredentialTypesModelImpl: CredentialTypesModel {
+class CredentialTypesModelImpl: @unchecked Sendable, CredentialTypesModel {
     
     private(set) var data: VCLCredentialTypes? = nil
     let credentialTypesUseCase: CredentialTypesUseCase
@@ -18,7 +18,7 @@ class CredentialTypesModelImpl: CredentialTypesModel {
     
     func initialize(
         cacheSequence: Int,
-        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypes>) -> Void
     ) {
         credentialTypesUseCase.getCredentialTypes(cacheSequence: cacheSequence) { [weak self] response in
             do {

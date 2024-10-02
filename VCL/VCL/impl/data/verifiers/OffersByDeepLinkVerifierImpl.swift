@@ -9,11 +9,11 @@
 
 import Foundation
 
-class OffersByDeepLinkVerifierImpl: OffersByDeepLinkVerifier {
+final class OffersByDeepLinkVerifierImpl: OffersByDeepLinkVerifier {
     func verifyOffers(
         offers: VCLOffers,
         deepLink: VCLDeepLink,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     ) {
         if let mismatchedOffer = offers.all.first(where: { $0.issuerId != deepLink.did }) {
             VCLLog.e("mismatched offer: \(mismatchedOffer.payload) \ndeepLink: \(deepLink.value)")

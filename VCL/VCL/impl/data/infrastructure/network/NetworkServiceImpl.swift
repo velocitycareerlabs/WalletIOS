@@ -9,7 +9,7 @@
 
 import Foundation
 
-class NetworkServiceImpl: NetworkService {
+final class NetworkServiceImpl: NetworkService {
     
     func sendRequest(
         endpoint: String,
@@ -18,7 +18,7 @@ class NetworkServiceImpl: NetworkService {
         method: Request.HttpMethod,
         headers: Array<(String, String)>? = nil,
         cachePolicy: NSURLRequest.CachePolicy,
-        completionBlock: @escaping (VCLResult<Response>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Response>) -> Void
     ) {
         sendRequest(
             request: Request.Builder()
@@ -33,7 +33,7 @@ class NetworkServiceImpl: NetworkService {
         )
     }
     
-    private func sendRequest(request: Request,completionBlock: @escaping (VCLResult<Response>) -> Void) {
+    private func sendRequest(request: Request,completionBlock: @escaping @Sendable (VCLResult<Response>) -> Void) {
         logRequest(request)
         guard let urlRequest = createUrlRequest(request: request) else {
             completionBlock(.failure(VCLError(message: "Request error: \(request.stringify())")))

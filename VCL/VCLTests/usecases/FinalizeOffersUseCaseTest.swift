@@ -101,7 +101,8 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+                EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(),
@@ -145,7 +146,8 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+                EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(),
@@ -189,7 +191,8 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+                EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(),
@@ -223,7 +226,8 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+                EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(),

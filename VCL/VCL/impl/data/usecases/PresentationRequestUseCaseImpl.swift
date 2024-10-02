@@ -9,7 +9,7 @@
 
 import Foundation
 
-class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
+final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
     private let presentationRequestRepository: PresentationRequestRepository
     private let resolveKidRepository: ResolveKidRepository
@@ -34,14 +34,15 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         verifiedProfile: VCLVerifiedProfile,
-        completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            self?.presentationRequestRepository.getPresentationRequest(
+            guard let self = self else { return }
+            self.presentationRequestRepository.getPresentationRequest(
                 presentationRequestDescriptor: presentationRequestDescriptor
             ) { encodedJwtStrResult in
                 do {
-                    self?.onGetPresentationRequestSuccess(
+                    self.onGetPresentationRequestSuccess(
                         VCLPresentationRequest(
                             jwt: VCLJwt(encodedJwt: try encodedJwtStrResult.get()),
                             verifiedProfile: verifiedProfile,
@@ -53,7 +54,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                         completionBlock
                     )
                 } catch {
-                    self?.onError(VCLError(error: error), completionBlock)
+                    self.onError(VCLError(error: error), completionBlock)
                 }
             }
         }
@@ -61,7 +62,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
     private func onGetPresentationRequestSuccess(
         _ presentationRequest: VCLPresentationRequest,
-        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         if let kid = presentationRequest.jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
             self.resolveKidRepository.getPublicKey(kid: kid) {
@@ -86,7 +87,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     private func onResolvePublicKeySuccess(
         _ publicJwk: VCLPublicJwk,
         _ presentationRequest: VCLPresentationRequest,
-        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         self.jwtServiceRepository.verifyJwt(
             jwt: presentationRequest.jwt,
@@ -94,26 +95,27 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
             remoteCryptoServicesToken: presentationRequest.remoteCryptoServicesToken
         ) {
             [weak self] jwtVerificationRes in
+            guard let self = self else { return }
             do {
-                let isVerified = try jwtVerificationRes.get()
-                self?.presentationRequestByDeepLinkVerifier.verifyPresentationRequest(
+                _ = try jwtVerificationRes.get()
+                self.presentationRequestByDeepLinkVerifier.verifyPresentationRequest(
                     presentationRequest: presentationRequest,
                     deepLink: presentationRequest.deepLink
                 ) { byDeepLinkVerificationRes in
                     do {
                         let isVerified = try byDeepLinkVerificationRes.get()
                         VCLLog.d("Presentation request by deep link verification result: \(isVerified)")
-                        self?.onVerificationSuccess(
+                        self.onVerificationSuccess(
                             isVerified,
                             presentationRequest,
                             completionBlock
                         )
                     } catch {
-                        self?.onError(error, completionBlock)
+                        self.onError(error, completionBlock)
                     }
                 }
             } catch {
-                self?.onError(error, completionBlock)
+                self.onError(error, completionBlock)
             }
         }
     }
@@ -121,7 +123,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     private func onVerificationSuccess(
         _ isVerified: Bool,
         _ presentationRequest: VCLPresentationRequest,
-        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         if isVerified == true {
             executor.runOnMain {
@@ -134,7 +136,7 @@ class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
     private func onError(
         _ error: Error,
-        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
+        _ completionBlock: @escaping @Sendable (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         executor.runOnMain {
             completionBlock(.failure(VCLError(error: error)))

@@ -9,7 +9,7 @@
 
 import Foundation
 
-class PresentationRequestRepositoryImpl: PresentationRequestRepository {
+final class PresentationRequestRepositoryImpl: PresentationRequestRepository {
     
     private let networkService: NetworkService
     
@@ -19,7 +19,7 @@ class PresentationRequestRepositoryImpl: PresentationRequestRepository {
     
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        completionBlock: @escaping (VCLResult<String>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<String>) -> Void
     ) {
         if let endpoint = presentationRequestDescriptor.endpoint {
             networkService.sendRequest(

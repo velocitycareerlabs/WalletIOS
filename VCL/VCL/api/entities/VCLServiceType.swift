@@ -9,7 +9,7 @@
 
 import Foundation
 
-public enum VCLServiceType: String {
+public enum VCLServiceType: String, Sendable {
     case Inspector = "Inspector"
     case Issuer = "Issuer"
     case NotaryIssuer = "NotaryIssuer"

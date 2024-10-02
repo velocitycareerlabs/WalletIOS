@@ -11,22 +11,22 @@ import Foundation
 
 class Utils {
     static func getCredentialType(_ jwtCredential: VCLJwt) -> String? {
-        return ((jwtCredential.payload?[CredentialIssuerVerifierImpl.CodingKeys.KeyVC] as? [String: Any])?[CredentialIssuerVerifierImpl.CodingKeys.KeyType] as? [String])?.first
+        return ((jwtCredential.payload?[CredentialIssuerVerifierImpl.CodingKeys.KeyVC] as? [String: Sendable])?[CredentialIssuerVerifierImpl.CodingKeys.KeyType] as? [String])?.first
     }
     
-    static func getCredentialSubject(_ jwtCredential: VCLJwt) -> [String: Any]? {
-        return ((jwtCredential.payload?[CredentialIssuerVerifierImpl.CodingKeys.KeyVC] as? [String: Any])?[CredentialIssuerVerifierImpl.CodingKeys.KeyCredentialSubject] as? [String: Any])
+    static func getCredentialSubject(_ jwtCredential: VCLJwt) -> [String: Sendable]? {
+        return ((jwtCredential.payload?[CredentialIssuerVerifierImpl.CodingKeys.KeyVC] as? [String: Sendable])?[CredentialIssuerVerifierImpl.CodingKeys.KeyCredentialSubject] as? [String: Sendable])
     }
     
     static func getIdentifier(
         _ primaryOrgProp: String?,
-        _ jsonObject: [String: Any]
+        _ jsonObject: [String: Sendable]
     ) -> String? {
         if(primaryOrgProp == nil) {
             return nil
         }
         var identifier: String? = nil
-        var stack = [[String: Any]]()
+        var stack = [[String: Sendable]]()
         stack.append(jsonObject)
         
         while (stack.isEmpty == false) {
@@ -38,7 +38,7 @@ class Utils {
             }
             
             obj.forEach { _, value in
-                if let valueDict = value as? [String: Any] {
+                if let valueDict = value as? [String: Sendable] {
                     stack.append(valueDict)
                 }
             }
@@ -47,16 +47,16 @@ class Utils {
     }
     
     static func getPrimaryIdentifier(
-        _ credentialSubject: Any?
+        _ credentialSubject: Sendable?
     ) -> String? {
         if ((credentialSubject as? String)?.isEmpty == false) {
             return credentialSubject as? String
         }
-        return (credentialSubject as? [String: Any])?["identifier"] as? String
-        ?? (credentialSubject as? [String: Any])?["id"] as? String
+        return (credentialSubject as? [String: Sendable])?["identifier"] as? String
+        ?? (credentialSubject as? [String: Sendable])?["id"] as? String
     }
     
-    static func offersFromJsonArray(offersJsonArray: [[String: Any]]) -> [VCLOffer] {
+    static func offersFromJsonArray(offersJsonArray: [[String: Sendable]]) -> [VCLOffer] {
         var allOffers = [VCLOffer]()
         offersJsonArray.forEach {
             allOffers.append(VCLOffer(payload: $0))
@@ -65,7 +65,7 @@ class Utils {
     }
     
     static func getCredentialIssuerId(jwtCredential: VCLJwt) -> String? {
-        let vc: [String: Any]? = jwtCredential.payload?["vc"] as? [String: Any]
-        return (vc?["issuer"] as? [String: Any])?["id"] as? String ?? vc?["issuer"] as? String
+        let vc: [String: Sendable]? = jwtCredential.payload?["vc"] as? [String: Sendable]
+        return (vc?["issuer"] as? [String: Sendable])?["id"] as? String ?? vc?["issuer"] as? String
     }
 }

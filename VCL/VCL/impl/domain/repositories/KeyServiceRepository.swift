@@ -9,9 +9,9 @@
 
 import Foundation
 
-protocol KeyServiceRepository {
+protocol KeyServiceRepository: Sendable {
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor,
-        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLDidJwk>) -> Void
     )
 }

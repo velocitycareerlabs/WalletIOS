@@ -32,7 +32,7 @@ class CredentialTypesModelMock: CredentialTypesModel {
 
     func initialize(
         cacheSequence: Int,
-        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypes>) -> Void
     ) {
     }
 

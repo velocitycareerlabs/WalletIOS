@@ -9,7 +9,7 @@
 
 import Foundation
 
-class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
+final class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
     
     private let networkService: NetworkService
     
@@ -23,7 +23,7 @@ class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
         proof: VCLJwt? = nil,
-        completionBlock: @escaping (VCLResult<[VCLJwt]>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<[VCLJwt]>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: finalizeOffersDescriptor.finalizeOffersUri,

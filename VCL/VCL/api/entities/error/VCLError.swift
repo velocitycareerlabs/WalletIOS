@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLError: Error {
+public struct VCLError: Sendable, Error {
     public let payload: String?
     public let error: String?
     public let errorCode: String

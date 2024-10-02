@@ -8,25 +8,25 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import VCToken
-import VCCrypto
+@preconcurrency import VCToken
+@preconcurrency import VCCrypto
 
-public protocol VCLKeyService {
+public protocol VCLKeyService: Sendable {
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor,
-        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLDidJwk>) -> Void
     )
     func generateSecret(
         signatureAlgorithm: VCLSignatureAlgorithm,
-        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
     )
     func retrieveSecretReference(
         keyId: String,
-        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
     )
     func retrievePublicJwk(
         secret: VCCrypto.VCCryptoSecret,
-        completionBlock: @escaping (VCLResult<VCToken.ECPublicJwk>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCToken.ECPublicJwk>) -> Void
     )
 }
 
@@ -49,21 +49,21 @@ extension VCLKeyService {
     /// implemented for local crypto services only
     func generateSecret(
         signatureAlgorithm: VCLSignatureAlgorithm,
-        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
     ) {
         completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
     }
     /// implemented for local crypto services only
     func retrieveSecretReference(
         keyId: String,
-        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
     ) {
         completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
     }
     /// implemented for local crypto services only
     func retrievePublicJwk(
         secret: VCCrypto.VCCryptoSecret,
-        completionBlock: @escaping (VCLResult<VCToken.ECPublicJwk>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCToken.ECPublicJwk>) -> Void
     ) {
         completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
     }

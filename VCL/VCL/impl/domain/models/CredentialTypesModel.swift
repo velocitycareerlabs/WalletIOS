@@ -13,7 +13,7 @@ protocol CredentialTypesModel: Model {
     var data: VCLCredentialTypes? { get }
     func initialize(
         cacheSequence: Int,
-        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypes>) -> Void
     )
     func credentialTypeByTypeName(type: String) -> VCLCredentialType?
 }

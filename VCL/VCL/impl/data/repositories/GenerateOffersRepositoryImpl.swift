@@ -9,7 +9,7 @@
 
 import Foundation
 
-class GenerateOffersRepositoryImpl: GenerateOffersRepository {
+final class GenerateOffersRepositoryImpl: GenerateOffersRepository {
     private let networkService: NetworkService
     
     init(_ networkService: NetworkService) {
@@ -19,7 +19,7 @@ class GenerateOffersRepositoryImpl: GenerateOffersRepository {
     func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
         sessionToken: VCLToken,
-        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLOffers>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: generateOffersDescriptor.checkOffersUri,

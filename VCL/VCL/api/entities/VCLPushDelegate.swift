@@ -4,12 +4,12 @@
 //
 //  Created by Michael Avoyan on 09/05/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
-public struct VCLPushDelegate {
+public struct VCLPushDelegate: Sendable {
     /// the url of the endpoint that will send pushes to the device
     public let pushUrl: String
     /// the token to use for identifying the group of devices this device belongs to

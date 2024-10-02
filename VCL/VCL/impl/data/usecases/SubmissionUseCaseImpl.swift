@@ -9,7 +9,7 @@
 
 import Foundation
 
-class SubmissionUseCaseImpl: SubmissionUseCase {
+final class SubmissionUseCaseImpl: SubmissionUseCase {
     
     private let submissionRepository: SubmissionRepository
     private let jwtServiceRepository: JwtServiceRepository
@@ -27,7 +27,7 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
     
     func submit(
         submission: VCLSubmission,
-        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         executor.runOnBackground  { [weak self] in
             self?.jwtServiceRepository.generateSignedJwt(
@@ -38,17 +38,19 @@ class SubmissionUseCaseImpl: SubmissionUseCase {
                 ), 
                 didJwk: submission.didJwk,
                 remoteCryptoServicesToken: submission.remoteCryptoServicesToken
-            ) { signedJwtResult in
+            ) {
+                [weak self] signedJwtResult in
+                guard let self = self else { return }
                     do {
                         let jwt = try signedJwtResult.get()
-                        self?.submissionRepository.submit(
+                        self.submissionRepository.submit(
                             submission: submission,
                             jwt: jwt
                         ) { submissionResult in
-                            self?.executor.runOnMain { completionBlock(submissionResult) }
+                            self.executor.runOnMain { completionBlock(submissionResult) }
                         }
                     } catch {
-                        self?.executor.runOnMain { completionBlock(VCLResult.failure(VCLError(error: error))) }
+                        self.executor.runOnMain { completionBlock(VCLResult.failure(VCLError(error: error))) }
                     }
                 }
         }

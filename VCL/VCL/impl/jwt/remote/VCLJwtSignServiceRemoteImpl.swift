@@ -9,7 +9,7 @@
 
 import Foundation
 
-class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
+final class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
     
     private let networkService: NetworkService
     private let jwtSignServiceUrl: String
@@ -24,7 +24,7 @@ class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
         nonce: String? = nil,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLJwt>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: jwtSignServiceUrl,

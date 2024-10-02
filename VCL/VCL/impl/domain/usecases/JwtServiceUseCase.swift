@@ -9,19 +9,19 @@
 
 import Foundation
 
-protocol JwtServiceUseCase {
+protocol JwtServiceUseCase: Sendable {
     func verifyJwt(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     )
     func generateSignedJwt(
         jwtDescriptor: VCLJwtDescriptor,
         nonce: String?,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLJwt>) -> Void
     )
 }
 
@@ -31,7 +31,7 @@ extension JwtServiceUseCase {
         nonce: String? = nil,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<VCLJwt>) -> Void
     ) {
         generateSignedJwt(
             jwtDescriptor: jwtDescriptor,

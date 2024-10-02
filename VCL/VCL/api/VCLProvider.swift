@@ -7,7 +7,7 @@
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
-public class VCLProvider {
+public final class VCLProvider: Sendable {
     
     private init(){}
     

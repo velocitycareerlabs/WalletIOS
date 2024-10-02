@@ -7,24 +7,24 @@
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
-import UIKit
+import Foundation
 
 struct GlobalConfig {
     static let VclPackage = "io.velocitycareerlabs"
     
-    static var CurrentEnvironment = VCLEnvironment.Prod
-    static var XVnfProtocolVersion = VCLXVnfProtocolVersion.XVnfProtocolVersion1
+    nonisolated(unsafe) static var CurrentEnvironment = VCLEnvironment.Prod
+    nonisolated(unsafe) static var XVnfProtocolVersion = VCLXVnfProtocolVersion.XVnfProtocolVersion1
         
-    static var KeycahinAccessGroupIdentifier: String? = nil
+    nonisolated(unsafe) static var KeycahinAccessGroupIdentifier: String? = nil
     
     #if DEBUG
-        static var IsDebugOn = false
+    nonisolated(unsafe) static var IsDebugOn = false
     #else
-        static var IsDebugOn = false
+    nonisolated(unsafe) static var IsDebugOn = false
     #endif
     
-    static let Build = Bundle(for: VCLImpl.self).infoDictionary?["CFBundleVersion"] ?? ""
-    static let Version = Bundle(for: VCLImpl.self).infoDictionary?["CFBundleShortVersionString" ] ?? ""
+    nonisolated(unsafe) static let Build = Bundle(for: VCLImpl.self).infoDictionary?["CFBundleVersion"] ?? ""
+    nonisolated(unsafe) static let Version = Bundle(for: VCLImpl.self).infoDictionary?["CFBundleShortVersionString" ] ?? ""
     
     static let LogTagPrefix = "VCL "
 

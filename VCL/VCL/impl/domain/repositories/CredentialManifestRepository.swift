@@ -9,7 +9,9 @@
 
 import Foundation
 
-protocol CredentialManifestRepository {
-    func getCredentialManifest(credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-                              completionBlock: @escaping (VCLResult<String>) -> Void)
+protocol CredentialManifestRepository: Sendable {
+    func getCredentialManifest(
+        credentialManifestDescriptor: VCLCredentialManifestDescriptor,
+        completionBlock: @escaping @Sendable (VCLResult<String>) -> Void
+    )
 }

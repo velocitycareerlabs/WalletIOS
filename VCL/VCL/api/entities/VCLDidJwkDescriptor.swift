@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLDidJwkDescriptor {
+public struct VCLDidJwkDescriptor: Sendable {
     public let signatureAlgorithm: VCLSignatureAlgorithm
     public let remoteCryptoServicesToken: VCLToken?
     

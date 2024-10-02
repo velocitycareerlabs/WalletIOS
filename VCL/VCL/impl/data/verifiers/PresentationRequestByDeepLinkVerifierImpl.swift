@@ -9,11 +9,11 @@
 
 import Foundation
 
-class PresentationRequestByDeepLinkVerifierImpl: PresentationRequestByDeepLinkVerifier {
+final class PresentationRequestByDeepLinkVerifierImpl: PresentationRequestByDeepLinkVerifier {
     func verifyPresentationRequest(
         presentationRequest: VCLPresentationRequest,
         deepLink: VCLDeepLink,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     ) {
         if presentationRequest.iss == deepLink.did {
             completionBlock(.success(true))

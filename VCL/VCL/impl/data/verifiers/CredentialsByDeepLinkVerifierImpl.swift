@@ -9,11 +9,11 @@
 
 import Foundation
 
-class CredentialsByDeepLinkVerifierImpl: CredentialsByDeepLinkVerifier {
+final class CredentialsByDeepLinkVerifierImpl: CredentialsByDeepLinkVerifier {
     func verifyCredentials(
         jwtCredentials: [VCLJwt],
         deepLink: VCLDeepLink,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     ) {
         if let mismatchedCredential = jwtCredentials.first(where: { $0.iss != deepLink.did }) {
             VCLLog.e("mismatched credential: \(mismatchedCredential.encodedJwt) \ndeepLink: \(deepLink.value)")

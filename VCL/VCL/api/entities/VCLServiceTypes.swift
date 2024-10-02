@@ -9,7 +9,7 @@
 
 import Foundation
 
-public class VCLServiceTypes {
+public struct VCLServiceTypes: Sendable {
 
     public let all: [VCLServiceType]
     
@@ -17,11 +17,11 @@ public class VCLServiceTypes {
         self.all = all
     }
 
-    public convenience init(serviceType: VCLServiceType) {
+    public init(serviceType: VCLServiceType) {
         self.init(all: [serviceType])
     }
     
-    public convenience init(issuingType: VCLIssuingType) {
+    public init(issuingType: VCLIssuingType) {
         var all: [VCLServiceType]
         switch(issuingType) {
         case VCLIssuingType.Career:

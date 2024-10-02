@@ -9,7 +9,7 @@
 
 import Foundation
 
-protocol CacheService {
+protocol CacheService: Sendable {
     func getCountries(key: String) -> Data?
     func setCountries(key: String, value: Data, cacheSequence: Int)
     func isResetCacheCountries(cacheSequence: Int) -> Bool

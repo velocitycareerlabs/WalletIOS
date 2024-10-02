@@ -36,12 +36,12 @@ final class VCLSubmissionTest: XCTestCase {
 
     func testPayload() {
         let presentationSubmissionPayload = subjectPresentationSubmission.generatePayload(iss: inspectionIss)
-        assert(presentationSubmissionPayload[VCLSubmission.CodingKeys.KeyJti] as? String == subjectPresentationSubmission.jti)
-        assert(presentationSubmissionPayload[VCLSubmission.CodingKeys.KeyIss] as? String == inspectionIss)
+        assert(presentationSubmissionPayload[SubmissionCodingKeys.KeyJti] as? String == subjectPresentationSubmission.jti)
+        assert(presentationSubmissionPayload[SubmissionCodingKeys.KeyIss] as? String == inspectionIss)
 
         let identificationSubmissionPayload = subjectIdentificationSubmission.generatePayload(iss: issuingIss)
-        assert(identificationSubmissionPayload[VCLSubmission.CodingKeys.KeyJti] as? String == subjectIdentificationSubmission.jti)
-        assert(identificationSubmissionPayload[VCLSubmission.CodingKeys.KeyIss] as? String == issuingIss)
+        assert(identificationSubmissionPayload[SubmissionCodingKeys.KeyJti] as? String == subjectIdentificationSubmission.jti)
+        assert(identificationSubmissionPayload[SubmissionCodingKeys.KeyIss] as? String == issuingIss)
     }
 
     func testPushDelegate() {
@@ -51,10 +51,10 @@ final class VCLSubmissionTest: XCTestCase {
 
     func testRequestBody() {
         let requestBodyJsonObj = subjectPresentationSubmission.generateRequestBody(jwt: JwtServiceMocks.JWT)
-        assert(requestBodyJsonObj[VCLSubmission.CodingKeys.KeyExchangeId] as? String == subjectPresentationSubmission.exchangeId)
-        assert(requestBodyJsonObj[VCLSubmission.CodingKeys.KeyContext] as? [String] == VCLSubmission.CodingKeys.ValueContextList)
+        assert(requestBodyJsonObj[SubmissionCodingKeys.KeyExchangeId] as? String == subjectPresentationSubmission.exchangeId)
+        assert(requestBodyJsonObj[SubmissionCodingKeys.KeyContext] as? [String] == SubmissionCodingKeys.ValueContextList)
 
-        let pushDelegateBodyJsonObj = requestBodyJsonObj[VCLSubmission.CodingKeys.KeyPushDelegate] as! [String: Any]
+        let pushDelegateBodyJsonObj = requestBodyJsonObj[SubmissionCodingKeys.KeyPushDelegate] as! [String: Any]
 
         assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushUrl] as? String == PresentationSubmissionMocks.PushDelegate.pushUrl)
         assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushToken] as? String == PresentationSubmissionMocks.PushDelegate.pushToken)
@@ -64,7 +64,7 @@ final class VCLSubmissionTest: XCTestCase {
     }
     
     func testContext() {
-        assert(VCLSubmission.CodingKeys.KeyContext == "@context")
-        assert(VCLSubmission.CodingKeys.ValueContextList == ["https://www.w3.org/2018/credentials/v1"])
+        assert(SubmissionCodingKeys.KeyContext == "@context")
+        assert(SubmissionCodingKeys.ValueContextList == ["https://www.w3.org/2018/credentials/v1"])
     }
 }

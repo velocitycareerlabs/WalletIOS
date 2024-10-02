@@ -9,10 +9,10 @@
 
 import Foundation
 
-protocol CredentialsByDeepLinkVerifier {
+protocol CredentialsByDeepLinkVerifier: Sendable {
     func verifyCredentials(
         jwtCredentials: [VCLJwt],
         deepLink: VCLDeepLink,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
     )
 }

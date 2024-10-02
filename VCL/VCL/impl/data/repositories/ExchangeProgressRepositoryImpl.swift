@@ -9,7 +9,7 @@
 
 import Foundation
 
-class ExchangeProgressRepositoryImpl: ExchangeProgressRepository {
+final class ExchangeProgressRepositoryImpl: ExchangeProgressRepository {
 
     private let networkService: NetworkService
     
@@ -17,8 +17,10 @@ class ExchangeProgressRepositoryImpl: ExchangeProgressRepository {
         self.networkService = networkService
     }
     
-    func getExchangeProgress(exchangeDescriptor: VCLExchangeDescriptor,
-                             completionBlock: @escaping (VCLResult<VCLExchange>) -> Void) {
+    func getExchangeProgress(
+        exchangeDescriptor: VCLExchangeDescriptor,
+        completionBlock: @escaping @Sendable (VCLResult<VCLExchange>) -> Void
+    ) {
         networkService.sendRequest(
             endpoint: exchangeDescriptor.processUri +
                 "?\(VCLExchangeDescriptor.CodingKeys.KeyExchangeId)=\(exchangeDescriptor.exchangeId ?? "")",

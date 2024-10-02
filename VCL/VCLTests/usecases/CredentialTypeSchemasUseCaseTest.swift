@@ -22,8 +22,7 @@ final class CredentialTypeSchemasUseCaseTest: XCTestCase {
             ),
             CredentialTypeSchemaMocks.CredentialTypes,
             EmptyExecutor(),
-            DispatcherImpl(),
-            DsptchQueueImpl("CredentialTypeSchemas")
+            DispatcherImpl()
         )
                 
         subject.getCredentialTypeSchemas(cacheSequence: 1) {

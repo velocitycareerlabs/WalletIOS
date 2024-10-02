@@ -7,10 +7,10 @@ on:
       - release/**
 jobs:
   tests-ios-sdk:
-    runs-on: macos-13 
+    runs-on: macos-14
     env:
       #Xcode config
-      XC_VERSION: "15.1"
+      XC_VERSION: "16.0"
     steps:
       # Git clone repository
       - name: Git clone repository
