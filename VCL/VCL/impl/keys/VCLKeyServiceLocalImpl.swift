@@ -52,7 +52,8 @@ final class VCLKeyServiceLocalImpl: VCLKeyService {
     }
     
     func generateSecret(
-        completionBlock: @escaping @Sendable (VCLResult<VCCryptoSecret>) -> Void
+        signatureAlgorithm: VCLSignatureAlgorithm = VCLSignatureAlgorithm.SECP256k1, // ignored
+        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
     ) {
         do {
             completionBlock(.success(try keyManagementOperations.generateKey()))

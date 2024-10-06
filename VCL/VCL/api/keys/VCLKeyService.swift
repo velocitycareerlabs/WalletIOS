@@ -18,11 +18,11 @@ public protocol VCLKeyService: Sendable {
     )
     func generateSecret(
         signatureAlgorithm: VCLSignatureAlgorithm,
-        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<any VCCrypto.VCCryptoSecret>) -> Void
     )
     func retrieveSecretReference(
         keyId: String,
-        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+        completionBlock: @escaping @Sendable (VCLResult<any VCCrypto.VCCryptoSecret>) -> Void
     )
     func retrievePublicJwk(
         secret: VCCrypto.VCCryptoSecret,
