@@ -12,7 +12,7 @@ import VCToken
 import VCCrypto
 @testable import VCL
 
-class VCLKeyServiceMock: VCLKeyService {
+final class VCLKeyServiceMock: VCLKeyService {
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor,
         completionBlock: @escaping @Sendable (VCLResult<VCLDidJwk>) -> Void
