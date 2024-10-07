@@ -14,10 +14,14 @@ import Foundation
 final class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     
     private let keyService: VCLKeyService
+    /// "⚠️" Necessary evil, anyways we are in local implementation
+    private let keyServiceLocalImpl: VCLKeyServiceLocalImpl?
+    
     private let tokenSigning: TokenSigning
     
     init(_ keyService: VCLKeyService) {
         self.keyService = keyService
+        self.keyServiceLocalImpl = keyService as? VCLKeyServiceLocalImpl
         self.tokenSigning = Secp256k1Signer() // No need to be injected
     }
     
@@ -35,13 +39,13 @@ final class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
                     guard let self = self else { return }
                     do {
                         let secret = try secretResult.get()
-                        self.keyService.retrievePublicJwk(
+                        self.keyServiceLocalImpl?.retrievePublicJwk(
                             secret: secret,
                             completionBlock: { publicJwkResult in
                                 do {
                                     let publicJwk = try publicJwkResult.get()
                                     
-                                    var header = Header(
+                                    let header = Header(
                                         type: GlobalConfig.TypeJwt,
                                         algorithm: VCLSignatureAlgorithm.fromString(value: didJwk.publicJwk.curve).jwsAlgorithm,
                                         jsonWebKey: publicJwk,
@@ -86,7 +90,7 @@ final class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
         keyId: String,
         completionBlock: @escaping @Sendable (VCLResult<VCCryptoSecret>) -> Void
     ) {
-        keyService.retrieveSecretReference(keyId: keyId, completionBlock: completionBlock)
+        keyServiceLocalImpl?.retrieveSecretReference(keyId: keyId, completionBlock: completionBlock)
     }
     
     private func generateClaims(

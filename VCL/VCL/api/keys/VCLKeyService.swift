@@ -34,25 +34,34 @@ extension VCLKeyService {
         return keyManagementOperations
     }
 
+//===========================================================================================================================
+
+//    "⚠️" NOTE:
+//    The whole below methods cannot be part of the public API, since the MS Crypto data structure dausen't conform Sendable
+    
     /// implemented for local crypto services only
-    func generateSecret(
-        signatureAlgorithm: VCLSignatureAlgorithm,
-        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
-    ) {
-        completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
-    }
+//    func generateSecret(
+//        signatureAlgorithm: VCLSignatureAlgorithm,
+//        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+//    ) {
+//        completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
+//    }
+    
     /// implemented for local crypto services only
-    func retrieveSecretReference(
-        keyId: String,
-        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
-    ) {
-        completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
-    }
+//    func retrieveSecretReference(
+//        keyId: String,
+//        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+//    ) {
+//        completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
+//    }
+    
     /// implemented for local crypto services only
-    func retrievePublicJwk(
-        secret: VCCrypto.VCCryptoSecret,
-        completionBlock: @escaping @Sendable (VCLResult<VCToken.ECPublicJwk>) -> Void
-    ) {
-        completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
-    }
+//    func retrievePublicJwk(
+//        secret: VCCrypto.VCCryptoSecret,
+//        completionBlock: @escaping @Sendable (VCLResult<VCToken.ECPublicJwk>) -> Void
+//    ) {
+//        completionBlock(.failure(VCLError(payload: "implemented for local crypto services only")))
+//    }
+
+//===========================================================================================================================
 }
