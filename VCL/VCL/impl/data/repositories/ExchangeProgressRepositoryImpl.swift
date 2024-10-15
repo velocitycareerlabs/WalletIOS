@@ -44,7 +44,7 @@ final class ExchangeProgressRepositoryImpl: ExchangeProgressRepository {
         }
     }
 
-    private func parseExchange(_ exchangeJsonDict: [String: Any]?) -> VCLExchange {
+    private func parseExchange(_ exchangeJsonDict: [String: Sendable]?) -> VCLExchange {
         return VCLExchange(
             id: exchangeJsonDict?[VCLExchange.CodingKeys.KeyId] as? String,
             type: exchangeJsonDict?[VCLExchange.CodingKeys.KeyType] as? String,

@@ -22,7 +22,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
     private var mockedCountries: VCLCountries!
     
     override func setUp() {
-        mockedCountries = jsonArrToCountries(CredentialTypesUIFormSchemaMocks.CountriesJson.toList() as! [[String: Any]])
+        mockedCountries = jsonArrToCountries(CredentialTypesUIFormSchemaMocks.CountriesJson.toList() as! [[String: Sendable]])
     }
     
     func testCredentialTypesFormSchemaFull() {
@@ -41,7 +41,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             countries: mockedCountries
         ) {
             do {
-                let addressJsonObj = try $0.get().payload["place"] as! [String: Any]
+                let addressJsonObj = try $0.get().payload["place"] as! [String: Sendable]
                 let addressCountryJsonObj = addressJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressCountry] as! [String: Any]
                 let addressRegionJsonObj = addressJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressRegion] as! [String: Any]
                 
@@ -77,7 +77,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             countries: mockedCountries
         ) {
             do {
-                let addressJsonObj = try $0.get().payload["place"] as! [String: Any]
+                let addressJsonObj = try $0.get().payload["place"] as! [String: Sendable]
                 let addressCountryJsonObj = addressJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressCountry] as! [String: Any]
                 let addressRegionJsonObj = addressJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressRegion] as! [String: Any]
                 
@@ -113,7 +113,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             countries: mockedCountries
         ) {
             do {
-                let addressJsonObj = try $0.get().payload["place"] as! [String: Any]
+                let addressJsonObj = try $0.get().payload["place"] as! [String: Sendable]
                 let addressCountryJsonObj = addressJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressCountry] as! [String: Any]
                 let addressRegionJsonObj = addressJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressRegion] as! [String: Any]
                 
@@ -149,9 +149,9 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
             countries: mockedCountries
         ) {
             do {
-                let addressJsonObj = try $0.get().payload["place"] as! [String: Any]
-                let addressCountryJsonObj = addressJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressCountry] as! [String: Any]
-                let addressRegionJsonObj = addressJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressRegion] as! [String: Any]
+                let addressJsonObj = try $0.get().payload["place"] as! [String: Sendable]
+                let addressCountryJsonObj = addressJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressCountry] as! [String: Sendable]
+                let addressRegionJsonObj = addressJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressRegion] as! [String: Sendable]
                 
                 let expectedAddressCountryCodes = addressCountryJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiEnum] as! [String]
                 let expectedAddressCountryNames = addressCountryJsonObj[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiNames] as? [String]
@@ -194,7 +194,7 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
         }
     }
     
-    private func jsonArrToCountries(_ countriesArr: [[String: Any]]) -> VCLCountries {
+    private func jsonArrToCountries(_ countriesArr: [[String: Sendable]]) -> VCLCountries {
         var countries = [VCLCountry]()
         for i in 0..<countriesArr.count {
             countries.append(parseCountry(countriesArr[i]))
@@ -202,10 +202,10 @@ final class CredentialTypesUIFormSchemaUseCaseTest: XCTestCase {
         return VCLCountries(all: countries)
     }
     
-    private func parseCountry(_ countryDict: [String: Any]) -> VCLCountry {
+    private func parseCountry(_ countryDict: [String: Sendable]) -> VCLCountry {
         var regions: VCLRegions? = nil
         
-        if let regionsArr = countryDict[VCLCountry.Codes.KeyRegions] as? [[String: Any]] {
+        if let regionsArr = countryDict[VCLCountry.Codes.KeyRegions] as? [[String: Sendable]] {
             var regionsList = [VCLRegion]()
             for i in 0..<regionsArr.count {
                 regionsList.append(VCLRegion(

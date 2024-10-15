@@ -48,7 +48,7 @@ final class JwtServiceUseCaseTest: XCTestCase {
             do {
                 let jwt = try $0.get()
                 assert(jwt.header?["alg"] as? String == VCLSignatureAlgorithm.SECP256k1.jwsAlgorithm)
-                assert(((jwt.header?["jwk"] as? [String: Any])?["crv"] as? String) == VCLSignatureAlgorithm.SECP256k1.rawValue)
+                assert(((jwt.header?["jwk"] as? [String: Sendable])?["crv"] as? String) == VCLSignatureAlgorithm.SECP256k1.rawValue)
                 assert(jwt.header?["typ"] as? String == "JWT")
             } catch {
                 XCTFail("\(error)")

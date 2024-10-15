@@ -13,7 +13,7 @@ import XCTest
 
 class UtilsTest: XCTestCase {
     func testGetIdentifier() {
-        let jsonObject: [String: Any] = [
+        let jsonObject: [String: Sendable] = [
             "a": "ValueA",
             "b": ["identifier": "ValueB"],
             "c": ["id1": "ValueC"],
@@ -29,7 +29,7 @@ class UtilsTest: XCTestCase {
     }
 
     func testGetIdentifierNoMatch() {
-        let jsonObject: [String: Any] = [
+        let jsonObject: [String: Sendable] = [
             "a": "ValueA",
             "b": ["identifier": "ValueB"],
             "c": ["x": "ValueX"]
@@ -49,21 +49,21 @@ class UtilsTest: XCTestCase {
     }
 
     func testGetPrimaryIdentifierMapWithId() {
-        let value: [String: Any] = ["id": "ValueY"]
+        let value: [String: Sendable] = ["id": "ValueY"]
         let result = Utils.getPrimaryIdentifier(value)
 
         assert("ValueY" == result)
     }
 
     func testGetPrimaryIdentifierMapWithIdentifier() {
-        let value: [String: Any] = ["identifier": "ValueZ"]
+        let value: [String: Sendable] = ["identifier": "ValueZ"]
         let result = Utils.getPrimaryIdentifier(value)
 
         assert("ValueZ" == result)
     }
 
     func testGetPrimaryIdentifierNull() {
-        let value: [AnyHashable: Any]? = nil
+        let value: [String: Sendable]? = nil
         let result = Utils.getPrimaryIdentifier(value)
 
         assert(result == nil)

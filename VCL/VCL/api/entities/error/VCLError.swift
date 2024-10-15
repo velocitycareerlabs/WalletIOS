@@ -68,7 +68,7 @@ public struct VCLError: Sendable, Error {
         }
     }
 
-    public func toDictionary() -> [String: Any?] {
+    public func toDictionary() -> [String: Sendable?] {
         return [
             CodingKeys.KeyPayload: payload,
             CodingKeys.KeyError: error,

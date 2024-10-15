@@ -81,7 +81,7 @@ public struct VCLJwt: Sendable {
     }
     
     var kid: String? { get {
-        return (header?[CodingKeys.KeyKid] as? String) ?? ((header?[CodingKeys.KeyJwk] as? [String: Any])?[CodingKeys.KeyKid]) as? String
+        return (header?[CodingKeys.KeyKid] as? String) ?? ((header?[CodingKeys.KeyJwk] as? [String: Sendable])?[CodingKeys.KeyKid]) as? String
     } }
     var iss: String? { get {
         return self.payload?[CodingKeys.KeyIss] as? String

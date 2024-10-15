@@ -52,10 +52,10 @@ final class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
         jwtDescriptor: VCLJwtDescriptor,
         nonce: String?,
         didJwk: VCLDidJwk
-    ) -> [String: Any] {
-        var retVal = [String: Any]()
-        var header = [String: Any]()
-        var options = [String: Any]()
+    ) -> [String: Sendable] {
+        var retVal = [String: Sendable]()
+        var header = [String: Sendable]()
+        var options = [String: Sendable]()
         var payload = jwtDescriptor.payload ?? [:]
         
 //        HeaderValues.XVnfProtocolVersion == VCLXVnfProtocolVersion.XVnfProtocolVersion1

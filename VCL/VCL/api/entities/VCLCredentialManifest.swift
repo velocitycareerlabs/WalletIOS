@@ -37,24 +37,24 @@ public struct VCLCredentialManifest: Sendable {
     public var did: String { get { return iss } }
     public var issuerId: String { get {
         jwt.payload?[CodingKeys.KeyIssuer] as? String
-        ?? (jwt.payload?[CodingKeys.KeyIssuer] as? [String: Any])?[CodingKeys.KeyId] as? String
+        ?? (jwt.payload?[CodingKeys.KeyIssuer] as? [String: Sendable])?[CodingKeys.KeyId] as? String
         ?? ""
     } }
     public var aud: String { get { return retrieveAud() } }
     public var exchangeId: String { get { return jwt.payload?[CodingKeys.KeyExchangeId] as? String ?? "" } }
-    public var presentationDefinitionId: String { get { (jwt.payload?[CodingKeys.KeyPresentationDefinitionId] as? [String: Any])?[CodingKeys.KeyId] as? String ?? "" } }
+    public var presentationDefinitionId: String { get { (jwt.payload?[CodingKeys.KeyPresentationDefinitionId] as? [String: Sendable])?[CodingKeys.KeyId] as? String ?? "" } }
     
     public var finalizeOffersUri: String { get {
-        (jwt.payload?[VCLCredentialManifest.CodingKeys.KeyMetadata] as? [String: Any])?[VCLCredentialManifest.CodingKeys.KeyFinalizeOffersUri] as? String ?? "" } }
+        (jwt.payload?[VCLCredentialManifest.CodingKeys.KeyMetadata] as? [String: Sendable])?[VCLCredentialManifest.CodingKeys.KeyFinalizeOffersUri] as? String ?? "" } }
     
     public var checkOffersUri: String { get {
-        (jwt.payload?[VCLCredentialManifest.CodingKeys.KeyMetadata] as? [String: Any])?[VCLCredentialManifest.CodingKeys.KeyCheckOffersUri] as? String ?? "" } }
+        (jwt.payload?[VCLCredentialManifest.CodingKeys.KeyMetadata] as? [String: Sendable])?[VCLCredentialManifest.CodingKeys.KeyCheckOffersUri] as? String ?? "" } }
 
     public var submitPresentationUri: String { get {
-        (jwt.payload?[VCLCredentialManifest.CodingKeys.KeyMetadata] as? [String: Any])?[VCLCredentialManifest.CodingKeys.KeySubmitIdentificationUri] as? String ?? "" } }
+        (jwt.payload?[VCLCredentialManifest.CodingKeys.KeyMetadata] as? [String: Sendable])?[VCLCredentialManifest.CodingKeys.KeySubmitIdentificationUri] as? String ?? "" } }
 
     private func retrieveAud() -> String {
-        let url = ((jwt.payload?[CodingKeys.KeyMetadata] as? [String: Any])?[CodingKeys.KeyFinalizeOffersUri] as? String) ?? ""
+        let url = ((jwt.payload?[CodingKeys.KeyMetadata] as? [String: Sendable])?[CodingKeys.KeyFinalizeOffersUri] as? String) ?? ""
         if let range = url.range(of: "/issue/") {
             return String(url[..<range.lowerBound])
         }

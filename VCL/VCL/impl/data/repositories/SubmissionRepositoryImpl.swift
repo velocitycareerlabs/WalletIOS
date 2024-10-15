@@ -47,17 +47,17 @@ final class SubmissionRepositoryImpl: SubmissionRepository {
             })
     }
     
-    private func parse(_ jsonDict: [String: Any]?, _ jti: String, _ submissionId: String) -> VCLSubmissionResult {
+    private func parse(_ jsonDict: [String: Sendable]?, _ jti: String, _ submissionId: String) -> VCLSubmissionResult {
         let exchangeJsonDict = jsonDict?[VCLSubmissionResult.CodingKeys.KeyExchange]
         return VCLSubmissionResult(
             sessionToken: VCLToken(value: jsonDict?[VCLSubmissionResult.CodingKeys.KeyToken] as? String ?? ""),
-            exchange: parseExchange(exchangeJsonDict as? [String : Any]),
+            exchange: parseExchange(exchangeJsonDict as? [String: Sendable]),
             jti: jti,
             submissionId: submissionId
         )
     }
     
-    private func parseExchange(_ exchangeJsonDict: [String: Any]?) -> VCLExchange {
+    private func parseExchange(_ exchangeJsonDict: [String: Sendable]?) -> VCLExchange {
         return VCLExchange(
             id: exchangeJsonDict?[VCLExchange.CodingKeys.KeyId] as? String,
             type: exchangeJsonDict?[VCLExchange.CodingKeys.KeyType] as? String,

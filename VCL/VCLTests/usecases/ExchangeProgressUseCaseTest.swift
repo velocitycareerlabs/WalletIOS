@@ -67,10 +67,12 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
         }
     }
     
-    private func expectedExchange(exchangeJsonDict: [String: Any]) -> VCLExchange {
-        return VCLExchange(id: (exchangeJsonDict[VCLExchange.CodingKeys.KeyId] as! String),
-                           type: (exchangeJsonDict[VCLExchange.CodingKeys.KeyType] as! String),
-                           disclosureComplete: (exchangeJsonDict[VCLExchange.CodingKeys.KeyDisclosureComplete] as! Bool),
-                           exchangeComplete: (exchangeJsonDict[VCLExchange.CodingKeys.KeyExchangeComplete] as! Bool))
+    private func expectedExchange(exchangeJsonDict: [String: Sendable]) -> VCLExchange {
+        return VCLExchange(
+            id: (exchangeJsonDict[VCLExchange.CodingKeys.KeyId] as! String),
+            type: (exchangeJsonDict[VCLExchange.CodingKeys.KeyType] as! String),
+            disclosureComplete: (exchangeJsonDict[VCLExchange.CodingKeys.KeyDisclosureComplete] as! Bool),
+            exchangeComplete: (exchangeJsonDict[VCLExchange.CodingKeys.KeyExchangeComplete] as! Bool)
+        )
     }
 }
