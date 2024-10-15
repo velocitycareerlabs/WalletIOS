@@ -86,8 +86,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     }
     
     private func completionHandler(
-        _ successHandler: @escaping () -> Void,
-        _ errorHandler: @escaping (VCLError) -> Void
+        _ successHandler: @escaping @Sendable () -> Void,
+        _ errorHandler: @escaping @Sendable (VCLError) -> Void
     ) {
         if let error = self.initializationWatcher.firstError() {
             errorHandler(error)
@@ -496,7 +496,7 @@ extension VCLImpl {
     }
     
     func printVersion() {
-        VCLLog.d("Version: \(GlobalConfig.Version)")
-        VCLLog.d("Build: \(GlobalConfig.Build)")
+        NSLog("Version: \(GlobalConfig.Version)")
+        NSLog("Build: \(GlobalConfig.Build)")
     }
 }

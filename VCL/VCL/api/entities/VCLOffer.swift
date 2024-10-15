@@ -16,7 +16,7 @@ public struct VCLOffer: Sendable {
         self.payload = payload
     }
     
-    public var issuerId: String { get { (payload[CodingKeys.KeyIssuer] as? [String: Any])?[CodingKeys.KeyId] as? String
+    public var issuerId: String { get { (payload[CodingKeys.KeyIssuer] as? [String: Sendable])?[CodingKeys.KeyId] as? String
         ?? payload[CodingKeys.KeyIssuer] as? String
         ?? ""
     }}

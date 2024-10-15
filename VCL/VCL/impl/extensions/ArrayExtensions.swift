@@ -20,10 +20,10 @@ extension Array {
     }
 }
 
-public func == (lhs: [Any], rhs: [Any] ) -> Bool {
+public func == (lhs: [Sendable], rhs: [Sendable] ) -> Bool {
     return NSArray(array: lhs).isEqual(to: rhs)
 }
 
-public func != (lhs: [Any], rhs: [Any] ) -> Bool {
+public func != (lhs: [Sendable], rhs: [Sendable] ) -> Bool {
     return !(lhs == rhs)
 }

@@ -17,7 +17,7 @@ class CredentialDidVerifierTest: XCTestCase {
     CredentialMocks.JwtCredentialsFromNotaryIssuer.toList()?.count ?? 0
         private let credentialsFromRegularIssuerAmount =
     CredentialMocks.JwtCredentialsFromRegularIssuer.toList()?.count ?? 0
-    private let OffersMock = VCLOffers(payload: [String: Any](), all: [VCLOffer(payload: [:])], responseCode: 1, sessionToken: VCLToken(value: ""), challenge: "")
+    private let OffersMock = VCLOffers(payload: [String: Sendable](), all: [VCLOffer(payload: [:])], responseCode: 1, sessionToken: VCLToken(value: ""), challenge: "")
 
         var finalizeOffersDescriptorOfNotaryIssuer: VCLFinalizeOffersDescriptor!
         var credentialManifestFromNotaryIssuer: VCLCredentialManifest!

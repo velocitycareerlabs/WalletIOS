@@ -48,7 +48,7 @@ final class VCLJwtVerifyServiceRemoteImpl: VCLJwtVerifyService {
     private func generatePayloadToVerify(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk
-    ) -> [String: Any] {
+    ) -> [String: Sendable] {
         return [
             CodingKeys.KeyJwt: jwt.encodedJwt,
             CodingKeys.KeyPublicKey: publicJwk.valueDict

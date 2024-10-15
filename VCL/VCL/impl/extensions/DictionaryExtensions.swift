@@ -19,15 +19,15 @@ extension Dictionary {
         }
     }
     /// A recursive function that replaces all values for a given key
-    func update(_ dict: [String: Any], set value: Any, for key: String) -> [String: Any] {
+    func update(_ dict: [String: Sendable], set value: Sendable, for key: String) -> [String: Sendable] {
         var newDict = dict
         for (k, v) in newDict {
             if k == key {
                 newDict[k] = value
-            } else if let subDict = v as? [String: Any] {
+            } else if let subDict = v as? [String: Sendable] {
                 newDict[k] = update(subDict, set: value, for: key)
-            } else if let subArray = v as? [[String: Any]] {
-                var newArray = [[String: Any]]()
+            } else if let subArray = v as? [[String: Sendable]] {
+                var newArray = [[String: Sendable]]()
                 for item in subArray {
                     newArray.append(update(item, set: value, for: key))
                 }
@@ -38,10 +38,10 @@ extension Dictionary {
     }
 }
 
-public func == (lhs: [String: Any], rhs: [String: Any]) -> Bool {
+public func == (lhs: [String: Sendable], rhs: [String: Sendable]) -> Bool {
     return NSDictionary(dictionary: lhs).isEqual(to: rhs)
 }
 
-public func != (lhs: [String: Any], rhs: [String: Any]) -> Bool {
+public func != (lhs: [String: Sendable], rhs: [String: Sendable]) -> Bool {
     return !(lhs == rhs)
 }

@@ -42,12 +42,12 @@ class VCLJwtSignServiceTest: XCTestCase {
             nonce: "nonce 1",
             didJwk: didJwk
         )
-        let header = payloadToSign["header"] as? [String: Any]
-        let options = payloadToSign["options"] as? [String: Any]
-        let payload = payloadToSign["payload"] as? [String: Any]
+        let header = payloadToSign["header"] as? [String: Sendable]
+        let options = payloadToSign["options"] as? [String: Sendable]
+        let payload = payloadToSign["payload"] as? [String: Sendable]
 
         assert(header?["kid"] as? String == didJwk.kid)
-        assert(header?["jwk"] as? [String: Any] ?? [:] == didJwk.publicJwk.valueDict)
+        assert(header?["jwk"] as? [String: Sendable] ?? [:] == didJwk.publicJwk.valueDict)
         
         assert(options?["keyId"] as? String == didJwk.keyId)
 

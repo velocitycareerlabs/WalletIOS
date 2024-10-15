@@ -27,11 +27,11 @@ public struct VCLGenerateOffersDescriptor: Sendable {
         self.identificationVerifiableCredentials = identificationVerifiableCredentials
     }
     
-    public var payload: [String: Any?] { get {
+    public var payload: [String: Sendable?] { get {
         [
             CodingKeys.KeyExchangeId: exchangeId,
-            CodingKeys.KeyTypes: types ?? [Any](),
-            CodingKeys.KeyOfferHashes: offerHashes ?? [Any]()
+            CodingKeys.KeyTypes: types ?? [Sendable](),
+            CodingKeys.KeyOfferHashes: offerHashes ?? [Sendable]()
         ]
     } }
     

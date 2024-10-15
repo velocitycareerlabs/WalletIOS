@@ -17,7 +17,7 @@ public struct VCLVerifiedProfile: Sendable {
         self.payload = payload
     }
     
-    public var credentialSubject: [String: Any]? { get { payload[CodingKeys.KeyCredentialSubject] as? [String : Any] } }
+    public var credentialSubject: [String: Sendable]? { get { payload[CodingKeys.KeyCredentialSubject] as? [String : Sendable] } }
     
     public var name: String? { get { credentialSubject?[CodingKeys.KeyName] as? String } }
     public var logo: String? { get { credentialSubject?[CodingKeys.KeyLogo] as? String } }
