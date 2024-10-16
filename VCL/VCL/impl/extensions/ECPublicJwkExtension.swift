@@ -13,11 +13,11 @@ import VCToken
 extension ECPublicJwk {
     func toDictionary() -> [String: String] {
         return [
-            CodingKeys.KeyType: self.keyType ?? "",
+            CodingKeys.KeyType: self.keyType,
             CodingKeys.KeyKeyId: self.keyId ?? "",
-            CodingKeys.KeyCurve: self.curve ?? "",
+            CodingKeys.KeyCurve: self.curve,
             CodingKeys.KeyUse: self.use ?? "",
-            CodingKeys.KeyX: self.x ?? "",
+            CodingKeys.KeyX: self.x,
             CodingKeys.KeyY: self.y ?? ""
         ]
     }
