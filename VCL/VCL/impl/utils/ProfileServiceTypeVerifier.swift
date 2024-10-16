@@ -25,7 +25,6 @@ final class ProfileServiceTypeVerifier: Sendable {
     ) {
         verifiedProfileUseCase.getVerifiedProfile(verifiedProfileDescriptor: verifiedProfileDescriptor) {
             [weak self] verifiedProfileResult in
-            guard let _self = self else { return }
             do {
                 let verifiedProfile = try verifiedProfileResult.get()
                 self?.verifyServiceType(
