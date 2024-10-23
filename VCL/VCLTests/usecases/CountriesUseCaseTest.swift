@@ -26,7 +26,7 @@ final class CountriesUseCaseTest: XCTestCase {
                 ), 
                 EmptyCacheService()
             ),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
         
         subject.getCountries(cacheSequence: 1) {
@@ -56,7 +56,7 @@ final class CountriesUseCaseTest: XCTestCase {
                 NetworkServiceSuccess(
                     validResponse: "wrong payload"
                 ), EmptyCacheService()            ),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
         
         subject.getCountries(cacheSequence: 1) {

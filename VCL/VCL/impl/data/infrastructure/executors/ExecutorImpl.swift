@@ -1,6 +1,6 @@
 //
 //  ExecutorImpl.swift
-//  
+//
 //
 //  Created by Michael Avoyan on 02/05/2021.
 //
@@ -10,10 +10,15 @@
 import Foundation
 
 final class ExecutorImpl: Executor {
-    private let dispatchQueueMain = DispatchQueue.main
 
+    // Singleton instance
+    static let instance = ExecutorImpl()
+    
+    // Private init to prevent external instantiation
+    private init() {}
+    
     func runOnMain(_ block: @escaping @Sendable () -> Void) {
-        self.dispatchQueueMain.async {
+        DispatchQueue.main.async {
             block()
         }
     }

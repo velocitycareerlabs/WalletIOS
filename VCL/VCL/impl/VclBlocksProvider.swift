@@ -100,7 +100,7 @@ class VclBlocksProvider {
                     NetworkServiceImpl(),
                     CacheServiceImpl()
                 ),
-                ExecutorImpl()
+                ExecutorImpl.instance
             )
         )
     }
@@ -115,7 +115,7 @@ class VclBlocksProvider {
                     CacheServiceImpl()
                 ),
                 credenctiialTypes,
-                ExecutorImpl(),
+                ExecutorImpl.instance,
                 DispatcherImpl()
             )
         )
@@ -128,7 +128,7 @@ class VclBlocksProvider {
                     NetworkServiceImpl(),
                     CacheServiceImpl()
                 ),
-                ExecutorImpl()
+                ExecutorImpl.instance
             )
         )
     }
@@ -148,7 +148,7 @@ class VclBlocksProvider {
                 try chooseJwtVerifyService(cryptoServicesDescriptor)
             ),
             PresentationRequestByDeepLinkVerifierImpl(),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
     }
     
@@ -163,7 +163,7 @@ class VclBlocksProvider {
                 try chooseJwtSignService(cryptoServicesDescriptor),
                 try chooseJwtVerifyService(cryptoServicesDescriptor)
             ),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
     }
     
@@ -172,7 +172,7 @@ class VclBlocksProvider {
             OrganizationsRepositoryImpl(
                 NetworkServiceImpl()
             ),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
     }
     
@@ -191,7 +191,7 @@ class VclBlocksProvider {
                 try chooseJwtVerifyService(cryptoServicesDescriptor)
             ),
             CredentialManifestByDeepLinkVerifierImpl(),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
     }
     
@@ -206,7 +206,7 @@ class VclBlocksProvider {
                 try chooseJwtSignService(cryptoServicesDescriptor),
                 try chooseJwtVerifyService(cryptoServicesDescriptor)
             ),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
     }
     
@@ -215,7 +215,7 @@ class VclBlocksProvider {
             ExchangeProgressRepositoryImpl(
                 NetworkServiceImpl()
             ),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
     }
     
@@ -225,7 +225,7 @@ class VclBlocksProvider {
                 NetworkServiceImpl()
             ),
             OffersByDeepLinkVerifierImpl(),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
     }
     
@@ -239,7 +239,7 @@ class VclBlocksProvider {
             credentialIssuerVerifier = CredentialIssuerVerifierImpl(
                 credentialTypesModel,
                 NetworkServiceImpl(),
-                ExecutorImpl()
+                ExecutorImpl.instance
             )
         }
         return FinalizeOffersUseCaseImpl(
@@ -252,7 +252,7 @@ class VclBlocksProvider {
             credentialIssuerVerifier,
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
     }
     
@@ -261,7 +261,7 @@ class VclBlocksProvider {
             CredentialTypesUIFormSchemaRepositoryImpl(
                 NetworkServiceImpl()
             ),
-            ExecutorImpl(),
+            ExecutorImpl.instance,
             DispatcherImpl()
         )
     }
@@ -271,7 +271,7 @@ class VclBlocksProvider {
             VerifiedProfileRepositoryImpl(
                 NetworkServiceImpl()
             ),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
     }
     
@@ -283,7 +283,7 @@ class VclBlocksProvider {
                 try chooseJwtSignService(cryptoServicesDescriptor),
                 try chooseJwtVerifyService(cryptoServicesDescriptor)
             ),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
     }
     
@@ -294,7 +294,7 @@ class VclBlocksProvider {
             KeyServiceRepositoryImpl(
                 try chooseKeyService(cryptoServicesDescriptor)
             ),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
     }
 }

@@ -21,7 +21,7 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
             ExchangeProgressRepositoryImpl(
                 NetworkServiceSuccess(validResponse: ExchangeProgressMocks.ExchangeProgressJson)
             ),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
         let submissionResult = VCLSubmissionResult(sessionToken: VCLToken(value: ""), exchange: VCLExchange(), jti: "", submissionId: "")
         let exchangeDescriptor = VCLExchangeDescriptor(
@@ -46,7 +46,7 @@ final class ExchangeProgressUseCaseTest: XCTestCase {
             ExchangeProgressRepositoryImpl(
                 NetworkServiceSuccess(validResponse: "wrong payload")
             ),
-            ExecutorImpl()
+            ExecutorImpl.instance
         )
         let submissionResult = VCLSubmissionResult(sessionToken: VCLToken(value: ""), exchange: VCLExchange(), jti: "", submissionId: "")
         let exchangeDescriptor = VCLExchangeDescriptor(
