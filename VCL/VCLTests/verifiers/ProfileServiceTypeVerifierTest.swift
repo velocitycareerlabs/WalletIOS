@@ -26,7 +26,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
                 ),
-                ExecutorImpl()
+                ExecutorImpl.instance
             )
         )
         subject2 = ProfileServiceTypeVerifier(
@@ -34,7 +34,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileInspectorJsonStr)
                 ),
-                ExecutorImpl()
+                ExecutorImpl.instance
             )
         )
         subject3 = ProfileServiceTypeVerifier(
@@ -42,7 +42,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
                 ),
-                ExecutorImpl()
+                ExecutorImpl.instance
             )
         )
         subject4 = ProfileServiceTypeVerifier(
@@ -50,7 +50,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryIssuerJsonStr)
                 ),
-                ExecutorImpl()
+                ExecutorImpl.instance
             )
         )
         subject5 = ProfileServiceTypeVerifier(
@@ -58,7 +58,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1)
                 ),
-                ExecutorImpl()
+                ExecutorImpl.instance
             )
         )
         subject6 = ProfileServiceTypeVerifier(
@@ -66,7 +66,7 @@ class ProfileServiceTypeVerifierTest: XCTestCase {
                 VerifiedProfileRepositoryImpl(
                     NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileIssuerInspectorJsonStr)
                 ),
-                ExecutorImpl()
+                ExecutorImpl.instance
             )
         )
     }
