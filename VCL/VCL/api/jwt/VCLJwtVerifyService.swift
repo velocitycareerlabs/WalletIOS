@@ -9,11 +9,11 @@
 
 import Foundation
 
-public protocol VCLJwtVerifyService: Sendable {
+public protocol VCLJwtVerifyService {
     func verify(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
 }

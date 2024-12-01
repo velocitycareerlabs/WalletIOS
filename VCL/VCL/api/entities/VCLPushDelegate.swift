@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLPushDelegate: Sendable {
+public struct VCLPushDelegate {
     /// the url of the endpoint that will send pushes to the device
     public let pushUrl: String
     /// the token to use for identifying the group of devices this device belongs to

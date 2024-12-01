@@ -24,7 +24,7 @@ final class ExchangeProgressUseCaseImpl: ExchangeProgressUseCase {
     
     func getExchangeProgress(
         exchangeDescriptor: VCLExchangeDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLExchange>) -> Void
+        completionBlock: @escaping (VCLResult<VCLExchange>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             guard let self = self else { return }

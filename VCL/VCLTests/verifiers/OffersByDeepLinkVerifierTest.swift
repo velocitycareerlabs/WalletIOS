@@ -23,8 +23,8 @@ class OffersByDeepLinkVerifierTest: XCTestCase {
     override func setUp() {
         offers = VCLOffers(
             payload: offersPayload,
-            all: Utils.offersFromJsonArray(
-                offersJsonArray: offersPayload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Sendable]] ?? []
+            all: VerificationUtils.offersFromJsonArray(
+                offersJsonArray: offersPayload[VCLOffers.CodingKeys.KeyOffers] as? [[String: Any]] ?? []
             ),
             responseCode: 0,
             sessionToken: VCLToken(value: ""),

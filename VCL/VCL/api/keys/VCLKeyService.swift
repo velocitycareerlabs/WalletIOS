@@ -11,10 +11,10 @@ import Foundation
 @preconcurrency import VCToken
 @preconcurrency import VCCrypto
 
-public protocol VCLKeyService: Sendable {
+public protocol VCLKeyService {
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLDidJwk>) -> Void
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     )
 }
 

@@ -7,9 +7,9 @@
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
-protocol CredentialTypesUseCase: Sendable {
+protocol CredentialTypesUseCase {
     func getCredentialTypes(
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypes>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
     )
 }

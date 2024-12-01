@@ -24,7 +24,7 @@ final class VerifiedProfileUseCaseImpl: VerifiedProfileUseCase {
     
     func getVerifiedProfile(
         verifiedProfileDescriptor: VCLVerifiedProfileDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLVerifiedProfile>) -> Void
+        completionBlock: @escaping (VCLResult<VCLVerifiedProfile>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             guard let self = self else { return }

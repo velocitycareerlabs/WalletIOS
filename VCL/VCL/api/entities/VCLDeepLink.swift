@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLDeepLink: Sendable {
+public struct VCLDeepLink {
     public let value: String
     
     public init(value: String) {

@@ -9,9 +9,9 @@
 
 import Foundation
 
-protocol SubmissionUseCase: Sendable {
+protocol SubmissionUseCase {
     func submit(
         submission: VCLSubmission,
-        completionBlock: @escaping @Sendable (VCLResult<VCLSubmissionResult>) -> Void
+        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     )
 }

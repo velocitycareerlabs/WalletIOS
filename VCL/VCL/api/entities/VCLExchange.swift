@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLExchange: Sendable {
+public struct VCLExchange {
     public let id: String?
     public let type: String?
     public let disclosureComplete: Bool?

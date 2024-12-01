@@ -27,7 +27,7 @@ final class VCLKeyServiceLocalImpl: VCLKeyService {
 
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor = VCLDidJwkDescriptor(),
-        completionBlock: @escaping @Sendable (VCLResult<VCLDidJwk>) -> Void
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
         generateSecret { [weak self] secretResult in
             do {
@@ -53,7 +53,7 @@ final class VCLKeyServiceLocalImpl: VCLKeyService {
     
     func generateSecret(
         signatureAlgorithm: VCLSignatureAlgorithm = VCLSignatureAlgorithm.SECP256k1, // ignored
-        completionBlock: @escaping @Sendable (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
+        completionBlock: @escaping (VCLResult<VCCrypto.VCCryptoSecret>) -> Void
     ) {
         do {
             completionBlock(.success(try keyManagementOperations.generateKey()))
@@ -64,7 +64,7 @@ final class VCLKeyServiceLocalImpl: VCLKeyService {
     
     func retrieveSecretReference(
         keyId: String,
-        completionBlock: @escaping @Sendable (VCLResult<VCCryptoSecret>) -> Void
+        completionBlock: @escaping (VCLResult<VCCryptoSecret>) -> Void
     ) {
         if let keyId = UUID(uuidString: keyId) {
             completionBlock(.success(keyManagementOperations.retrieveKeyFromStorage(withId: keyId)))
@@ -75,7 +75,7 @@ final class VCLKeyServiceLocalImpl: VCLKeyService {
     
     func retrievePublicJwk(
         secret: VCCryptoSecret,
-        completionBlock: @escaping @Sendable (VCLResult<ECPublicJwk>) -> Void
+        completionBlock: @escaping (VCLResult<ECPublicJwk>) -> Void
     ) {
         do {
             completionBlock(.success(try tokenSigning.getPublicJwk(from: secret, withKeyId: secret.id.uuidString)))

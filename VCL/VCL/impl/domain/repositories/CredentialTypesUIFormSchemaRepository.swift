@@ -9,10 +9,10 @@
 
 import Foundation
 
-protocol CredentialTypesUIFormSchemaRepository: Sendable {
+protocol CredentialTypesUIFormSchemaRepository {
     func getCredentialTypesUIFormSchema(
         credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor,
         countries: VCLCountries,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypesUIFormSchema>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypesUIFormSchema>) -> Void
     )
 }

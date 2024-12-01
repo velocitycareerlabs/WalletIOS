@@ -7,10 +7,10 @@
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
-public struct VCLCredentialTypeSchema: Sendable {
-    public let payload: [String: Sendable]?
+public struct VCLCredentialTypeSchema: Any {
+    public let payload: [String: Any]?
     
-    public init(payload: [String: Sendable]?) {
+    public init(payload: [String: Any]?) {
         self.payload = payload
     }
 }

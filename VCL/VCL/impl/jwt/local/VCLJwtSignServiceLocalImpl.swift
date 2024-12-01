@@ -30,7 +30,7 @@ final class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
         nonce: String? = nil,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        completionBlock: @escaping @Sendable (VCLResult<VCLJwt>) -> Void
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
             let secp256k1Signer = Secp256k1Signer()
             getSecretReference(
@@ -88,7 +88,7 @@ final class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     
     private func getSecretReference(
         keyId: String,
-        completionBlock: @escaping @Sendable (VCLResult<VCCryptoSecret>) -> Void
+        completionBlock: @escaping (VCLResult<VCCryptoSecret>) -> Void
     ) {
         keyServiceLocalImpl?.retrieveSecretReference(keyId: keyId, completionBlock: completionBlock)
     }
@@ -96,8 +96,8 @@ final class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
     private func generateClaims(
         jwtDescriptor: VCLJwtDescriptor,
         nonce: String?
-    ) -> [String: Sendable] {
-        var retVal = jwtDescriptor.payload ?? [String: Sendable]()
+    ) -> [String: Any] {
+        var retVal = jwtDescriptor.payload ?? [String: Any]()
         retVal[CodingKeys.KeyIss] = jwtDescriptor.iss
         retVal[CodingKeys.KeyAud] = jwtDescriptor.aud
         retVal[CodingKeys.KeySub] = randomString(length: 10)

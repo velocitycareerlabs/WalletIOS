@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLGenerateOffersDescriptor: Sendable {
+public struct VCLGenerateOffersDescriptor {
     public let credentialManifest: VCLCredentialManifest
     public let types: [String]?
     public let offerHashes: [String]?
@@ -27,11 +27,11 @@ public struct VCLGenerateOffersDescriptor: Sendable {
         self.identificationVerifiableCredentials = identificationVerifiableCredentials
     }
     
-    public var payload: [String: Sendable?] { get {
+    public var payload: [String: Any?] { get {
         [
             CodingKeys.KeyExchangeId: exchangeId,
-            CodingKeys.KeyTypes: types ?? [Sendable](),
-            CodingKeys.KeyOfferHashes: offerHashes ?? [Sendable]()
+            CodingKeys.KeyTypes: types ?? [Any](),
+            CodingKeys.KeyOfferHashes: offerHashes ?? [Any]()
         ]
     } }
     

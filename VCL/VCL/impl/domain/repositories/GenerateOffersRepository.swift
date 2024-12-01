@@ -9,9 +9,9 @@
 
 import Foundation
 
-protocol GenerateOffersRepository: Sendable {
+protocol GenerateOffersRepository {
     func generateOffers(  
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
         sessionToken: VCLToken,
-        completionBlock: @escaping @Sendable (VCLResult<VCLOffers>) -> Void)
+        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void)
 }

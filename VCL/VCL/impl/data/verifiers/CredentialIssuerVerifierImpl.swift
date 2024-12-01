@@ -20,9 +20,9 @@ actor GlobalErrorStorage {
 }
 
 actor CompleteContextsStorage {
-    private var completeContexts = [[String: Sendable]]()
+    private var completeContexts = [[String: Any]]()
     
-    func append(_ completeContext: [String: Sendable]) {
+    func append(_ completeContext: [String: Any]) {
         completeContexts.append(completeContext)
     }
     
@@ -30,7 +30,7 @@ actor CompleteContextsStorage {
         return completeContexts.isEmpty
     }
     
-    func get() -> [[String: Sendable]] { return completeContexts }
+    func get() -> [[String: Any]] { return completeContexts }
 }
 
 actor IsCredentialVerifiedStorage {
@@ -41,7 +41,7 @@ actor IsCredentialVerifiedStorage {
     func get() -> Bool { return isVeirfied }
 }
 
-final class CredentialIssuerVerifierImpl: @unchecked Sendable, CredentialIssuerVerifier {
+final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
     
     private let credentialTypesModel: CredentialTypesModel
     private let networkService: NetworkService
@@ -71,7 +71,7 @@ final class CredentialIssuerVerifierImpl: @unchecked Sendable, CredentialIssuerV
     func verifyCredentials(
         jwtCredentials: [VCLJwt],
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if (jwtCredentials.isEmpty) /* nothing to verify */ {
             completionBlock(VCLResult.success(true))
@@ -84,7 +84,7 @@ final class CredentialIssuerVerifierImpl: @unchecked Sendable, CredentialIssuerV
             jwtCredentials.forEach { jwtCredential in
                 executor.runOnBackground { [weak self] in
                     
-                    if let credentialTypeName = Utils.getCredentialType(jwtCredential) {
+                    if let credentialTypeName = VerificationUtils.getCredentialType(jwtCredential) {
                         if let credentialType = self?.credentialTypesModel.credentialTypeByTypeName(type: credentialTypeName) {
                             
                             self?.mainDispatcher.enter()
@@ -142,7 +142,7 @@ final class CredentialIssuerVerifierImpl: @unchecked Sendable, CredentialIssuerV
         _ jwtCredential: VCLJwt,
         _ credentialType: VCLCredentialType,
         _ serviceTypes: VCLServiceTypes,
-        _ completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if (
             serviceTypes.contains(serviceType: VCLServiceType.IdentityIssuer) ||
@@ -166,7 +166,7 @@ final class CredentialIssuerVerifierImpl: @unchecked Sendable, CredentialIssuerV
     
     func verifyIdentityIssuer(
         _ credentialType: VCLCredentialType,
-        _ completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if (
             credentialType.issuerCategory == VCLServiceType.IdentityIssuer.rawValue ||
@@ -187,13 +187,13 @@ final class CredentialIssuerVerifierImpl: @unchecked Sendable, CredentialIssuerV
     func verifyRegularIssuer(
         _ jwtCredential: VCLJwt,
         _ permittedServiceCategory: VCLServiceTypes,
-        _ completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if (permittedServiceCategory.contains(serviceType: VCLServiceType.NotaryIssuer)) {
             completionBlock(VCLResult.success(true))
         } else if (permittedServiceCategory.contains(serviceType: VCLServiceType.Issuer)) {
-            if let credentialSubject = Utils.getCredentialSubject(jwtCredential) {
-                if let credentialSubjectContexts = retrieveContextFromCredentialSubject(credentialSubject) {
+            if let credentialSubject = VerificationUtils.getCredentialSubjectFromCredential(jwtCredential) {
+                if let credentialSubjectContexts = VerificationUtils.getContextsFromCredential(jwtCredential) {
                     resolveCredentialSubjectContexts(credentialSubjectContexts, self) { [weak self] credentialSubjectContextsResult in
                             do {
                                 let completeContexts = try credentialSubjectContextsResult.get()
@@ -232,19 +232,10 @@ final class CredentialIssuerVerifierImpl: @unchecked Sendable, CredentialIssuerV
         }
     }
     
-    private func retrieveContextFromCredentialSubject(_ credentialSubject: [String: Sendable]) -> [String]? {
-        if let credentialSubjectContexts = credentialSubject[CodingKeys.KeyContext] as? [String] {
-            return credentialSubjectContexts
-        } else if let credentialSubjectContext = credentialSubject[CodingKeys.KeyContext] as? String {
-            return [credentialSubjectContext]
-        }
-        return nil
-    }
-    
     private func resolveCredentialSubjectContexts(
         _ credentialSubjectContexts: [String],
         _ self: CredentialIssuerVerifierImpl,
-        _ completionBlock: @escaping @Sendable (VCLResult<[[String: Sendable]]>) -> Void
+        _ completionBlock: @escaping (VCLResult<[[String: Any]]>) -> Void
     ) {
         let completeContextsStorage = CompleteContextsStorage()
         
@@ -291,13 +282,13 @@ final class CredentialIssuerVerifierImpl: @unchecked Sendable, CredentialIssuerV
     }
     
     private func onResolveCredentialSubjectContexts(
-        _ credentialSubject: [String: Sendable],
+        _ credentialSubject: [String: Any],
         _ jwtCredential: VCLJwt,
-        _ completeContexts: [[String: Sendable]],
+        _ completeContexts: [[String: Any]],
         _ self: CredentialIssuerVerifierImpl?,
-        _ completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if let credentialSubjectType = (((credentialSubject[CodingKeys.KeyType] as? [Sendable])?[0] as? String) ?? credentialSubject[CodingKeys.KeyType] as? String) {
+        if let credentialSubjectType = (((credentialSubject[CodingKeys.KeyType] as? [Any])?[0] as? String) ?? credentialSubject[CodingKeys.KeyType] as? String) {
             let globalErrorStorage = GlobalErrorStorage()
             let isCredentialVerifiedStorage = IsCredentialVerifiedStorage()
 
@@ -307,14 +298,14 @@ final class CredentialIssuerVerifierImpl: @unchecked Sendable, CredentialIssuerV
                 self.completeConetxDispatcher.enter()
                 self.executor.runOnBackground {
                     
-                    let activeContext = (((completeContext[CodingKeys.KeyContext] as? [String: Sendable])?[credentialSubjectType] as? [String: Sendable]))?[CodingKeys.KeyContext] as? [String: Sendable] ?? completeContext
+                    let activeContext = (((completeContext[CodingKeys.KeyContext] as? [String: Any])?[credentialSubjectType] as? [String: Any]))?[CodingKeys.KeyContext] as? [String: Any] ?? completeContext
                     if let K = self.findKeyForPrimaryOrganizationValue(activeContext) {
-                        if let did = Utils.getIdentifier(K, credentialSubject) {
+                        if let did = VerificationUtils.getIdentifier(K, credentialSubject) {
                             //  Comparing issuer.id instead of iss
                             //  https://velocitycareerlabs.atlassian.net/browse/VL-6178?focusedCommentId=46933
                             //  https://velocitycareerlabs.atlassian.net/browse/VL-6988
                             //  if (jwtCredential.iss == did)
-                            let credentialIssuerId = Utils.getCredentialIssuerId(jwtCredential: jwtCredential)
+                            let credentialIssuerId = VerificationUtils.getCredentialIssuerId(jwtCredential: jwtCredential)
                             VCLLog.d("Comparing credentialIssuerId: \(credentialIssuerId ?? "") with did: \(did)")
                             if (credentialIssuerId == did) {
                                 Task {
@@ -373,10 +364,10 @@ final class CredentialIssuerVerifierImpl: @unchecked Sendable, CredentialIssuerV
     }
     
     private func findKeyForPrimaryOrganizationValue(
-        _ activeContext: [String: Sendable]
+        _ activeContext: [String: Any]
     ) -> String? {
         for (key, value) in activeContext {
-            if let valueMap = value as? [String: Sendable] {
+            if let valueMap = value as? [String: Any] {
                 if (valueMap[CodingKeys.KeyId] as? String == CodingKeys.ValPrimaryOrganization || 
                     valueMap[CodingKeys.KeyId] as? String == CodingKeys.ValPrimarySourceProfile) {
                     return key

@@ -9,10 +9,10 @@
 
 import Foundation
 
-protocol PresentationRequestByDeepLinkVerifier: Sendable {
+protocol PresentationRequestByDeepLinkVerifier {
     func verifyPresentationRequest(
         presentationRequest: VCLPresentationRequest,
         deepLink: VCLDeepLink,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
 }

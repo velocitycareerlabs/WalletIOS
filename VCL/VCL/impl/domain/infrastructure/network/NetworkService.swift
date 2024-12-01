@@ -9,7 +9,7 @@
 
 import Foundation
 
-protocol NetworkService: Sendable {
+protocol NetworkService {
     func sendRequest(
         endpoint: String,
         body: String?,
@@ -17,7 +17,7 @@ protocol NetworkService: Sendable {
         method: Request.HttpMethod,
         headers: Array<(String, String)>?,
         cachePolicy: NSURLRequest.CachePolicy,
-        completionBlock: @escaping @Sendable (VCLResult<Response>) -> Void
+        completionBlock: @escaping (VCLResult<Response>) -> Void
     )
 }
 
@@ -29,7 +29,7 @@ extension NetworkService {
         method: Request.HttpMethod,
         headers: Array<(String, String)>? = nil,
         cachePolicy: NSURLRequest.CachePolicy = .reloadIgnoringLocalCacheData,
-        completionBlock: @escaping @Sendable (VCLResult<Response>) -> Void
+        completionBlock: @escaping (VCLResult<Response>) -> Void
     ) {
         sendRequest(
             endpoint: endpoint,

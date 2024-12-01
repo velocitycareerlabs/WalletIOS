@@ -24,7 +24,7 @@ final class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
         nonce: String? = nil,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        completionBlock: @escaping @Sendable (VCLResult<VCLJwt>) -> Void
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: jwtSignServiceUrl,
@@ -52,10 +52,10 @@ final class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
         jwtDescriptor: VCLJwtDescriptor,
         nonce: String?,
         didJwk: VCLDidJwk
-    ) -> [String: Sendable] {
-        var retVal = [String: Sendable]()
-        var header = [String: Sendable]()
-        var options = [String: Sendable]()
+    ) -> [String: Any] {
+        var retVal = [String: Any]()
+        var header = [String: Any]()
+        var options = [String: Any]()
         var payload = jwtDescriptor.payload ?? [:]
         
 //        HeaderValues.XVnfProtocolVersion == VCLXVnfProtocolVersion.XVnfProtocolVersion1

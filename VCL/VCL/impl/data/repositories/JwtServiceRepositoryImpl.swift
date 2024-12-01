@@ -26,7 +26,7 @@ final class JwtServiceRepositoryImpl: JwtServiceRepository {
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         jwtVerifyService.verify(
             jwt: jwt,
@@ -41,7 +41,7 @@ final class JwtServiceRepositoryImpl: JwtServiceRepository {
         nonce: String? = nil,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping @Sendable (VCLResult<VCLJwt>) -> Void
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         jwtSignService.sign(
             jwtDescriptor: jwtDescriptor,

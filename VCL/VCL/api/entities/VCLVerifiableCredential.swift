@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLVerifiableCredential: Sendable {
+public struct VCLVerifiableCredential {
     public let inputDescriptor: String
     public let jwtVc: String
     

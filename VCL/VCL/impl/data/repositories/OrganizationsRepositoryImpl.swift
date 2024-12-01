@@ -19,7 +19,7 @@ final class OrganizationsRepositoryImpl: OrganizationsRepository {
     
     func searchForOrganizations(
         organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLOrganizations>) -> Void
+        completionBlock: @escaping (VCLResult<VCLOrganizations>) -> Void
     ) {
         var endpoint = Urls.Organizations
         if let qp = organizationsSearchDescriptor.queryParams {
@@ -45,9 +45,9 @@ final class OrganizationsRepositoryImpl: OrganizationsRepository {
         }
     }
     
-    private func parse(organizationDict: [String: Sendable]?) -> VCLOrganizations {
+    private func parse(organizationDict: [String: Any]?) -> VCLOrganizations {
         var organizations = [VCLOrganization]()
-        if let organizationsJsonArray = organizationDict?[VCLOrganizations.CodingKeys.KeyResult] as? [[String: Sendable]] {
+        if let organizationsJsonArray = organizationDict?[VCLOrganizations.CodingKeys.KeyResult] as? [[String: Any]] {
             for i in 0..<organizationsJsonArray.count {
                 organizations.append(VCLOrganization(payload: organizationsJsonArray[i]))
             }

@@ -23,7 +23,7 @@ final class VCLJwtVerifyServiceRemoteImpl: VCLJwtVerifyService {
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: jwtVerifyServiceUrl,
@@ -48,7 +48,7 @@ final class VCLJwtVerifyServiceRemoteImpl: VCLJwtVerifyService {
     private func generatePayloadToVerify(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk
-    ) -> [String: Sendable] {
+    ) -> [String: Any] {
         return [
             CodingKeys.KeyJwt: jwt.encodedJwt,
             CodingKeys.KeyPublicKey: publicJwk.valueDict

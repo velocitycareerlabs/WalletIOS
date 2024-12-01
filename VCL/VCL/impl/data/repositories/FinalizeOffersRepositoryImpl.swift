@@ -23,7 +23,7 @@ final class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
         proof: VCLJwt? = nil,
-        completionBlock: @escaping @Sendable (VCLResult<[VCLJwt]>) -> Void
+        completionBlock: @escaping (VCLResult<[VCLJwt]>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: finalizeOffersDescriptor.finalizeOffersUri,

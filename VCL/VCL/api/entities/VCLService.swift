@@ -9,13 +9,13 @@
 
 import Foundation
 
-public struct VCLService: Sendable {
-    public let payload: [String: Sendable]
+public struct VCLService {
+    public let payload: [String: Any]
     public var id: String { retrieveId() }
     public var type: String { retrieveType()  }
     public var serviceEndpoint: String { retrieveServiceEndpoint() }
     
-    public init(payload: [String: Sendable]) {
+    public init(payload: [String: Any]) {
         self.payload = payload
     }
     

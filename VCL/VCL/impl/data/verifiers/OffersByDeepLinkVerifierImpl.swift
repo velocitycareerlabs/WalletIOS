@@ -13,7 +13,7 @@ final class OffersByDeepLinkVerifierImpl: OffersByDeepLinkVerifier {
     func verifyOffers(
         offers: VCLOffers,
         deepLink: VCLDeepLink,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if let mismatchedOffer = offers.all.first(where: { $0.issuerId != deepLink.did }) {
             VCLLog.e("mismatched offer: \(mismatchedOffer.payload) \ndeepLink: \(deepLink.value)")

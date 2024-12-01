@@ -21,7 +21,7 @@ final class CountriesRepositoryImpl: CountriesRepository {
     
     func getCountries(
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCountries>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
     ) {
         let endpoint = Urls.Countries
         if (cacheService.isResetCacheCountries(cacheSequence: cacheSequence)) {
@@ -29,7 +29,7 @@ final class CountriesRepositoryImpl: CountriesRepository {
         } else {
             if let countries = cacheService.getCountries(key: endpoint) {
                 if let countriesList = countries.toList() {
-                    completionBlock(.success(self.listToCountries(countriesList as? [[String: Sendable]])))
+                    completionBlock(.success(self.listToCountries(countriesList as? [[String: Any]])))
                 } else {
                     completionBlock(.failure(VCLError(message: "Failed to parse \(countries)")))
                 }
@@ -42,7 +42,7 @@ final class CountriesRepositoryImpl: CountriesRepository {
     private func fetchCountries(
         endpoint: String,
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCountries>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: endpoint,
@@ -55,7 +55,7 @@ final class CountriesRepositoryImpl: CountriesRepository {
             do {
                 let payload = try res.get().payload
                 self?.cacheService.setCountries(key: endpoint, value: payload, cacheSequence: cacheSequence)
-                if let countriesList = payload.toList() as? [[String: Sendable]], let self = self {
+                if let countriesList = payload.toList() as? [[String: Any]], let self = self {
                     completionBlock(.success(self.listToCountries(countriesList)))
                 } else {
                     completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: payload, encoding: .utf8) ?? "")")))
@@ -66,7 +66,7 @@ final class CountriesRepositoryImpl: CountriesRepository {
         }
     }
     
-    private func listToCountries(_ countriesDictArr: [[String: Sendable]]?) -> VCLCountries {
+    private func listToCountries(_ countriesDictArr: [[String: Any]]?) -> VCLCountries {
         var countries = [VCLCountry]()
         countriesDictArr?.forEach{
             countries.append(parseCountry($0))
@@ -74,10 +74,10 @@ final class CountriesRepositoryImpl: CountriesRepository {
         return VCLCountries(all: countries)
     }
     
-    private func parseCountry(_ countryDict: [String: Sendable]) -> VCLCountry {
+    private func parseCountry(_ countryDict: [String: Any]) -> VCLCountry {
         var regions: VCLRegions? = nil
 
-        if let dictArrRegions = countryDict[VCLCountry.Codes.KeyRegions] as? [[String: Sendable]] {
+        if let dictArrRegions = countryDict[VCLCountry.Codes.KeyRegions] as? [[String: Any]] {
             var regionsList = [VCLRegion]()
             dictArrRegions.forEach { regionDict in
                 regionsList.append(VCLRegion(

@@ -17,13 +17,13 @@ final class ExecutorImpl: Executor {
     // Private init to prevent external instantiation
     private init() {}
     
-    func runOnMain(_ block: @escaping @Sendable () -> Void) {
+    func runOnMain(_ block: @escaping () -> Void) {
         DispatchQueue.main.async {
             block()
         }
     }
     
-    func runOnBackground(_ block: @escaping @Sendable () -> Void) {
+    func runOnBackground(_ block: @escaping () -> Void) {
         DispatchQueue.global().async {
             block()
         }

@@ -9,10 +9,10 @@
 
 import Foundation
 
-protocol SubmissionRepository: Sendable {
+protocol SubmissionRepository {
     func submit(
         submission: VCLSubmission,
         jwt: VCLJwt,
-        completionBlock: @escaping @Sendable (VCLResult<VCLSubmissionResult>) -> Void
+        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     )
 }

@@ -9,7 +9,7 @@
 
 import Foundation
 
-public enum VCLResult<Value: Sendable>: Sendable {
+public enum VCLResult<Value: Any> {
     case success(Value)
     case failure(VCLError)
 }

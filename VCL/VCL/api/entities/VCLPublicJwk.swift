@@ -9,15 +9,15 @@
 
 import Foundation
 
-public struct VCLPublicJwk: Sendable {
+public struct VCLPublicJwk {
     public let valueStr: String
-    public let valueDict: [String: Sendable]
+    public let valueDict: [String: Any]
 
     public init(valueStr: String) {
         self.valueStr = valueStr
-        self.valueDict = valueStr.toDictionary() ?? [String: Sendable]()
+        self.valueDict = valueStr.toDictionary() ?? [String: Any]()
     }
-    public init(valueDict: [String: Sendable]) {
+    public init(valueDict: [String: Any]) {
         self.valueStr = valueDict.toJsonString() ?? ""
         self.valueDict = valueDict
     }

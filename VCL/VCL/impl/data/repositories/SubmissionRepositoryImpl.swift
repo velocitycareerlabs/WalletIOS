@@ -22,7 +22,7 @@ final class SubmissionRepositoryImpl: SubmissionRepository {
     func submit(
         submission: VCLSubmission,
         jwt: VCLJwt,
-        completionBlock: @escaping @Sendable (VCLResult<VCLSubmissionResult>) -> Void
+        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         self.networkService.sendRequest(
             endpoint: submission.submitUri,
@@ -47,17 +47,17 @@ final class SubmissionRepositoryImpl: SubmissionRepository {
             })
     }
     
-    private func parse(_ jsonDict: [String: Sendable]?, _ jti: String, _ submissionId: String) -> VCLSubmissionResult {
+    private func parse(_ jsonDict: [String: Any]?, _ jti: String, _ submissionId: String) -> VCLSubmissionResult {
         let exchangeJsonDict = jsonDict?[VCLSubmissionResult.CodingKeys.KeyExchange]
         return VCLSubmissionResult(
             sessionToken: VCLToken(value: jsonDict?[VCLSubmissionResult.CodingKeys.KeyToken] as? String ?? ""),
-            exchange: parseExchange(exchangeJsonDict as? [String: Sendable]),
+            exchange: parseExchange(exchangeJsonDict as? [String: Any]),
             jti: jti,
             submissionId: submissionId
         )
     }
     
-    private func parseExchange(_ exchangeJsonDict: [String: Sendable]?) -> VCLExchange {
+    private func parseExchange(_ exchangeJsonDict: [String: Any]?) -> VCLExchange {
         return VCLExchange(
             id: exchangeJsonDict?[VCLExchange.CodingKeys.KeyId] as? String,
             type: exchangeJsonDict?[VCLExchange.CodingKeys.KeyType] as? String,

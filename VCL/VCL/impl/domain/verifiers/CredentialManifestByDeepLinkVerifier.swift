@@ -9,10 +9,10 @@
 
 import Foundation
 
-protocol CredentialManifestByDeepLinkVerifier: Sendable {
+protocol CredentialManifestByDeepLinkVerifier {
     func verifyCredentialManifest(
         credentialManifest: VCLCredentialManifest,
         deepLink: VCLDeepLink,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
 }

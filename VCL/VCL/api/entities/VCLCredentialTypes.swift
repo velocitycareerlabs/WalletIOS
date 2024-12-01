@@ -7,7 +7,7 @@
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
-public struct VCLCredentialTypes: Sendable {
+public struct VCLCredentialTypes {
     public private(set) var all: [VCLCredentialType]? = nil
     public var recommendedTypes:[VCLCredentialType]? { get { all?.filter { $0.recommended == true } }}
     

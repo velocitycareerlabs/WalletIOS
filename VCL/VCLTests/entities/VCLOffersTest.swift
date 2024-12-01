@@ -35,7 +35,7 @@ class VCLOffersTest: XCTestCase {
     
     func testOffersFromJsonArray() {
         assert(
-            subject1.payload[VCLOffers.CodingKeys.KeyOffers] as! [[String: Sendable]] == OffersMocks.OffersJsonArrayStr.toListOfDictionaries()!
+            subject1.payload[VCLOffers.CodingKeys.KeyOffers] as! [[String: Any]] == OffersMocks.OffersJsonArrayStr.toListOfDictionaries()!
         )
         assert(subject1.challenge == nil)
         testExpectations(subject1)
@@ -46,7 +46,7 @@ class VCLOffersTest: XCTestCase {
     
     func testOffersFromJsonDictionary() {
         assert(
-            subject2.payload[VCLOffers.CodingKeys.KeyOffers] as! [[String: Sendable]] == OffersMocks.OffersJsonArrayStr.toListOfDictionaries()!
+            subject2.payload[VCLOffers.CodingKeys.KeyOffers] as! [[String: Any]] == OffersMocks.OffersJsonArrayStr.toListOfDictionaries()!
         )
         assert(subject2.challenge == OffersMocks.challenge)
         testExpectations(subject2)
@@ -57,7 +57,7 @@ class VCLOffersTest: XCTestCase {
     
     func testOffersFromEmptyJsonArray() {
         assert(
-            subject3.payload[VCLOffers.CodingKeys.KeyOffers] as! [[String: Sendable]] == OffersMocks.offersJsonEmptyArrayStr.toListOfDictionaries()!
+            subject3.payload[VCLOffers.CodingKeys.KeyOffers] as! [[String: Any]] == OffersMocks.offersJsonEmptyArrayStr.toListOfDictionaries()!
         )
         assert(subject3.challenge == nil)
         testExpectationsEmpty(subject3)

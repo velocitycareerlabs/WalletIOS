@@ -24,7 +24,7 @@ final class KeyServiceUseCaseImpl: KeyServiceUseCase {
     
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLDidJwk>) -> Void
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             guard let self = self else { return }

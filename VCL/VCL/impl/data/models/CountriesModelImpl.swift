@@ -9,7 +9,7 @@
 
 import Foundation
 
-final class CountriesModelImpl: @unchecked Sendable, CountriesModel {
+final class CountriesModelImpl: CountriesModel {
     
     private(set) var data: VCLCountries? = nil
     let countriesUseCase: CountriesUseCase
@@ -20,7 +20,7 @@ final class CountriesModelImpl: @unchecked Sendable, CountriesModel {
     
     func initialize(
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCountries>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
     ) {
         countriesUseCase.getCountries(cacheSequence: cacheSequence) { [weak self] result in
             do {

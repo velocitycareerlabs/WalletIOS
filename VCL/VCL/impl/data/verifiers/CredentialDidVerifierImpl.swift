@@ -16,7 +16,7 @@ final class CredentialDidVerifierImpl: CredentialDidVerifier {
     func verifyCredentials(
         jwtCredentials: [VCLJwt],
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+        completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         var passedCredentials = [VCLJwt]()
         var failedCredentials = [VCLJwt]()

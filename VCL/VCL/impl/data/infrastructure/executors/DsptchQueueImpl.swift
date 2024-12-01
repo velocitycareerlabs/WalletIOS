@@ -21,13 +21,13 @@ class DsptchQueueImpl: DsptchQueue {
             attributes: .concurrent)
     }
     
-    func async(flags: DispatchWorkItemFlags, _ block: @escaping @Sendable () -> Void) {
+    func async(flags: DispatchWorkItemFlags, _ block: @escaping () -> Void) {
         self.dispatchQueue.async(flags: flags) {
             block()
         }
     }
     
-    func sync<T>(_ block: @escaping @Sendable () -> T) -> T {
+    func sync<T>(_ block: @escaping () -> T) -> T {
         return self.dispatchQueue.sync {
             return block()
         }

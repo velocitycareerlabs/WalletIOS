@@ -28,7 +28,7 @@ final class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
     func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
         sessionToken: VCLToken,
-        completionBlock: @escaping @Sendable (VCLResult<VCLOffers>) -> Void
+        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             self?.generateOffersRepository.generateOffers(
@@ -53,7 +53,7 @@ final class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
     private func verifyOffersByDeepLink(
         offers: VCLOffers,
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLOffers>) -> Void
+        completionBlock: @escaping (VCLResult<VCLOffers>) -> Void
     ) {
         if let deepLink = generateOffersDescriptor.credentialManifest.deepLink {
             offersByDeepLinkVerifier.verifyOffers(offers: offers, deepLink: deepLink) {
@@ -78,7 +78,7 @@ final class GenerateOffersUseCaseImpl: GenerateOffersUseCase {
     
     private func onError<T>(
         _ error: VCLError,
-        _ completionBlock: @escaping @Sendable (VCLResult<T>) -> Void
+        _ completionBlock: @escaping (VCLResult<T>) -> Void
     ) {
         executor.runOnMain { completionBlock(VCLResult.failure(error)) }
     }

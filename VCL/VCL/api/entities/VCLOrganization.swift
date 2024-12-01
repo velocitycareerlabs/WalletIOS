@@ -9,10 +9,10 @@
 
 import Foundation
 
-public struct VCLOrganization: Sendable {
-    public let payload: [String: Sendable]
+public struct VCLOrganization: Any {
+    public let payload: [String: Any]
     
-    public init(payload: [String: Sendable]) {
+    public init(payload: [String: Any]) {
         self.payload = payload
     }
     
@@ -20,7 +20,7 @@ public struct VCLOrganization: Sendable {
 
     private func parseServiceCredentialAgentIssuers() -> [VCLService] {
         var retVal = [VCLService]()
-        if let serviceJsonArr = payload[CodingKeys.KeyService] as? [[String: Sendable]] {
+        if let serviceJsonArr = payload[CodingKeys.KeyService] as? [[String: Any]] {
             for i in 0..<serviceJsonArr.count {
                 retVal.append(VCLService(payload: serviceJsonArr[i]))
             }

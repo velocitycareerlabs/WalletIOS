@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLCryptoServicesDescriptor: Sendable {
+public struct VCLCryptoServicesDescriptor {
     public let cryptoServiceType: VCLCryptoServiceType
     public let injectedCryptoServicesDescriptor: VCLInjectedCryptoServicesDescriptor?
     public let remoteCryptoServicesUrlsDescriptor: VCLRemoteCryptoServicesUrlsDescriptor?

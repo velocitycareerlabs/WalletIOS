@@ -19,7 +19,7 @@ final class KeyServiceRepositoryImpl: KeyServiceRepository {
     
     func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLDidJwk>) -> Void
+        completionBlock: @escaping (VCLResult<VCLDidJwk>) -> Void
     ) {
         keyService.generateDidJwk(
             didJwkDescriptor: didJwkDescriptor,

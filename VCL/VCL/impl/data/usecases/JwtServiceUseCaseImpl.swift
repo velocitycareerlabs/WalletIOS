@@ -26,7 +26,7 @@ final class JwtServiceUseCaseImpl: JwtServiceUseCase {
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             guard let self = self else { return }
@@ -45,7 +45,7 @@ final class JwtServiceUseCaseImpl: JwtServiceUseCase {
         nonce: String? = nil,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping @Sendable (VCLResult<VCLJwt>) -> Void
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             guard let self = self else { return }

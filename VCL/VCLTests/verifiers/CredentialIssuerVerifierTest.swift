@@ -357,7 +357,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
                 let _ = try $0.get()
                 XCTFail("\(VCLErrorCode.InvalidCredentialSubjectContext.rawValue) error code is expected")
             } catch {
-                assert((error as! VCLError).errorCode == VCLErrorCode.InvalidCredentialSubjectContext.rawValue)
+                assert((error as! VCLError).errorCode == VCLErrorCode.InvalidCredentialSubjectType.rawValue)
             }
         }
     }

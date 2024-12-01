@@ -13,6 +13,6 @@ protocol CountriesModel: Model {
     var data: VCLCountries? { get }
     func initialize(
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCountries>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
     )
 }

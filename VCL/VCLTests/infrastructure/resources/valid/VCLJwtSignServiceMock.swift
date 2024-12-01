@@ -16,7 +16,7 @@ class VCLJwtSignServiceMock: VCLJwtSignService {
         nonce: String?,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping @Sendable (VCLResult<VCLJwt>) -> Void
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         completionBlock(.success(VCLJwt(encodedJwt: "")))
     }

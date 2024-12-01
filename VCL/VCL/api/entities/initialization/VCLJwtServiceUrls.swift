@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLJwtServiceUrls: Sendable {
+public struct VCLJwtServiceUrls {
     public let jwtSignServiceUrl: String
     public let jwtVerifyServiceUrl: String?
     

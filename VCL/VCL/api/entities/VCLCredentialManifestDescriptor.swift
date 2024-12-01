@@ -9,7 +9,7 @@
 
 import Foundation
 
-public protocol VCLCredentialManifestDescriptor: Sendable {
+public protocol VCLCredentialManifestDescriptor {
     var uri: String? { get }
     var issuingType: VCLIssuingType { get }
     var credentialTypes: [String]? { get }

@@ -24,7 +24,7 @@ final class CountriesUseCaseImpl: CountriesUseCase  {
     
     func getCountries(
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCountries>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             guard let self = self else { return }

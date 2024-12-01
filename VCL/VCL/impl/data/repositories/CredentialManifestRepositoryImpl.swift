@@ -18,7 +18,7 @@ final class CredentialManifestRepositoryImpl: CredentialManifestRepository {
     
     func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<String>) -> Void
+        completionBlock: @escaping (VCLResult<String>) -> Void
     ) {
         if let endpoint = credentialManifestDescriptor.endpoint {
             networkService.sendRequest(

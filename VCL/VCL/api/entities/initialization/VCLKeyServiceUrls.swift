@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLKeyServiceUrls: Sendable {
+public struct VCLKeyServiceUrls {
     public let createDidKeyServiceUrl: String
     
     public init(createDidKeyServiceUrl: String) {

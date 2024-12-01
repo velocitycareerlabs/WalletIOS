@@ -13,7 +13,7 @@ final class CredentialIssuerVerifierEmptyImpl: CredentialIssuerVerifier {
     func verifyCredentials(
         jwtCredentials: [VCLJwt],
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         VCLLog.d("Empty implementation - credential issuer is always approved...")
         completionBlock(.success(true))

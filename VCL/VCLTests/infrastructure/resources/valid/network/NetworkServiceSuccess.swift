@@ -24,7 +24,7 @@ final class NetworkServiceSuccess: NetworkService {
             method: Request.HttpMethod,
             headers: Array<(String, String)>?,
             cachePolicy: NSURLRequest.CachePolicy,
-            completionBlock: @escaping @Sendable (VCLResult<Response>) -> Void
+            completionBlock: @escaping (VCLResult<Response>) -> Void
     ) {
         completionBlock(.success(Response(payload: self.validResponse.toData(), code: 0)))
     }

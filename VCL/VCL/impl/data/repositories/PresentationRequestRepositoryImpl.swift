@@ -19,7 +19,7 @@ final class PresentationRequestRepositoryImpl: PresentationRequestRepository {
     
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<String>) -> Void
+        completionBlock: @escaping (VCLResult<String>) -> Void
     ) {
         if let endpoint = presentationRequestDescriptor.endpoint {
             networkService.sendRequest(

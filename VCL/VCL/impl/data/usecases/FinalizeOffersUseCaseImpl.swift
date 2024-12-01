@@ -37,7 +37,7 @@ final class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
-        completionBlock: @escaping @Sendable (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+        completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             if let challenge = finalizeOffersDescriptor.challenge {
@@ -81,7 +81,7 @@ final class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
         proof: VCLJwt? = nil,
-        completionBlock: @escaping @Sendable (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+        completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         weakSelf?.finalizeOffersRepository.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
@@ -129,7 +129,7 @@ final class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     private func verifyCredentialsByDeepLink(
         _ jwtCredentials: [VCLJwt],
         _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        _ completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if let deepLink = finalizeOffersDescriptor.credentialManifest.deepLink {
             credentialsByDeepLinkVerifier.verifyCredentials(
@@ -152,7 +152,7 @@ final class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     private func verifyCredentialsByIssuer(
         _ jwtCredentials: [VCLJwt],
         _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        _ completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         credentialIssuerVerifier.verifyCredentials(
             jwtCredentials: jwtCredentials,
@@ -169,7 +169,7 @@ final class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
     private func verifyCredentialByDid(
         _ jwtCredentials: [VCLJwt],
         _ finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
-        _ completionBlock: @escaping @Sendable (VCLResult<VCLJwtVerifiableCredentials>) -> Void
+        _ completionBlock: @escaping (VCLResult<VCLJwtVerifiableCredentials>) -> Void
     ) {
         credentialDidVerifier.verifyCredentials(
             jwtCredentials: jwtCredentials,
@@ -185,7 +185,7 @@ final class FinalizeOffersUseCaseImpl: FinalizeOffersUseCase {
 
     private func onError<T>(
         _ error: VCLError,
-        _ completionBlock: @escaping @Sendable (VCLResult<T>) -> Void
+        _ completionBlock: @escaping (VCLResult<T>) -> Void
     ) {
         executor.runOnMain { completionBlock(VCLResult.failure(error)) }
     }
