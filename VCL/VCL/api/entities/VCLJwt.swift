@@ -10,17 +10,17 @@
 import Foundation
 @preconcurrency import VCToken
 
-public struct VCLJwt: Sendable {
-    public private(set) var header: [String: Sendable]? = nil
-    public private(set) var payload: [String: Sendable]? = nil
+public struct VCLJwt {
+    public private(set) var header: [String: Any]? = nil
+    public private(set) var payload: [String: Any]? = nil
     public private(set) var signature: String? = nil
     public private(set) var encodedJwt: String = ""
     
     public private(set) var jwsToken: JwsToken<VCLClaims>? = nil
     
     public init(
-        header: [String: Sendable]?,
-        payload: [String: Sendable]?,
+        header: [String: Any]?,
+        payload: [String: Any]?,
         signature: String?,
         encodedJwt: String
     ) {
@@ -44,8 +44,8 @@ public struct VCLJwt: Sendable {
     }
     
     private mutating func initialize(
-        header: [String: Sendable]? = nil,
-        payload: [String: Sendable]? = nil,
+        header: [String: Any]? = nil,
+        payload: [String: Any]? = nil,
         signature: String? = nil,
         encodedJwt: String
     ) {
@@ -81,7 +81,7 @@ public struct VCLJwt: Sendable {
     }
     
     var kid: String? { get {
-        return (header?[CodingKeys.KeyKid] as? String) ?? ((header?[CodingKeys.KeyJwk] as? [String: Sendable])?[CodingKeys.KeyKid]) as? String
+        return (header?[CodingKeys.KeyKid] as? String) ?? ((header?[CodingKeys.KeyJwk] as? [String: Any])?[CodingKeys.KeyKid]) as? String
     } }
     var iss: String? { get {
         return self.payload?[CodingKeys.KeyIss] as? String

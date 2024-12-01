@@ -13,7 +13,7 @@ final class CredentialManifestByDeepLinkVerifierImpl: CredentialManifestByDeepLi
     func verifyCredentialManifest(
         credentialManifest: VCLCredentialManifest,
         deepLink: VCLDeepLink, 
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if credentialManifest.issuerId == deepLink.did {
             completionBlock(.success(true))

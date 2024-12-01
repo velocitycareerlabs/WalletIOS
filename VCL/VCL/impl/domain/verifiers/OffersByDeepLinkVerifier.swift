@@ -9,10 +9,10 @@
 
 import Foundation
 
-protocol OffersByDeepLinkVerifier: Sendable {
+protocol OffersByDeepLinkVerifier {
     func verifyOffers(
         offers: VCLOffers,
         deepLink: VCLDeepLink,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
 }

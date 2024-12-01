@@ -19,7 +19,7 @@ final class ExchangeProgressRepositoryImpl: ExchangeProgressRepository {
     
     func getExchangeProgress(
         exchangeDescriptor: VCLExchangeDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLExchange>) -> Void
+        completionBlock: @escaping (VCLResult<VCLExchange>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: exchangeDescriptor.processUri +
@@ -44,7 +44,7 @@ final class ExchangeProgressRepositoryImpl: ExchangeProgressRepository {
         }
     }
 
-    private func parseExchange(_ exchangeJsonDict: [String: Sendable]?) -> VCLExchange {
+    private func parseExchange(_ exchangeJsonDict: [String: Any]?) -> VCLExchange {
         return VCLExchange(
             id: exchangeJsonDict?[VCLExchange.CodingKeys.KeyId] as? String,
             type: exchangeJsonDict?[VCLExchange.CodingKeys.KeyType] as? String,

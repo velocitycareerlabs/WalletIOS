@@ -9,7 +9,7 @@
 
 import Foundation
 
-public enum VCLEnvironment: String, Sendable {
+public enum VCLEnvironment: String {
     case Prod = "prod"
     case Staging = "staging"
     case Qa = "qa"

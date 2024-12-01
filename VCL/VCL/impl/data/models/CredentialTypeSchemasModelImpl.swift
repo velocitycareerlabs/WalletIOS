@@ -7,7 +7,7 @@
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
-class CredentialTypeSchemasModelImpl: @unchecked Sendable, CredentialTypeSchemasModel {
+class CredentialTypeSchemasModelImpl: CredentialTypeSchemasModel {
     
     private(set) var data: VCLCredentialTypeSchemas?
     let credentialTypeSchemasUseCase: CredentialTypeSchemasUseCase
@@ -18,7 +18,7 @@ class CredentialTypeSchemasModelImpl: @unchecked Sendable, CredentialTypeSchemas
     
     func initialize(
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypeSchemas>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypeSchemas>) -> Void
     ) {
         credentialTypeSchemasUseCase.getCredentialTypeSchemas(cacheSequence: cacheSequence) { [weak self] result in
             do {

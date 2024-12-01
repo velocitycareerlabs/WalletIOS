@@ -49,10 +49,10 @@ extension String {
         return urlVars.isEmpty ? "" : "?" + urlVars.joined(separator: "&")
     }
     
-    func toDictionary() -> [String: Sendable]? {
+    func toDictionary() -> [String: Any]? {
         if let data = self.data(using: .utf8) {
             do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Sendable]
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
             } catch {
 //                VCLLog.e(error)
             }
@@ -60,10 +60,10 @@ extension String {
         return nil
     }
     
-    func toList() -> [Sendable]? {
+    func toList() -> [Any]? {
         if let data = self.data(using: .utf8) {
             do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? [Sendable]
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [Any]
             } catch {
 //                VCLLog.error(error)
             }
@@ -71,10 +71,10 @@ extension String {
         return nil
     }
     
-    func toListOfDictionaries() -> [[String: Sendable]]? {
+    func toListOfDictionaries() -> [[String: Any]]? {
         if let data = self.data(using: .utf8) {
             do {
-                return try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Sendable]]
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
             } catch {
 //                VCLLog.error(error)
             }

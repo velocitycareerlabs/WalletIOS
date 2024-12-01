@@ -9,9 +9,9 @@
 
 import Foundation
 
-protocol PresentationRequestRepository: Sendable {
+protocol PresentationRequestRepository {
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<String>) -> Void
+        completionBlock: @escaping (VCLResult<String>) -> Void
     )
 }

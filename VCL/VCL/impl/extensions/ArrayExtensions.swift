@@ -20,10 +20,16 @@ extension Array {
     }
 }
 
-public func == (lhs: [Sendable], rhs: [Sendable] ) -> Bool {
+func merge<T>(_ arrays: Array<T>?...) -> Set<T> {
+    return arrays.compactMap{ $0 }
+        .compactMap{ Set($0) }
+        .reduce(Set<T>()){ $0.union($1) }
+}
+
+public func == (lhs: [Any], rhs: [Any] ) -> Bool {
     return NSArray(array: lhs).isEqual(to: rhs)
 }
 
-public func != (lhs: [Sendable], rhs: [Sendable] ) -> Bool {
+public func != (lhs: [Any], rhs: [Any] ) -> Bool {
     return !(lhs == rhs)
 }

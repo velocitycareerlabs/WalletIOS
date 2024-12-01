@@ -9,14 +9,14 @@
 
 import Foundation
 
-public struct VCLOffer: Sendable {
-    public let payload: [String: Sendable]
+public struct VCLOffer {
+    public let payload: [String: Any]
     
-    public init(payload: [String : Sendable]) {
+    public init(payload: [String : Any]) {
         self.payload = payload
     }
     
-    public var issuerId: String { get { (payload[CodingKeys.KeyIssuer] as? [String: Sendable])?[CodingKeys.KeyId] as? String
+    public var issuerId: String { get { (payload[CodingKeys.KeyIssuer] as? [String: Any])?[CodingKeys.KeyId] as? String
         ?? payload[CodingKeys.KeyIssuer] as? String
         ?? ""
     }}

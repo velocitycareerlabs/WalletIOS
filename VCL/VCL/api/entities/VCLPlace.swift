@@ -9,8 +9,8 @@
 
 import Foundation
 
-public protocol VCLPlace: Sendable {
-    var payload: [String: Sendable] { get }
+public protocol VCLPlace {
+    var payload: [String: Any] { get }
     var code: String  { get }
     var name: String  { get }
 }

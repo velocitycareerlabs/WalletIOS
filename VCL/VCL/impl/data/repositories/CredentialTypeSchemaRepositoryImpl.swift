@@ -22,7 +22,7 @@ final class CredentialTypeSchemaRepositoryImpl: CredentialTypeSchemaRepository {
     func getCredentialTypeSchema(
         schemaName: String,
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypeSchema>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypeSchema>) -> Void
     ) {
         let endpoint = Urls.CredentialTypeSchemas + schemaName
         if(cacheService.isResetCacheCredentialTypeSchema(cacheSequence: cacheSequence)) {
@@ -43,7 +43,7 @@ final class CredentialTypeSchemaRepositoryImpl: CredentialTypeSchemaRepository {
     private func fetchCredentialTypeSchema(
         endpoint: String,
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypeSchema>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypeSchema>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: endpoint,

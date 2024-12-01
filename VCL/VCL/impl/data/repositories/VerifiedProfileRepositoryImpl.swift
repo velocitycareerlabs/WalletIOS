@@ -19,7 +19,7 @@ final class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
     
     func getVerifiedProfile(
         verifiedProfileDescriptor: VCLVerifiedProfileDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLVerifiedProfile>) -> Void
+        completionBlock: @escaping (VCLResult<VCLVerifiedProfile>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: Urls.VerifiedProfile.replacingOccurrences(of: Params.Did, with: verifiedProfileDescriptor.did),

@@ -27,7 +27,7 @@ final class SubmissionUseCaseImpl: SubmissionUseCase {
     
     func submit(
         submission: VCLSubmission,
-        completionBlock: @escaping @Sendable (VCLResult<VCLSubmissionResult>) -> Void
+        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         executor.runOnBackground  { [weak self] in
             self?.jwtServiceRepository.generateSignedJwt(

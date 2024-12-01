@@ -9,9 +9,9 @@
 
 import Foundation
 
-protocol OrganizationsRepository: Sendable {
+protocol OrganizationsRepository {
     func searchForOrganizations(
         organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLOrganizations>) -> Void
+        completionBlock: @escaping (VCLResult<VCLOrganizations>) -> Void
     )
 }

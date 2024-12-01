@@ -21,7 +21,7 @@ final class CredentialTypesUseCaseImpl: CredentialTypesUseCase {
 
     func getCredentialTypes(
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypes>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             guard let self = self else { return }

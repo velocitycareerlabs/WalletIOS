@@ -10,6 +10,6 @@
 import Foundation
 
 protocol DsptchQueue {
-    func async(flags: DispatchWorkItemFlags, _ block: @escaping @Sendable () -> Void)
-    func sync<T>(_ block: @escaping @Sendable () -> T) -> T
+    func async(flags: DispatchWorkItemFlags, _ block: @escaping () -> Void)
+    func sync<T>(_ block: @escaping () -> T) -> T
 }

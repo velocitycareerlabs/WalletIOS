@@ -9,11 +9,11 @@
 
 import Foundation
 
-protocol FinalizeOffersRepository: Sendable {
+protocol FinalizeOffersRepository {
     func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
         proof: VCLJwt?,
-        completionBlock: @escaping @Sendable (VCLResult<[VCLJwt]>) -> Void
+        completionBlock: @escaping (VCLResult<[VCLJwt]>) -> Void
     )
 }

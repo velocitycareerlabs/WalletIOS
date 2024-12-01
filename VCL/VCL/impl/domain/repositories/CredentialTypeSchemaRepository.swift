@@ -9,10 +9,10 @@
 
 import Foundation
 
-protocol CredentialTypeSchemaRepository: Sendable {
+protocol CredentialTypeSchemaRepository {
     func getCredentialTypeSchema(
         schemaName: String,
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypeSchema>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypeSchema>) -> Void
     )
 }

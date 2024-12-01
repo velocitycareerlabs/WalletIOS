@@ -12,11 +12,11 @@ import Foundation
 
 final class EmptyExecutor: Executor {
     
-    func runOnMain(_ block: @escaping @Sendable () -> Void) {
+    func runOnMain(_ block: @escaping () -> Void) {
         block()
     }
     
-    func runOnBackground(_ block: @escaping @Sendable () -> Void) {
+    func runOnBackground(_ block: @escaping () -> Void) {
         block()
     }
 }

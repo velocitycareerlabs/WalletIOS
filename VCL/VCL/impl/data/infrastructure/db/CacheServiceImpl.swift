@@ -9,7 +9,7 @@
 
 import Foundation
 
-final class CacheServiceImpl: @unchecked Sendable, CacheService {
+final class CacheServiceImpl: CacheService {
     
     private static let KEY_CACHE_SEQUENCE_COUNTRIES = "KEY_CACHE_SEQUENCE_COUNTRIES"
     private static let KEY_CACHE_SEQUENCE_CREDENTIAL_TYPES = "KEY_CACHE_SEQUENCE_CREDENTIAL_TYPES"

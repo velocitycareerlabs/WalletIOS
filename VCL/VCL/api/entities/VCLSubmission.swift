@@ -10,14 +10,14 @@
 import Foundation
 
 protocol PayloadGeneratable {
-    func generatePayload(iss: String?) -> [String: Sendable]
+    func generatePayload(iss: String?) -> [String: Any]
 }
 
 protocol RequestBodyGeneratable {
-    func generateRequestBody(jwt: VCLJwt) -> [String: Sendable]
+    func generateRequestBody(jwt: VCLJwt) -> [String: Any]
 }
 
-public protocol VCLSubmission: Sendable {
+public protocol VCLSubmission {
     var submitUri: String { get }
     var exchangeId: String { get }
     var presentationDefinitionId: String { get }
@@ -31,13 +31,13 @@ public protocol VCLSubmission: Sendable {
 }
 
 extension VCLSubmission {
-    func generatePayload(iss: String?) -> [String: Sendable] {
-        var retVal = [String: Sendable]()
+    func generatePayload(iss: String?) -> [String: Any] {
+        var retVal = [String: Any]()
         retVal[SubmissionCodingKeys.KeyJti] = self.jti
         retVal[SubmissionCodingKeys.KeyIss] = iss
-        var vp = [String: Sendable]()
+        var vp = [String: Any]()
         vp[SubmissionCodingKeys.KeyType] = SubmissionCodingKeys.ValueVerifiablePresentation
-        var presentationSubmissionDict = [String: Sendable]()
+        var presentationSubmissionDict = [String: Any]()
         presentationSubmissionDict[SubmissionCodingKeys.KeyId] = self.submissionId
         presentationSubmissionDict[SubmissionCodingKeys.KeyDefinitionId] = presentationDefinitionId
         var descriptorMap = [[String: String]]()
@@ -58,8 +58,8 @@ extension VCLSubmission {
         return retVal
     }
 
-    func generateRequestBody(jwt: VCLJwt) -> [String: Sendable] {
-        var retVal = [String: Sendable]()
+    func generateRequestBody(jwt: VCLJwt) -> [String: Any] {
+        var retVal = [String: Any]()
         retVal[SubmissionCodingKeys.KeyExchangeId] = exchangeId
         retVal[SubmissionCodingKeys.KeyJwtVp] = jwt.encodedJwt
         retVal[SubmissionCodingKeys.KeyPushDelegate] = pushDelegate?.toDictionary()

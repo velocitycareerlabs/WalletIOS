@@ -34,7 +34,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         verifiedProfile: VCLVerifiedProfile,
-        completionBlock: @escaping @Sendable (VCLResult<VCLPresentationRequest>) -> Void
+        completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             guard let self = self else { return }
@@ -62,7 +62,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
     private func onGetPresentationRequestSuccess(
         _ presentationRequest: VCLPresentationRequest,
-        _ completionBlock: @escaping @Sendable (VCLResult<VCLPresentationRequest>) -> Void
+        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         if let kid = presentationRequest.jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
             self.resolveKidRepository.getPublicKey(kid: kid) {
@@ -87,7 +87,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     private func onResolvePublicKeySuccess(
         _ publicJwk: VCLPublicJwk,
         _ presentationRequest: VCLPresentationRequest,
-        _ completionBlock: @escaping @Sendable (VCLResult<VCLPresentationRequest>) -> Void
+        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         self.jwtServiceRepository.verifyJwt(
             jwt: presentationRequest.jwt,
@@ -123,7 +123,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     private func onVerificationSuccess(
         _ isVerified: Bool,
         _ presentationRequest: VCLPresentationRequest,
-        _ completionBlock: @escaping @Sendable (VCLResult<VCLPresentationRequest>) -> Void
+        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         if isVerified == true {
             executor.runOnMain {
@@ -136,7 +136,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
     private func onError(
         _ error: Error,
-        _ completionBlock: @escaping @Sendable (VCLResult<VCLPresentationRequest>) -> Void
+        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         executor.runOnMain {
             completionBlock(.failure(VCLError(error: error)))

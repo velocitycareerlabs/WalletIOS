@@ -10,13 +10,13 @@
 import Foundation
 
 extension Data {
-    func toDictionary() -> [String: Sendable]? {
-        var retVal: [String: Sendable]? = nil
+    func toDictionary() -> [String: Any]? {
+        var retVal: [String: Any]? = nil
         do {
             retVal = try JSONSerialization.jsonObject(
                 with: self,
                 options: []
-            ) as? [String : Sendable]
+            ) as? [String : Any]
         }
         catch {
             // VCLLog.error(error)
@@ -24,18 +24,18 @@ extension Data {
         return retVal
     }
     
-    func toList() -> [Sendable]? {
+    func toList() -> [Any]? {
         do {
-            return try JSONSerialization.jsonObject(with: self, options: []) as? [Sendable]
+            return try JSONSerialization.jsonObject(with: self, options: []) as? [Any]
         } catch {
 //            VCLLog.e(error)
         }
         return nil
     }
     
-    func toListOfDictionaries() -> [[String: Sendable]]? {
+    func toListOfDictionaries() -> [[String: Any]]? {
         do {
-            return try JSONSerialization.jsonObject(with: self, options: []) as? [[String: Sendable]]
+            return try JSONSerialization.jsonObject(with: self, options: []) as? [[String: Any]]
         } catch {
             // VCLLog.e(error)
         }

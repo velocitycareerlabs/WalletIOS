@@ -9,9 +9,9 @@
 
 import Foundation
 
-protocol VerifiedProfileRepository: Sendable {
+protocol VerifiedProfileRepository {
     func getVerifiedProfile(
         verifiedProfileDescriptor: VCLVerifiedProfileDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLVerifiedProfile>) -> Void
+        completionBlock: @escaping (VCLResult<VCLVerifiedProfile>) -> Void
     )
 }

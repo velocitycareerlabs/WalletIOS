@@ -9,9 +9,9 @@
 
 import Foundation
 
-protocol CredentialTypesRepository: Sendable {
+protocol CredentialTypesRepository {
     func getCredentialTypes(
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypes>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
     )
 }

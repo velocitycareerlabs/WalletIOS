@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLOrganizations: Sendable {
+public struct VCLOrganizations {
     public let all: [VCLOrganization]
     
     public init(all: [VCLOrganization]) {

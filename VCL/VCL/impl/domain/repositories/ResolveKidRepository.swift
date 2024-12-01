@@ -9,9 +9,9 @@
 
 import Foundation
 
-protocol ResolveKidRepository: Sendable {
+protocol ResolveKidRepository {
     func getPublicKey(
         kid: String,
-        completionBlock: @escaping @Sendable (VCLResult<VCLPublicJwk>) -> Void
+        completionBlock: @escaping (VCLResult<VCLPublicJwk>) -> Void
     )
 }

@@ -7,7 +7,7 @@
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
-public final class VCLImpl: @unchecked Sendable, VCL {
+public final class VCLImpl: VCL {
     
     private static let ModelsToInitializeAmount = 3
     
@@ -35,8 +35,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     
     public func initialize(
         initializationDescriptor: VCLInitializationDescriptor,
-        successHandler: @escaping @Sendable () -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping () -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         
         self.initializationDescriptor = initializationDescriptor
@@ -86,8 +86,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     }
     
     private func completionHandler(
-        _ successHandler: @escaping @Sendable () -> Void,
-        _ errorHandler: @escaping @Sendable (VCLError) -> Void
+        _ successHandler: @escaping () -> Void,
+        _ errorHandler: @escaping (VCLError) -> Void
     ) {
         if let error = self.initializationWatcher.firstError() {
             errorHandler(error)
@@ -108,8 +108,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     
     private func cacheRemoteData(
         cacheSequence: Int,
-        successHandler: @escaping @Sendable () -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping () -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         credentialTypesModel = VclBlocksProvider.provideCredentialTypesModel()
         
@@ -176,8 +176,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     
     public func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
-        successHandler: @escaping @Sendable (VCLPresentationRequest) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLPresentationRequest) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         if let did = presentationRequestDescriptor.did {
             profileServiceTypeVerifier?.verifyServiceTypeOfVerifiedProfile(
@@ -211,8 +211,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     
     public func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
-        successHandler: @escaping @Sendable (VCLSubmissionResult) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLSubmissionResult) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         presentationSubmissionUseCase.submit(
             submission: presentationSubmission
@@ -229,8 +229,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     
     public func getExchangeProgress(
         exchangeDescriptor: VCLExchangeDescriptor,
-        successHandler: @escaping @Sendable (VCLExchange) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLExchange) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         exchangeProgressUseCase.getExchangeProgress(
             exchangeDescriptor: exchangeDescriptor
@@ -247,8 +247,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     
     public func searchForOrganizations(
         organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
-        successHandler: @escaping @Sendable (VCLOrganizations) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLOrganizations) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         organizationsUseCase.searchForOrganizations(organizationsSearchDescriptor: organizationsSearchDescriptor) {
             [weak self] organizationsResult in
@@ -263,8 +263,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     
     public func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
-        successHandler: @escaping @Sendable (VCLCredentialManifest) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLCredentialManifest) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         VCLLog.d("credentialManifestDescriptor: \(credentialManifestDescriptor.toPropsString())")
         if let did = credentialManifestDescriptor.did {
@@ -299,8 +299,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     
     public func generateOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
-        successHandler: @escaping @Sendable (VCLOffers) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLOffers) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         let identificationSubmission = VCLIdentificationSubmission(
             credentialManifest: generateOffersDescriptor.credentialManifest,
@@ -336,8 +336,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     public func checkForOffers(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
         sessionToken: VCLToken,
-        successHandler: @escaping @Sendable (VCLOffers) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLOffers) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         invokeGenerateOffersUseCase(
             generateOffersDescriptor: generateOffersDescriptor,
@@ -350,8 +350,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     private func invokeGenerateOffersUseCase(
         generateOffersDescriptor: VCLGenerateOffersDescriptor,
         sessionToken: VCLToken,
-        successHandler: @escaping @Sendable (VCLOffers) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLOffers) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         generateOffersUseCase.generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
@@ -370,8 +370,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     public func finalizeOffers(
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
-        successHandler: @escaping @Sendable (VCLJwtVerifiableCredentials) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         finalizeOffersUseCase.finalizeOffers(
             finalizeOffersDescriptor: finalizeOffersDescriptor,
@@ -389,8 +389,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     
     public func getCredentialTypesUIFormSchema(
         credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor,
-        successHandler: @escaping @Sendable (VCLCredentialTypesUIFormSchema) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLCredentialTypesUIFormSchema) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         if let countries = countriesModel.data {
             credentialTypesUIFormSchemaUseCase.getCredentialTypesUIFormSchema(
@@ -413,8 +413,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     
     public func getVerifiedProfile(
         verifiedProfileDescriptor: VCLVerifiedProfileDescriptor,
-        successHandler: @escaping @Sendable (VCLVerifiedProfile) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLVerifiedProfile) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         verifiedProfileUseCase.getVerifiedProfile(verifiedProfileDescriptor: verifiedProfileDescriptor) {
             [weak self] verifiedProfileResult in
@@ -431,8 +431,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        successHandler: @escaping @Sendable (Bool) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (Bool) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         jwtServiceUseCase.verifyJwt(
             jwt: jwt,
@@ -453,8 +453,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
         jwtDescriptor: VCLJwtDescriptor,
         didJwk: VCLDidJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        successHandler: @escaping @Sendable (VCLJwt) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLJwt) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         jwtServiceUseCase.generateSignedJwt(
             jwtDescriptor: jwtDescriptor, 
@@ -473,8 +473,8 @@ public final class VCLImpl: @unchecked Sendable, VCL {
     
     public func generateDidJwk(
         didJwkDescriptor: VCLDidJwkDescriptor = VCLDidJwkDescriptor(),
-        successHandler: @escaping @Sendable (VCLDidJwk) -> Void,
-        errorHandler: @escaping @Sendable (VCLError) -> Void
+        successHandler: @escaping (VCLDidJwk) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
     ) {
         keyServiceUseCase.generateDidJwk(
             didJwkDescriptor: didJwkDescriptor

@@ -15,7 +15,7 @@ final class VCLJwtVerifyServiceLocalImpl: VCLJwtVerifyService {
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken? = nil,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         do {
             let pubKey = ECPublicJwk(

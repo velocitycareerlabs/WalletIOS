@@ -9,7 +9,7 @@
 
 import Foundation
 
-public enum VCLCryptoServiceType: String, Sendable {
+public enum VCLCryptoServiceType: String {
     case Local = "local"
     case Remote = "remote"
     case Injected = "injected"

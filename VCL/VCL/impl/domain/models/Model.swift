@@ -9,11 +9,11 @@
 
 import Foundation
 
-protocol Model: Sendable {
+protocol Model {
     var data: T? { get }
 }
 
 extension Model {
-    typealias T = Sendable
-    var data: Sendable? { nil }
+    typealias T = Any
+    var data: Any? { nil }
 }

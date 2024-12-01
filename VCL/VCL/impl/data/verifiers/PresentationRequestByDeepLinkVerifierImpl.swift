@@ -13,7 +13,7 @@ final class PresentationRequestByDeepLinkVerifierImpl: PresentationRequestByDeep
     func verifyPresentationRequest(
         presentationRequest: VCLPresentationRequest,
         deepLink: VCLDeepLink,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if presentationRequest.iss == deepLink.did {
             completionBlock(.success(true))

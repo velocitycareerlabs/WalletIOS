@@ -63,7 +63,7 @@ class CredentialTypeSchemaMocks {
                 "  ]}\n"
 
         static let CredentialType = VCLCredentialType(
-            payload: [String: Sendable](),
+            payload: [String: Any](),
             id: "60759e68c4a22d1aea4820a5",
             schema: "???",
             createdAt: "2021-04-13T13:36:40.832Z",

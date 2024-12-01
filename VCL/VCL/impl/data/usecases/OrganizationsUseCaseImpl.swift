@@ -24,7 +24,7 @@ final class OrganizationsUseCaseImpl: OrganizationsUseCase {
     
     func searchForOrganizations(
         organizationsSearchDescriptor: VCLOrganizationsSearchDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLOrganizations>) -> Void
+        completionBlock: @escaping (VCLResult<VCLOrganizations>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             guard let self = self else { return }

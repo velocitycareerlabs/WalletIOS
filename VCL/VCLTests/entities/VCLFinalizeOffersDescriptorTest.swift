@@ -18,7 +18,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
     private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
     
     private let offers = VCLOffers(
-        payload: [String: Sendable](),
+        payload: [String: Any](),
         all: [VCLOffer(payload: [:])],
         responseCode: 200,
         sessionToken: VCLToken(value: ""),
@@ -77,7 +77,7 @@ class VCLFinalizeOffersDescriptorTest: XCTestCase {
                     assert(requestBody["approvedOfferIds"] as? [String] == self!.approvedOfferIds)
                     assert(requestBody["rejectedOfferIds"] as? [String] == self!.rejectedOfferIds)
                     
-                    let proof = requestBody["proof"] as? [String: Sendable]
+                    let proof = requestBody["proof"] as? [String: Any]
                     assert((proof?["proof_type"] as? String) == "jwt")
                     assert((proof?["jwt"] as? String) == jwt.encodedJwt)
                     //        equivalent to checking nonce in proof jwt

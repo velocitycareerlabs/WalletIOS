@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLPresentationRequest: Sendable {
+public struct VCLPresentationRequest {
     public let jwt: VCLJwt
     public let verifiedProfile: VCLVerifiedProfile
     public let deepLink: VCLDeepLink
@@ -36,15 +36,15 @@ public struct VCLPresentationRequest: Sendable {
     public var iss: String { get { jwt.payload?[CodingKeys.KeyIss] as? String ?? "" } }
     public var exchangeId: String { get { jwt.payload?[CodingKeys.KeyExchangeId] as? String ?? "" } }
     public var presentationDefinitionId: String { get {
-        (jwt.payload?[CodingKeys.KeyPresentationDefinition] as? [String: Sendable])? [CodingKeys.KeyId] as? String ?? "" }
+        (jwt.payload?[CodingKeys.KeyPresentationDefinition] as? [String: Any])? [CodingKeys.KeyId] as? String ?? "" }
     }
     var keyID: String { get { return jwt.header?["kid"] as? String ?? "" } }
     var vendorOriginContext: String? { get { deepLink.vendorOriginContext } }
     
     var progressUri: String { get {
-        (jwt.payload?[CodingKeys.KeyMetadata] as? [String: Sendable])?[CodingKeys.KeyProgressUri] as? String ?? "" } }
+        (jwt.payload?[CodingKeys.KeyMetadata] as? [String: Any])?[CodingKeys.KeyProgressUri] as? String ?? "" } }
     var submitPresentationUri: String { get {
-        (jwt.payload?[CodingKeys.KeyMetadata] as? [String: Sendable])?[CodingKeys.KeySubmitPresentationUri] as? String ?? "" } }
+        (jwt.payload?[CodingKeys.KeyMetadata] as? [String: Any])?[CodingKeys.KeySubmitPresentationUri] as? String ?? "" } }
     
     public struct CodingKeys {
         public static let KeyId = "id"

@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLSubmissionResult: Sendable {
+public struct VCLSubmissionResult {
     
     public let sessionToken: VCLToken
     public let exchange: VCLExchange

@@ -7,7 +7,7 @@
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
-class CredentialTypesModelImpl: @unchecked Sendable, CredentialTypesModel {
+class CredentialTypesModelImpl: CredentialTypesModel {
     
     private(set) var data: VCLCredentialTypes? = nil
     let credentialTypesUseCase: CredentialTypesUseCase
@@ -18,7 +18,7 @@ class CredentialTypesModelImpl: @unchecked Sendable, CredentialTypesModel {
     
     func initialize(
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypes>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypes>) -> Void
     ) {
         credentialTypesUseCase.getCredentialTypes(cacheSequence: cacheSequence) { [weak self] response in
             do {

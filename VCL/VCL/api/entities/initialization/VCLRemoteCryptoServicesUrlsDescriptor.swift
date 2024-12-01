@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLRemoteCryptoServicesUrlsDescriptor: Sendable {
+public struct VCLRemoteCryptoServicesUrlsDescriptor {
     public let keyServiceUrls: VCLKeyServiceUrls
     public let jwtServiceUrls: VCLJwtServiceUrls
     

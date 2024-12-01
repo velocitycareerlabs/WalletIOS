@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLToken: Sendable {
+public struct VCLToken {
     /// token value represented as jwt string
     public let value: String
     /// token value represented as VCLJwt object

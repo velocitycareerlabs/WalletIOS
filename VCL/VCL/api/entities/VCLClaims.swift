@@ -10,12 +10,12 @@
 import Foundation
 import VCToken
 
-public struct VCLClaims: Sendable, Claims, Decodable, Encodable {
+public struct VCLClaims: Claims, Decodable, Encodable {
     
-    public let all: [String: Sendable]
+    public let all: [String: Any]
     
     public init(from decoder: Decoder) throws {
-        self.all = [String : Sendable]()
+        self.all = [String : Any]()
 //        VCLLog.d("Dummy implementation")
     }
     
@@ -23,7 +23,7 @@ public struct VCLClaims: Sendable, Claims, Decodable, Encodable {
 //        VCLLog.d("Empty implementation")
     }
     
-    public init(all: [String : Sendable]) {
+    public init(all: [String : Any]) {
         self.all = all
     }
     

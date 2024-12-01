@@ -54,7 +54,7 @@ final class VCLSubmissionTest: XCTestCase {
         assert(requestBodyJsonObj[SubmissionCodingKeys.KeyExchangeId] as? String == subjectPresentationSubmission.exchangeId)
         assert(requestBodyJsonObj[SubmissionCodingKeys.KeyContext] as? [String] == SubmissionCodingKeys.ValueContextList)
 
-        let pushDelegateBodyJsonObj = requestBodyJsonObj[SubmissionCodingKeys.KeyPushDelegate] as! [String: Sendable]
+        let pushDelegateBodyJsonObj = requestBodyJsonObj[SubmissionCodingKeys.KeyPushDelegate] as! [String: Any]
 
         assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushUrl] as? String == PresentationSubmissionMocks.PushDelegate.pushUrl)
         assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushToken] as? String == PresentationSubmissionMocks.PushDelegate.pushToken)

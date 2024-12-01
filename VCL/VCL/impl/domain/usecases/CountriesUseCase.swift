@@ -9,9 +9,9 @@
 
 import Foundation
 
-protocol CountriesUseCase: Sendable {
+protocol CountriesUseCase {
     func getCountries(
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCountries>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
     )
 }

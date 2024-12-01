@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLFinalizeOffersDescriptor: Sendable {
+public struct VCLFinalizeOffersDescriptor {
     public let credentialManifest: VCLCredentialManifest
     public let challenge: String?
     public let approvedOfferIds: [String]
@@ -27,7 +27,7 @@ public struct VCLFinalizeOffersDescriptor: Sendable {
         self.rejectedOfferIds = rejectedOfferIds
     }
     
-    public var payload: [String: Sendable?] { get {
+    public var payload: [String: Any?] { get {
         [
             CodingKeys.KeyExchangeId: exchangeId,
             CodingKeys.KeyApprovedOfferIds: approvedOfferIds,
@@ -42,7 +42,7 @@ public struct VCLFinalizeOffersDescriptor: Sendable {
     public var didJwk: VCLDidJwk { get { credentialManifest.didJwk } }
     public var remoteCryptoServicesToken: VCLToken? { get { credentialManifest.remoteCryptoServicesToken } }
     
-    func generateRequestBody(proof: VCLJwt?) -> [String: Sendable?] {
+    func generateRequestBody(proof: VCLJwt?) -> [String: Any?] {
         var retVal = self.payload
         if let proof = proof {
             retVal[CodingKeys.KeyProof] = [

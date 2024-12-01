@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLJwtVerifiableCredentials: Sendable {
+public struct VCLJwtVerifiableCredentials {
     public let passedCredentials: [VCLJwt]
     public let failedCredentials: [VCLJwt]
     

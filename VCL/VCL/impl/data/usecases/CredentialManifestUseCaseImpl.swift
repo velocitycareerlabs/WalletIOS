@@ -34,7 +34,7 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     func getCredentialManifest(
         credentialManifestDescriptor: VCLCredentialManifestDescriptor,
         verifiedProfile: VCLVerifiedProfile,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             self?.credentialManifestRepository.getCredentialManifest(
@@ -63,7 +63,7 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onGetCredentialManifestSuccess(
         _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
+        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if let deepLink = credentialManifest.deepLink {
             credentialManifestByDeepLinkVerifier.verifyCredentialManifest(
@@ -92,7 +92,7 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onCredentialManifestDidVerificationSuccess(
         _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
+        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if let kid = credentialManifest.jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
             self.resolveKidRepository.getPublicKey(kid: kid) {
@@ -118,7 +118,7 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     private func onResolvePublicKeySuccess(
         _ publicJwk: VCLPublicJwk,
         _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
+        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         self.jwtServiceRepository.verifyJwt(
             jwt: credentialManifest.jwt,
@@ -142,7 +142,7 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     private func onVerificationSuccess(
         _ isVerified: Bool,
         _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
+        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if (isVerified) {
             executor.runOnMain {
@@ -158,7 +158,7 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private func onError(
         _ error: Error,
-        _ completionBlock: @escaping @Sendable (VCLResult<VCLCredentialManifest>) -> Void
+        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         executor.runOnMain {
             completionBlock(.failure(VCLError(error: error)))

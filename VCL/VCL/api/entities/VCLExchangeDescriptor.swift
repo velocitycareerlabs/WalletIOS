@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLExchangeDescriptor: Sendable {
+public struct VCLExchangeDescriptor {
     public let presentationSubmission: VCLPresentationSubmission
     public let submissionResult: VCLSubmissionResult
     

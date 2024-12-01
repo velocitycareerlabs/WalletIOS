@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLServiceTypes: Sendable {
+public struct VCLServiceTypes {
 
     public let all: [VCLServiceType]
     

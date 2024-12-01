@@ -9,9 +9,9 @@
 
 import Foundation
 
-protocol ExchangeProgressRepository: Sendable {
+protocol ExchangeProgressRepository {
     func getExchangeProgress(
         exchangeDescriptor: VCLExchangeDescriptor,
-        completionBlock: @escaping @Sendable (VCLResult<VCLExchange>) -> Void
+        completionBlock: @escaping (VCLResult<VCLExchange>) -> Void
     )
 }

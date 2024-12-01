@@ -13,7 +13,7 @@ import XCTest
 
 class UtilsTest: XCTestCase {
     func testGetIdentifier() {
-        let jsonObject: [String: Sendable] = [
+        let jsonObject: [String: AnyHashable] = [
             "a": "ValueA",
             "b": ["identifier": "ValueB"],
             "c": ["id1": "ValueC"],
@@ -22,49 +22,49 @@ class UtilsTest: XCTestCase {
         ]
 
         let primaryOrgProp = "id"
-        let result = Utils.getIdentifier(primaryOrgProp, jsonObject)
+        let result = VerificationUtils.getIdentifier(primaryOrgProp, jsonObject)
 
 //        assert("ValueC" == result) // what about this case?
         assert("ValueD" == result)
     }
 
     func testGetIdentifierNoMatch() {
-        let jsonObject: [String: Sendable] = [
+        let jsonObject: [String: AnyHashable] = [
             "a": "ValueA",
             "b": ["identifier": "ValueB"],
             "c": ["x": "ValueX"]
         ]
 
         let primaryOrgProp = "id"
-        let result = Utils.getIdentifier(primaryOrgProp, jsonObject)
+        let result = VerificationUtils.getIdentifier(primaryOrgProp, jsonObject)
 
         assert(result == nil)
     }
 
     func testGetPrimaryIdentifier() {
         let value = "ValueX"
-        let result = Utils.getPrimaryIdentifier(value)
+        let result = VerificationUtils.getPrimaryIdentifier(value)
 
         assert("ValueX" == result)
     }
 
     func testGetPrimaryIdentifierMapWithId() {
-        let value: [String: Sendable] = ["id": "ValueY"]
-        let result = Utils.getPrimaryIdentifier(value)
+        let value = ["id": "ValueY"]
+        let result = VerificationUtils.getPrimaryIdentifier(value)
 
         assert("ValueY" == result)
     }
 
     func testGetPrimaryIdentifierMapWithIdentifier() {
-        let value: [String: Sendable] = ["identifier": "ValueZ"]
-        let result = Utils.getPrimaryIdentifier(value)
+        let value = ["identifier": "ValueZ"]
+        let result = VerificationUtils.getPrimaryIdentifier(value)
 
         assert("ValueZ" == result)
     }
 
     func testGetPrimaryIdentifierNull() {
-        let value: [String: Sendable]? = nil
-        let result = Utils.getPrimaryIdentifier(value)
+        let value: [String: AnyHashable]? = nil
+        let result = VerificationUtils.getPrimaryIdentifier(value)
 
         assert(result == nil)
     }

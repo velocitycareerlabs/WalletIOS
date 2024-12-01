@@ -9,7 +9,7 @@
 
 import Foundation
 
-public enum VCLXVnfProtocolVersion: String, Sendable {
+public enum VCLXVnfProtocolVersion: String {
     case XVnfProtocolVersion1 = "1.0"
     case XVnfProtocolVersion2 = "2.0"
     

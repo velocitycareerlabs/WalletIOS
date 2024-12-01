@@ -19,7 +19,7 @@ final class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSche
     func getCredentialTypesUIFormSchema(
         credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor,
         countries: VCLCountries,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypesUIFormSchema>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypesUIFormSchema>) -> Void
     ) {
         networkService.sendRequest(
             endpoint: Urls.CredentialTypesFormSchema.replacingOccurrences(of: Params.CredentialType, with: credentialTypesUIFormSchemaDescriptor.credentialType),
@@ -54,11 +54,11 @@ final class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSche
         _ credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor,
         _ countries: VCLCountries,
         _ regions: VCLRegions?,
-        _ formSchemaDict: [String: Sendable]
-    ) -> [String: Sendable] {
+        _ formSchemaDict: [String: Any]
+    ) -> [String: Any] {
         var formSchemaDictCP = formSchemaDict
         for (key, value) in formSchemaDictCP {
-            if let valueDict = value as? [String: Sendable] {
+            if let valueDict = value as? [String: Any] {
                 if key == VCLCredentialTypesUIFormSchema.CodingKeys.KeyAddressCountry {
                     if let allCountries = countries.all {
                         formSchemaDictCP = updateAddressEnums(
@@ -93,9 +93,9 @@ final class CredentialTypesUIFormSchemaRepositoryImpl: CredentialTypesUIFormSche
     private func updateAddressEnums(
         _ places: [VCLPlace],
         _ key: String,
-        _ valueDict: [String: Sendable],
-        _ formSchemaDict: [String: Sendable]
-    ) -> [String: Sendable] {
+        _ valueDict: [String: Any],
+        _ formSchemaDict: [String: Any]
+    ) -> [String: Any] {
         var formSchemaDictCP = formSchemaDict
         var valueDictCP = valueDict
         let valueDictHasKeyUiEnum = valueDictCP[VCLCredentialTypesUIFormSchema.CodingKeys.KeyUiEnum] != nil

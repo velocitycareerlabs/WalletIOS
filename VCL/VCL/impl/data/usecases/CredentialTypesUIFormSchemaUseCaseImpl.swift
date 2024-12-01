@@ -26,7 +26,7 @@ final class CredentialTypesUIFormSchemaUseCaseImpl: CredentialTypesUIFormSchemaU
     func getCredentialTypesUIFormSchema(
         credentialTypesUIFormSchemaDescriptor: VCLCredentialTypesUIFormSchemaDescriptor,
         countries: VCLCountries,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypesUIFormSchema>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypesUIFormSchema>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
             self?.credentialTypesUIFormSchemaRepository.getCredentialTypesUIFormSchema(

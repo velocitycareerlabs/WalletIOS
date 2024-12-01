@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct VCLError: Sendable, Error {
+public struct VCLError: Error {
     public let payload: String?
     public let error: String?
     public let errorCode: String
@@ -68,7 +68,7 @@ public struct VCLError: Sendable, Error {
         }
     }
 
-    public func toDictionary() -> [String: Sendable?] {
+    public func toDictionary() -> [String: Any?] {
         return [
             CodingKeys.KeyPayload: payload,
             CodingKeys.KeyError: error,

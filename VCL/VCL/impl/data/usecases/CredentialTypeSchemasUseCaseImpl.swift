@@ -25,7 +25,7 @@ actor CredentialTypeSchemasMapStorage {
     }
 }
 
-final class CredentialTypeSchemasUseCaseImpl: Sendable, CredentialTypeSchemasUseCase {
+final class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
     
     private let credentialTypeSchemasRepository: CredentialTypeSchemaRepository
     private let credentialTypes: VCLCredentialTypes
@@ -49,7 +49,7 @@ final class CredentialTypeSchemasUseCaseImpl: Sendable, CredentialTypeSchemasUse
     
     func getCredentialTypeSchemas(
         cacheSequence: Int,
-        completionBlock: @escaping @Sendable (VCLResult<VCLCredentialTypeSchemas>) -> Void
+        completionBlock: @escaping (VCLResult<VCLCredentialTypeSchemas>) -> Void
     ) {
         let schemaNamesArr = self.credentialTypes.all?.compactMap { $0.schemaName } ?? []
                 

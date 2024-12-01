@@ -15,7 +15,7 @@ class VCLJwtVerifyServiceMock: VCLJwtVerifyService {
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
         remoteCryptoServicesToken: VCLToken?,
-        completionBlock: @escaping @Sendable (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         completionBlock(.success(true))
     }
