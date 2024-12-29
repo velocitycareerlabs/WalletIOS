@@ -12,10 +12,10 @@ import Foundation
 struct VCLLog {
     
     enum LogLevel: String {
-            case error = "⛔️"
-            case warning = "⚠️"
-            case debug = "💬"
-        }
+        case error = "⛔️"
+        case warning = "⚠️"
+        case debug = "💬"
+    }
     static func d(_ infoData: Data?, level: LogLevel = .debug, file: String = #file, function: String = #function, line: Int = #line) {
         if GlobalConfig.IsLoggerOn {
             let info = String(data: infoData ?? Data(bytes: [] as [UInt8], count: 0), encoding: .utf8) ?? ""
@@ -27,22 +27,20 @@ struct VCLLog {
             print("\(level.rawValue), \((file as NSString).lastPathComponent), \(line), \(function), \(GlobalConfig.LogTagPrefix + info)")
         }
     }
-
+    
     static func w(_ warning: String, level: LogLevel = .warning, file: String = #file, function: String = #function, line: Int = #line) {
         if GlobalConfig.IsLoggerOn {
             print("\(level.rawValue), \((file as NSString).lastPathComponent), \(line), \(function), \(GlobalConfig.LogTagPrefix + warning)")
         }
     }
-
+    
     static func e(_ error: Error, level: LogLevel = .error, file: String = #file, function: String = #function, line: Int = #line) {
-        if GlobalConfig.IsLoggerOn {
-            VCLLog.e("\(error)", level: level, file: file, function: function, line: line)
-        }
+        // always log errors
+        VCLLog.e("\(error)", level: level, file: file, function: function, line: line)
     }
     
     static func e(_ error: String, level: LogLevel = .error, file: String = #file, function: String = #function, line: Int = #line) {
-        if GlobalConfig.IsLoggerOn {
-            print("\(level.rawValue), \((file as NSString).lastPathComponent), \(line), \(function), \(GlobalConfig.LogTagPrefix + error)")
-        }
+        // always log errors
+        print("\(level.rawValue), \((file as NSString).lastPathComponent), \(line), \(function), \(GlobalConfig.LogTagPrefix + error)")
     }
 }
