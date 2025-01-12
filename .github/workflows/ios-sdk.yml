@@ -22,8 +22,7 @@ jobs:
   tests-ios-sdk:
     runs-on: macos-15
     env:
-      #Xcode config
-      XC_VERSION: "16.0"
+      XC_VERSION: "16.2"
     steps:
       # Git clone repository
       - name: Git clone repository
@@ -52,10 +51,9 @@ jobs:
     needs:
       - tests-ios-sdk
       - set-environment
-    runs-on: macos-14
+    runs-on: macos-15
     env:
-      #Xcode config
-      XC_VERSION: "16.0"
+      XC_VERSION: "16.2"
       #Certs
       ENCRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz.gpg"
       DECRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz"
@@ -107,9 +105,9 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
       # Get Version
       - name: Get Version
-        run: echo "FRAMEWORK_VERSION=$(cat VCL.xcodeproj/project.pbxproj | grep PRODUCT_BUNDLE_IDENTIFIER -B 1 | grep MARKETING_VERSION | cut -d'=' -f2 | uniq | sed -e 's/^[ \t]*//;s/;//')${{ env.RELEASE_TAG }}" >> $GITHUB_ENV      
+        run: echo "FRAMEWORK_VERSION=$(cat VCL.xcodeproj/project.pbxproj | grep PRODUCT_BUNDLE_IDENTIFIER -B 1 | grep MARKETING_VERSION | cut -d'=' -f2 | uniq | sed -e 's/^[ \t]*//;s/;//')${{ env.RELEASE_TAG }}" >> $GITHUB_ENV
         working-directory: VCL
-        env: 
+        env:
           # RELEASE_TAG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
           RELEASE_TAG: ${{ '' }}
       # Clone Additional repos
@@ -136,5 +134,5 @@ jobs:
            echo ${{ env.PAT_TOKEN }} | gh auth login --with-token
            gh release create ${{ env.FRAMEWORK_VERSION }} --title "VCL-${{ env.FRAMEWORK_VERSION }}" ${{ env.RELEASE_ARG }}
         working-directory: VCL-Swift
-        env: 
+        env:
           RELEASE_ARG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}', '--prerelease' ) || format('{0}', '--latest') }}
