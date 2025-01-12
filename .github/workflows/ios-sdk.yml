@@ -20,7 +20,7 @@ env:
 
 jobs:
   tests-ios-sdk:
-    runs-on: macos-14
+    runs-on: macos-15
     env:
       #Xcode config
       XC_VERSION: "16.0"
