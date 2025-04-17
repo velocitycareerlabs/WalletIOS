@@ -25,6 +25,8 @@ public final class VCLImpl: VCL {
     private var identificationSubmissionUseCase: IdentificationSubmissionUseCase!
     private var generateOffersUseCase: GenerateOffersUseCase!
     private var finalizeOffersUseCase: FinalizeOffersUseCase!
+    private var authTokenUseCase: AuthTokenUseCase!
+    
     private var credentialTypesUIFormSchemaUseCase: CredentialTypesUIFormSchemaUseCase!
     private var verifiedProfileUseCase: VerifiedProfileUseCase!
     private var jwtServiceUseCase: JwtServiceUseCase!
@@ -55,6 +57,7 @@ public final class VCLImpl: VCL {
     }
     
     private func initializeUseCases() throws {
+        authTokenUseCase = VclBlocksProvider.provideAuthTokenUseCase()
         presentationRequestUseCase =
         try VclBlocksProvider.providePresentationRequestUseCase(
             initializationDescriptor.cryptoServicesDescriptor
@@ -211,11 +214,13 @@ public final class VCLImpl: VCL {
     
     public func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
+        authToken: VCLAuthToken?,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         presentationSubmissionUseCase.submit(
-            submission: presentationSubmission
+            submission: presentationSubmission,
+            authToken: authToken
         ) {
             [weak self] presentationSubmissionResult in
             do {
@@ -382,6 +387,24 @@ public final class VCLImpl: VCL {
                 successHandler(try jwtVerifiableCredentials.get())
             } catch {
                 self?.logError(message: "finalizeOffers", error: error)
+                errorHandler(error as? VCLError ?? VCLError(error: error))
+            }
+        }
+    }
+    
+    public func getAuthToken(
+        authTokenDescriptor: VCLAuthTokenDescriptor,
+        successHandler: @escaping (VCLAuthToken) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        authTokenUseCase.getAuthToken(
+            authTokenDescriptor: authTokenDescriptor
+        ) {
+            [weak self] authToken in
+            do {
+                successHandler(try authToken.get())
+            } catch {
+                self?.logError(message: "getAuthToken", error: error)
                 errorHandler(error as? VCLError ?? VCLError(error: error))
             }
         }

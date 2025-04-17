@@ -4,8 +4,8 @@
 //
 //  Created by Michael Avoyan on 19/04/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
 
@@ -22,6 +22,7 @@ final class SubmissionRepositoryImpl: SubmissionRepository {
     func submit(
         submission: VCLSubmission,
         jwt: VCLJwt,
+        authToken: VCLAuthToken?,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         self.networkService.sendRequest(
@@ -29,7 +30,7 @@ final class SubmissionRepositoryImpl: SubmissionRepository {
             body: submission.generateRequestBody(jwt: jwt).toJsonString(),
             contentType: Request.ContentType.ApplicationJson,
             method: .POST,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)],
+            headers: generateHeader(authToken: authToken),
             completionBlock: { [weak self] result in
                 if let self = self {
                     do {
@@ -45,6 +46,17 @@ final class SubmissionRepositoryImpl: SubmissionRepository {
                     completionBlock(.failure(VCLError(message: "self is nil")))
                 }
             })
+    }
+    
+    private func generateHeader(authToken: VCLAuthToken?) -> [(String, String)] {
+        if let token = authToken {
+            return [
+                (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion),
+                (HeaderKeys.Authorization, "\(HeaderValues.PrefixBearer) \(token.accessToken.value)")
+            ]
+        } else {
+            return [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
+        }
     }
     
     private func parse(_ jsonDict: [String: Any]?, _ jti: String, _ submissionId: String) -> VCLSubmissionResult {

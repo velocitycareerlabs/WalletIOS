@@ -27,9 +27,8 @@ final class CountriesUseCaseImpl: CountriesUseCase  {
         completionBlock: @escaping (VCLResult<VCLCountries>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            guard let self = self else { return }
-            self.countriesRepository.getCountries(cacheSequence: cacheSequence) { result in
-                self.executor.runOnMain {
+            self?.countriesRepository.getCountries(cacheSequence: cacheSequence) { result in
+                self?.executor.runOnMain {
                     completionBlock(result)
                 }
             }

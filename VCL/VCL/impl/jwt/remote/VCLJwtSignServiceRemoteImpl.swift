@@ -33,7 +33,7 @@ final class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
             method: .POST,
             headers: [
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion),
-                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(remoteCryptoServicesToken?.value ?? "")")
+                (HeaderKeys.Authorization, "\(HeaderValues.PrefixBearer) \(remoteCryptoServicesToken?.value ?? "")")
             ]
         ) { [weak self] signedJwtResult in
             do {

@@ -31,7 +31,7 @@ final class FinalizeOffersRepositoryImpl: FinalizeOffersRepository {
             contentType: .ApplicationJson,
             method: .POST,
             headers:[
-                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(sessionToken.value)"),
+                (HeaderKeys.Authorization, "\(HeaderValues.PrefixBearer) \(sessionToken.value)"),
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)
             ]
         ) { result in

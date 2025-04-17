@@ -32,7 +32,7 @@ final class VCLJwtVerifyServiceRemoteImpl: VCLJwtVerifyService {
             method: .POST,
             headers: [
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion),
-                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(remoteCryptoServicesToken?.value ?? "")")
+                (HeaderKeys.Authorization, "\(HeaderValues.PrefixBearer) \(remoteCryptoServicesToken?.value ?? "")")
             ]
         ) { verifiedJwtResult in
             do {
