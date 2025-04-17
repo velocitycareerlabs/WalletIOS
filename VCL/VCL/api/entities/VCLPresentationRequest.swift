@@ -16,6 +16,8 @@ public struct VCLPresentationRequest {
     public let pushDelegate: VCLPushDelegate?
     public let didJwk: VCLDidJwk
     public let remoteCryptoServicesToken: VCLToken?
+    public let feed: Bool
+    public let vendorOriginContext: String?
     
     public init(
         jwt: VCLJwt,
@@ -31,6 +33,8 @@ public struct VCLPresentationRequest {
         self.pushDelegate = pushDelegate
         self.didJwk = didJwk
         self.remoteCryptoServicesToken = remoteCryptoServicesToken
+        self.vendorOriginContext = deepLink.vendorOriginContext
+        self.feed = (jwt.payload?[CodingKeys.KeyMetadata] as? [String: Any])?[CodingKeys.KeyFeed] as? Bool ?? false
     }
     
     public var iss: String { get { jwt.payload?[CodingKeys.KeyIss] as? String ?? "" } }
@@ -39,13 +43,16 @@ public struct VCLPresentationRequest {
         (jwt.payload?[CodingKeys.KeyPresentationDefinition] as? [String: Any])? [CodingKeys.KeyId] as? String ?? "" }
     }
     var keyID: String { get { return jwt.header?["kid"] as? String ?? "" } }
-    var vendorOriginContext: String? { get { deepLink.vendorOriginContext } }
     
     var progressUri: String { get {
         (jwt.payload?[CodingKeys.KeyMetadata] as? [String: Any])?[CodingKeys.KeyProgressUri] as? String ?? "" } }
     var submitPresentationUri: String { get {
         (jwt.payload?[CodingKeys.KeyMetadata] as? [String: Any])?[CodingKeys.KeySubmitPresentationUri] as? String ?? "" } }
     
+    var authTokenUri: String {
+        (jwt.payload?[CodingKeys.KeyMetadata] as? [String: Any])?[CodingKeys.KeyAuthTokenUri] as? String ?? ""
+    }
+
     public struct CodingKeys {
         public static let KeyId = "id"
         public static let KeyIss = "iss"
@@ -56,5 +63,7 @@ public struct VCLPresentationRequest {
         public static let KeyMetadata = "metadata"
         public static let KeyProgressUri = "progress_uri"
         public static let KeySubmitPresentationUri = "submit_presentation_uri"
+        public static let KeyFeed = "feed"
+        public static let KeyAuthTokenUri = "auth_token_uri"
     }
 }

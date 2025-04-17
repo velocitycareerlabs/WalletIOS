@@ -27,6 +27,7 @@ public protocol VCL {
     
     func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
+        authToken: VCLAuthToken?,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
@@ -66,6 +67,12 @@ public protocol VCL {
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         sessionToken: VCLToken,
         successHandler: @escaping (VCLJwtVerifiableCredentials) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    )
+    
+    func getAuthToken(
+        authTokenDescriptor: VCLAuthTokenDescriptor,
+        successHandler: @escaping (VCLAuthToken) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     )
     
@@ -119,11 +126,13 @@ extension VCL {
     
     public func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
+        authToken: VCLAuthToken? = nil,
         successHandler: @escaping (VCLSubmissionResult) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
         submitPresentation(
             presentationSubmission: presentationSubmission,
+            authToken: authToken,
             successHandler: successHandler,
             errorHandler: errorHandler
         )

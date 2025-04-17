@@ -12,6 +12,16 @@ import Foundation
 protocol SubmissionUseCase {
     func submit(
         submission: VCLSubmission,
+        authToken: VCLAuthToken?,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     )
+}
+
+extension SubmissionUseCase {
+    func submit(
+        submission: VCLSubmission,
+        completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
+    ) {
+        submit(submission: submission, authToken: nil, completionBlock: completionBlock)
+    }
 }

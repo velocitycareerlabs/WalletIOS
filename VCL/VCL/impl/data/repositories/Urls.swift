@@ -40,10 +40,10 @@ struct Params {
 
 struct HeaderKeys {
     static let Authorization = "Authorization"
-    static let Bearer = "Bearer"
     static let XVnfProtocolVersion = "x-vnf-protocol-version"
 }
 
 struct HeaderValues {
+    static var PrefixBearer = "Bearer"
     static var XVnfProtocolVersion: String { get { GlobalConfig.XVnfProtocolVersion.rawValue } }
 }

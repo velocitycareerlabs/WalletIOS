@@ -256,6 +256,15 @@ class VclBlocksProvider {
         )
     }
     
+    static func provideAuthTokenUseCase() -> AuthTokenUseCase {
+        return AuthTokenUseCaseImpl(
+            AuthTokenRepositoryImpl(
+                NetworkServiceImpl()
+            ),
+            ExecutorImpl.instance
+        )
+    }
+    
     static func provideCredentialTypesUIFormSchemaUseCase() -> CredentialTypesUIFormSchemaUseCase {
         return CredentialTypesUIFormSchemaUseCaseImpl(
             CredentialTypesUIFormSchemaRepositoryImpl(

@@ -27,6 +27,7 @@ final class SubmissionUseCaseImpl: SubmissionUseCase {
     
     func submit(
         submission: VCLSubmission,
+        authToken: VCLAuthToken?,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     ) {
         executor.runOnBackground  { [weak self] in
@@ -45,7 +46,8 @@ final class SubmissionUseCaseImpl: SubmissionUseCase {
                         let jwt = try signedJwtResult.get()
                         self.submissionRepository.submit(
                             submission: submission,
-                            jwt: jwt
+                            jwt: jwt,
+                            authToken: authToken,
                         ) { submissionResult in
                             self.executor.runOnMain { completionBlock(submissionResult) }
                         }

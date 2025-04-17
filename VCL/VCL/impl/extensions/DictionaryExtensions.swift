@@ -39,8 +39,43 @@ extension Dictionary {
 }
 
 public func == (lhs: [String: Any], rhs: [String: Any]) -> Bool {
-    return NSDictionary(dictionary: lhs).isEqual(to: rhs)
+    guard lhs.count == rhs.count else { return false }
+
+    for (key, lhsValue) in lhs {
+        guard let rhsValue = rhs[key], isEqual(lhsValue, rhsValue) else {
+            return false
+        }
+    }
+    return true
 }
+
+private func isEqual(_ lhs: Any, _ rhs: Any) -> Bool {
+    if isOptionalNil(lhs), isOptionalNil(rhs) { return true }
+
+    switch (lhs, rhs) {
+    case let (lhs as Int, rhs as Int): return lhs == rhs
+    case let (lhs as Float, rhs as Float): return lhs == rhs
+    case let (lhs as Double, rhs as Double): return lhs == rhs
+    case let (lhs as String, rhs as String): return lhs == rhs
+    case let (lhs as Bool, rhs as Bool): return lhs == rhs
+    case let (lhs as UUID, rhs as UUID): return lhs == rhs
+    case let (lhs as NSNumber, rhs as NSNumber): return lhs == rhs
+    case let (lhs as [String: Any], rhs as [String: Any]): return lhs == rhs
+    case let (lhs as [Any], rhs as [Any]):
+        return lhs.count == rhs.count &&
+               zip(lhs, rhs).allSatisfy { isEqual($0, $1) }
+    case let (lhs as any Equatable, rhs):
+        return (lhs as? AnyHashable) == (rhs as? AnyHashable)
+    default:
+        return false
+    }
+}
+
+private func isOptionalNil(_ value: Any) -> Bool {
+    let mirror = Mirror(reflecting: value)
+    return mirror.displayStyle == .optional && mirror.children.count == 0
+}
+
 
 public func != (lhs: [String: Any], rhs: [String: Any]) -> Bool {
     return !(lhs == rhs)

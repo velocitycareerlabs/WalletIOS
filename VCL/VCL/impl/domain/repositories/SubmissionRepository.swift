@@ -13,6 +13,7 @@ protocol SubmissionRepository {
     func submit(
         submission: VCLSubmission,
         jwt: VCLJwt,
+        authToken: VCLAuthToken?,
         completionBlock: @escaping (VCLResult<VCLSubmissionResult>) -> Void
     )
 }

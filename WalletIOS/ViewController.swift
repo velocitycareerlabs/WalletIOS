@@ -119,7 +119,19 @@ class ViewController: UIViewController {
             successHandler: { [weak self] presentationRequest in
                 NSLog("VCL Presentation request received: \(presentationRequest.jwt.payload?.toJson() ?? "")")
                 
-                self?.submitPresentation(presentationRequest: presentationRequest)
+                if(presentationRequest.feed) {
+                    self?.vcl.getAuthToken(
+                        authTokenDescriptor: VCLAuthTokenDescriptor(presentationRequest: presentationRequest),
+                        successHandler: { authToken in
+                            NSLog("VCL auth token: ${it.payload}")
+                            self?.submitPresentation(presentationRequest: presentationRequest, authToken: authToken)
+                        },
+                        errorHandler: { error in
+                            NSLog("VCL getAuthToken failed: \(error)")
+                        })
+                } else {
+                    self?.submitPresentation(presentationRequest: presentationRequest)
+                }
             },
             errorHandler: {error in
                 NSLog("VCL Presentation request failed: \(error)")
@@ -127,17 +139,24 @@ class ViewController: UIViewController {
         )
     }
     
-    private func submitPresentation(presentationRequest: VCLPresentationRequest)  {
+    private func submitPresentation(
+        presentationRequest: VCLPresentationRequest,
+        authToken: VCLAuthToken? = nil
+    )  {
         let presentationSubmission = VCLPresentationSubmission(
             presentationRequest: presentationRequest,
             verifiableCredentials: Constants.getIdentificationList(environment)
         )
-        submitPresentation(presentationSubmission: presentationSubmission)
+        submitPresentation(presentationSubmission: presentationSubmission, authToken: authToken)
     }
     
-    private func submitPresentation(presentationSubmission: VCLPresentationSubmission)  {
+    private func submitPresentation(
+        presentationSubmission: VCLPresentationSubmission,
+        authToken: VCLAuthToken? = nil
+    )  {
         vcl.submitPresentation(
             presentationSubmission: presentationSubmission,
+            authToken: authToken,
             successHandler: { [weak self] presentationSubmissionResult in
                 NSLog("VCL Presentation Submission result: \(presentationSubmissionResult)")
                 self?.vcl.getExchangeProgress(
@@ -153,8 +172,44 @@ class ViewController: UIViewController {
                     }
                 )
             },
-            errorHandler: { error in
+            errorHandler: { [weak self] error in
                 NSLog("VCL Presentation submission failed: \(error)")
+                
+                if(error.statusCode == 401) {
+                    self?.vcl.getAuthToken(
+                        authTokenDescriptor: VCLAuthTokenDescriptor(
+                            authTokenUri: authToken?.authTokenUri ?? "",
+                            refreshToken: authToken?.refreshToken.value,
+                            walletDid: authToken?.walletDid,
+                            relyingPartyDid: authToken?.relyingPartyDid,
+                            
+                        ), successHandler: { newAuthToken in
+                            self?.vcl.submitPresentation(
+                                presentationSubmission: presentationSubmission,
+                                authToken: newAuthToken,
+                                successHandler: { [weak self] presentationSubmissionResult in
+                                    NSLog("VCL Presentation Submission result: \(presentationSubmissionResult)")
+                                    self?.vcl.getExchangeProgress(
+                                        exchangeDescriptor: VCLExchangeDescriptor(
+                                            presentationSubmission: presentationSubmission,
+                                            submissionResult: presentationSubmissionResult
+                                        ),
+                                        successHandler: { exchange in
+                                            NSLog("VCL Presentation exchange progress \(exchange)")
+                                        },
+                                        errorHandler: { error in
+                                            NSLog("VCL Presentation exchange progress failed: \(error)")
+                                        }
+                                    )
+                                },
+                                errorHandler: { error in
+                                    NSLog("VCL Presentation submission failed: \(error)")
+                                }
+                            )
+                        }, errorHandler: { error in
+                            NSLog("VCL getAuthToken failed: $\(error)")
+                        })
+                }
             }
         )
     }

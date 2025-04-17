@@ -32,7 +32,7 @@ final class VCLKeyServiceRemoteImpl: VCLKeyService {
             method: .POST,
             headers: [
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion),
-                (HeaderKeys.Authorization, "\(HeaderKeys.Bearer) \(didJwkDescriptor.remoteCryptoServicesToken?.value ?? "")")
+                (HeaderKeys.Authorization, "\(HeaderValues.PrefixBearer) \(didJwkDescriptor.remoteCryptoServicesToken?.value ?? "")")
             ]
         ) { [weak self] didJwkResult in
             do {
