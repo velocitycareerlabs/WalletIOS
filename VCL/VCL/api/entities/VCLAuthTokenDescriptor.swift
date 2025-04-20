@@ -16,14 +16,14 @@ public enum GrantType: String {
 
 public struct VCLAuthTokenDescriptor {
     public let authTokenUri: String
-    public let refreshToken: String?
+    public let refreshToken: VCLToken?
     public let walletDid: String?
     public let relyingPartyDid: String?
     public let vendorOriginContext: String?
     
     public init(
         authTokenUri: String,
-        refreshToken: String? = nil,
+        refreshToken: VCLToken? = nil,
         walletDid: String? = nil,
         relyingPartyDid: String? = nil,
         vendorOriginContext: String? = nil
@@ -35,7 +35,7 @@ public struct VCLAuthTokenDescriptor {
         self.vendorOriginContext = vendorOriginContext
     }
     
-    public init(presentationRequest: VCLPresentationRequest, refreshToken: String? = nil) {
+    public init(presentationRequest: VCLPresentationRequest, refreshToken: VCLToken? = nil) {
         self.authTokenUri = presentationRequest.authTokenUri
         self.refreshToken = refreshToken
         self.walletDid = presentationRequest.didJwk.did
@@ -48,7 +48,7 @@ public struct VCLAuthTokenDescriptor {
             return [
                 CodingKeys.KeyGrantType: GrantType.RefreshToken.rawValue,
                 CodingKeys.KeyClientId: walletDid,
-                GrantType.RefreshToken.rawValue: refreshToken,
+                GrantType.RefreshToken.rawValue: refreshToken.value,
                 CodingKeys.KeyAudience: relyingPartyDid
             ]
         } else {

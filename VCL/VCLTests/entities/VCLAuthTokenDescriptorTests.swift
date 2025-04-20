@@ -17,7 +17,7 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
     private let walletDid = "did:jwk:eyJrdHkiOiJFQyIsInVzZSI6InNpZyIsImNydiI6InNlY3AyNTZrMSIsImtpZCI6IjNkODdhZGFmLWQ0ZmEtNDBkZS1iNGYzLTExNGFhOGZmOTMyOCIsIngiOiJvZThGN1ZPWmtOZGpnUTNLdHVmenlwRjBkTWh2QjZVanpYQVRVQ1d2NlRjIiwieSI6IjRQNFZJRFJtYWM2ZlJFY0hkR2tDdVRqdDJMSnNoYVZ2WWpjMGVVZEdpaHcifQ"
     private let relyingPartyDid = "did:web:devregistrar.velocitynetwork.foundation:d:example-21.com-8b82ce9a"
     private let vendorOriginContext = "vendor-context"
-    private let refreshToken = "refresh-token-789"
+    private let refreshToken = VCLToken(jwtValue: TokenMocks.TokenJwt1)
 
     func testInitWithPresentationRequestAndOptionalParameters() {
         let descriptor = VCLAuthTokenDescriptor(
@@ -29,7 +29,7 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
         XCTAssertEqual(descriptor.walletDid, walletDid)
         XCTAssertEqual(descriptor.relyingPartyDid, relyingPartyDid)
         XCTAssertNil(descriptor.vendorOriginContext)
-        XCTAssertEqual(descriptor.refreshToken, refreshToken)
+        XCTAssertEqual(descriptor.refreshToken?.value, refreshToken.value)
     }
 
     func testInitWithPresentationRequestOnly() {
@@ -55,7 +55,7 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
         XCTAssertEqual(descriptor.walletDid, walletDid)
         XCTAssertEqual(descriptor.relyingPartyDid, relyingPartyDid)
         XCTAssertEqual(descriptor.vendorOriginContext, vendorOriginContext)
-        XCTAssertEqual(descriptor.refreshToken, refreshToken)
+        XCTAssertEqual(descriptor.refreshToken?.value, refreshToken.value)
     }
 
     func testGenerateRequestBodyForRefreshTokenOnly() {
@@ -70,7 +70,7 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
         let expected = [
             VCLAuthTokenDescriptor.CodingKeys.KeyGrantType: GrantType.RefreshToken.rawValue,
             VCLAuthTokenDescriptor.CodingKeys.KeyClientId: walletDid,
-            GrantType.RefreshToken.rawValue: refreshToken,
+            GrantType.RefreshToken.rawValue: refreshToken.value,
             VCLAuthTokenDescriptor.CodingKeys.KeyAudience: relyingPartyDid
         ]
         
@@ -109,7 +109,7 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
         let expected = [
             VCLAuthTokenDescriptor.CodingKeys.KeyGrantType: GrantType.RefreshToken.rawValue,
             VCLAuthTokenDescriptor.CodingKeys.KeyClientId: walletDid,
-            GrantType.RefreshToken.rawValue: refreshToken,
+            GrantType.RefreshToken.rawValue: refreshToken.value,
             VCLAuthTokenDescriptor.CodingKeys.KeyAudience: relyingPartyDid
         ]
 
