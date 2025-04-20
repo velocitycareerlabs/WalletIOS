@@ -34,11 +34,11 @@ actor CompleteContextsStorage {
 }
 
 actor IsCredentialVerifiedStorage {
-    private var isVeirfied = false
+    private var isVerified = false
     
-    func update(_ value: Bool) { self.isVeirfied = value }
+    func update(_ value: Bool) { self.isVerified = value }
     
-    func get() -> Bool { return isVeirfied }
+    func get() -> Bool { return isVerified }
 }
 
 final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
@@ -49,23 +49,23 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
     private let executor: Executor
         
     private let mainDispatcher: DispatchGroup
-    private let resolveConetxDispatcher: DispatchGroup
-    private let completeConetxDispatcher: DispatchGroup
+    private let resolveContextDispatcher: DispatchGroup
+    private let completeContextDispatcher: DispatchGroup
     
     init(
         _ credentialTypesModel: CredentialTypesModel,
         _ networkService: NetworkService,
         _ executor: Executor,
         _ mainDispatcher: DispatchGroup = DispatchGroup(),
-        _ resolveConetxDispatcher: DispatchGroup = DispatchGroup(),
-        _ completeConetxDispatcher: DispatchGroup = DispatchGroup()
+        _ resolveContextDispatcher: DispatchGroup = DispatchGroup(),
+        _ completeContextDispatcher: DispatchGroup = DispatchGroup()
     ) {
         self.credentialTypesModel = credentialTypesModel
         self.networkService = networkService
         self.executor = executor
         self.mainDispatcher = mainDispatcher
-        self.resolveConetxDispatcher = resolveConetxDispatcher
-        self.completeConetxDispatcher = completeConetxDispatcher
+        self.resolveContextDispatcher = resolveContextDispatcher
+        self.completeContextDispatcher = completeContextDispatcher
     }
     
     func verifyCredentials(
@@ -194,7 +194,7 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         } else if (permittedServiceCategory.contains(serviceType: VCLServiceType.Issuer)) {
             if let credentialSubject = VerificationUtils.getCredentialSubjectFromCredential(jwtCredential) {
                 if let credentialSubjectContexts = VerificationUtils.getContextsFromCredential(jwtCredential) {
-                    resolveCredentialSubjectContexts(credentialSubjectContexts, self) { [weak self] credentialSubjectContextsResult in
+                    resolveCredentialSubjectContexts(credentialSubjectContexts) { [weak self] credentialSubjectContextsResult in
                             do {
                                 let completeContexts = try credentialSubjectContextsResult.get()
                                 self?.onResolveCredentialSubjectContexts(
@@ -234,14 +234,13 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
     
     private func resolveCredentialSubjectContexts(
         _ credentialSubjectContexts: [String],
-        _ self: CredentialIssuerVerifierImpl,
         _ completionBlock: @escaping (VCLResult<[[String: Any]]>) -> Void
     ) {
         let completeContextsStorage = CompleteContextsStorage()
         
         credentialSubjectContexts.forEach { [weak self] credentialSubjectContext in
             guard let self = self else { return }
-            self.resolveConetxDispatcher.enter()
+            self.resolveContextDispatcher.enter()
             self.executor.runOnBackground {
                 self.networkService.sendRequest(
                     endpoint: credentialSubjectContext,
@@ -260,12 +259,12 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                     } catch {
                         VCLLog.e("Error fetching \(credentialSubjectContext):\n\(error)")
                     }
-                    self.resolveConetxDispatcher.leave()
+                    self.resolveContextDispatcher.leave()
                 }
             }
         }
         
-        resolveConetxDispatcher.notify(queue: DispatchQueue.global(), execute: {
+        self.resolveContextDispatcher.notify(queue: DispatchQueue.global(), execute: {
             Task { [weak self] in
                 guard let self = self else { return }
                 
@@ -295,7 +294,7 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             completeContexts.forEach { [weak self] completeContext in
                 guard let self = self else { return }
                 
-                self.completeConetxDispatcher.enter()
+                self.completeContextDispatcher.enter()
                 self.executor.runOnBackground {
                     
                     let activeContext = (((completeContext[CodingKeys.KeyContext] as? [String: Any])?[credentialSubjectType] as? [String: Any]))?[CodingKeys.KeyContext] as? [String: Any] ?? completeContext
@@ -310,13 +309,13 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                             if (credentialIssuerId == did) {
                                 Task {
                                     await isCredentialVerifiedStorage.update(true)
-                                    self.completeConetxDispatcher.leave()
+                                    self.completeContextDispatcher.leave()
                                 }
                             } else {
                                 Task {
                                     await globalErrorStorage.update(VCLError(errorCode: VCLErrorCode.IssuerRequiresNotaryPermission.rawValue))
                                 }
-                                self.completeConetxDispatcher.leave()
+                                self.completeContextDispatcher.leave()
                             }
                         } else {
                             Task {
@@ -324,7 +323,7 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                             }
                             VCLLog.e("DID NOT FOUND for K = \(K) and credentialSubject = \(credentialSubject)")
                             
-                            self.completeConetxDispatcher.leave()
+                            self.completeContextDispatcher.leave()
                         }
                     } else {
                         Task {
@@ -334,12 +333,12 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                             
                             VCLLog.d("Key for primary organization NOT FOUND for active context:\n\(activeContext)")
                             
-                            self.completeConetxDispatcher.leave()
+                            self.completeContextDispatcher.leave()
                         }
                     }
                 }
             }
-            completeConetxDispatcher.notify(queue: DispatchQueue.global(), execute: {
+            completeContextDispatcher.notify(queue: DispatchQueue.global(), execute: {
                 Task {
                     if let globalError = await globalErrorStorage.get() {
                         completionBlock(.failure(globalError))
