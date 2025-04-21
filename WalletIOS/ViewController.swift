@@ -123,7 +123,7 @@ class ViewController: UIViewController {
                     self?.vcl.getAuthToken(
                         authTokenDescriptor: VCLAuthTokenDescriptor(presentationRequest: presentationRequest),
                         successHandler: { authToken in
-                            NSLog("VCL auth token: ${it.payload}")
+                            NSLog("VCL auth token: \(authToken.payload)")
                             self?.submitPresentation(presentationRequest: presentationRequest, authToken: authToken)
                         },
                         errorHandler: { error in
@@ -181,9 +181,9 @@ class ViewController: UIViewController {
                             authTokenUri: authToken?.authTokenUri ?? "",
                             refreshToken: authToken?.refreshToken.value,
                             walletDid: authToken?.walletDid,
-                            relyingPartyDid: authToken?.relyingPartyDid,
-                            
-                        ), successHandler: { newAuthToken in
+                            relyingPartyDid: authToken?.relyingPartyDid
+                        ),
+                        successHandler: { newAuthToken in
                             self?.vcl.submitPresentation(
                                 presentationSubmission: presentationSubmission,
                                 authToken: newAuthToken,
