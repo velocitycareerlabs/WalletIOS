@@ -47,7 +47,7 @@ final class SubmissionUseCaseImpl: SubmissionUseCase {
                         self.submissionRepository.submit(
                             submission: submission,
                             jwt: jwt,
-                            authToken: authToken,
+                            authToken: authToken
                         ) { submissionResult in
                             self.executor.runOnMain { completionBlock(submissionResult) }
                         }

@@ -19,20 +19,20 @@ public struct VCLAuthTokenDescriptor {
     public let refreshToken: VCLToken?
     public let walletDid: String?
     public let relyingPartyDid: String?
-    public let vendorOriginContext: String?
+    public let authorizationCode: String?
     
     public init(
         authTokenUri: String,
         refreshToken: VCLToken? = nil,
         walletDid: String? = nil,
         relyingPartyDid: String? = nil,
-        vendorOriginContext: String? = nil
+        authorizationCode: String? = nil
     ) {
         self.authTokenUri = authTokenUri
         self.refreshToken = refreshToken
         self.walletDid = walletDid
         self.relyingPartyDid = relyingPartyDid
-        self.vendorOriginContext = vendorOriginContext
+        self.authorizationCode = authorizationCode
     }
     
     public init(presentationRequest: VCLPresentationRequest, refreshToken: VCLToken? = nil) {
@@ -40,7 +40,7 @@ public struct VCLAuthTokenDescriptor {
         self.refreshToken = refreshToken
         self.walletDid = presentationRequest.didJwk.did
         self.relyingPartyDid = presentationRequest.iss
-        self.vendorOriginContext = presentationRequest.vendorOriginContext
+        self.authorizationCode = presentationRequest.vendorOriginContext
     }
     
     func generateRequestBody() -> [String: String?] {
@@ -55,7 +55,7 @@ public struct VCLAuthTokenDescriptor {
             return [
                 CodingKeys.KeyGrantType: GrantType.AuthorizationCode.rawValue,
                 CodingKeys.KeyClientId: walletDid,
-                GrantType.AuthorizationCode.rawValue: vendorOriginContext,
+                GrantType.AuthorizationCode.rawValue: authorizationCode,
                 CodingKeys.KeyAudience: relyingPartyDid,
                 CodingKeys.KeyTokenType: CodingKeys.KeyTokenTypeValue
             ]

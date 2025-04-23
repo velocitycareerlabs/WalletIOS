@@ -25,7 +25,7 @@ final class AuthTokenRepositoryImpl: AuthTokenRepository {
             body: authTokenDescriptor.generateRequestBody().toJsonString(),
             contentType: .ApplicationJson,
             method: .POST,
-            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)],
+            headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
         ) { result in
             do {
                 if let payload = try result.get().payload.toDictionary() {
