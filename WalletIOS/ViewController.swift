@@ -102,116 +102,137 @@ class ViewController: UIViewController {
     }
     
     @objc private func getPresentationRequest() {
-        let deepLink =
-        environment == VCLEnvironment.Dev ?
-        VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrDev) :
-        VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrStaging)
-        
-        vcl.getPresentationRequest(
-            presentationRequestDescriptor: VCLPresentationRequestDescriptor(
-                deepLink: deepLink,
-                pushDelegate: VCLPushDelegate(
-                    pushUrl: "pushUrl",
-                    pushToken: "pushToken"
-                ),
-                didJwk: self.didJwk
+        let deepLink = environment == .Dev
+            ? VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrDev)
+            : VCLDeepLink(value: Constants.PresentationRequestDeepLinkStrStaging)
+
+        let descriptor = VCLPresentationRequestDescriptor(
+            deepLink: deepLink,
+            pushDelegate: VCLPushDelegate(
+                pushUrl: "pushUrl",   // TODO: Replace with real push URL
+                pushToken: "pushToken" // TODO: Replace with real push token
             ),
+            didJwk: self.didJwk
+        )
+
+        vcl.getPresentationRequest(
+            presentationRequestDescriptor: descriptor,
             successHandler: { [weak self] presentationRequest in
-                NSLog("VCL Presentation request received: \(presentationRequest.jwt.payload?.toJson() ?? "")")
-                
-                if(presentationRequest.feed) {
-                    self?.vcl.getAuthToken(
-                        authTokenDescriptor: VCLAuthTokenDescriptor(presentationRequest: presentationRequest),
-                        successHandler: { authToken in
-                            NSLog("VCL auth token: \(authToken.payload)")
-                            self?.submitPresentation(presentationRequest: presentationRequest, authToken: authToken)
-                        },
-                        errorHandler: { error in
-                            NSLog("VCL getAuthToken failed: \(error)")
-                        })
-                } else {
-                    self?.submitPresentation(presentationRequest: presentationRequest)
-                }
+                self?.handlePresentationRequest(presentationRequest: presentationRequest)
             },
-            errorHandler: {error in
+            errorHandler: { error in
                 NSLog("VCL Presentation request failed: \(error)")
             }
         )
     }
-    
-    private func submitPresentation(
-        presentationRequest: VCLPresentationRequest,
-        authToken: VCLAuthToken? = nil
-    )  {
+
+    private func handlePresentationRequest(presentationRequest: VCLPresentationRequest) {
+        NSLog("VCL Presentation request received: \(presentationRequest.jwt.payload?.toJson() ?? "")")
+
         let presentationSubmission = VCLPresentationSubmission(
             presentationRequest: presentationRequest,
-            verifiableCredentials: Constants.getIdentificationList(environment)
+            verifiableCredentials: Constants.getIdentificationList(self.environment)
         )
-        submitPresentation(presentationSubmission: presentationSubmission, authToken: authToken)
+
+        if presentationRequest.feed {
+            vcl.getAuthToken(
+                authTokenDescriptor: VCLAuthTokenDescriptor(presentationRequest: presentationRequest),
+                successHandler: { [weak self] authToken in
+                    NSLog("VCL auth token: \(authToken.payload)")
+                    self?.submitAndTrack(presentationSubmission: presentationSubmission, authToken: authToken)
+                },
+                errorHandler: { error in
+                    NSLog("VCL getAuthToken failed: \(error)")
+                }
+            )
+        } else {
+            submitAndTrack(presentationSubmission: presentationSubmission, authToken: nil)
+        }
+    }
+
+    private func submitAndTrack(
+        presentationSubmission: VCLPresentationSubmission,
+        authToken: VCLAuthToken?
+    ) {
+        submitPresentation(
+            presentationSubmission: presentationSubmission,
+            authToken: authToken,
+            successHandler: { [weak self] result in
+                NSLog("VCL Presentation submission successful: \(result)")
+                self?.vcl.getExchangeProgress(
+                    exchangeDescriptor: VCLExchangeDescriptor(
+                        presentationSubmission: presentationSubmission,
+                        submissionResult: result
+                    ),
+                    successHandler: { exchange in
+                        NSLog("VCL Exchange progress: \(exchange)")
+                    },
+                    errorHandler: { error in
+                        NSLog("VCL Exchange progress failed: \(error)")
+                    }
+                )
+            },
+            errorHandler: { error in
+                NSLog("VCL Presentation submission failed: \(error)")
+            }
+        )
     }
     
     private func submitPresentation(
         presentationSubmission: VCLPresentationSubmission,
-        authToken: VCLAuthToken? = nil
-    )  {
-        vcl.submitPresentation(
-            presentationSubmission: presentationSubmission,
-            authToken: authToken,
-            successHandler: { [weak self] presentationSubmissionResult in
-                NSLog("VCL Presentation Submission result: \(presentationSubmissionResult)")
-                self?.vcl.getExchangeProgress(
-                    exchangeDescriptor: VCLExchangeDescriptor(
-                        presentationSubmission: presentationSubmission,
-                        submissionResult: presentationSubmissionResult
-                    ),
-                    successHandler: { exchange in
-                        NSLog("VCL Presentation exchange progress \(exchange)")
-                    },
-                    errorHandler: { error in
-                        NSLog("VCL Presentation exchange progress failed: \(error)")
-                    }
-                )
-            },
-            errorHandler: { [weak self] error in
-                NSLog("VCL Presentation submission failed: \(error)")
-                
-                if(error.statusCode == 401) {
-                    self?.vcl.getAuthToken(
-                        authTokenDescriptor: VCLAuthTokenDescriptor(
-                            authTokenUri: authToken?.authTokenUri ?? "",
-                            refreshToken: authToken?.refreshToken.value,
-                            walletDid: authToken?.walletDid,
-                            relyingPartyDid: authToken?.relyingPartyDid
+        authToken: VCLAuthToken? = nil,
+        successHandler: @escaping (VCLSubmissionResult) -> Void,
+        errorHandler: @escaping (VCLError) -> Void
+    ) {
+        func performSubmission(using authToken: VCLAuthToken? = nil) {
+            vcl.submitPresentation(
+                presentationSubmission: presentationSubmission,
+                authToken: authToken,
+                successHandler: { [weak self] result in
+                    NSLog("VCL Presentation Submission result: \(result)")
+                    self?.vcl.getExchangeProgress(
+                        exchangeDescriptor: VCLExchangeDescriptor(
+                            presentationSubmission: presentationSubmission,
+                            submissionResult: result
                         ),
-                        successHandler: { newAuthToken in
-                            self?.vcl.submitPresentation(
-                                presentationSubmission: presentationSubmission,
-                                authToken: newAuthToken,
-                                successHandler: { [weak self] presentationSubmissionResult in
-                                    NSLog("VCL Presentation Submission result: \(presentationSubmissionResult)")
-                                    self?.vcl.getExchangeProgress(
-                                        exchangeDescriptor: VCLExchangeDescriptor(
-                                            presentationSubmission: presentationSubmission,
-                                            submissionResult: presentationSubmissionResult
-                                        ),
-                                        successHandler: { exchange in
-                                            NSLog("VCL Presentation exchange progress \(exchange)")
-                                        },
-                                        errorHandler: { error in
-                                            NSLog("VCL Presentation exchange progress failed: \(error)")
-                                        }
-                                    )
-                                },
-                                errorHandler: { error in
-                                    NSLog("VCL Presentation submission failed: \(error)")
-                                }
-                            )
-                        }, errorHandler: { error in
-                            NSLog("VCL getAuthToken failed: $\(error)")
-                        })
+                        successHandler: { exchange in
+                            NSLog("VCL Presentation exchange progress \(exchange)")
+                        },
+                        errorHandler: { error in
+                            NSLog("VCL Presentation exchange progress failed: \(error)")
+                        }
+                    )
+                    successHandler(result)
+                },
+                errorHandler: { error in
+                    NSLog("VCL Presentation submission failed: \(error)")
+                    errorHandler(error)
                 }
-            }
-        )
+            )
+        }
+
+        if authToken == nil {
+            performSubmission()
+            return
+        }
+        
+        if !Utils.isTokenValid(token: authToken?.accessToken) {
+            vcl.getAuthToken(
+                authTokenDescriptor: VCLAuthTokenDescriptor(
+                    authTokenUri: authToken?.authTokenUri ?? "",
+                    refreshToken: authToken?.refreshToken,
+                    walletDid: authToken?.walletDid,
+                    relyingPartyDid: authToken?.relyingPartyDid
+                ),
+                successHandler: { newAuthToken in
+                    performSubmission(using: newAuthToken)
+                },
+                errorHandler: { error in
+                    NSLog("VCL getAuthToken failed: \(error)")
+                    errorHandler(error)
+                }
+            )
+        }
     }
     
     @objc private func getOrganizationsThenCredentialManifestByService() {

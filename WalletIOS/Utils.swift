@@ -26,4 +26,8 @@ class Utils {
         rejectedOfferIds = [offer2].compactMap{ $0 }
         return (approvedOfferIds, rejectedOfferIds)
     }
+    
+    static func isTokenValid(token: VCLToken?) -> Bool {
+        return (token?.expiresIn ?? 0) > Double(Date().timeIntervalSince1970)
+    }
 }
