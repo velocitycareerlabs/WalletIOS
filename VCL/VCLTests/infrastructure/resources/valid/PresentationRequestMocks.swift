@@ -42,6 +42,6 @@ class PresentationRequestMocks {
         jwt: PresentationRequestFeedJwt,
         verifiedProfile: VCLVerifiedProfile(payload: [:]),
         deepLink: VCLDeepLink(value: ""),
-        didJwk: DidJwkMocks.DidJwk,
+        didJwk: DidJwkMocks.DidJwk
     )
 }

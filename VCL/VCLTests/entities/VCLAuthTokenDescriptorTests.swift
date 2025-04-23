@@ -16,7 +16,7 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
     private let authTokenUri = "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:web:devregistrar.velocitynetwork.foundation:d:example-21.com-8b82ce9a/oauth/token"
     private let walletDid = "did:jwk:eyJrdHkiOiJFQyIsInVzZSI6InNpZyIsImNydiI6InNlY3AyNTZrMSIsImtpZCI6IjNkODdhZGFmLWQ0ZmEtNDBkZS1iNGYzLTExNGFhOGZmOTMyOCIsIngiOiJvZThGN1ZPWmtOZGpnUTNLdHVmenlwRjBkTWh2QjZVanpYQVRVQ1d2NlRjIiwieSI6IjRQNFZJRFJtYWM2ZlJFY0hkR2tDdVRqdDJMSnNoYVZ2WWpjMGVVZEdpaHcifQ"
     private let relyingPartyDid = "did:web:devregistrar.velocitynetwork.foundation:d:example-21.com-8b82ce9a"
-    private let vendorOriginContext = "vendor-context"
+    private let authorizationCode = "authorization code"
     private let refreshToken = VCLToken(jwtValue: TokenMocks.TokenJwt1)
 
     func testInitWithPresentationRequestAndOptionalParameters() {
@@ -28,7 +28,7 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
         XCTAssertEqual(descriptor.authTokenUri, authTokenUri)
         XCTAssertEqual(descriptor.walletDid, walletDid)
         XCTAssertEqual(descriptor.relyingPartyDid, relyingPartyDid)
-        XCTAssertNil(descriptor.vendorOriginContext)
+        XCTAssertNil(descriptor.authorizationCode)
         XCTAssertEqual(descriptor.refreshToken?.value, refreshToken.value)
     }
 
@@ -38,7 +38,7 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
         XCTAssertEqual(descriptor.authTokenUri, authTokenUri)
         XCTAssertEqual(descriptor.walletDid, walletDid)
         XCTAssertEqual(descriptor.relyingPartyDid, relyingPartyDid)
-        XCTAssertNil(descriptor.vendorOriginContext)
+        XCTAssertNil(descriptor.authorizationCode)
         XCTAssertNil(descriptor.refreshToken)
     }
 
@@ -48,13 +48,13 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
             refreshToken: refreshToken,
             walletDid: walletDid,
             relyingPartyDid: relyingPartyDid,
-            vendorOriginContext: vendorOriginContext
+            authorizationCode: authorizationCode
         )
 
         XCTAssertEqual(descriptor.authTokenUri, authTokenUri)
         XCTAssertEqual(descriptor.walletDid, walletDid)
         XCTAssertEqual(descriptor.relyingPartyDid, relyingPartyDid)
-        XCTAssertEqual(descriptor.vendorOriginContext, vendorOriginContext)
+        XCTAssertEqual(descriptor.authorizationCode, authorizationCode)
         XCTAssertEqual(descriptor.refreshToken?.value, refreshToken.value)
     }
 
@@ -64,7 +64,7 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
             refreshToken: refreshToken,
             walletDid: walletDid,
             relyingPartyDid: relyingPartyDid,
-            vendorOriginContext: nil
+            authorizationCode: nil
         )
 
         let expected = [
@@ -83,13 +83,13 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
             refreshToken: nil,
             walletDid: walletDid,
             relyingPartyDid: relyingPartyDid,
-            vendorOriginContext: vendorOriginContext
+            authorizationCode: authorizationCode
         )
 
         let expected = [
             VCLAuthTokenDescriptor.CodingKeys.KeyGrantType: GrantType.AuthorizationCode.rawValue,
             VCLAuthTokenDescriptor.CodingKeys.KeyClientId: walletDid,
-            GrantType.AuthorizationCode.rawValue: vendorOriginContext,
+            GrantType.AuthorizationCode.rawValue: authorizationCode,
             VCLAuthTokenDescriptor.CodingKeys.KeyAudience: relyingPartyDid,
             VCLAuthTokenDescriptor.CodingKeys.KeyTokenType: VCLAuthTokenDescriptor.CodingKeys.KeyTokenTypeValue
         ]
@@ -103,7 +103,7 @@ class VCLAuthTokenDescriptorTests: XCTestCase {
             refreshToken: refreshToken,
             walletDid: walletDid,
             relyingPartyDid: relyingPartyDid,
-            vendorOriginContext: vendorOriginContext
+            authorizationCode: authorizationCode
         )
 
         let expected = [
