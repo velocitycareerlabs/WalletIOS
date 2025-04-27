@@ -8,7 +8,7 @@
 //  SPDX-License-Identifier: Apache-2.0
 
 import Foundation
-import VCL
+@testable import VCL
 
 class TokenMocks {
     public static let TokenStr1 =
@@ -18,4 +18,12 @@ class TokenMocks {
 
     public static let TokenJwt1 = VCLJwt(encodedJwt: TokenMocks.TokenStr1)
     public static let TokenJwt2 = VCLJwt(encodedJwt: TokenMocks.TokenStr2)
+    
+    public static let AuthTokenStr = "{\"access_token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksiLCJraWQiOiIjZXhjaGFuZ2Uta2V5LTEifQ.eyJuYmYiOjE3NDU3NDEwMDIsImp0aSI6IlE3aHZuM3BBXzJ5dUNIQl8tSEppWSIsImlzcyI6ImRpZDp3ZWI6ZGV2cmVnaXN0cmFyLnZlbG9jaXR5bmV0d29yay5mb3VuZGF0aW9uOmQ6ZXhhbXBsZS0yMS5jb20tOGI4MmNlOWEiLCJhdWQiOiJkaWQ6d2ViOmRldnJlZ2lzdHJhci52ZWxvY2l0eW5ldHdvcmsuZm91bmRhdGlvbjpkOmV4YW1wbGUtMjEuY29tLThiODJjZTlhIiwiZXhwIjoxNzQ1NzQxMDE3LCJzdWIiOiI2NjZhZTExODE5MjVmNmE0YTQ5N2RiYmMiLCJpYXQiOjE3NDU3NDEwMDJ9.awjYaf_2VqzNs_A3Ox3JlC8aNftGdW10oEkO5uoVEfklDlVBI_cXkH0vajeXF4EUXYWql2-c2lslIh94ASmVyg\",\"token_type\":\"Bearer\",\"refresh_token\":\"d9bb90b98fced3df74b7ec7cef1da44bf02bcd466688182178b798bb46a0195c5e1dd88bc57aa7085582ee686ffc968b31610807fd3158b41638484e4a68ef3d\"}"
+    public static let AuthToken = VCLAuthToken(
+        payload: TokenMocks.AuthTokenStr.toDictionary()!,
+        authTokenUri: "auth token uri",
+        walletDid: "wallet did",
+        relyingPartyDid: "relying party did"
+    )
 }

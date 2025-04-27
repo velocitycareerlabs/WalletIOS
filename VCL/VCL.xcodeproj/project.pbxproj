@@ -242,6 +242,8 @@
 		28A6FAB82B28E09C00C7675E /* CredentialsByDeepLinkVerifierImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6FAB42B28E09C00C7675E /* CredentialsByDeepLinkVerifierImpl.swift */; };
 		28A6FAB92B28E09C00C7675E /* PresentationRequestByDeepLinkVerifierImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6FAB52B28E09C00C7675E /* PresentationRequestByDeepLinkVerifierImpl.swift */; };
 		28A72FFA26C939440079EFEA /* VCLOrganizationsDescriptorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A72FF926C939440079EFEA /* VCLOrganizationsDescriptorTest.swift */; };
+		28A8A9222DBE2308005F94F8 /* AuthTokenUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A8A9212DBE2306005F94F8 /* AuthTokenUseCaseTest.swift */; };
+		28A8A9242DBE24BD005F94F8 /* NetworkServiceFailure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A8A9232DBE24B5005F94F8 /* NetworkServiceFailure.swift */; };
 		28AADD5228AA6D5C005EAF9D /* DsptchQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AADD5128AA6D5C005EAF9D /* DsptchQueue.swift */; };
 		28AADD5D28AA6E56005EAF9D /* DsptchQueueImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28AADD5C28AA6E56005EAF9D /* DsptchQueueImpl.swift */; };
 		28B300BA2DAFD2DB00C7AD21 /* AuthTokenRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B300B92DAFD2D900C7AD21 /* AuthTokenRepository.swift */; };
@@ -543,6 +545,8 @@
 		28A6FAB42B28E09C00C7675E /* CredentialsByDeepLinkVerifierImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialsByDeepLinkVerifierImpl.swift; sourceTree = "<group>"; };
 		28A6FAB52B28E09C00C7675E /* PresentationRequestByDeepLinkVerifierImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationRequestByDeepLinkVerifierImpl.swift; sourceTree = "<group>"; };
 		28A72FF926C939440079EFEA /* VCLOrganizationsDescriptorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLOrganizationsDescriptorTest.swift; sourceTree = "<group>"; };
+		28A8A9212DBE2306005F94F8 /* AuthTokenUseCaseTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenUseCaseTest.swift; sourceTree = "<group>"; };
+		28A8A9232DBE24B5005F94F8 /* NetworkServiceFailure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceFailure.swift; sourceTree = "<group>"; };
 		28AADD5128AA6D5C005EAF9D /* DsptchQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DsptchQueue.swift; sourceTree = "<group>"; };
 		28AADD5C28AA6E56005EAF9D /* DsptchQueueImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DsptchQueueImpl.swift; sourceTree = "<group>"; };
 		28B300B92DAFD2D900C7AD21 /* AuthTokenRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTokenRepository.swift; sourceTree = "<group>"; };
@@ -1196,6 +1200,7 @@
 		289A538B264D64E500B84389 /* network */ = {
 			isa = PBXGroup;
 			children = (
+				28A8A9232DBE24B5005F94F8 /* NetworkServiceFailure.swift */,
 				289A538C264D64E500B84389 /* NetworkServiceSuccess.swift */,
 			);
 			path = network;
@@ -1212,6 +1217,7 @@
 		289A5391264D64E500B84389 /* usecases */ = {
 			isa = PBXGroup;
 			children = (
+				28A8A9212DBE2306005F94F8 /* AuthTokenUseCaseTest.swift */,
 				28F6093A27678B5C00EBDEC5 /* CountriesUseCaseTest.swift */,
 				289A5399264D64E500B84389 /* CredentialManifestUseCaseTest.swift */,
 				289A5393264D64E500B84389 /* CredentialTypeSchemasUseCaseTest.swift */,
@@ -1680,11 +1686,13 @@
 				2893D07B2AC318960079B290 /* VCLXVnfProtocolVersionTest.swift in Sources */,
 				287B13EA2B38785C00421A29 /* TokenMocks.swift in Sources */,
 				28C52808293DF98500D5D7FF /* VCLPresentationRequestDescriptorTest.swift in Sources */,
+				28A8A9242DBE24BD005F94F8 /* NetworkServiceFailure.swift in Sources */,
 				28576F4C2AD16971008E6A48 /* EmptyExecutor.swift in Sources */,
 				28F2D9FC2B73B311007E4583 /* DidJwkMocks.swift in Sources */,
 				2801D1CA2A31EF4F00B659B4 /* VCLJwtTest.swift in Sources */,
 				289A53AB264D64E500B84389 /* CredentialManifestUseCaseTest.swift in Sources */,
 				28C15C9226CA8AA000E248C3 /* CredentialTypesMocks.swift in Sources */,
+				28A8A9222DBE2308005F94F8 /* AuthTokenUseCaseTest.swift in Sources */,
 				2806600D29B5EB8700433302 /* VCLFinalizeOffersDescriptorTest.swift in Sources */,
 				2801702929DD6DEC00DAB4F1 /* SecretStoreMock.swift in Sources */,
 				2873A47B2ACC9DD3003AE086 /* VCLJwtVerifyServiceMock.swift in Sources */,
