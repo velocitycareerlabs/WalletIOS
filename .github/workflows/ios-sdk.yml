@@ -46,7 +46,7 @@ jobs:
     outputs:
       GLOBAL_ENV: ${{ steps.environment.outputs.GLOBAL_ENV }}
 
-  build-ios-sdk:
+  build-and-publish-ios-sdk:
     if: needs.set-environment.outputs.GLOBAL_ENV == 'prod' || needs.set-environment.outputs.GLOBAL_ENV == 'rc'
     needs:
       - tests-ios-sdk
