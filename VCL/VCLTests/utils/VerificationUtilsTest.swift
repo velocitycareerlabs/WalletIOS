@@ -1,5 +1,5 @@
 //
-//  UtilsTest.swift
+//  VerificationUtilsTest.swift
 //  VCLTests
 //
 //  Created by Michael Avoyan on 07/11/2023.
@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 @testable import VCL
 
-class UtilsTest: XCTestCase {
+class VerificationUtilsTest: XCTestCase {
     func testGetIdentifier() {
         let jsonObject: [String: AnyHashable] = [
             "a": "ValueA",

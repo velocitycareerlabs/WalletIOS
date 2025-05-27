@@ -63,6 +63,8 @@
 		283AB6032DB105AB000907DB /* VCLAuthTokenTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AB6022DB105AA000907DB /* VCLAuthTokenTest.swift */; };
 		283BCF7029B921350023B219 /* VCLErrorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283BCF6F29B921350023B219 /* VCLErrorTest.swift */; };
 		283BCF7229B921BA0023B219 /* ErrorMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283BCF7129B921BA0023B219 /* ErrorMocks.swift */; };
+		283CBD9D2DE5A79C007528D1 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283CBD9C2DE5A799007528D1 /* Utils.swift */; };
+		283CBD9F2DE5A875007528D1 /* SubmissionRepositoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283CBD9E2DE5A872007528D1 /* SubmissionRepositoryTest.swift */; };
 		2840149226F23CD400BD2C93 /* UrlsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2840149126F23CD400BD2C93 /* UrlsTest.swift */; };
 		28429A3A2A6944F600496342 /* VCLXVnfProtocolVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28429A392A6944F600496342 /* VCLXVnfProtocolVersion.swift */; };
 		2842BB5B26C15B4C00B07F2E /* VCLSubmission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2842BB5A26C15B4C00B07F2E /* VCLSubmission.swift */; };
@@ -219,7 +221,7 @@
 		289A536F264D647200B84389 /* VCLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289A536E264D647200B84389 /* VCLTests.swift */; };
 		289A5371264D647200B84389 /* VCL.h in Headers */ = {isa = PBXBuildFile; fileRef = 289A5363264D647100B84389 /* VCL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		289A53A1264D64E500B84389 /* NetworkServiceSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289A538C264D64E500B84389 /* NetworkServiceSuccess.swift */; };
-		289A53A4264D64E500B84389 /* PresentationSubmissionUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289A5392264D64E500B84389 /* PresentationSubmissionUseCaseTest.swift */; };
+		289A53A4264D64E500B84389 /* SubmissionUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289A5392264D64E500B84389 /* SubmissionUseCaseTest.swift */; };
 		289A53A5264D64E500B84389 /* CredentialTypeSchemasUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289A5393264D64E500B84389 /* CredentialTypeSchemasUseCaseTest.swift */; };
 		289A53A6264D64E500B84389 /* PresentationRequestUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289A5394264D64E500B84389 /* PresentationRequestUseCaseTest.swift */; };
 		289A53A7264D64E500B84389 /* GenerateOffersUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289A5395264D64E500B84389 /* GenerateOffersUseCaseTest.swift */; };
@@ -308,7 +310,7 @@
 		28F6093B27678B5C00EBDEC5 /* CountriesUseCaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F6093A27678B5C00EBDEC5 /* CountriesUseCaseTest.swift */; };
 		28FA80E626789CA2000A3C7F /* JwtServiceUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FA80E526789CA2000A3C7F /* JwtServiceUseCase.swift */; };
 		28FA80E826789D25000A3C7F /* JwtServiceUseCaseImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FA80E726789D25000A3C7F /* JwtServiceUseCaseImpl.swift */; };
-		28FA86482AFABDE700568176 /* UtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FA86472AFABDE700568176 /* UtilsTest.swift */; };
+		28FA86482AFABDE700568176 /* VerificationUtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28FA86472AFABDE700568176 /* VerificationUtilsTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -364,6 +366,8 @@
 		283AB6022DB105AA000907DB /* VCLAuthTokenTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLAuthTokenTest.swift; sourceTree = "<group>"; };
 		283BCF6F29B921350023B219 /* VCLErrorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLErrorTest.swift; sourceTree = "<group>"; };
 		283BCF7129B921BA0023B219 /* ErrorMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMocks.swift; sourceTree = "<group>"; };
+		283CBD9C2DE5A799007528D1 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		283CBD9E2DE5A872007528D1 /* SubmissionRepositoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionRepositoryTest.swift; sourceTree = "<group>"; };
 		2840149126F23CD400BD2C93 /* UrlsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlsTest.swift; sourceTree = "<group>"; };
 		28429A392A6944F600496342 /* VCLXVnfProtocolVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLXVnfProtocolVersion.swift; sourceTree = "<group>"; };
 		2842BB5A26C15B4C00B07F2E /* VCLSubmission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLSubmission.swift; sourceTree = "<group>"; };
@@ -522,7 +526,7 @@
 		289A536E264D647200B84389 /* VCLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLTests.swift; sourceTree = "<group>"; };
 		289A5370264D647200B84389 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		289A538C264D64E500B84389 /* NetworkServiceSuccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkServiceSuccess.swift; sourceTree = "<group>"; };
-		289A5392264D64E500B84389 /* PresentationSubmissionUseCaseTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationSubmissionUseCaseTest.swift; sourceTree = "<group>"; };
+		289A5392264D64E500B84389 /* SubmissionUseCaseTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmissionUseCaseTest.swift; sourceTree = "<group>"; };
 		289A5393264D64E500B84389 /* CredentialTypeSchemasUseCaseTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CredentialTypeSchemasUseCaseTest.swift; sourceTree = "<group>"; };
 		289A5394264D64E500B84389 /* PresentationRequestUseCaseTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationRequestUseCaseTest.swift; sourceTree = "<group>"; };
 		289A5395264D64E500B84389 /* GenerateOffersUseCaseTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenerateOffersUseCaseTest.swift; sourceTree = "<group>"; };
@@ -612,7 +616,7 @@
 		28F6093A27678B5C00EBDEC5 /* CountriesUseCaseTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesUseCaseTest.swift; sourceTree = "<group>"; };
 		28FA80E526789CA2000A3C7F /* JwtServiceUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JwtServiceUseCase.swift; sourceTree = "<group>"; };
 		28FA80E726789D25000A3C7F /* JwtServiceUseCaseImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JwtServiceUseCaseImpl.swift; sourceTree = "<group>"; };
-		28FA86472AFABDE700568176 /* UtilsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilsTest.swift; sourceTree = "<group>"; };
+		28FA86472AFABDE700568176 /* VerificationUtilsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationUtilsTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -654,9 +658,18 @@
 			path = Microsoft;
 			sourceTree = "<group>";
 		};
+		283CBD9B2DE5A72C007528D1 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				283CBD9C2DE5A799007528D1 /* Utils.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
 		2840148726F23CA200BD2C93 /* repositories */ = {
 			isa = PBXGroup;
 			children = (
+				283CBD9E2DE5A872007528D1 /* SubmissionRepositoryTest.swift */,
 				2840149126F23CD400BD2C93 /* UrlsTest.swift */,
 			);
 			path = repositories;
@@ -1177,6 +1190,7 @@
 		289A5383264D64E500B84389 /* infrastructure */ = {
 			isa = PBXGroup;
 			children = (
+				283CBD9B2DE5A72C007528D1 /* utils */,
 				284362D42A114825007F70CC /* jwt */,
 				284362C02A11297A007F70CC /* keys */,
 				289A538D264D64E500B84389 /* db */,
@@ -1230,7 +1244,7 @@
 				28C9B25C2A0D143200AC87BD /* KeyServiceUseCaseTest.swift */,
 				285D154826CA92CE00532E1C /* OrganizationsUseCaseTest.swift */,
 				289A5394264D64E500B84389 /* PresentationRequestUseCaseTest.swift */,
-				289A5392264D64E500B84389 /* PresentationSubmissionUseCaseTest.swift */,
+				289A5392264D64E500B84389 /* SubmissionUseCaseTest.swift */,
 				2825AA02272B19860044D7C5 /* VerifiedProfileUseCaseTest.swift */,
 			);
 			path = usecases;
@@ -1345,7 +1359,7 @@
 		28F1A629299EA6D5001A151F /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				28FA86472AFABDE700568176 /* UtilsTest.swift */,
+				28FA86472AFABDE700568176 /* VerificationUtilsTest.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -1714,6 +1728,7 @@
 				289A536F264D647200B84389 /* VCLTests.swift in Sources */,
 				284B89D12B2B32B7000E9776 /* CredentialsByDeepLinkVerifierTest.swift in Sources */,
 				283BCF7029B921350023B219 /* VCLErrorTest.swift in Sources */,
+				283CBD9D2DE5A79C007528D1 /* Utils.swift in Sources */,
 				28BEC7212A0E6E37000DEC88 /* KeyServiceMocks.swift in Sources */,
 				281B64862C22CD3800413861 /* VCLOffersTest.swift in Sources */,
 				288A27D92946744400B6AC63 /* VCLSubmissionTest.swift in Sources */,
@@ -1760,15 +1775,16 @@
 				284BF89D270EDE8700030401 /* GlobalConfigTest.swift in Sources */,
 				2825AA03272B19860044D7C5 /* VerifiedProfileUseCaseTest.swift in Sources */,
 				289A53A6264D64E500B84389 /* PresentationRequestUseCaseTest.swift in Sources */,
-				28FA86482AFABDE700568176 /* UtilsTest.swift in Sources */,
+				28FA86482AFABDE700568176 /* VerificationUtilsTest.swift in Sources */,
 				280587F826CD3BCC00E89146 /* VCLCredentialManifestDescriptorByServiceTest.swift in Sources */,
 				289A53A7264D64E500B84389 /* GenerateOffersUseCaseTest.swift in Sources */,
+				283CBD9F2DE5A875007528D1 /* SubmissionRepositoryTest.swift in Sources */,
 				28F1A628299E9AD6001A151F /* VCLIssuingTypeTest.swift in Sources */,
 				28C15C8726CA87B600E248C3 /* CredentialTypeSchemaMocks.swift in Sources */,
 				2873A4792ACC9DC0003AE086 /* VCLJwtSignServiceMock.swift in Sources */,
 				285F63E32677665E0081D522 /* CredentialTypesUIFormSchemaUseCaseTest.swift in Sources */,
 				2873A4682ACC5315003AE086 /* JwtSignServiceLocalTest.swift in Sources */,
-				289A53A4264D64E500B84389 /* PresentationSubmissionUseCaseTest.swift in Sources */,
+				289A53A4264D64E500B84389 /* SubmissionUseCaseTest.swift in Sources */,
 				28507A212663FCC700F97259 /* ExchangeProgressUseCaseTest.swift in Sources */,
 				285D154726CA926F00532E1C /* OrganizationsMocks.swift in Sources */,
 				2811227C2678CE1700DE519C /* JwtServiceUseCaseTest.swift in Sources */,

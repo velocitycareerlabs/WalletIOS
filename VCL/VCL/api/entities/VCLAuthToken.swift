@@ -51,3 +51,16 @@ public struct VCLAuthToken {
     }
 }
 
+public func == (lhs: VCLAuthToken, rhs: VCLAuthToken) -> Bool {
+    return lhs.accessToken == rhs.accessToken &&
+    lhs.refreshToken == rhs.refreshToken &&
+    lhs.tokenType == rhs.tokenType &&
+    lhs.authTokenUri == rhs.authTokenUri &&
+    lhs.walletDid == rhs.walletDid &&
+    lhs.relyingPartyDid == rhs.relyingPartyDid
+}
+
+public func != (lhs: VCLAuthToken, rhs: VCLAuthToken) -> Bool {
+    return !(lhs == rhs)
+}
+
