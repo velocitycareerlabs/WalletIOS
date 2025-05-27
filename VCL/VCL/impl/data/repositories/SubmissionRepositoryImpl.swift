@@ -9,13 +9,11 @@
 
 import Foundation
 
-final class SubmissionRepositoryImpl: SubmissionRepository {
+class SubmissionRepositoryImpl: SubmissionRepository {
     
     private let networkService: NetworkService
     
-    init(
-        _ networkService: NetworkService
-    ) {
+    init(_ networkService: NetworkService) {
         self.networkService = networkService
     }
     
@@ -48,7 +46,7 @@ final class SubmissionRepositoryImpl: SubmissionRepository {
             })
     }
     
-    private func generateHeader(authToken: VCLAuthToken?) -> [(String, String)] {
+    internal func generateHeader(authToken: VCLAuthToken? = nil) -> [(String, String)] {
         if let token = authToken {
             return [
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion),
