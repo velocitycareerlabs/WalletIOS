@@ -28,7 +28,7 @@ class SubmissionRepositoryImpl: SubmissionRepository {
             body: submission.generateRequestBody(jwt: jwt).toJsonString(),
             contentType: Request.ContentType.ApplicationJson,
             method: .POST,
-            headers: generateHeader(authToken: authToken),
+            headers: generateHeader(accessToken: authToken?.accessToken),
             completionBlock: { [weak self] result in
                 if let self = self {
                     do {
@@ -46,11 +46,11 @@ class SubmissionRepositoryImpl: SubmissionRepository {
             })
     }
     
-    internal func generateHeader(authToken: VCLAuthToken? = nil) -> [(String, String)] {
-        if let token = authToken {
+    internal func generateHeader(accessToken: VCLToken? = nil) -> [(String, String)] {
+        if let accessToken = accessToken {
             return [
                 (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion),
-                (HeaderKeys.Authorization, "\(HeaderValues.PrefixBearer) \(token.accessToken.value)")
+                (HeaderKeys.Authorization, "\(HeaderValues.PrefixBearer) \(accessToken.value)")
             ]
         } else {
             return [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]

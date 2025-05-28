@@ -68,7 +68,7 @@ final class SubmissionRepositoryTest: XCTestCase {
         }
         
         XCTAssertTrue(subject.generateHeaderCalled)
-        XCTAssertEqual(subject.capturedAuthToken?.accessToken.value, nil)
+        XCTAssertEqual(subject.capturedAuthToken?.value, nil)
     }
     
     func testSubmitPresentationTypeFeedSuccess() {
@@ -107,11 +107,11 @@ final class SubmissionRepositoryTest: XCTestCase {
         }
         
         XCTAssertTrue(subject.generateHeaderCalled)
-        XCTAssert(subject.capturedAuthToken! == authToken)
+        XCTAssert(subject.capturedAuthToken! == authToken.accessToken)
     }
     
     func testGenerateHeaderWithAuthToken() {
-        let header = subject.generateHeader(authToken: authToken)
+        let header = subject.generateHeader(accessToken: authToken.accessToken)
 
         assert(header.count == 2)
 
@@ -134,11 +134,11 @@ final class SubmissionRepositoryTest: XCTestCase {
 
 class SpyPresentationSubmissionRepository: SubmissionRepositoryImpl {
     var generateHeaderCalled = false
-    var capturedAuthToken: VCLAuthToken?
+    var capturedAuthToken: VCLToken?
 
-    override func generateHeader(authToken: VCLAuthToken? = nil) -> [(String, String)] {
+    override func generateHeader(accessToken: VCLToken? = nil) -> [(String, String)] {
         generateHeaderCalled = true
-        capturedAuthToken = authToken
-        return super.generateHeader(authToken: authToken)
+        capturedAuthToken = accessToken
+        return super.generateHeader(accessToken: accessToken)
     }
 }
