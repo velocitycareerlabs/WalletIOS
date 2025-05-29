@@ -18,7 +18,7 @@ final class SubmissionUseCaseTest: XCTestCase {
     private let authToken = TokenMocks.AuthToken
     private var didJwk: VCLDidJwk!
     private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
-    private let networkServiceSuccessSpy = NetworkServiceSuccessSpy(validResponse: PresentationSubmissionMocks.PresentationSubmissionResultJson)
+    private var networkServiceSuccessSpy: NetworkServiceSuccessSpy!
     
     private var expectedHeadersWithAccessToken: Array<(String, String)>!
     private var expectedHeadersWithoutAccessToken: Array<(String, String)>!
@@ -38,6 +38,8 @@ final class SubmissionUseCaseTest: XCTestCase {
             (HeaderKeys.Authorization, "\(HeaderValues.PrefixBearer) \(authToken.accessToken.value)")
         ]
         expectedHeadersWithoutAccessToken = [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
+        
+        networkServiceSuccessSpy = NetworkServiceSuccessSpy(validResponse: PresentationSubmissionMocks.PresentationSubmissionResultJson)
         
         subject = PresentationSubmissionUseCaseImpl(
             PresentationSubmissionRepositoryImpl(
