@@ -64,7 +64,6 @@
 		283BCF7029B921350023B219 /* VCLErrorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283BCF6F29B921350023B219 /* VCLErrorTest.swift */; };
 		283BCF7229B921BA0023B219 /* ErrorMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283BCF7129B921BA0023B219 /* ErrorMocks.swift */; };
 		283CBD9D2DE5A79C007528D1 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283CBD9C2DE5A799007528D1 /* Utils.swift */; };
-		283CBD9F2DE5A875007528D1 /* SubmissionRepositoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283CBD9E2DE5A872007528D1 /* SubmissionRepositoryTest.swift */; };
 		2840149226F23CD400BD2C93 /* UrlsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2840149126F23CD400BD2C93 /* UrlsTest.swift */; };
 		28429A3A2A6944F600496342 /* VCLXVnfProtocolVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28429A392A6944F600496342 /* VCLXVnfProtocolVersion.swift */; };
 		2842BB5B26C15B4C00B07F2E /* VCLSubmission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2842BB5A26C15B4C00B07F2E /* VCLSubmission.swift */; };
@@ -367,7 +366,6 @@
 		283BCF6F29B921350023B219 /* VCLErrorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLErrorTest.swift; sourceTree = "<group>"; };
 		283BCF7129B921BA0023B219 /* ErrorMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMocks.swift; sourceTree = "<group>"; };
 		283CBD9C2DE5A799007528D1 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		283CBD9E2DE5A872007528D1 /* SubmissionRepositoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmissionRepositoryTest.swift; sourceTree = "<group>"; };
 		2840149126F23CD400BD2C93 /* UrlsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlsTest.swift; sourceTree = "<group>"; };
 		28429A392A6944F600496342 /* VCLXVnfProtocolVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLXVnfProtocolVersion.swift; sourceTree = "<group>"; };
 		2842BB5A26C15B4C00B07F2E /* VCLSubmission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLSubmission.swift; sourceTree = "<group>"; };
@@ -669,7 +667,6 @@
 		2840148726F23CA200BD2C93 /* repositories */ = {
 			isa = PBXGroup;
 			children = (
-				283CBD9E2DE5A872007528D1 /* SubmissionRepositoryTest.swift */,
 				2840149126F23CD400BD2C93 /* UrlsTest.swift */,
 			);
 			path = repositories;
@@ -1778,7 +1775,6 @@
 				28FA86482AFABDE700568176 /* VerificationUtilsTest.swift in Sources */,
 				280587F826CD3BCC00E89146 /* VCLCredentialManifestDescriptorByServiceTest.swift in Sources */,
 				289A53A7264D64E500B84389 /* GenerateOffersUseCaseTest.swift in Sources */,
-				283CBD9F2DE5A875007528D1 /* SubmissionRepositoryTest.swift in Sources */,
 				28F1A628299E9AD6001A151F /* VCLIssuingTypeTest.swift in Sources */,
 				28C15C8726CA87B600E248C3 /* CredentialTypeSchemaMocks.swift in Sources */,
 				2873A4792ACC9DC0003AE086 /* VCLJwtSignServiceMock.swift in Sources */,
