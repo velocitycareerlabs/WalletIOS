@@ -10,7 +10,7 @@
 import Foundation
 @testable import VCL
 
-final class NetworkServiceSuccess: NetworkService {
+class NetworkServiceSuccess: NetworkService {
     private let validResponse: String
     
     init(validResponse: String) {

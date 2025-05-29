@@ -9,7 +9,7 @@
 
 import Foundation
 
-class SubmissionRepositoryImpl: SubmissionRepository {
+final class SubmissionRepositoryImpl: SubmissionRepository {
     
     private let networkService: NetworkService
     
