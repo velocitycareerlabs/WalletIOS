@@ -18,7 +18,11 @@ final class SubmissionUseCaseTest: XCTestCase {
     private let authToken = TokenMocks.AuthToken
     private var didJwk: VCLDidJwk!
     private let keyService = VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)
-
+    private var networkServiceSuccessSpy: NetworkServiceSuccessSpy!
+    
+    private var expectedHeadersWithAccessToken: Array<(String, String)>!
+    private var expectedHeadersWithoutAccessToken: Array<(String, String)>!
+    
     override func setUp() {
         keyService.generateDidJwk() { [weak self] didJwkResult in
             do {
@@ -27,12 +31,19 @@ final class SubmissionUseCaseTest: XCTestCase {
                 XCTFail("\(error)")
             }
         }
-    }
-    
-    func testSubmitPresentationSuccess() {
+        
+        expectedHeadersWithAccessToken =
+        [
+            (HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion),
+            (HeaderKeys.Authorization, "\(HeaderValues.PrefixBearer) \(authToken.accessToken.value)")
+        ]
+        expectedHeadersWithoutAccessToken = [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
+        
+        networkServiceSuccessSpy = NetworkServiceSuccessSpy(validResponse: PresentationSubmissionMocks.PresentationSubmissionResultJson)
+        
         subject = PresentationSubmissionUseCaseImpl(
             PresentationSubmissionRepositoryImpl(
-                NetworkServiceSuccess(validResponse: PresentationSubmissionMocks.PresentationSubmissionResultJson)
+                networkServiceSuccessSpy
             ),
             JwtServiceRepositoryImpl(
                 VCLJwtSignServiceLocalImpl(keyService),
@@ -40,9 +51,12 @@ final class SubmissionUseCaseTest: XCTestCase {
             ),
             EmptyExecutor()
         )
+    }
+    
+    func testSubmitPresentationSuccess() {
         let presentationSubmission = VCLPresentationSubmission(
             presentationRequest: VCLPresentationRequest(
-                jwt: CommonMocks.JWT, 
+                jwt: CommonMocks.JWT,
                 verifiedProfile: VCLVerifiedProfile(payload: [:]),
                 deepLink: VCLDeepLink(value: ""),
                 didJwk: didJwk
@@ -57,7 +71,7 @@ final class SubmissionUseCaseTest: XCTestCase {
         
         subject.submit(
             submission: presentationSubmission
-        ) {
+        ) { [self] in
             do {
                 let presentationSubmissionResult = try $0.get()
                 
@@ -65,6 +79,14 @@ final class SubmissionUseCaseTest: XCTestCase {
                 assert(presentationSubmissionResult.exchange.id == expectedSubmissionResult.exchange.id)
                 assert(presentationSubmissionResult.jti == expectedSubmissionResult.jti)
                 assert(presentationSubmissionResult.submissionId == expectedSubmissionResult.submissionId)
+                
+                XCTAssertTrue(networkServiceSuccessSpy.sendRequestCalled)
+                XCTAssertTrue(
+                    zip(
+                        networkServiceSuccessSpy.headersCaptured!,
+                        expectedHeadersWithoutAccessToken
+                    ).allSatisfy { $0 == $1 } && networkServiceSuccessSpy.headersCaptured!.count == expectedHeadersWithoutAccessToken.count
+                )
             } catch {
                 XCTFail("\(error)")
             }
@@ -72,16 +94,6 @@ final class SubmissionUseCaseTest: XCTestCase {
     }
     
     func testSubmitPresentationTypeFeedSuccess() {
-        subject = PresentationSubmissionUseCaseImpl(
-            PresentationSubmissionRepositoryImpl(
-                NetworkServiceSuccess(validResponse: PresentationSubmissionMocks.PresentationSubmissionResultJson)
-            ),
-            JwtServiceRepositoryImpl(
-                VCLJwtSignServiceLocalImpl(keyService),
-                VCLJwtVerifyServiceLocalImpl()
-            ),
-            EmptyExecutor()
-        )
         let presentationSubmission = VCLPresentationSubmission(
             presentationRequest: VCLPresentationRequest(
                 jwt: CommonMocks.JWT,
@@ -100,7 +112,7 @@ final class SubmissionUseCaseTest: XCTestCase {
         subject.submit(
             submission: presentationSubmission,
             authToken: authToken
-        ) {
+        ) { [self] in
             do {
                 let presentationSubmissionResult = try $0.get()
                 
@@ -108,9 +120,45 @@ final class SubmissionUseCaseTest: XCTestCase {
                 assert(presentationSubmissionResult.exchange.id == expectedSubmissionResult.exchange.id)
                 assert(presentationSubmissionResult.jti == expectedSubmissionResult.jti)
                 assert(presentationSubmissionResult.submissionId == expectedSubmissionResult.submissionId)
+                
+                XCTAssertTrue(networkServiceSuccessSpy.sendRequestCalled)
+                XCTAssertTrue(
+                    zip(
+                        networkServiceSuccessSpy.headersCaptured!,
+                        expectedHeadersWithAccessToken
+                    ).allSatisfy { $0 == $1 } && networkServiceSuccessSpy.headersCaptured!.count == expectedHeadersWithAccessToken.count
+                )
+                
             } catch {
                 XCTFail("\(error)")
             }
         }
+    }
+}
+
+class NetworkServiceSuccessSpy: NetworkServiceSuccess {
+    var sendRequestCalled = false
+    var headersCaptured: Array<(String, String)>?
+
+    override func sendRequest(
+        endpoint: String,
+        body: String?,
+        contentType: Request.ContentType,
+        method: Request.HttpMethod,
+        headers: Array<(String, String)>?,
+        cachePolicy: NSURLRequest.CachePolicy,
+        completionBlock: @escaping (VCLResult<Response>) -> Void
+    ) {
+        sendRequestCalled = true
+        headersCaptured = headers
+        super.sendRequest(
+            endpoint: endpoint,
+            body: body,
+            contentType: contentType,
+            method: method,
+            headers: headers,
+            cachePolicy: cachePolicy,
+            completionBlock: completionBlock
+        )
     }
 }
