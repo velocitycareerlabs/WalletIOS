@@ -27,7 +27,11 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            CredentialManifestByDeepLinkVerifierImpl(),
+            CredentialManifestByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         )
 
@@ -75,7 +79,11 @@ final class CredentialManifestUseCaseTest: XCTestCase {
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            CredentialManifestByDeepLinkVerifierImpl(),
+            CredentialManifestByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         )
 

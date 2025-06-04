@@ -147,7 +147,11 @@ class VclBlocksProvider {
                 try chooseJwtSignService(cryptoServicesDescriptor),
                 try chooseJwtVerifyService(cryptoServicesDescriptor)
             ),
-            PresentationRequestByDeepLinkVerifierImpl(),
+            PresentationRequestByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceImpl()
+                )
+            ),
             ExecutorImpl.instance
         )
     }
@@ -190,7 +194,11 @@ class VclBlocksProvider {
                 try chooseJwtSignService(cryptoServicesDescriptor),
                 try chooseJwtVerifyService(cryptoServicesDescriptor)
             ),
-            CredentialManifestByDeepLinkVerifierImpl(),
+            CredentialManifestByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceImpl()
+                )
+            ),
             ExecutorImpl.instance
         )
     }
@@ -224,7 +232,11 @@ class VclBlocksProvider {
             GenerateOffersRepositoryImpl(
                 NetworkServiceImpl()
             ),
-            OffersByDeepLinkVerifierImpl(),
+            OffersByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceImpl()
+                )
+            ),
             ExecutorImpl.instance
         )
     }
@@ -251,7 +263,11 @@ class VclBlocksProvider {
             ),
             credentialIssuerVerifier,
             CredentialDidVerifierImpl(),
-            CredentialsByDeepLinkVerifierImpl(),
+            CredentialsByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceImpl()
+                )
+            ),
             ExecutorImpl.instance
         )
     }
