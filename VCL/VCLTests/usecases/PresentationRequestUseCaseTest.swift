@@ -30,7 +30,11 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            PresentationRequestByDeepLinkVerifierImpl(),
+            PresentationRequestByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         )
         subject1.getPresentationRequest(
@@ -72,7 +76,11 @@ final class PresentationRequestUseCaseTest: XCTestCase {
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            PresentationRequestByDeepLinkVerifierImpl(),
+            PresentationRequestByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         )
         subject2.getPresentationRequest(
