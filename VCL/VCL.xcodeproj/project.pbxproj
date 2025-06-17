@@ -1282,8 +1282,6 @@
 		28BA0AD426CA636900FF28BB /* valid */ = {
 			isa = PBXGroup;
 			children = (
-				28E64F882A0C08EC00A92FC0 /* microsoft */,
-				289A538B264D64E500B84389 /* network */,
 				28BA0ADF26CA63BB00FF28BB /* CountriesMocks.swift */,
 				281E505026CA9FEB00D0FB4F /* CredentialManifestDescriptorMocks.swift */,
 				28A595AC26CA700000D6E176 /* CredentialManifestMocks.swift */,
@@ -1292,13 +1290,16 @@
 				28C15C9126CA8AA000E248C3 /* CredentialTypesMocks.swift */,
 				28C15C9326CA8B0500E248C3 /* CredentialTypesUIFormSchemaMocks.swift */,
 				281E504C26CA9D6F00D0FB4F /* DeepLinkMocks.swift */,
+				28F2D9FB2B73B311007E4583 /* DidJwkMocks.swift */,
 				283BCF7129B921BA0023B219 /* ErrorMocks.swift */,
 				28C15C9926CA8D3C00E248C3 /* ExchangeProgressMocks.swift */,
-				28F2D9FB2B73B311007E4583 /* DidJwkMocks.swift */,
 				285D153B26CA90E200532E1C /* GenerateOffersMocks.swift */,
 				284D72242A670E0C00298DB9 /* JsonLdMocks.swift */,
 				28A595B726CA724900D6E176 /* JwtServiceMocks.swift */,
 				28BEC7202A0E6E37000DEC88 /* KeyServiceMocks.swift */,
+				28E64F882A0C08EC00A92FC0 /* microsoft */,
+				289A538B264D64E500B84389 /* network */,
+				281B64872C22CDCB00413861 /* OffersMocks.swift */,
 				281E505226CAA07900D0FB4F /* OrganizationsDescriptorMocks.swift */,
 				285D154626CA926F00532E1C /* OrganizationsMocks.swift */,
 				28C52809293DFA7E00D5D7FF /* PresentationRequestDescriptorMocks.swift */,
@@ -1309,7 +1310,6 @@
 				2873A47A2ACC9DD3003AE086 /* VCLJwtVerifyServiceMock.swift */,
 				285C90E72AADCF62000A9E3E /* VCLKeyServiceMock.swift */,
 				2825AA0D272B19D40044D7C5 /* VerifiedProfileMocks.swift */,
-				281B64872C22CDCB00413861 /* OffersMocks.swift */,
 			);
 			path = valid;
 			sourceTree = "<group>";
@@ -1952,7 +1952,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 163;
+				CURRENT_PROJECT_VERSION = 164;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1965,7 +1965,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.7.3;
+				MARKETING_VERSION = 2.7.4;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1982,7 +1982,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 163;
+				CURRENT_PROJECT_VERSION = 164;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1995,7 +1995,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.7.3;
+				MARKETING_VERSION = 2.7.4;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

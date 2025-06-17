@@ -14,7 +14,6 @@ public struct VCLCredentialManifestDescriptorByService: VCLCredentialManifestDes
     public var issuingType: VCLIssuingType
     public var credentialTypes: [String]?
     public var pushDelegate: VCLPushDelegate?
-    public var did: String? { get { return retrieveDid() } }
     public var vendorOriginContext: String?
     public var deepLink: VCLDeepLink?
     public var didJwk: VCLDidJwk

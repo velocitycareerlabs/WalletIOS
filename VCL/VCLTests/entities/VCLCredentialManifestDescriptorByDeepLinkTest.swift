@@ -34,6 +34,24 @@ final class VCLCredentialManifestDescriptorByDeepLinkTest: XCTestCase {
         assert(subject.pushDelegate?.pushToken == "some_token")
     }
     
+    func testCredentialManifestDescriptorFullValidByDeepLinkWithIdSuccess() {
+        subject = VCLCredentialManifestDescriptorByDeepLink(
+            deepLink: DeepLinkMocks.CredentialManifestDeepLinkMainNetWithId,
+            issuingType: VCLIssuingType.Career,
+            pushDelegate: VCLPushDelegate(pushUrl: "some_url", pushToken: "some_token"),
+            didJwk: DidJwkMocks.DidJwk
+        )
+
+        assert(
+            subject.endpoint?.decode()?.isUrlEquivalentTo(
+                url: DeepLinkMocks.CredentialManifestRequestDecodedUriWithIdStr + "&push_delegate.push_url=some_url&push_delegate.push_token=some_token"
+            ) == true
+        )
+        assert(subject.did == DeepLinkMocks.IssuerDid)
+        assert(subject.pushDelegate?.pushUrl == "some_url")
+        assert(subject.pushDelegate?.pushToken == "some_token")
+    }
+    
     override func tearDown() {
     }
 }
