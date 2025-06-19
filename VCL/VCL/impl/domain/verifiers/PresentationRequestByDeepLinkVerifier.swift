@@ -13,6 +13,7 @@ protocol PresentationRequestByDeepLinkVerifier {
     func verifyPresentationRequest(
         presentationRequest: VCLPresentationRequest,
         deepLink: VCLDeepLink,
+        didDocument: VCLDidDocument,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
 }

@@ -22,7 +22,11 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffers)
             ),
-            OffersByDeepLinkVerifierImpl(),
+            OffersByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
@@ -51,7 +55,11 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonObj)
             ),
-            OffersByDeepLinkVerifierImpl(),
+            OffersByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(
@@ -81,7 +89,11 @@ final class GenerateOffersUseCaseTest: XCTestCase {
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffersEmptyJsonArr)
             ),
-            OffersByDeepLinkVerifierImpl(),
+            OffersByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         )
         let generateOffersDescriptor = VCLGenerateOffersDescriptor(

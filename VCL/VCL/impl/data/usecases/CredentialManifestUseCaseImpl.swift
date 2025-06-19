@@ -12,20 +12,20 @@ import Foundation
 final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     
     private let credentialManifestRepository: CredentialManifestRepository
-    private let resolveKidRepository: ResolveKidRepository
+    private let resolveDidDocumentRepository: ResolveDidDocumentRepository
     private let jwtServiceRepository: JwtServiceRepository
     private let credentialManifestByDeepLinkVerifier: CredentialManifestByDeepLinkVerifier
     private let executor: Executor
     
     init(
         _ credentialManifestRepository: CredentialManifestRepository,
-        _ resolveKidRepository: ResolveKidRepository,
+        _ resolveDidDocumentRepository: ResolveDidDocumentRepository,
         _ jwtServiceRepository: JwtServiceRepository,
         _ credentialManifestByDeepLinkVerifier: CredentialManifestByDeepLinkVerifier,
         _ executor: Executor
     ) {
         self.credentialManifestRepository = credentialManifestRepository
-        self.resolveKidRepository = resolveKidRepository
+        self.resolveDidDocumentRepository = resolveDidDocumentRepository
         self.jwtServiceRepository = jwtServiceRepository
         self.credentialManifestByDeepLinkVerifier = credentialManifestByDeepLinkVerifier
         self.executor = executor
@@ -43,7 +43,7 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                 [weak self] credentialManifestResult in
                 guard let self = self else { return }
                 do {
-                    self.onGetCredentialManifestSuccess(
+                    self.resolveDidDocument(
                         VCLCredentialManifest(
                             jwt: VCLJwt(encodedJwt: try credentialManifestResult.get()),
                             vendorOriginContext: credentialManifestDescriptor.vendorOriginContext,
@@ -61,18 +61,81 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         }
     }
     
-    private func onGetCredentialManifestSuccess(
+    private func resolveDidDocument(
         _ credentialManifest: VCLCredentialManifest,
+        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+    ) {
+        if let kid = credentialManifest.jwt.kid {
+            resolveDidDocumentRepository.resolveDidDocument(did: credentialManifest.iss) { [weak self] didDocumentResult in
+                do {
+                    let didDocument = try didDocumentResult.get()
+                    if let publicJwk = didDocument.getPublicJwk(kid: kid) {
+                        self?.verifyCredentialManifestJwt(
+                            publicJwk,
+                            credentialManifest,
+                            didDocument,
+                            completionBlock
+                        )
+                    } else {
+                        self?.onError(
+                            VCLError(error: "public jwk not found for kid: \(kid)"),
+                            completionBlock
+                        )
+                    }
+                } catch {
+                    self?.onError(error, completionBlock)
+                }
+            }
+        } else {
+            self.onError(
+                VCLError(error: "Empty credentialManifest.jwt.kid in jwt: \(credentialManifest.jwt)"),
+                completionBlock
+            )
+        }
+    }
+    
+    private func verifyCredentialManifestJwt(
+        _ publicJwk: VCLPublicJwk,
+        _ credentialManifest: VCLCredentialManifest,
+        _ didDocument: VCLDidDocument,
+        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
+    ) {
+        jwtServiceRepository.verifyJwt(
+            jwt: credentialManifest.jwt,
+            publicJwk: publicJwk,
+            remoteCryptoServicesToken: credentialManifest.remoteCryptoServicesToken
+        ) { [weak self] verificationResult in
+            do {
+                _ = try verificationResult.get()
+                self?.verifyCredentialManifestByDeepLink(
+                    credentialManifest,
+                    didDocument,
+                    completionBlock
+                )
+            } catch {
+                self?.onError(error, completionBlock)
+            }
+        }
+    }
+    
+    private func verifyCredentialManifestByDeepLink(
+        _ credentialManifest: VCLCredentialManifest,
+        _ didDocument: VCLDidDocument,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
         if let deepLink = credentialManifest.deepLink {
             credentialManifestByDeepLinkVerifier.verifyCredentialManifest(
-                credentialManifest: credentialManifest, 
-                deepLink: deepLink
-            ) { [weak self] isVerifiedRes in
+                credentialManifest: credentialManifest,
+                deepLink: deepLink,
+                didDocument: didDocument
+            ) { [weak self] in
                 do {
-                    VCLLog.d("Credential manifest deep link verification result: \(try isVerifiedRes.get())")
-                    self?.onCredentialManifestDidVerificationSuccess(
+                    let isVerified = try $0.get()
+                    VCLLog.d(
+                        "Credential manifest deep link verification result: \(isVerified)"
+                    )
+                    self?.onVerificationSuccess(
+                        isVerified,
                         credentialManifest,
                         completionBlock
                     )
@@ -83,58 +146,8 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
             }
         } else {
             VCLLog.d("Deep link was not provided => nothing to verify")
-            onCredentialManifestDidVerificationSuccess(
-                credentialManifest,
-                completionBlock
-            )
-        }
-    }
-    
-    private func onCredentialManifestDidVerificationSuccess(
-        _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
-    ) {
-        if let kid = credentialManifest.jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
-            self.resolveKidRepository.getPublicKey(kid: kid) {
-                [weak self] publicKeyResult in
-                do {
-                    let publicKey = try publicKeyResult.get()
-                    self?.onResolvePublicKeySuccess(
-                        publicKey,
-                        credentialManifest,
-                        completionBlock
-                    )
-                } catch {
-                    self?.onError(error, completionBlock)
-                }
-            }
-        } else {
-            self.executor.runOnMain {
-                completionBlock(.failure(VCLError(message: "Empty KeyID")))
-            }
-        }
-    }
-    
-    private func onResolvePublicKeySuccess(
-        _ publicJwk: VCLPublicJwk,
-        _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
-    ) {
-        self.jwtServiceRepository.verifyJwt(
-            jwt: credentialManifest.jwt,
-            publicJwk: publicJwk,
-            remoteCryptoServicesToken: credentialManifest.remoteCryptoServicesToken
-        ) {
-            [weak self] isVerifiedResult in
-            do {
-                let isVerified = try isVerifiedResult.get()
-                self?.onVerificationSuccess(
-                    isVerified,
-                    credentialManifest,
-                    completionBlock
-                )
-            } catch {
-                self?.onError(error, completionBlock)
+            executor.runOnMain {
+                completionBlock(VCLResult.success(credentialManifest))
             }
         }
     }
@@ -146,11 +159,11 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
     ) {
         if (isVerified) {
             executor.runOnMain {
-                completionBlock(.success(credentialManifest))
+                completionBlock(VCLResult.success(credentialManifest))
             }
         } else {
             onError(
-                VCLError(message: "Failed to verify credentialManifest jwt:\n\(credentialManifest.jwt)"),
+                VCLError(error: "Failed to verify credentialManifest jwt:\n\(credentialManifest.jwt)"),
                 completionBlock
             )
         }

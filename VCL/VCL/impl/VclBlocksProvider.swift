@@ -140,7 +140,7 @@ class VclBlocksProvider {
             PresentationRequestRepositoryImpl(
                 NetworkServiceImpl()
             ),
-            ResolveKidRepositoryImpl(
+            ResolveDidDocumentRepositoryImpl(
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
@@ -183,7 +183,7 @@ class VclBlocksProvider {
             CredentialManifestRepositoryImpl(
                 NetworkServiceImpl()
             ),
-            ResolveKidRepositoryImpl(
+            ResolveDidDocumentRepositoryImpl(
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
@@ -224,7 +224,11 @@ class VclBlocksProvider {
             GenerateOffersRepositoryImpl(
                 NetworkServiceImpl()
             ),
-            OffersByDeepLinkVerifierImpl(),
+            OffersByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceImpl()
+                )
+            ),
             ExecutorImpl.instance
         )
     }
@@ -251,7 +255,11 @@ class VclBlocksProvider {
             ),
             credentialIssuerVerifier,
             CredentialDidVerifierImpl(),
-            CredentialsByDeepLinkVerifierImpl(),
+            CredentialsByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceImpl()
+                )
+            ),
             ExecutorImpl.instance
         )
     }

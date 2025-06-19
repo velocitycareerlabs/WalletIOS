@@ -13,6 +13,7 @@ protocol CredentialManifestByDeepLinkVerifier {
     func verifyCredentialManifest(
         credentialManifest: VCLCredentialManifest,
         deepLink: VCLDeepLink,
+        didDocument: VCLDidDocument,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     )
 }

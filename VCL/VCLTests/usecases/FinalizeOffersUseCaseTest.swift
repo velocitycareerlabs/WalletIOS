@@ -45,7 +45,11 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
             GenerateOffersRepositoryImpl(
                 NetworkServiceSuccess(validResponse: GenerateOffersMocks.GeneratedOffers)
             ),
-            OffersByDeepLinkVerifierImpl(),
+            OffersByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         ).generateOffers(
             generateOffersDescriptor: generateOffersDescriptor,
@@ -105,7 +109,11 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),
-            CredentialsByDeepLinkVerifierImpl(),
+            CredentialsByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         )
         
@@ -150,7 +158,11 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),
-            CredentialsByDeepLinkVerifierImpl(),
+            CredentialsByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         )
         
@@ -195,7 +207,11 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),
-            CredentialsByDeepLinkVerifierImpl(),
+            CredentialsByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         )
         
@@ -230,7 +246,11 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),
-            CredentialsByDeepLinkVerifierImpl(),
+            CredentialsByDeepLinkVerifierImpl(
+                ResolveDidDocumentRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
+                )
+            ),
             EmptyExecutor()
         )
         
