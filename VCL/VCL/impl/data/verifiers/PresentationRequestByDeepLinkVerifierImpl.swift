@@ -11,53 +11,25 @@ import Foundation
 
 final class PresentationRequestByDeepLinkVerifierImpl: PresentationRequestByDeepLinkVerifier {
     
-    let didDocumentRepository: ResolveDidDocumentRepository
-
-    init(_ didDocumentRepository: ResolveDidDocumentRepository) {
-        self.didDocumentRepository = didDocumentRepository
-    }
-    
     func verifyPresentationRequest(
         presentationRequest: VCLPresentationRequest,
         deepLink: VCLDeepLink,
+        didDocument: VCLDidDocument,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if let did = deepLink.did {
-            didDocumentRepository.resolveDidDocument(did: did) { [weak self] didDocumentResult in
-                do {
-                    let didDocument = try didDocumentResult.get()
-                    self?.verify(
-                        presentationRequest: presentationRequest,
-                        didDocument: didDocument,
-                        completionBlock: completionBlock
-                    )
-                } catch {
-                    self?.onError(
-                        errorMessage: "Failed to resolve DID Document: $\(did)\n\(error)",
-                        completionBlock: completionBlock
-                    )
-                }
+        if let deepLinkDid = deepLink.did {
+            if (didDocument.id == presentationRequest.iss && didDocument.id == deepLinkDid ||
+                didDocument.alsoKnownAs.contains(presentationRequest.iss) && didDocument.alsoKnownAs.contains(deepLinkDid)) {
+                completionBlock(.success(true))
+            } else {
+                VCLLog.e("presentation request: \(presentationRequest.jwt.encodedJwt) \ndidDocument: \(didDocument)")
+                completionBlock(.failure(VCLError(errorCode: VCLErrorCode.MismatchedPresentationRequestInspectorDid.rawValue)))
             }
         } else {
             onError(
                 errorMessage: "DID not found in deep link: \(deepLink.value)",
                 completionBlock: completionBlock
             )
-        }
-    }
-    
-    private func verify(
-        presentationRequest: VCLPresentationRequest,
-        didDocument: VCLDidDocument,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
-    ) {
-        if (didDocument.id == presentationRequest.iss ||
-            didDocument.alsoKnownAs.contains(presentationRequest.iss)
-        ) {
-            completionBlock(.success(true))
-        } else {
-            VCLLog.e("presentation request: \(presentationRequest.jwt.encodedJwt) \ndidDocument: \(didDocument)")
-            completionBlock(.failure(VCLError(errorCode: VCLErrorCode.MismatchedPresentationRequestInspectorDid.rawValue)))
         }
     }
     

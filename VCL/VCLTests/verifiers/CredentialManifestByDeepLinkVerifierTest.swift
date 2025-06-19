@@ -22,15 +22,12 @@ class CredentialManifestByDeepLinkVerifierTest: XCTestCase {
     private let deepLink = DeepLinkMocks.CredentialManifestDeepLinkDevNet
 
     func testVerifyCredentialManifestSuccess() {
-        subject = CredentialManifestByDeepLinkVerifierImpl(
-            ResolveDidDocumentRepositoryImpl(
-                NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
-            )
-        )
+        subject = CredentialManifestByDeepLinkVerifierImpl()
         
         subject.verifyCredentialManifest(
             credentialManifest: credentialManifest,
-            deepLink: deepLink
+            deepLink: deepLink,
+            didDocument: DidDocumentMocks.DidDocumentMock
         ) { isVerifiedRes in
             do {
                 let isVerified = try isVerifiedRes.get()
@@ -43,15 +40,12 @@ class CredentialManifestByDeepLinkVerifierTest: XCTestCase {
                        
 
     func testVerifyCredentialManifestError() {
-        subject = CredentialManifestByDeepLinkVerifierImpl(
-            ResolveDidDocumentRepositoryImpl(
-                NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentWithWrongDidMockStr)
-            )
-        )
+        subject = CredentialManifestByDeepLinkVerifierImpl()
         
         subject.verifyCredentialManifest(
             credentialManifest: credentialManifest,
-            deepLink: deepLink
+            deepLink: deepLink,
+            didDocument: DidDocumentMocks.DidDocumentWithWrongDidMock
         ) { isVerifiedRes in
             do {
                 _ = try isVerifiedRes.get()

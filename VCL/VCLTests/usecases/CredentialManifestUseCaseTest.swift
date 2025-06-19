@@ -20,18 +20,14 @@ final class CredentialManifestUseCaseTest: XCTestCase {
             CredentialManifestRepositoryImpl(
                 NetworkServiceSuccess(validResponse: CredentialManifestMocks.CredentialManifest1)
             ),
-            ResolveKidRepositoryImpl(
-                NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
+            ResolveDidDocumentRepositoryImpl(
+                NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
             ),
             JwtServiceRepositoryImpl(
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            CredentialManifestByDeepLinkVerifierImpl(
-                ResolveDidDocumentRepositoryImpl(
-                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
-                )
-            ),
+            CredentialManifestByDeepLinkVerifierImpl(),
             EmptyExecutor()
         )
 
@@ -72,18 +68,14 @@ final class CredentialManifestUseCaseTest: XCTestCase {
             CredentialManifestRepositoryImpl(
                 NetworkServiceSuccess(validResponse: "wrong payload")
             ),
-            ResolveKidRepositoryImpl(
-                NetworkServiceSuccess(validResponse: CredentialManifestMocks.JWK)
+            ResolveDidDocumentRepositoryImpl(
+                NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
             ),
             JwtServiceRepositoryImpl(
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            CredentialManifestByDeepLinkVerifierImpl(
-                ResolveDidDocumentRepositoryImpl(
-                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
-                )
-            ),
+            CredentialManifestByDeepLinkVerifierImpl(),
             EmptyExecutor()
         )
 

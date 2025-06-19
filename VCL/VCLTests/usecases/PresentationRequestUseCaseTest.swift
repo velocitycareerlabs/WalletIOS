@@ -23,18 +23,14 @@ final class PresentationRequestUseCaseTest: XCTestCase {
             PresentationRequestRepositoryImpl(
                 NetworkServiceSuccess(validResponse: PresentationRequestMocks.EncodedPresentationRequestResponse)
             ),
-            ResolveKidRepositoryImpl(
-                NetworkServiceSuccess(validResponse: PresentationRequestMocks.JWK)
+            ResolveDidDocumentRepositoryImpl(
+                NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
             ),
             JwtServiceRepositoryImpl(
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            PresentationRequestByDeepLinkVerifierImpl(
-                ResolveDidDocumentRepositoryImpl(
-                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
-                )
-            ),
+            PresentationRequestByDeepLinkVerifierImpl(),
             EmptyExecutor()
         )
         subject1.getPresentationRequest(
@@ -69,25 +65,21 @@ final class PresentationRequestUseCaseTest: XCTestCase {
             PresentationRequestRepositoryImpl(
                 NetworkServiceSuccess(validResponse: "wrong payload")
             ),
-            ResolveKidRepositoryImpl(
-                NetworkServiceSuccess(validResponse: PresentationRequestMocks.JWK)
+            ResolveDidDocumentRepositoryImpl(
+                NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentWithWrongDidMockStr)
             ),
             JwtServiceRepositoryImpl(
                 VCLJwtSignServiceLocalImpl(VCLKeyServiceLocalImpl(secretStore: SecretStoreMock.Instance)),
                 VCLJwtVerifyServiceLocalImpl()
             ),
-            PresentationRequestByDeepLinkVerifierImpl(
-                ResolveDidDocumentRepositoryImpl(
-                    NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
-                )
-            ),
+            PresentationRequestByDeepLinkVerifierImpl(),
             EmptyExecutor()
         )
         subject2.getPresentationRequest(
             presentationRequestDescriptor: VCLPresentationRequestDescriptor(
                 deepLink: DeepLinkMocks.PresentationRequestDeepLinkDevNet,
                 didJwk: DidJwkMocks.DidJwk
-            ), 
+            ),
             verifiedProfile: VCLVerifiedProfile(payload: [:])
         ) {
             do  {

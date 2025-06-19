@@ -12,20 +12,20 @@ import Foundation
 final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
     
     private let presentationRequestRepository: PresentationRequestRepository
-    private let resolveKidRepository: ResolveKidRepository
+    private let resolveDidDocumentRepository: ResolveDidDocumentRepository
     private let jwtServiceRepository: JwtServiceRepository
     private let presentationRequestByDeepLinkVerifier: PresentationRequestByDeepLinkVerifier
     private let executor: Executor
     
     init(
         _ presentationRequestRepository: PresentationRequestRepository,
-        _ resolveKidRepository: ResolveKidRepository,
+        _ resolveDidDocumentRepository: ResolveDidDocumentRepository,
         _ verifyRepository: JwtServiceRepository,
         _ presentationRequestByDeepLinkVerifier: PresentationRequestByDeepLinkVerifier,
         _ executor: Executor
     ) {
         self.presentationRequestRepository = presentationRequestRepository
-        self.resolveKidRepository = resolveKidRepository
+        self.resolveDidDocumentRepository = resolveDidDocumentRepository
         self.jwtServiceRepository = verifyRepository
         self.presentationRequestByDeepLinkVerifier = presentationRequestByDeepLinkVerifier
         self.executor = executor
@@ -37,12 +37,11 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
         executor.runOnBackground { [weak self] in
-            guard let self = self else { return }
-            self.presentationRequestRepository.getPresentationRequest(
+            self?.presentationRequestRepository.getPresentationRequest(
                 presentationRequestDescriptor: presentationRequestDescriptor
             ) { encodedJwtStrResult in
                 do {
-                    self.onGetPresentationRequestSuccess(
+                    self?.resolveDidDocument(
                         VCLPresentationRequest(
                             jwt: VCLJwt(encodedJwt: try encodedJwtStrResult.get()),
                             verifiedProfile: verifiedProfile,
@@ -54,68 +53,72 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                         completionBlock
                     )
                 } catch {
-                    self.onError(VCLError(error: error), completionBlock)
-                }
-            }
-        }
-    }
-    
-    private func onGetPresentationRequestSuccess(
-        _ presentationRequest: VCLPresentationRequest,
-        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
-    ) {
-        if let kid = presentationRequest.jwt.kid?.replacingOccurrences(of: "#", with: "#".encode() ?? "") {
-            self.resolveKidRepository.getPublicKey(kid: kid) {
-                [weak self] publicKeyResult in
-                do {
-                    let publicKey = try publicKeyResult.get()
-                    self?.onResolvePublicKeySuccess(
-                        publicKey,
-                        presentationRequest,
-                        completionBlock
-                    )
-                }
-                catch {
                     self?.onError(VCLError(error: error), completionBlock)
                 }
             }
-        } else {
-            self.onError(VCLError(message: "Empty KeyID"), completionBlock)
         }
     }
     
-    private func onResolvePublicKeySuccess(
-        _ publicJwk: VCLPublicJwk,
+    private func resolveDidDocument(
         _ presentationRequest: VCLPresentationRequest,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
-        self.jwtServiceRepository.verifyJwt(
+        if let kid = presentationRequest.jwt.kid {
+            resolveDidDocumentRepository.resolveDidDocument(did: presentationRequest.iss) {
+                [weak self] didDocumentResult in
+                do {
+                    let didDocument = try didDocumentResult.get()
+                    if let publicJwk = didDocument.getPublicJwk(kid: kid) {
+                        self?.verifyPresentationRequest(
+                            publicJwk,
+                            presentationRequest,
+                            didDocument,
+                            completionBlock
+                        )
+                    } else {
+                        self?.onError(VCLError(error: "public jwk not found for kid: \(kid)"), completionBlock)
+                    }
+                } catch {
+                    self?.onError(error, completionBlock)
+                }
+            }
+        } else {
+            onError(VCLError(error: "Empty KeyID"), completionBlock)
+        }
+    }
+    
+    private func verifyPresentationRequest(
+        _ publicJwk: VCLPublicJwk,
+        _ presentationRequest: VCLPresentationRequest,
+        _ didDocument: VCLDidDocument,
+        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
+    ) {
+        jwtServiceRepository.verifyJwt(
             jwt: presentationRequest.jwt,
             publicJwk: publicJwk,
             remoteCryptoServicesToken: presentationRequest.remoteCryptoServicesToken
-        ) {
-            [weak self] jwtVerificationRes in
-            guard let self = self else { return }
+        ) { [weak self] jwtVerificationRes in
             do {
-                _ = try jwtVerificationRes.get()
-                self.presentationRequestByDeepLinkVerifier.verifyPresentationRequest(
+                let _ = try jwtVerificationRes.get()
+                self?.presentationRequestByDeepLinkVerifier.verifyPresentationRequest(
                     presentationRequest: presentationRequest,
-                    deepLink: presentationRequest.deepLink
+                    deepLink: presentationRequest.deepLink,
+                    didDocument: didDocument
                 ) { byDeepLinkVerificationRes in
                     do {
                         let isVerified = try byDeepLinkVerificationRes.get()
                         VCLLog.d("Presentation request by deep link verification result: \(isVerified)")
-                        self.onVerificationSuccess(
+                        self?.onVerificationSuccess(
                             isVerified,
                             presentationRequest,
                             completionBlock
                         )
-                    } catch {
-                        self.onError(error, completionBlock)
+                    }catch {
+                        self?.onError(error, completionBlock)
                     }
                 }
             } catch {
-                self.onError(error, completionBlock)
+                self?.onError(error, completionBlock)
             }
         }
     }

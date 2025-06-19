@@ -11,54 +11,26 @@ import Foundation
 
 final class CredentialManifestByDeepLinkVerifierImpl: CredentialManifestByDeepLinkVerifier {
     
-    let didDocumentRepository: ResolveDidDocumentRepository
-    
-    init(_ didDocumentRepository: ResolveDidDocumentRepository) {
-        self.didDocumentRepository = didDocumentRepository
-    }
-    
     func verifyCredentialManifest(
         credentialManifest: VCLCredentialManifest,
         deepLink: VCLDeepLink,
+        didDocument: VCLDidDocument,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if let did = deepLink.did {
-            didDocumentRepository.resolveDidDocument(did: did) { [weak self] didDocumentResult in
-                do {
-                    let didDocument = try didDocumentResult.get()
-                    self?.verify(
-                        credentialManifest: credentialManifest,
-                        didDocument: didDocument,
-                        completionBlock: completionBlock
-                    )
-                } catch {
-                    self?.onError(
-                        errorMessage: "Failed to resolve DID Document: $\(did)\n\(error)",
-                        completionBlock: completionBlock
-                    )
-                }
+        if let deepLinkDid = deepLink.did {
+            if (didDocument.id == credentialManifest.iss && didDocument.id == deepLinkDid ||
+                didDocument.alsoKnownAs.contains(credentialManifest.iss) && didDocument.alsoKnownAs.contains(deepLinkDid)) {
+                completionBlock(VCLResult.success(true))
+            } else {
+                onError(
+                    errorCode: VCLErrorCode.MismatchedRequestIssuerDid,
+                    errorMessage: "credential manifest: \(credentialManifest.jwt.encodedJwt) \ndidDocument: \(didDocument)",
+                    completionBlock: completionBlock
+                )
             }
         } else {
             onError(
                 errorMessage: "DID not found in deep link: \(deepLink.value)",
-                completionBlock: completionBlock
-            )
-        }
-    }
-    
-    private func verify(
-        credentialManifest: VCLCredentialManifest,
-        didDocument: VCLDidDocument,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
-    ) {
-        if (didDocument.id == credentialManifest.issuerId ||
-            didDocument.alsoKnownAs.contains(credentialManifest.issuerId)
-        ) {
-            completionBlock(VCLResult.success(true))
-        } else {
-            onError(
-                errorCode: VCLErrorCode.MismatchedRequestIssuerDid,
-                errorMessage: "credential manifest: \(credentialManifest.jwt.encodedJwt) \ndidDocument: \(didDocument)",
                 completionBlock: completionBlock
             )
         }

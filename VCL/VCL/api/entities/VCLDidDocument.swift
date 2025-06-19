@@ -18,10 +18,41 @@ public struct VCLDidDocument {
     }
     
     var id: String {get { payload[CodingKeys.KeyId] as? String ?? "" } }
-    var alsoKnownAs: [String] { get { payload[CodingKeys.KeyAlsoKnownAs] as? [String] ?? [] } }
+
+    var alsoKnownAs: [String] {
+        if let jsonArray = payload[CodingKeys.KeyAlsoKnownAs] as? [Any] {
+            return jsonArray.compactMap { $0 as? String }
+        } else {
+            return []
+        }
+    }
+    
+    func getPublicJwk(kid: String) -> VCLPublicJwk? {
+        guard let hashIndex = kid.firstIndex(of: "#") else {
+            return nil
+        }
+
+        let publicJwkId = "#" + kid[kid.index(after: hashIndex)...]
+
+        guard let verificationMethods = payload[CodingKeys.KeyVerificationMethod] as? [Any] else {
+            return nil
+        }
+
+        let publicJwkPayload = verificationMethods
+            .compactMap { $0 as? [String: Any] }
+            .first { $0[CodingKeys.KeyId] as? String == publicJwkId }
+
+        if let publicJwk = publicJwkPayload?[CodingKeys.KeyPublicKeyJwk] as? [String: Any] {
+            return VCLPublicJwk(valueDict: publicJwk)
+        } else {
+            return nil
+        }
+    }
 
     public struct CodingKeys {
         public static let KeyId = "id"
         public static let KeyAlsoKnownAs = "alsoKnownAs"
+        public static let KeyVerificationMethod = "verificationMethod"
+        public static let KeyPublicKeyJwk = "publicKeyJwk"
     }
 }

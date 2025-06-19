@@ -20,15 +20,12 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
     private let deepLink = DeepLinkMocks.PresentationRequestDeepLinkDevNet
 
     func testVerifyCredentialManifestSuccess() {
-        subject = PresentationRequestByDeepLinkVerifierImpl(
-            ResolveDidDocumentRepositoryImpl(
-                NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentMockStr)
-            )
-        )
+        subject = PresentationRequestByDeepLinkVerifierImpl()
         
         subject.verifyPresentationRequest(
             presentationRequest: presentationRequest,
-            deepLink: deepLink
+            deepLink: deepLink,
+            didDocument: DidDocumentMocks.DidDocumentMock
         ) { isVerifiedRes in
             do {
                 let isVerified = try isVerifiedRes.get()
@@ -40,15 +37,12 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
     }
 
     func testVerifyCredentialManifestError() {
-        subject = PresentationRequestByDeepLinkVerifierImpl(
-            ResolveDidDocumentRepositoryImpl(
-                NetworkServiceSuccess(validResponse: DidDocumentMocks.DidDocumentWithWrongDidMockStr)
-            )
-        )
+        subject = PresentationRequestByDeepLinkVerifierImpl()
         
         subject.verifyPresentationRequest(
             presentationRequest: presentationRequest,
-            deepLink: deepLink
+            deepLink: deepLink,
+            didDocument: DidDocumentMocks.DidDocumentWithWrongDidMock
         ) { isVerifiedRes in
             do {
                 _ = try isVerifiedRes.get()

@@ -140,18 +140,14 @@ class VclBlocksProvider {
             PresentationRequestRepositoryImpl(
                 NetworkServiceImpl()
             ),
-            ResolveKidRepositoryImpl(
+            ResolveDidDocumentRepositoryImpl(
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
                 try chooseJwtSignService(cryptoServicesDescriptor),
                 try chooseJwtVerifyService(cryptoServicesDescriptor)
             ),
-            PresentationRequestByDeepLinkVerifierImpl(
-                ResolveDidDocumentRepositoryImpl(
-                    NetworkServiceImpl()
-                )
-            ),
+            PresentationRequestByDeepLinkVerifierImpl(),
             ExecutorImpl.instance
         )
     }
@@ -187,18 +183,14 @@ class VclBlocksProvider {
             CredentialManifestRepositoryImpl(
                 NetworkServiceImpl()
             ),
-            ResolveKidRepositoryImpl(
+            ResolveDidDocumentRepositoryImpl(
                 NetworkServiceImpl()
             ),
             JwtServiceRepositoryImpl(
                 try chooseJwtSignService(cryptoServicesDescriptor),
                 try chooseJwtVerifyService(cryptoServicesDescriptor)
             ),
-            CredentialManifestByDeepLinkVerifierImpl(
-                ResolveDidDocumentRepositoryImpl(
-                    NetworkServiceImpl()
-                )
-            ),
+            CredentialManifestByDeepLinkVerifierImpl(),
             ExecutorImpl.instance
         )
     }
