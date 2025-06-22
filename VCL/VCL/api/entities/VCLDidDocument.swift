@@ -34,11 +34,11 @@ public struct VCLDidDocument {
 
         let publicJwkId = "#" + kid[kid.index(after: hashIndex)...]
 
-        guard let verificationMethods = payload[CodingKeys.KeyVerificationMethod] as? [Any] else {
+        guard let verificationMethod = payload[CodingKeys.KeyVerificationMethod] as? [Any] else {
             return nil
         }
 
-        let publicJwkPayload = verificationMethods
+        let publicJwkPayload = verificationMethod
             .compactMap { $0 as? [String: Any] }
             .first { $0[CodingKeys.KeyId] as? String == publicJwkId }
 

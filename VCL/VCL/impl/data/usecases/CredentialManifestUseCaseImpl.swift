@@ -43,54 +43,38 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                 [weak self] credentialManifestResult in
                 guard let self = self else { return }
                 do {
-                    self.resolveDidDocument(
-                        VCLCredentialManifest(
-                            jwt: VCLJwt(encodedJwt: try credentialManifestResult.get()),
-                            vendorOriginContext: credentialManifestDescriptor.vendorOriginContext,
-                            verifiedProfile: verifiedProfile,
-                            deepLink: credentialManifestDescriptor.deepLink,
-                            didJwk: credentialManifestDescriptor.didJwk,
-                            remoteCryptoServicesToken: credentialManifestDescriptor.remoteCryptoServicesToken
-                        ),
-                        completionBlock
+                    let credentialManifest = VCLCredentialManifest(
+                        jwt: VCLJwt(encodedJwt: try credentialManifestResult.get()),
+                        vendorOriginContext: credentialManifestDescriptor.vendorOriginContext,
+                        verifiedProfile: verifiedProfile,
+                        deepLink: credentialManifestDescriptor.deepLink,
+                        didJwk: credentialManifestDescriptor.didJwk,
+                        remoteCryptoServicesToken: credentialManifestDescriptor.remoteCryptoServicesToken
                     )
+                    resolveDidDocumentRepository.resolveDidDocument(did: credentialManifest.iss) { [weak self] didDocumentResult in
+                        do {
+                            let didDocument = try didDocumentResult.get()
+                            if let publicJwk = didDocument.getPublicJwk(kid: credentialManifest.jwt.kid ?? "") {
+                                self?.verifyCredentialManifestJwt(
+                                    publicJwk,
+                                    credentialManifest,
+                                    didDocument,
+                                    completionBlock
+                                )
+                            } else {
+                                self?.onError(
+                                    VCLError(error: "public jwk not found for kid: \(credentialManifest.jwt.kid ?? "")"),
+                                    completionBlock
+                                )
+                            }
+                        } catch {
+                            self?.onError(error, completionBlock)
+                        }
+                    }
                 } catch {
                     self.onError(error, completionBlock)
                 }
             }
-        }
-    }
-    
-    private func resolveDidDocument(
-        _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
-    ) {
-        if let kid = credentialManifest.jwt.kid {
-            resolveDidDocumentRepository.resolveDidDocument(did: credentialManifest.iss) { [weak self] didDocumentResult in
-                do {
-                    let didDocument = try didDocumentResult.get()
-                    if let publicJwk = didDocument.getPublicJwk(kid: kid) {
-                        self?.verifyCredentialManifestJwt(
-                            publicJwk,
-                            credentialManifest,
-                            didDocument,
-                            completionBlock
-                        )
-                    } else {
-                        self?.onError(
-                            VCLError(error: "public jwk not found for kid: \(kid)"),
-                            completionBlock
-                        )
-                    }
-                } catch {
-                    self?.onError(error, completionBlock)
-                }
-            }
-        } else {
-            self.onError(
-                VCLError(error: "Empty credentialManifest.jwt.kid in jwt: \(credentialManifest.jwt)"),
-                completionBlock
-            )
         }
     }
     
