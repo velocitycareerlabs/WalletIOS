@@ -252,7 +252,7 @@ class ViewController: UIViewController {
                 if organizations.all.count == 0 || organizations.all[0].serviceCredentialAgentIssuers.isEmpty {
                     NSLog("VCL Organizations error, issuing service not found")
                 } else {
-                    self.getCredentialManifestByService(serviceCredentialAgentIssuer: organizations.all[0].serviceCredentialAgentIssuers[0])
+                    self.getCredentialManifestByService(organization: organizations.all.first!)
                 }
             },
             errorHandler: { error in
@@ -268,7 +268,8 @@ class ViewController: UIViewController {
         VCLCredentialManifestDescriptorRefresh(
             service: service,
             credentialIds: Constants.getCredentialIdsToRefresh(environment),
-            didJwk: self.didJwk
+            didJwk: self.didJwk,
+            did: "some did"
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorRefresh,
@@ -282,26 +283,31 @@ class ViewController: UIViewController {
         )
     }
     
-    private func getCredentialManifestByService(serviceCredentialAgentIssuer: VCLService) {
-        let credentialManifestDescriptorByOrganization =
-        VCLCredentialManifestDescriptorByService(
-            service: serviceCredentialAgentIssuer,
-//            issuingType: VCLIssuingType.Career,
-            credentialTypes: serviceCredentialAgentIssuer.credentialTypes, // Can come from any where
-            didJwk: self.didJwk
-        )
-        vcl.getCredentialManifest(
-            credentialManifestDescriptor: credentialManifestDescriptorByOrganization,
-            successHandler: { [weak self] credentialManifest in
-                NSLog("VCL Credential Manifest received: \(credentialManifest.jwt.payload?.toJson() ?? "")")
-                // NSLog("VCL Credential Manifest received")
-                
-                self?.generateOffers(credentialManifest: credentialManifest)
-            },
-            errorHandler: { error in
-                NSLog("VCL Get Credential Manifest failed: \(error)")
-            }
-        )
+    private func getCredentialManifestByService(organization: VCLOrganization) {
+        if let serviceCredentialAgentIssuer = organization.serviceCredentialAgentIssuers.first {
+            let credentialManifestDescriptorByOrganization =
+            VCLCredentialManifestDescriptorByService(
+                service: serviceCredentialAgentIssuer,
+                //            issuingType: VCLIssuingType.Career,
+                credentialTypes: serviceCredentialAgentIssuer.credentialTypes, // Can come from any where
+                didJwk: self.didJwk,
+                did: organization.did
+            )
+            vcl.getCredentialManifest(
+                credentialManifestDescriptor: credentialManifestDescriptorByOrganization,
+                successHandler: { [weak self] credentialManifest in
+                    NSLog("VCL Credential Manifest received: \(credentialManifest.jwt.payload?.toJson() ?? "")")
+                    // NSLog("VCL Credential Manifest received")
+                    
+                    self?.generateOffers(credentialManifest: credentialManifest)
+                },
+                errorHandler: { error in
+                    NSLog("VCL Get Credential Manifest failed: \(error)")
+                }
+            )
+        } else {
+            NSLog("VCL Service not found in organization: \(organization)")
+        }
     }
     
     @objc private func getCredentialManifestByDeepLink() {

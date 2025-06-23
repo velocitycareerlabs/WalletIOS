@@ -17,6 +17,15 @@ public struct VCLOrganization: Any {
     }
     
     public var serviceCredentialAgentIssuers: [VCLService] { get { parseServiceCredentialAgentIssuers() } }
+    
+    public var did: String {
+        if let alsoKnownAsArray = payload[CodingKeys.KeyAlsoKnownAs] as? [Any],
+           let stringArray = alsoKnownAsArray as? [String],
+           let first = stringArray.first {
+            return first
+        }
+        return payload[CodingKeys.KeyId] as? String ?? ""
+    }
 
     private func parseServiceCredentialAgentIssuers() -> [VCLService] {
         var retVal = [VCLService]()
@@ -30,5 +39,7 @@ public struct VCLOrganization: Any {
     
     public struct CodingKeys {
         public static let KeyService = "service"
+        public static let KeyId = "id"
+        public static let KeyAlsoKnownAs = "alsoKnownAs"
     }
 }

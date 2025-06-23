@@ -14,10 +14,10 @@ public struct VCLCredentialManifestDescriptorByService: VCLCredentialManifestDes
     public var issuingType: VCLIssuingType
     public var credentialTypes: [String]?
     public var pushDelegate: VCLPushDelegate?
-    public var did: String? { get { return retrieveDid() } }
     public var vendorOriginContext: String?
     public var deepLink: VCLDeepLink?
     public var didJwk: VCLDidJwk
+    public let didInput: String?
     public var remoteCryptoServicesToken: VCLToken?
     public var endpoint: String? { get { return retrieveEndpoint() } }
     private let service: VCLService // for log
@@ -28,6 +28,7 @@ public struct VCLCredentialManifestDescriptorByService: VCLCredentialManifestDes
         credentialTypes: [String]? = nil,
         pushDelegate: VCLPushDelegate? = nil,
         didJwk: VCLDidJwk,
+        did: String,
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.service = service
@@ -37,9 +38,12 @@ public struct VCLCredentialManifestDescriptorByService: VCLCredentialManifestDes
         self.credentialTypes = credentialTypes
         self.pushDelegate = pushDelegate
         self.didJwk = didJwk
+        self.didInput = did
         self.remoteCryptoServicesToken = remoteCryptoServicesToken
     }
     
+    public var did: String? { get { return self.didInput } }
+        
     public func toPropsString() -> String {
         var propsString = "\nuri: \(uri ?? "")"
         propsString += "\ndid: \(did ?? "")"

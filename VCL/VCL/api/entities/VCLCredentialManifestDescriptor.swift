@@ -40,9 +40,7 @@ public struct CredentialManifestDescriptorCodingKeys {
 
 extension VCLCredentialManifestDescriptor {
     
-    public func retrieveDid() -> String? {
-        return uri?.getUrlSubPath(subPathPrefix: CredentialManifestDescriptorCodingKeys.KeyDidPrefix)
-    }
+    public var did: String? { get { return deepLink?.did } }
     
     public func retrieveEndpoint() -> String? {
         if let queryParams = generateQueryParams() {

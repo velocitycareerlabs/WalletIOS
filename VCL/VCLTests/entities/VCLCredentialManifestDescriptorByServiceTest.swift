@@ -26,7 +26,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
             issuingType: VCLIssuingType.Career,
             credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList,
             pushDelegate: CredentialManifestDescriptorMocks.PushDelegate,
-            didJwk: DidJwkMocks.DidJwk
+            didJwk: DidJwkMocks.DidJwk,
+            did: "123"
         )
         
         let credentialTypesQuery =
@@ -38,7 +39,7 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
         (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
         
         assert(subject.endpoint == mockEndpoint)
-        assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+        assert(subject.did == "123")
     }
 
     func testCredentialManifestDescriptorByServiceWithFullInput2Success() {
@@ -49,7 +50,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
             issuingType: VCLIssuingType.Identity,
             credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList,
             pushDelegate: CredentialManifestDescriptorMocks.PushDelegate,
-            didJwk: DidJwkMocks.DidJwk
+            didJwk: DidJwkMocks.DidJwk,
+            did: "123"
         )
         
         let credentialTypesQuery =
@@ -61,7 +63,7 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
         (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
         
         assert(subject.endpoint == mockEndpoint)
-        assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+        assert(subject.did == "123")
     }
 
         func testCredentialManifestDescriptorByServiceWithPartialInput2Success() {
@@ -71,7 +73,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
                 service: service,
                 issuingType: VCLIssuingType.Career,
                 pushDelegate: CredentialManifestDescriptorMocks.PushDelegate,
-                didJwk: DidJwkMocks.DidJwk
+                didJwk: DidJwkMocks.DidJwk,
+                did: "123"
             )
 
             let credentialTypesQuery =
@@ -81,7 +84,7 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
                 (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
 
             assert(subject.endpoint == mockEndpoint)
-            assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+            assert(subject.did == "123")
         }
 
         func testCredentialManifestDescriptorByServiceWithPartialInput3Success() {
@@ -91,7 +94,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
                 service: service,
                 issuingType: VCLIssuingType.Career,
                 credentialTypes: CredentialManifestDescriptorMocks.CredentialTypesList,
-                didJwk: DidJwkMocks.DidJwk
+                didJwk: DidJwkMocks.DidJwk,
+                did: "123"
             )
 
             let credentialTypesQuery =
@@ -101,7 +105,7 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
                 (CredentialManifestDescriptorMocks.IssuingServiceWithParamEndPoint + "&" + credentialTypesQuery)
 
             assert(subject.endpoint == mockEndpoint)
-            assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+            assert(subject.did == "123")
         }
 
         func testCredentialManifestDescriptorByServiceWithPartialInput4Success() {
@@ -111,7 +115,8 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
                 service: service,
                 issuingType: VCLIssuingType.Career,
                 pushDelegate: CredentialManifestDescriptorMocks.PushDelegate,
-                didJwk: DidJwkMocks.DidJwk
+                didJwk: DidJwkMocks.DidJwk,
+                did: "123"
             )
 
             let credentialTypesQuery =
@@ -121,7 +126,7 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
                 (CredentialManifestDescriptorMocks.IssuingServiceWithParamEndPoint + "&" + credentialTypesQuery)
 
             assert(subject.endpoint == mockEndpoint)
-            assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+            assert(subject.did == "123")
         }
 
         func testCredentialManifestDescriptorByServiceWithPartialInput5Success() {
@@ -130,12 +135,13 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
             subject = VCLCredentialManifestDescriptorByService(
                 service: service,
                 issuingType: VCLIssuingType.Career,
-                didJwk: DidJwkMocks.DidJwk
+                didJwk: DidJwkMocks.DidJwk,
+                did: "123"
             )
             let mockEndpoint = CredentialManifestDescriptorMocks.IssuingServiceWithParamEndPoint
 
             assert(subject.endpoint == mockEndpoint)
-            assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+            assert(subject.did == "123")
         }
 
         func testCredentialManifestDescriptorByServiceWithPartialInput6Success() {
@@ -143,12 +149,13 @@ final class VCLCredentialManifestDescriptorByServiceTest: XCTestCase {
             VCLService(payload: CredentialManifestDescriptorMocks.IssuingServiceJsonStr.toDictionary()!)
             subject = VCLCredentialManifestDescriptorByService(
                 service: service,
-                didJwk: DidJwkMocks.DidJwk
+                didJwk: DidJwkMocks.DidJwk,
+                did: "123"
             )
             let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint)
 
             assert(subject.endpoint == mockEndpoint)
-            assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+            assert(subject.did == "123")
         }
 
     

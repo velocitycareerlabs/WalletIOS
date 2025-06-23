@@ -81,6 +81,19 @@ final class VCLPresentationRequestDescriptorTest: XCTestCase {
         assert(subject.did == PresentationRequestDescriptorMocks.InspectorDid)
     }
     
+    func testPresentationRequestDescriptorWithInspectorIdSuccess() {
+        subject = VCLPresentationRequestDescriptor(
+            deepLink: DeepLinkMocks.PresentationRequestDeepLinkMainNetWithId,
+            didJwk: DidJwkMocks.DidJwk
+        )
+
+        let mockEndpoint = DeepLinkMocks.PresentationRequestRequestDecodedUriWithIdStr!
+
+        assert(subject.endpoint?.decode()?.isUrlEquivalentTo(url: mockEndpoint) == true)
+        assert(subject.pushDelegate == nil)
+        assert(subject.did == PresentationRequestDescriptorMocks.InspectorDid)
+    }
+    
     override func tearDown() {
     }
 }
