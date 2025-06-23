@@ -17,6 +17,7 @@ public struct VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescr
     public let vendorOriginContext: String?
     public let deepLink: VCLDeepLink?
     public let didJwk: VCLDidJwk
+    public let didInput: String?
     public let remoteCryptoServicesToken: VCLToken?
     public var endpoint: String? { get { return retrieveEndpoint() } }
 
@@ -27,6 +28,7 @@ public struct VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescr
         issuingType: VCLIssuingType = VCLIssuingType.Refresh,
         credentialIds:[String],
         didJwk: VCLDidJwk,
+        did: String,
         remoteCryptoServicesToken: VCLToken? = nil
     ) {
         self.credentialIds = credentialIds
@@ -34,12 +36,15 @@ public struct VCLCredentialManifestDescriptorRefresh: VCLCredentialManifestDescr
         self.uri = service.serviceEndpoint
         self.issuingType = issuingType
         self.didJwk = didJwk
+        self.didInput = did
         self.remoteCryptoServicesToken = remoteCryptoServicesToken
         self.credentialTypes = nil
         self.pushDelegate = nil
         self.deepLink = nil
         self.vendorOriginContext = nil
     }
+
+    public var did: String? { get { return self.didInput } }
 
     public func retrieveEndpoint() -> String? {
         if let queryParams = generateQueryParams() {

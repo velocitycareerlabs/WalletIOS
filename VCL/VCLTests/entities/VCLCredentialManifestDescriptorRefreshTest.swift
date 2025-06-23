@@ -23,7 +23,8 @@ final class VCLCredentialManifestDescriptorRefreshTest: XCTestCase {
         subject = VCLCredentialManifestDescriptorRefresh(
             service: service,
             credentialIds: [CredentialManifestDescriptorMocks.CredentialId1, CredentialManifestDescriptorMocks.CredentialId2],
-            didJwk: DidJwkMocks.DidJwk
+            didJwk: DidJwkMocks.DidJwk,
+            did: "123"
         )
         
         let credentialTypesQuery = "\(CredentialManifestDescriptorCodingKeys.KeyRefresh)=\(true)" +
@@ -32,7 +33,7 @@ final class VCLCredentialManifestDescriptorRefreshTest: XCTestCase {
         let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
         
         assert(subject.endpoint == mockEndpoint)
-        assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+        assert(subject.did == "123")
     }
     
     func testCredentialManifestDescriptorWith1CredentialIdsSuccess() {
@@ -40,14 +41,15 @@ final class VCLCredentialManifestDescriptorRefreshTest: XCTestCase {
         subject = VCLCredentialManifestDescriptorRefresh(
             service: service,
             credentialIds: [CredentialManifestDescriptorMocks.CredentialId1],
-            didJwk: DidJwkMocks.DidJwk
+            didJwk: DidJwkMocks.DidJwk,
+            did: "123"
         )
         let credentialTypesQuery = "\(CredentialManifestDescriptorCodingKeys.KeyRefresh)=\(true)" +
         "&\(CredentialManifestDescriptorCodingKeys.KeyCredentialId)=\(CredentialManifestDescriptorMocks.CredentialId1.encode()!)"
         let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
         
         assert(subject.endpoint == mockEndpoint)
-        assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+        assert(subject.did == "123")
     }
     
     func testCredentialManifestDescriptorWith0CredentialIdsSuccess() {
@@ -55,13 +57,14 @@ final class VCLCredentialManifestDescriptorRefreshTest: XCTestCase {
         subject = VCLCredentialManifestDescriptorRefresh(
             service: service,
             credentialIds: [],
-            didJwk: DidJwkMocks.DidJwk
+            didJwk: DidJwkMocks.DidJwk,
+            did: "123"
         )
         let credentialTypesQuery = "\(CredentialManifestDescriptorCodingKeys.KeyRefresh)=\(true)"
         let mockEndpoint = (CredentialManifestDescriptorMocks.IssuingServiceEndPoint + "?" + credentialTypesQuery)
         
         assert(subject.endpoint == mockEndpoint)
-        assert(subject.did == CredentialManifestDescriptorMocks.IssuerDid)
+        assert(subject.did == "123")
     }
     
     override func tearDown() {

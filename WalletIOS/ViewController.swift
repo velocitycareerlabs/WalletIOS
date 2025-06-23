@@ -268,7 +268,8 @@ class ViewController: UIViewController {
         VCLCredentialManifestDescriptorRefresh(
             service: service,
             credentialIds: Constants.getCredentialIdsToRefresh(environment),
-            didJwk: self.didJwk
+            didJwk: self.didJwk,
+            did: "some did"
         )
         vcl.getCredentialManifest(
             credentialManifestDescriptor: credentialManifestDescriptorRefresh,
