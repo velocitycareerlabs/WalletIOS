@@ -29,6 +29,7 @@ struct Urls {
     static var Countries: String { get { "\(BaseUrlRegistrar)/reference/countries" } }
     static var Organizations: String { get { "\(BaseUrlRegistrar)/api/v0.6/organizations/search-profiles" } }
     static var ResolveKid: String { get { "\(BaseUrlRegistrar)/api/v0.6/resolve-kid/" } }
+    static var ResolveDid: String { get { "\(BaseUrlRegistrar)/api/v0.6/resolve-did/" } }
     static var CredentialTypesFormSchema: String { get { "\(BaseUrlRegistrar)/api/v0.6/form-schemas?credentialType=\(Params.CredentialType)" } }
     static var VerifiedProfile: String { get { "\(BaseUrlRegistrar)/api/v0.6/organizations/\(Params.Did)/verified-profile" } }
 }
