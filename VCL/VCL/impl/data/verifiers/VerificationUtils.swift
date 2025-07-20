@@ -10,8 +10,10 @@
 import Foundation
 
 class VerificationUtils {
+    ///  The implementation relaying on the below reference:
+    ///  https://github.com/velocitycareerlabs/velocitycore/blob/37c8535c2ef839ed72a2706685a398f20f4ae11c/packages/vc-checks/src/extract-credential-type.js#L20
     static func getCredentialType(_ jwtCredential: VCLJwt) -> String? {
-        return ((jwtCredential.payload?[CredentialIssuerVerifierImpl.CodingKeys.KeyVC] as? [String: AnyHashable])?[CredentialIssuerVerifierImpl.CodingKeys.KeyType] as? [String])?.first
+        return ((jwtCredential.payload?[CredentialIssuerVerifierImpl.CodingKeys.KeyVC] as? [String: AnyHashable])?[CredentialIssuerVerifierImpl.CodingKeys.KeyType] as? [String])?.first { $0 != "VerifiableCredential" }
     }
     
     internal static func getCredentialSubjectFromCredential(_ jwtCredential: VCLJwt) -> [String: Any]? {
