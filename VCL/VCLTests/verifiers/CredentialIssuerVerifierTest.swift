@@ -247,10 +247,25 @@ class CredentialIssuerVerifierTest: XCTestCase {
         }
     }
     
-//    func testVerifyOpenBadgeCredentialSuccess() {
-//        subject1.verifyCredentials(
-//            jwtCredentials: CredentialMocks.JwtCredentialsOpenBadgeValid.toJwtList()!,
-//            finalizeOffersDescriptor: finalizeOffersDescriptorOfNotaryIssuer
+    func testVerifyOpenBadgeCredentialSuccess() {
+        subject1.verifyCredentials(
+            jwtCredentials: CredentialMocks.JwtCredentialsOpenBadgeValid.toJwtList()!,
+            finalizeOffersDescriptor: finalizeOffersDescriptorOfNotaryIssuer
+        ) {
+            do {
+                let isVerified = try $0.get()
+                assert(isVerified)
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+    }
+   
+//    K is null => verification passed
+//    func testVerifyOpenBadgeCredentialError() {
+//        subject2.verifyCredentials(
+//            jwtCredentials: CredentialMocks.JwtCredentialsOpenBadgeInvalid.toJwtList()!,
+//            finalizeOffersDescriptor: finalizeOffersDescriptorOfRegularIssuer,
 //        ) {
 //            do {
 //                let isVerified = try $0.get()
@@ -258,23 +273,6 @@ class CredentialIssuerVerifierTest: XCTestCase {
 //            } catch {
 //                XCTFail("\(error)")
 //            }
-//        }
-//    }
-   
-//    @Test
-//    fun testVerifyOpenBadgeCredentialError() {
-//        subject2.verifyCredentials(
-//            jwtCredentials = CredentialMocks.JwtCredentialsOpenBadgeInvalid.toJwtList()!!,
-//            finalizeOffersDescriptor = finalizeOffersDescriptorOfRegularIssuer,
-//        ) { verificationResult ->
-//            verificationResult.handleResult(
-//                successHandler = {
-//                    assert(it)
-//                },
-//                errorHandler = { error ->
-//                    assert(false) { "${error.toJsonObject()}" }
-//                }
-//            )
 //        }
 //    }
 

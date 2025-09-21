@@ -108,4 +108,34 @@ class VerificationUtils {
         let vc: [String: Any]? = jwtCredential.payload?["vc"] as? [String: Any]
         return (vc?["issuer"] as? [String: Any])?["id"] as? String ?? vc?["issuer"] as? String
     }
+    
+    internal static func extractCredentialSubjectType(from subject: [String: Any]) -> String? {
+        if let types = subject[CredentialIssuerVerifierImpl.CodingKeys.KeyType] as? [Any],
+           let firstType = types.first as? String {
+            return firstType
+        }
+        return subject[CredentialIssuerVerifierImpl.CodingKeys.KeyType] as? String
+    }
+
+    internal static func extractActiveContext(
+        _ completeContext: [String: Any],
+        _ credentialSubjectType: String
+    ) -> [String: Any] {
+        let nested = (completeContext[CredentialIssuerVerifierImpl.CodingKeys.KeyContext] as? [String: Any])?[credentialSubjectType] as? [String: Any]
+        return nested?[CredentialIssuerVerifierImpl.CodingKeys.KeyContext] as? [String: Any] ?? completeContext
+    }
+    
+    internal static func findKeyForPrimaryOrganizationValue(
+        _ activeContext: [String: Any]
+    ) -> String? {
+        for (key, value) in activeContext {
+            if let valueMap = value as? [String: Any] {
+                let id = valueMap[CredentialIssuerVerifierImpl.CodingKeys.KeyId] as? String
+                if (id == CredentialIssuerVerifierImpl.CodingKeys.ValPrimaryOrganization || id == CredentialIssuerVerifierImpl.CodingKeys.ValPrimarySourceProfile) {
+                    return key
+                }
+            }
+        }
+        return nil
+    }
 }
