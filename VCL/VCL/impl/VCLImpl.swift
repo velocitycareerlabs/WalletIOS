@@ -32,7 +32,7 @@ public final class VCLImpl: VCL {
     private var jwtServiceUseCase: JwtServiceUseCase!
     private var keyServiceUseCase: KeyServiceUseCase!
     
-    private var initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
+    private let initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
     private var profileServiceTypeVerifier: ProfileServiceTypeVerifier?
     
     public func initialize(
@@ -46,9 +46,7 @@ public final class VCLImpl: VCL {
         initGlobalConfigurations()
         
         printVersion()
-        
-        self.initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
-        
+                
         cacheRemoteData(
             cacheSequence: initializationDescriptor.cacheSequence,
             successHandler: successHandler,
