@@ -125,8 +125,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-            ),
-            EmptyExecutor()
+            )
         )
         subject2 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -134,8 +133,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-            ),
-            EmptyExecutor()
+            )
         )
         subject3 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -143,8 +141,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-            ),
-            EmptyExecutor()
+            )
         )
         subject4 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -152,8 +149,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-            ),
-            EmptyExecutor()
+            )
         )
         subject5 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -161,8 +157,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-            ),
-            EmptyExecutor()
+            )
         )
         subject6 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -170,8 +165,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-            ),
-            EmptyExecutor()
+            )
         )
         subject7 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -179,8 +173,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-            ),
-            EmptyExecutor()
+            )
         )
         subject8 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -188,8 +181,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-            ),
-            EmptyExecutor()
+            )
         )
         subject9 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -197,8 +189,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-            ),
-            EmptyExecutor()
+            )
         )
         subject10 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -206,8 +197,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-            ),
-            EmptyExecutor()
+            )
         )
         subject11 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -215,8 +205,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-            ),
-            EmptyExecutor()
+            )
         )
         subject12 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -224,8 +213,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: "")
-            ),
-            EmptyExecutor()
+            )
         )
         subject13 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -233,8 +221,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10JsonldWithoutPrimaryOrganization)
-            ),
-            EmptyExecutor()
+            )
         )
         subjectQa = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -242,8 +229,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
             ),
             CredentialSubjectContextRepositoryImpl(
                 NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10JsonldQa)
-            ),
-            EmptyExecutor()
+            )
         )
     }
     

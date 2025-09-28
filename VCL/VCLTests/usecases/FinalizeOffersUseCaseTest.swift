@@ -107,8 +107,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 ),
                 CredentialSubjectContextRepositoryImpl(
                     NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-                ),
-                EmptyExecutor()
+                )
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(
@@ -158,8 +157,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 ),
                 CredentialSubjectContextRepositoryImpl(
                     NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-                ),
-                EmptyExecutor()
+                )
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(
@@ -209,8 +207,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 ),
                 CredentialSubjectContextRepositoryImpl(
                     NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-                ),
-                EmptyExecutor()
+                )
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(
@@ -250,8 +247,7 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 ),
                 CredentialSubjectContextRepositoryImpl(
                     NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
-                ),
-                EmptyExecutor()
+                )
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(
