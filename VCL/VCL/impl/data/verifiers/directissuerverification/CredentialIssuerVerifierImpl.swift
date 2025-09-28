@@ -15,25 +15,15 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
     private let credentialSubjectContextRepository: CredentialSubjectContextRepository
     
     private let executor: Executor
-        
-    private let mainDispatcher: DispatchGroup
-    private let resolveContextDispatcher: DispatchGroup
-    private let completeContextDispatcher: DispatchGroup
     
     init(
         _ credentialTypesModel: CredentialTypesModel,
         _ credentialSubjectContextRepository: CredentialSubjectContextRepository,
-        _ executor: Executor,
-        _ mainDispatcher: DispatchGroup = DispatchGroup(),
-        _ resolveContextDispatcher: DispatchGroup = DispatchGroup(),
-        _ completeContextDispatcher: DispatchGroup = DispatchGroup()
+        _ executor: Executor
     ) {
         self.credentialTypesModel = credentialTypesModel
         self.credentialSubjectContextRepository = credentialSubjectContextRepository
         self.executor = executor
-        self.mainDispatcher = mainDispatcher
-        self.resolveContextDispatcher = resolveContextDispatcher
-        self.completeContextDispatcher = completeContextDispatcher
     }
     
     func verifyCredentials(
@@ -41,6 +31,8 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         finalizeOffersDescriptor: VCLFinalizeOffersDescriptor,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
+        let group = DispatchGroup()
+        
         if jwtCredentials.isEmpty {
             completionBlock(.success(true))
             return
@@ -56,16 +48,9 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         let globalErrorStorage = GlobalErrorStorage()
         
         for jwtCredential in jwtCredentials {
-            mainDispatcher.enter()
+            group.enter()
             
-            executor.runOnBackground { [weak self] in
-                guard let self = self else {
-                    self?.mainDispatcher.leave()
-                    return
-                }
-                
-                defer { self.mainDispatcher.leave() }
-                
+            executor.runOnBackground {
                 guard
                     let credentialTypeName = VerificationUtils.getCredentialType(jwtCredential),
                     let credentialType = self.credentialTypesModel.credentialTypeByTypeName(type: credentialTypeName)
@@ -73,6 +58,7 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                     globalErrorStorage.update(
                         VCLError(errorCode: VCLErrorCode.CredentialTypeNotRegistered.rawValue)
                     )
+                    group.leave()   // leave here on early error
                     return
                 }
                 
@@ -87,17 +73,20 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                     case .failure(let error):
                         globalErrorStorage.update(error)
                     }
+                    group.leave()   // leave when async verification actually completes
                 }
             }
         }
         
-        mainDispatcher.notify(queue: .main) {
-            if let error = globalErrorStorage.get() {
-                // if at least one credential verification failed => the whole process fails
-                completionBlock(.failure(error))
-            } else {
-                completionBlock(.success(true))
-            }
+        // BLOCK here until all tasks finished
+        group.wait()
+        
+        // Only after all tasks are done, check the error
+        if let error = globalErrorStorage.get() {
+            // if at least one credential verification failed => the whole process fails
+            completionBlock(.failure(error))
+        } else {
+            completionBlock(.success(true))
         }
     }
     
@@ -198,20 +187,23 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ credentialSubjectContexts: [String],
         _ completionBlock: @escaping (VCLResult<[[String: Any]]>) -> Void
     ) {
+        let group = DispatchGroup()
+        
         let completeContextsStorage = CompleteContextsStorage()
-    
+        
         for credentialSubjectContext in credentialSubjectContexts {
+            group.enter()
             
-            self.resolveContextDispatcher.enter()
-            
-            self.executor.runOnBackground { [weak self] in
+            executor.runOnBackground { [weak self] in
+                guard let strongSelf = self else {
+                    group.leave() // always balance enter/leave
+                    return
+                }
                 
-                self?.credentialSubjectContextRepository.getCredentialSubjectContext(
+                strongSelf.credentialSubjectContextRepository.getCredentialSubjectContext(
                     credentialSubjectContextEndpoint: credentialSubjectContext
                 ) { result in
-                    
-                    defer { self?.resolveContextDispatcher.leave() }
-                    
+                    defer { group.leave() }    // balanced even on error paths
                     do {
                         let ldContextResponse = try result.get()
                         completeContextsStorage.append(ldContextResponse)
@@ -222,15 +214,16 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             }
         }
         
-        self.resolveContextDispatcher.notify(queue: DispatchQueue.global()) {
-            if completeContextsStorage.isEmpty() {
-                self.onError(
-                    VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
-                    completionBlock
-                )
-            } else {
-                completionBlock(.success(completeContextsStorage.get()))
-            }
+        // BLOCK here until all fetches are done
+        group.wait()
+        
+        if completeContextsStorage.isEmpty() {
+            onError(
+                VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
+                completionBlock
+            )
+        } else {
+            completionBlock(.success(completeContextsStorage.get()))
         }
     }
     
@@ -248,19 +241,21 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             return
         }
         
+        let group = DispatchGroup()
+        
         let globalErrorStorage = GlobalErrorStorage()
         let isCredentialVerifiedStorage = IsCredentialVerifiedStorage()
         
         for completeContext in completeContexts {
-            completeContextDispatcher.enter()
+            group.enter()
             
             executor.runOnBackground { [weak self] in
-                guard let self = self else {
-                    self?.completeContextDispatcher.leave()
+                guard let strongSelf = self else {
+                    group.leave()
                     return
                 }
                 
-                defer { self.completeContextDispatcher.leave() }
+                defer { group.leave() }
                 
                 let activeContext = VerificationUtils.extractActiveContext(completeContext, credentialSubjectType)
                 
@@ -284,10 +279,10 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                 let issuerId = VerificationUtils.getCredentialIssuerId(jwtCredential: jwtCredential)
                 VCLLog.d("Comparing credentialIssuerId: \(issuerId ?? "") with did: \(did)")
                 
-//                    Comparing issuer.id instead of iss
-//                    https://velocitycareerlabs.atlassian.net/browse/VL-6178?focusedCommentId=46933
-//                    https://velocitycareerlabs.atlassian.net/browse/VL-6988
-//                    if (jwtCredential.iss == did)
+                // Comparing issuer.id instead of iss
+                // https://velocitycareerlabs.atlassian.net/browse/VL-6178?focusedCommentId=46933
+                // https://velocitycareerlabs.atlassian.net/browse/VL-6988
+                // if (jwtCredential.iss == did)
                 if issuerId == did {
                     isCredentialVerifiedStorage.update(true)
                 } else {
@@ -298,16 +293,17 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             }
         }
         
-        completeContextDispatcher.notify(queue: DispatchQueue.global()) {
-            if let error = globalErrorStorage.get() {
-                completionBlock(.failure(error))
-            } else if isCredentialVerifiedStorage.get() {
-                completionBlock(.success(true))
-            } else {
-                completionBlock(
-                    .failure(VCLError(errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure.rawValue))
-                )
-            }
+        // BLOCK until all context checks are complete
+        group.wait()
+        
+        if let error = globalErrorStorage.get() {
+            completionBlock(.failure(error))
+        } else if isCredentialVerifiedStorage.get() {
+            completionBlock(.success(true))
+        } else {
+            completionBlock(
+                .failure(VCLError(errorCode: VCLErrorCode.IssuerUnexpectedPermissionFailure.rawValue))
+            )
         }
     }
     
