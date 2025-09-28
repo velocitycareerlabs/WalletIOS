@@ -242,7 +242,9 @@ class VclBlocksProvider {
         if (isDirectIssuerCheckOn) {
             credentialIssuerVerifier = CredentialIssuerVerifierImpl(
                 credentialTypesModel,
-                NetworkServiceImpl(),
+                CredentialSubjectContextRepositoryImpl(
+                    NetworkServiceImpl()
+                ),
                 ExecutorImpl.instance
             )
         }

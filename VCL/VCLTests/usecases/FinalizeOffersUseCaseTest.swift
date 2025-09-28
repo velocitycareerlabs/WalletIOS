@@ -105,7 +105,9 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+                CredentialSubjectContextRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                ),
                 EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),
@@ -154,7 +156,9 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+                CredentialSubjectContextRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                ),
                 EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),
@@ -203,7 +207,9 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+                CredentialSubjectContextRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                ),
                 EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),
@@ -242,7 +248,9 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+                CredentialSubjectContextRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                ),
                 EmptyExecutor()
             ),
             CredentialDidVerifierImpl(),

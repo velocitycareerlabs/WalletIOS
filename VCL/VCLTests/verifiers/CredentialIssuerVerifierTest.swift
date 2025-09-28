@@ -123,98 +123,126 @@ class CredentialIssuerVerifierTest: XCTestCase {
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
             EmptyExecutor()
         )
         subject2 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
             EmptyExecutor()
         )
         subject3 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
             EmptyExecutor()
         )
         subject4 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
             EmptyExecutor()
         )
         subject5 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
             EmptyExecutor()
         )
         subject6 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
             EmptyExecutor()
         )
         subject7 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
             EmptyExecutor()
         )
         subject8 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
             EmptyExecutor()
         )
         subject9 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.IssuerCategoryIdDocumentIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
             EmptyExecutor()
         )
         subject10 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.IssuerCategoryNotaryContactIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
             EmptyExecutor()
         )
         subject11 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+            ),
             EmptyExecutor()
         )
         subject12 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
             ),
-            NetworkServiceSuccess(validResponse: ""),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: "")
+            ),
             EmptyExecutor()
         )
         subject13 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10JsonldWithoutPrimaryOrganization),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10JsonldWithoutPrimaryOrganization)
+            ),
             EmptyExecutor()
         )
         subjectQa = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
                 issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
             ),
-            NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10JsonldQa),
+            CredentialSubjectContextRepositoryImpl(
+                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10JsonldQa)
+            ),
             EmptyExecutor()
         )
     }

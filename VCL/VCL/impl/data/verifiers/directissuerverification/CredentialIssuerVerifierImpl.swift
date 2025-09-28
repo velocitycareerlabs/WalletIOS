@@ -12,7 +12,7 @@ import Foundation
 final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
     
     private let credentialTypesModel: CredentialTypesModel
-    private let networkService: NetworkService
+    private let credentialSubjectContextRepository: CredentialSubjectContextRepository
     
     private let executor: Executor
         
@@ -22,14 +22,14 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
     
     init(
         _ credentialTypesModel: CredentialTypesModel,
-        _ networkService: NetworkService,
+        _ credentialSubjectContextRepository: CredentialSubjectContextRepository,
         _ executor: Executor,
         _ mainDispatcher: DispatchGroup = DispatchGroup(),
         _ resolveContextDispatcher: DispatchGroup = DispatchGroup(),
         _ completeContextDispatcher: DispatchGroup = DispatchGroup()
     ) {
         self.credentialTypesModel = credentialTypesModel
-        self.networkService = networkService
+        self.credentialSubjectContextRepository = credentialSubjectContextRepository
         self.executor = executor
         self.mainDispatcher = mainDispatcher
         self.resolveContextDispatcher = resolveContextDispatcher
@@ -201,25 +201,22 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         let completeContextsStorage = CompleteContextsStorage()
     
         for credentialSubjectContext in credentialSubjectContexts {
+            
             self.resolveContextDispatcher.enter()
-            self.executor.runOnBackground {
-                self.networkService.sendRequest(
-                    endpoint: credentialSubjectContext,
-                    method: Request.HttpMethod.GET,
-                    headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)]
-                ) { [weak self] result in
-                    guard let self = self else { return }
+            
+            self.executor.runOnBackground { [weak self] in
+                
+                self?.credentialSubjectContextRepository.getCredentialSubjectContext(
+                    credentialSubjectContextEndpoint: credentialSubjectContext
+                ) { result in
                     
-                    defer { self.resolveContextDispatcher.leave() }
+                    defer { self?.resolveContextDispatcher.leave() }
                     
                     do {
-                        if let ldContextResponse = try result.get().payload.toDictionary() {
-                            completeContextsStorage.append(ldContextResponse)
-                        } else {
-                            VCLLog.e("Unexpected LD-Context payload for \(credentialSubjectContext).")
-                        }
+                        let ldContextResponse = try result.get()
+                        completeContextsStorage.append(ldContextResponse)
                     } catch {
-                        VCLLog.e("Error fetching \(credentialSubjectContext):\n\(error)")
+                        VCLLog.e("\(error)")
                     }
                 }
             }
