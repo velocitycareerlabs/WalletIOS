@@ -14,16 +14,30 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
     private let credentialTypesModel: CredentialTypesModel
     private let credentialSubjectContextRepository: CredentialSubjectContextRepository
     
-    private let executor: Executor
+    private let verifyQueue = DispatchQueue(
+        label: "io.velocitycareerlabs.contexts.verify",
+        qos: .userInitiated,
+        attributes: .concurrent
+    )
+    
+    private let contextsQueue = DispatchQueue(
+        label: "io.velocitycareerlabs.contexts.fetch",
+        qos: .userInitiated,
+        attributes: .concurrent
+    )
+
+    private let checksQueue = DispatchQueue(
+        label: "io.velocitycareerlabs.contexts.checks",
+        qos: .userInitiated,
+        attributes: .concurrent
+    )
     
     init(
         _ credentialTypesModel: CredentialTypesModel,
-        _ credentialSubjectContextRepository: CredentialSubjectContextRepository,
-        _ executor: Executor
+        _ credentialSubjectContextRepository: CredentialSubjectContextRepository
     ) {
         self.credentialTypesModel = credentialTypesModel
         self.credentialSubjectContextRepository = credentialSubjectContextRepository
-        self.executor = executor
     }
     
     func verifyCredentials(
@@ -50,7 +64,7 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         for jwtCredential in jwtCredentials {
             group.enter()
             
-            executor.runOnBackground {
+            verifyQueue.async {
                 guard
                     let credentialTypeName = VerificationUtils.getCredentialType(jwtCredential),
                     let credentialType = self.credentialTypesModel.credentialTypeByTypeName(type: credentialTypeName)
@@ -191,10 +205,11 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         
         let completeContextsStorage = CompleteContextsStorage()
         
+//        let credentialSubjectContext = credentialSubjectContexts[0]
         for credentialSubjectContext in credentialSubjectContexts {
             group.enter()
             
-            executor.runOnBackground { [weak self] in
+            contextsQueue.async { [weak self] in
                 guard let strongSelf = self else {
                     group.leave() // always balance enter/leave
                     return
@@ -203,6 +218,7 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                 strongSelf.credentialSubjectContextRepository.getCredentialSubjectContext(
                     credentialSubjectContextEndpoint: credentialSubjectContext
                 ) { result in
+                    VCLLog.d("getCredentialSubjectContext completed for \(credentialSubjectContext)")
                     defer { group.leave() }    // balanced even on error paths
                     do {
                         let ldContextResponse = try result.get()
@@ -249,11 +265,7 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         for completeContext in completeContexts {
             group.enter()
             
-            executor.runOnBackground { [weak self] in
-                guard let strongSelf = self else {
-                    group.leave()
-                    return
-                }
+            checksQueue.async {
                 
                 defer { group.leave() }
                 

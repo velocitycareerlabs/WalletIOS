@@ -244,8 +244,7 @@ class VclBlocksProvider {
                 credentialTypesModel,
                 CredentialSubjectContextRepositoryImpl(
                     NetworkServiceImpl()
-                ),
-                ExecutorImpl.instance
+                )
             )
         }
         return FinalizeOffersUseCaseImpl(

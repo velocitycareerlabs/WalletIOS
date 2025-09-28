@@ -11,6 +11,18 @@ import Foundation
 
 final class NetworkServiceImpl: NetworkService {
     
+    private let urlSession: URLSession
+    
+    init() {
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 15
+        configuration.timeoutIntervalForResource = 30
+        configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+        configuration.waitsForConnectivity = false
+        
+        urlSession = URLSession(configuration: configuration)
+    }
+    
     func sendRequest(
         endpoint: String,
         body: String? = nil,
@@ -33,52 +45,47 @@ final class NetworkServiceImpl: NetworkService {
         )
     }
     
-    private func sendRequest(request: Request,completionBlock: @escaping (VCLResult<Response>) -> Void) {
+    private func sendRequest(request: Request, completionBlock: @escaping (VCLResult<Response>) -> Void) {
         logRequest(request)
         guard let urlRequest = createUrlRequest(request: request) else {
             completionBlock(.failure(VCLError(message: "Request error: \(request.stringify())")))
             return
         }
-        let task = URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+        
+//        let task = URLSession.shared.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+        let task = urlSession.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            
             if let taskError = error {
                 completionBlock(.failure(VCLError(error: taskError, statusCode: VCLStatusCode.NetworkError.rawValue)))
+                return
             }
-            else {
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    completionBlock(.failure(VCLError(message: "Empty response")))
-                    return
-                }
-                guard let jsonData = data else {
-                    completionBlock(.failure(VCLError(message:"Empty data received")))
-                    return
-                }
-                if (200...299).contains(httpResponse.statusCode) {
-                    let response = Response(payload: jsonData, code: httpResponse.statusCode)
-                    self?.logResponse(response)
-                    completionBlock(.success(response))
-                }
-                else {
-                    completionBlock(.failure(
-                        VCLError(payload:"\((String(data: data ?? Data(bytes: [] as [UInt8], count: 0), encoding: .utf8)) ?? "" )")
-                    ))
-                }
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completionBlock(.failure(VCLError(message: "Empty response")))
+                return
+            }
+            guard let jsonData = data else {
+                completionBlock(.failure(VCLError(message: "Empty data received")))
+                return
+            }
+            if (200...299).contains(httpResponse.statusCode) {
+                let response = Response(payload: jsonData, code: httpResponse.statusCode)
+                self?.logResponse(response)
+                completionBlock(.success(response))
+            } else {
+                completionBlock(.failure(
+                    VCLError(payload: String(data: jsonData, encoding: .utf8) ?? "")
+                ))
             }
         }
         task.resume()
     }
-    
-    //    private func createSession(request: Request) -> URLSession {
-    //        let config = URLSessionConfiguration.default
-    //        config.timeoutIntervalForRequest = TimeInterval(request.timeoutIntervalForRequest)
-    //        config.requestCachePolicy = request.cachePolicy
-    //        return URLSession(configuration: config) // Load configuration into Session
-    //    }
     
     private func createUrlRequest(request: Request) -> URLRequest? {
         guard let url = URL(string: request.endpoint) else {
             return nil
         }
         var urlRequest = URLRequest(url: url)
+        urlRequest.cachePolicy = request.cachePolicy
         urlRequest.httpMethod = request.method.rawValue
         if(request.method == Request.HttpMethod.POST && request.body != nil) {
             urlRequest.httpBody = request.body?.data(using: request.encoding)

@@ -50,7 +50,8 @@ final class CredentialTypeSchemaRepositoryImpl: CredentialTypeSchemaRepository {
             contentType: .ApplicationJson,
             method: .GET,
             headers: [(HeaderKeys.XVnfProtocolVersion, HeaderValues.XVnfProtocolVersion)],
-            cachePolicy: .useProtocolCachePolicy) {
+            cachePolicy: .useProtocolCachePolicy
+        ) {
             [weak self] res in
             do {
                 let payload = try res.get().payload
