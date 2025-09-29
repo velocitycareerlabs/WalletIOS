@@ -18,9 +18,7 @@ class Request {
 //    private(set) var timeoutIntervalForRequest: Int
     private(set) var encoding: String.Encoding
     private(set) var contentType: ContentType
-    
-    static let DefaultTimeoutIntervalForRequest = 60
-    
+        
     static let DefaultEncoding = String.Encoding.utf8
 
     enum ContentType: String {

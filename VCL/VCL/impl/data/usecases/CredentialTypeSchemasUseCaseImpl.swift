@@ -9,19 +9,26 @@
 
 import Foundation
 
-actor CredentialTypeSchemasMapStorage {
+final class CredentialTypeSchemasMapStorage {
     private var credentialTypeSchemasMap: [String: VCLCredentialTypeSchema] = [:]
+    private let queue = DispatchQueue(label: "CredentialTypeSchemasMapStorage.queue", attributes: .concurrent)
     
     func add(schemaName: String, schema: VCLCredentialTypeSchema) {
-        credentialTypeSchemasMap[schemaName] = schema
+        queue.async(flags: .barrier) {
+            self.credentialTypeSchemasMap[schemaName] = schema
+        }
     }
     
     func isEmpty() -> Bool {
-        return credentialTypeSchemasMap.isEmpty
+        queue.sync {
+            credentialTypeSchemasMap.isEmpty
+        }
     }
     
     func get() -> [String: VCLCredentialTypeSchema] {
-        return credentialTypeSchemasMap
+        queue.sync {
+            credentialTypeSchemasMap
+        }
     }
 }
 
@@ -32,7 +39,6 @@ final class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
     private let executor: Executor
     private let dispatcher: Dispatcher
     
-    // Actor to manage the state of credentialTypeSchemasMap safely across threads
     private let credentialTypeSchemasStorage = CredentialTypeSchemasMapStorage()
     
     init(
@@ -66,10 +72,7 @@ final class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
                     
                     switch result {
                     case .success(let credentialTypeSchema):
-                        Task {
-                            // Safely update the actor-managed map
-                            await self.credentialTypeSchemasStorage.add(schemaName: schemaName, schema: credentialTypeSchema)
-                        }
+                        self.credentialTypeSchemasStorage.add(schemaName: schemaName, schema: credentialTypeSchema)
                     case .failure:
                         // Ignore errors
                         break
@@ -82,13 +85,10 @@ final class CredentialTypeSchemasUseCaseImpl: CredentialTypeSchemasUseCase {
         dispatcher.notify(queue: .main) { [weak self] in
             guard let self = self else { return }
             self.executor.runOnMain {
-                Task { [weak self] in
-                    guard let self = self else { return }
-                    if await self.credentialTypeSchemasStorage.isEmpty() {
-                        VCLLog.e("Credential type schemas were not found.")
-                    }
-                    completionBlock(VCLResult.success(VCLCredentialTypeSchemas(all: await self.credentialTypeSchemasStorage.get())))
+                if self.credentialTypeSchemasStorage.isEmpty() {
+                    VCLLog.e("Credential type schemas were not found.")
                 }
+                completionBlock(VCLResult.success(VCLCredentialTypeSchemas(all: self.credentialTypeSchemasStorage.get())))
             }
         }
     }

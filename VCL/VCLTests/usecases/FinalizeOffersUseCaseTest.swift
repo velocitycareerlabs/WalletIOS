@@ -105,8 +105,9 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
-                EmptyExecutor()
+                CredentialSubjectContextRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                )
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(
@@ -154,8 +155,9 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
-                EmptyExecutor()
+                CredentialSubjectContextRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                )
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(
@@ -203,8 +205,9 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
-                EmptyExecutor()
+                CredentialSubjectContextRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                )
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(
@@ -242,8 +245,9 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
                 CredentialTypesModelMock(
                     issuerCategory: CredentialTypesModelMock.issuerCategoryRegularIssuer
                 ),
-                NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld),
-                EmptyExecutor()
+                CredentialSubjectContextRepositoryImpl(
+                    NetworkServiceSuccess(validResponse: JsonLdMocks.Layer1v10Jsonld)
+                )
             ),
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(

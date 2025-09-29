@@ -4,30 +4,45 @@
 //
 //  Created by Michael Avoyan on 20/03/2021.
 //
-// Copyright 2022 Velocity Career Labs inc.
-// SPDX-License-Identifier: Apache-2.0
+//  Copyright 2022 Velocity Career Labs inc.
+//  SPDX-License-Identifier: Apache-2.0
 
-class InitializationWatcher {
+final class InitializationWatcher {
     private let initAmount: Int
     private var initCount = 0
+    private var _errors: [VCLError] = []
     
-    private(set) var errors: Array<VCLError> = Array()
+    private let queue = DispatchQueue(label: "InitializationWatcher.queue", attributes: .concurrent)
+    
+    var errors: [VCLError] {
+        queue.sync {
+            _errors
+        }
+    }
     
     init(initAmount: Int) {
         self.initAmount = initAmount
     }
 
-    func onInitializedModel(error: VCLError?, enforceFailure: Bool=false) -> Bool{
-        initCount += 1
-        if let e = error {
-            errors.append(e)
+    func onInitializedModel(error: VCLError?, enforceFailure: Bool = false) -> Bool {
+        var result = false
+        queue.sync(flags: .barrier) {
+            initCount += 1
+            if let e = error {
+                _errors.append(e)
+            }
+            result = isInitializationComplete(enforceFailure)
         }
-        return isInitializationComplete(enforceFailure)
+        return result
     }
+    
     func firstError() -> VCLError? {
-        return errors.first
+        queue.sync {
+            _errors.first
+        }
     }
-    private func isInitializationComplete(_ enforceFailure: Bool) -> Bool{
-        return initCount == initAmount || enforceFailure
+    
+    private func isInitializationComplete(_ enforceFailure: Bool) -> Bool {
+        initCount == initAmount || enforceFailure
     }
 }

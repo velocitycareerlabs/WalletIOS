@@ -267,6 +267,8 @@
 		28C15C9226CA8AA000E248C3 /* CredentialTypesMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C15C9126CA8AA000E248C3 /* CredentialTypesMocks.swift */; };
 		28C15C9426CA8B0500E248C3 /* CredentialTypesUIFormSchemaMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C15C9326CA8B0500E248C3 /* CredentialTypesUIFormSchemaMocks.swift */; };
 		28C15C9A26CA8D3C00E248C3 /* ExchangeProgressMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C15C9926CA8D3C00E248C3 /* ExchangeProgressMocks.swift */; };
+		28C2DA312E8919D5005C4B8B /* CredentialSubjectContextRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C2DA302E8919D2005C4B8B /* CredentialSubjectContextRepository.swift */; };
+		28C2DA332E891A38005C4B8B /* CredentialSubjectContextRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C2DA322E891A32005C4B8B /* CredentialSubjectContextRepositoryImpl.swift */; };
 		28C3B7B52806028F0026E542 /* VCLCredentialManifestDescriptorRefreshTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C3B7B42806028F0026E542 /* VCLCredentialManifestDescriptorRefreshTest.swift */; };
 		28C527FD293DEB2000D5D7FF /* VCLPresentationRequestDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C527FC293DEB2000D5D7FF /* VCLPresentationRequestDescriptor.swift */; };
 		28C52808293DF98500D5D7FF /* VCLPresentationRequestDescriptorTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C52807293DF98500D5D7FF /* VCLPresentationRequestDescriptorTest.swift */; };
@@ -295,6 +297,9 @@
 		28D3F8D02A642AB5001CF3C2 /* CredentialIssuerVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D3F8CF2A642AB5001CF3C2 /* CredentialIssuerVerifier.swift */; };
 		28D3F8D22A642B29001CF3C2 /* CredentialIssuerVerifierImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D3F8D12A642B29001CF3C2 /* CredentialIssuerVerifierImpl.swift */; };
 		28D3F8D82A643513001CF3C2 /* VerificationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D3F8D72A643513001CF3C2 /* VerificationUtils.swift */; };
+		28D445572E7C33FB00764799 /* GlobalErrorStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D445562E7C33F700764799 /* GlobalErrorStorage.swift */; };
+		28D445592E7C342B00764799 /* CompleteContextsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D445582E7C342900764799 /* CompleteContextsStorage.swift */; };
+		28D4455B2E7C344500764799 /* IsCredentialVerifiedStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D4455A2E7C344300764799 /* IsCredentialVerifiedStorage.swift */; };
 		28D4D6182A0CEDD500059A87 /* VCLKeyServiceLocalImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D4D6172A0CEDD500059A87 /* VCLKeyServiceLocalImpl.swift */; };
 		28D4D61B2A0CEDFC00059A87 /* VCLKeyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D4D61A2A0CEDFC00059A87 /* VCLKeyService.swift */; };
 		28D62F312DF069B2009B9D8E /* DidDocumentMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28D62F302DF069B1009B9D8E /* DidDocumentMocks.swift */; };
@@ -575,6 +580,8 @@
 		28C15C9126CA8AA000E248C3 /* CredentialTypesMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTypesMocks.swift; sourceTree = "<group>"; };
 		28C15C9326CA8B0500E248C3 /* CredentialTypesUIFormSchemaMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialTypesUIFormSchemaMocks.swift; sourceTree = "<group>"; };
 		28C15C9926CA8D3C00E248C3 /* ExchangeProgressMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeProgressMocks.swift; sourceTree = "<group>"; };
+		28C2DA302E8919D2005C4B8B /* CredentialSubjectContextRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialSubjectContextRepository.swift; sourceTree = "<group>"; };
+		28C2DA322E891A32005C4B8B /* CredentialSubjectContextRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialSubjectContextRepositoryImpl.swift; sourceTree = "<group>"; };
 		28C3B7B42806028F0026E542 /* VCLCredentialManifestDescriptorRefreshTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLCredentialManifestDescriptorRefreshTest.swift; sourceTree = "<group>"; };
 		28C527FC293DEB2000D5D7FF /* VCLPresentationRequestDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLPresentationRequestDescriptor.swift; sourceTree = "<group>"; };
 		28C52807293DF98500D5D7FF /* VCLPresentationRequestDescriptorTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLPresentationRequestDescriptorTest.swift; sourceTree = "<group>"; };
@@ -603,6 +610,9 @@
 		28D3F8CF2A642AB5001CF3C2 /* CredentialIssuerVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialIssuerVerifier.swift; sourceTree = "<group>"; };
 		28D3F8D12A642B29001CF3C2 /* CredentialIssuerVerifierImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialIssuerVerifierImpl.swift; sourceTree = "<group>"; };
 		28D3F8D72A643513001CF3C2 /* VerificationUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationUtils.swift; sourceTree = "<group>"; };
+		28D445562E7C33F700764799 /* GlobalErrorStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalErrorStorage.swift; sourceTree = "<group>"; };
+		28D445582E7C342900764799 /* CompleteContextsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteContextsStorage.swift; sourceTree = "<group>"; };
+		28D4455A2E7C344300764799 /* IsCredentialVerifiedStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsCredentialVerifiedStorage.swift; sourceTree = "<group>"; };
 		28D4D6172A0CEDD500059A87 /* VCLKeyServiceLocalImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLKeyServiceLocalImpl.swift; sourceTree = "<group>"; };
 		28D4D61A2A0CEDFC00059A87 /* VCLKeyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLKeyService.swift; sourceTree = "<group>"; };
 		28D62F302DF069B1009B9D8E /* DidDocumentMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DidDocumentMocks.swift; sourceTree = "<group>"; };
@@ -1278,14 +1288,12 @@
 		28A6FAA92B28DF9B00C7675E /* verifiers */ = {
 			isa = PBXGroup;
 			children = (
+				28D445552E7C33C400764799 /* directissuerverification */,
 				28D3F8CD2A641842001CF3C2 /* CredentialDidVerifierImpl.swift */,
-				28B825692ADD7AF60044FF28 /* CredentialIssuerVerifierEmptyImpl.swift */,
-				28D3F8D12A642B29001CF3C2 /* CredentialIssuerVerifierImpl.swift */,
 				28A6FAB22B28E09B00C7675E /* CredentialManifestByDeepLinkVerifierImpl.swift */,
 				28A6FAB42B28E09C00C7675E /* CredentialsByDeepLinkVerifierImpl.swift */,
 				28A6FAB32B28E09B00C7675E /* OffersByDeepLinkVerifierImpl.swift */,
 				28A6FAB52B28E09C00C7675E /* PresentationRequestByDeepLinkVerifierImpl.swift */,
-				28D3F8D72A643513001CF3C2 /* VerificationUtils.swift */,
 			);
 			path = verifiers;
 			sourceTree = "<group>";
@@ -1326,6 +1334,15 @@
 			path = valid;
 			sourceTree = "<group>";
 		};
+		28C2DA2F2E891985005C4B8B /* repositories */ = {
+			isa = PBXGroup;
+			children = (
+				28C2DA302E8919D2005C4B8B /* CredentialSubjectContextRepository.swift */,
+				28C2DA322E891A32005C4B8B /* CredentialSubjectContextRepositoryImpl.swift */,
+			);
+			path = repositories;
+			sourceTree = "<group>";
+		};
 		28D3F8CA2A6417A7001CF3C2 /* verifiers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1337,6 +1354,20 @@
 				28A6FAB02B28E00C00C7675E /* PresentationRequestByDeepLinkVerifier.swift */,
 			);
 			path = verifiers;
+			sourceTree = "<group>";
+		};
+		28D445552E7C33C400764799 /* directissuerverification */ = {
+			isa = PBXGroup;
+			children = (
+				28C2DA2F2E891985005C4B8B /* repositories */,
+				28D445582E7C342900764799 /* CompleteContextsStorage.swift */,
+				28B825692ADD7AF60044FF28 /* CredentialIssuerVerifierEmptyImpl.swift */,
+				28D3F8D12A642B29001CF3C2 /* CredentialIssuerVerifierImpl.swift */,
+				28D445562E7C33F700764799 /* GlobalErrorStorage.swift */,
+				28D4455A2E7C344300764799 /* IsCredentialVerifiedStorage.swift */,
+				28D3F8D72A643513001CF3C2 /* VerificationUtils.swift */,
+			);
+			path = directissuerverification;
 			sourceTree = "<group>";
 		};
 		28D4D60D2A0CEDA800059A87 /* keys */ = {
@@ -1548,6 +1579,7 @@
 				28D4D61B2A0CEDFC00059A87 /* VCLKeyService.swift in Sources */,
 				286415B9264D65E2006C1AA3 /* CredentialManifestRepositoryImpl.swift in Sources */,
 				2864160A264D65E2006C1AA3 /* VCLVerifiableCredential.swift in Sources */,
+				28C2DA332E891A38005C4B8B /* CredentialSubjectContextRepositoryImpl.swift in Sources */,
 				28A6FAB62B28E09C00C7675E /* CredentialManifestByDeepLinkVerifierImpl.swift in Sources */,
 				28905A7B2ACC1CA50011B7FE /* VCLJwtSignServiceLocalImpl.swift in Sources */,
 				289DFDC926F2190F00052CA8 /* VCLEnvironment.swift in Sources */,
@@ -1621,6 +1653,7 @@
 				28AADD5228AA6D5C005EAF9D /* DsptchQueue.swift in Sources */,
 				286415AF264D65E2006C1AA3 /* DataExtensions.swift in Sources */,
 				286415EF264D65E2006C1AA3 /* GenerateOffersUseCase.swift in Sources */,
+				28D4455B2E7C344500764799 /* IsCredentialVerifiedStorage.swift in Sources */,
 				28648A622AA8736D002FD0E2 /* VCLCryptoServicesDescriptor.swift in Sources */,
 				2859B5AE29DC2759005626DA /* VCSDKConfiguration.swift in Sources */,
 				28648A632AA8736D002FD0E2 /* VCLInitializationDescriptor.swift in Sources */,
@@ -1638,6 +1671,7 @@
 				286415F5264D65E2006C1AA3 /* VCL.swift in Sources */,
 				28D3F8CC2A6417E9001CF3C2 /* CredentialDidVerifier.swift in Sources */,
 				288FBDCB27626A3F00154BF6 /* CountriesRepository.swift in Sources */,
+				28D445592E7C342B00764799 /* CompleteContextsStorage.swift in Sources */,
 				28FA80E626789CA2000A3C7F /* JwtServiceUseCase.swift in Sources */,
 				28C5622F2A6855F500C10161 /* ECPublicJwkExtension.swift in Sources */,
 				28A6FAAF2B28DFFB00C7675E /* OffersByDeepLinkVerifier.swift in Sources */,
@@ -1652,6 +1686,7 @@
 				28243959272AE72B00A712C8 /* VerifiedProfileUseCaseImpl.swift in Sources */,
 				286415F1264D65E2006C1AA3 /* PresentationSubmissionUseCase.swift in Sources */,
 				286415C3264D65E2006C1AA3 /* CredentialTypesModelImpl.swift in Sources */,
+				28C2DA312E8919D5005C4B8B /* CredentialSubjectContextRepository.swift in Sources */,
 				286415E5264D65E2006C1AA3 /* CredentialTypesModel.swift in Sources */,
 				286415D5264D65E2006C1AA3 /* CredentialsURI.swift in Sources */,
 				28F1A624299E3956001A151F /* VCLIssuingType.swift in Sources */,
@@ -1662,6 +1697,7 @@
 				2821473026C03345002613A9 /* VCLCredentialManifestDescriptorByDeepLink.swift in Sources */,
 				28A6FAA82B28D0D400C7675E /* VCLOffer.swift in Sources */,
 				286415B4264D65E2006C1AA3 /* PresentationRequestRepositoryImpl.swift in Sources */,
+				28D445572E7C33FB00764799 /* GlobalErrorStorage.swift in Sources */,
 				2829747926C11863008CE30A /* VCLOrganization.swift in Sources */,
 				28641601264D65E2006C1AA3 /* VCLJwtVerifiableCredentials.swift in Sources */,
 				28EBDD972B7B855E0043012B /* VCLSignatureAlgorithm.swift in Sources */,
@@ -1968,7 +2004,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 166;
+				CURRENT_PROJECT_VERSION = 167;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1981,7 +2017,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.7.6;
+				MARKETING_VERSION = 2.7.7;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1998,7 +2034,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 166;
+				CURRENT_PROJECT_VERSION = 167;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7DDDGP43MJ;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -2011,7 +2047,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.7.6;
+				MARKETING_VERSION = 2.7.7;
 				PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
