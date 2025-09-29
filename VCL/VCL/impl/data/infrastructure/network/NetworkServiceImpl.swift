@@ -15,8 +15,9 @@ final class NetworkServiceImpl: NetworkService {
     
     init() {
         let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = 15
-        configuration.timeoutIntervalForResource = 30
+//        use default timeouts:
+//        configuration.timeoutIntervalForRequest = 30
+//        configuration.timeoutIntervalForResource = 60
         configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
         configuration.waitsForConnectivity = false
         
