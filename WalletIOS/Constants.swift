@@ -102,12 +102,7 @@ struct Constants  {
         )
     )
     
-    static let CredentialTypes = [
-        "EducationDegreeRegistrationV1.0",
-        "EducationDegreeStudyV1.0",
-        "EducationDegreeGraduationV1.0",
-        "EmploymentPastV1.1"
-    ]
+    static let CredentialTypes: [String] = []
     
     static let ResidentPermitV10 = "ResidentPermitV1.0"
     
