@@ -28,7 +28,9 @@ public struct VCLServiceTypes {
             all = [
                 VCLServiceType.Issuer,
                 VCLServiceType.CareerIssuer,
-                VCLServiceType.NotaryIssuer
+                VCLServiceType.NotaryIssuer,
+                VCLServiceType.NotaryWorkPermitIssuer,
+                VCLServiceType.WorkPermitIssuer
             ]
         case VCLIssuingType.Identity:
             all = [
