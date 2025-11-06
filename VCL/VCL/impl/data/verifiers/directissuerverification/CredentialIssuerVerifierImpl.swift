@@ -155,9 +155,16 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ permittedServiceCategory: VCLServiceTypes,
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if (permittedServiceCategory.contains(serviceType: VCLServiceType.NotaryIssuer)) {
+        if (
+            permittedServiceCategory.contains(serviceType: VCLServiceType.NotaryIssuer) ||
+            permittedServiceCategory.contains(serviceType: VCLServiceType.NotaryWorkPermitIssuer)
+        ) {
             completionBlock(VCLResult.success(true))
-        } else if (permittedServiceCategory.contains(serviceType: VCLServiceType.Issuer)) {
+        } else if (
+            permittedServiceCategory.contains(serviceType: VCLServiceType.Issuer) ||
+            permittedServiceCategory.contains(serviceType: VCLServiceType.CareerIssuer) ||
+            permittedServiceCategory.contains(serviceType: VCLServiceType.WorkPermitIssuer)
+        ) {
             if let credentialSubject = VerificationUtils.getCredentialSubjectFromCredential(jwtCredential) {
                 if let credentialSubjectContexts = VerificationUtils.getContextsFromCredential(jwtCredential) {
                     resolveCredentialSubjectContexts(credentialSubjectContexts) { [weak self] credentialSubjectContextsResult in
