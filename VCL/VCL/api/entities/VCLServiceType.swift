@@ -20,6 +20,8 @@ public enum VCLServiceType: String {
     case NotaryIdDocumentIssuer = "NotaryIdDocumentIssuer"
     case ContactIssuer = "ContactIssuer"
     case NotaryContactIssuer = "NotaryContactIssuer"
+    case NotaryWorkPermitIssuer = "NotaryWorkPermitIssuer"
+    case WorkPermitIssuer = "WorkPermitIssuer"
     case Undefined = "Undefined"
     
     public static func fromString(value: String) -> VCLServiceType {
@@ -43,6 +45,12 @@ public enum VCLServiceType: String {
         }
         if(value.contains(VCLServiceType.ContactIssuer.rawValue)) {
             return .ContactIssuer
+        }
+        if(value.contains(VCLServiceType.NotaryWorkPermitIssuer.rawValue)) {
+            return .NotaryWorkPermitIssuer
+        }
+        if(value.contains(VCLServiceType.WorkPermitIssuer.rawValue)) {
+            return .WorkPermitIssuer
         }
         if(value.contains(VCLServiceType.CareerIssuer.rawValue)) {
             return .CareerIssuer

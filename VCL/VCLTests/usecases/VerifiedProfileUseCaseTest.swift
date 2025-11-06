@@ -37,6 +37,18 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
         ),
         EmptyExecutor()
     )
+    private let subject5 = VerifiedProfileUseCaseImpl(
+        VerifiedProfileRepositoryImpl(
+            NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileWorkPermissionIssuerJsonStr)
+        ),
+        EmptyExecutor()
+    )
+    private let subject6 = VerifiedProfileUseCaseImpl(
+        VerifiedProfileRepositoryImpl(
+            NetworkServiceSuccess(validResponse: VerifiedProfileMocks.VerifiedProfileNotaryWorkPermissionIssuerJsonStr)
+        ),
+        EmptyExecutor()
+    )
     
     func testGetVerifiedProfileIssuerSuccess() {
         subject1.getVerifiedProfile(
@@ -90,6 +102,38 @@ final class VerifiedProfileUseCaseTest: XCTestCase {
 
     func testGetVerifiedProfileIssuerNotaryIssuerSuccess() {
         subject4.getVerifiedProfile(
+            verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
+                did: "did123"
+            )
+        ) {
+            do {
+                let verifiedProfile = try $0.get()
+                
+                self.compareVerifiedProfile(verifiedProfile: verifiedProfile)
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+    }
+
+    func testGetVerifiedProfileWorkPermissionIssuerSuccess() {
+        subject5.getVerifiedProfile(
+            verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
+                did: "did123"
+            )
+        ) {
+            do {
+                let verifiedProfile = try $0.get()
+                
+                self.compareVerifiedProfile(verifiedProfile: verifiedProfile)
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+    }
+
+    func testGetVerifiedProfileNotaryWorkPermissionIssuerSuccess() {
+        subject6.getVerifiedProfile(
             verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(
                 did: "did123"
             )
