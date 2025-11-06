@@ -162,7 +162,7 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
             completionBlock(VCLResult.success(true))
         } else if (
             permittedServiceCategory.contains(serviceType: VCLServiceType.Issuer) ||
-            permittedServiceCategory.contains(serviceType: VCLServiceType.WorkPermissionIssuer)
+            permittedServiceCategory.contains(serviceType: VCLServiceType.WorkPermitIssuer)
         ) {
             if let credentialSubject = VerificationUtils.getCredentialSubjectFromCredential(jwtCredential) {
                 if let credentialSubjectContexts = VerificationUtils.getContextsFromCredential(jwtCredential) {
