@@ -49,7 +49,9 @@ public struct VCLServiceTypes {
                 VCLServiceType.IdDocumentIssuer,
                 VCLServiceType.NotaryIdDocumentIssuer,
                 VCLServiceType.ContactIssuer,
-                VCLServiceType.NotaryContactIssuer
+                VCLServiceType.NotaryContactIssuer,
+                VCLServiceType.NotaryWorkPermitIssuer,
+                VCLServiceType.WorkPermitIssuer
             ]
         case VCLIssuingType.Undefined:
             all = [VCLServiceType.Undefined]
