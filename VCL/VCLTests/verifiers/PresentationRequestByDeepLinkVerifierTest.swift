@@ -36,6 +36,54 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
         }
     }
 
+    func testVerifyCredentialManifestSuccessWithDidDocumentIdInDeepLink() {
+        subject = PresentationRequestByDeepLinkVerifierImpl()
+        let deepLinkWithDidDocumentId = deepLinkWithInspectorDid(DidDocumentMocks.DidDocumentMock.id)
+
+        subject.verifyPresentationRequest(
+            presentationRequest: presentationRequest,
+            deepLink: deepLinkWithDidDocumentId,
+            didDocument: DidDocumentMocks.DidDocumentMock
+        ) { isVerifiedRes in
+            do {
+                let isVerified = try isVerifiedRes.get()
+                assert(isVerified)
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+    }
+
+    func testVerifyCredentialManifestSuccessWithDidDocumentIdInPresentationRequest() {
+        subject = PresentationRequestByDeepLinkVerifierImpl()
+
+        let originalDidDocumentId = DidDocumentMocks.DidDocumentMock.id
+        var didDocumentPayload = DidDocumentMocks.DidDocumentMock.payload
+        didDocumentPayload[VCLDidDocument.CodingKeys.KeyId] = presentationRequest.iss
+
+        var alsoKnownAs = DidDocumentMocks.DidDocumentMock.alsoKnownAs
+        if !alsoKnownAs.contains(originalDidDocumentId) {
+            alsoKnownAs.append(originalDidDocumentId)
+        }
+        didDocumentPayload[VCLDidDocument.CodingKeys.KeyAlsoKnownAs] = alsoKnownAs
+
+        let didDocumentWithPresentationRequestIss = VCLDidDocument(payload: didDocumentPayload)
+        let deepLinkWithDidDocumentAlias = deepLinkWithInspectorDid(originalDidDocumentId)
+
+        subject.verifyPresentationRequest(
+            presentationRequest: presentationRequest,
+            deepLink: deepLinkWithDidDocumentAlias,
+            didDocument: didDocumentWithPresentationRequestIss
+        ) { isVerifiedRes in
+            do {
+                let isVerified = try isVerifiedRes.get()
+                assert(isVerified)
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+    }
+
     func testVerifyCredentialManifestError() {
         subject = PresentationRequestByDeepLinkVerifierImpl()
         
@@ -51,5 +99,10 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
                 assert((error as! VCLError).errorCode == VCLErrorCode.MismatchedPresentationRequestInspectorDid.rawValue)
             }
         }
+    }
+
+    private func deepLinkWithInspectorDid(_ inspectorDid: String) -> VCLDeepLink {
+        let encodedInspectorDid = inspectorDid.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? inspectorDid
+        return VCLDeepLink(value: "velocity-network://inspect?inspectorDid=\(encodedInspectorDid)")
     }
 }
