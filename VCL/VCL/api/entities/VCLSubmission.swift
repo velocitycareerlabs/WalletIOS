@@ -36,6 +36,7 @@ extension VCLSubmission {
         retVal[SubmissionCodingKeys.KeyJti] = self.jti
         retVal[SubmissionCodingKeys.KeyIss] = iss
         var vp = [String: Any]()
+        vp[SubmissionCodingKeys.KeyContext] = SubmissionCodingKeys.ValueContextList
         vp[SubmissionCodingKeys.KeyType] = SubmissionCodingKeys.ValueVerifiablePresentation
         var presentationSubmissionDict = [String: Any]()
         presentationSubmissionDict[SubmissionCodingKeys.KeyId] = self.submissionId
@@ -63,7 +64,6 @@ extension VCLSubmission {
         retVal[SubmissionCodingKeys.KeyExchangeId] = exchangeId
         retVal[SubmissionCodingKeys.KeyJwtVp] = jwt.encodedJwt
         retVal[SubmissionCodingKeys.KeyPushDelegate] = pushDelegate?.toDictionary()
-        retVal[SubmissionCodingKeys.KeyContext] = SubmissionCodingKeys.ValueContextList
         return retVal
     }
 }
