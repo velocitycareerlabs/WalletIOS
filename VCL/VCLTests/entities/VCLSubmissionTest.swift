@@ -14,6 +14,7 @@ import XCTest
 final class VCLSubmissionTest: XCTestCase {
     private var subjectPresentationSubmission: VCLSubmission!
     private var subjectIdentificationSubmission: VCLSubmission!
+    private var credentialManifest: VCLCredentialManifest!
     
     private let issuingIss = "issuing iss"
     private let inspectionIss = "inspection iss"
@@ -24,47 +25,120 @@ final class VCLSubmissionTest: XCTestCase {
             verifiableCredentials: PresentationSubmissionMocks.SelectionsList
         )
         
+        credentialManifest = VCLCredentialManifest(
+            jwt: CommonMocks.JWT,
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!),
+            didJwk: DidJwkMocks.DidJwk
+        )
+
         subjectIdentificationSubmission = VCLIdentificationSubmission(
-            credentialManifest: VCLCredentialManifest(
-                jwt: CommonMocks.JWT,
-                verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!),
-                didJwk: DidJwkMocks.DidJwk
-            ),
+            credentialManifest: credentialManifest,
             verifiableCredentials: PresentationSubmissionMocks.SelectionsList
         )
     }
 
-    func testPayload() {
-        let presentationSubmissionPayload = subjectPresentationSubmission.generatePayload(iss: inspectionIss)
-        assert(presentationSubmissionPayload[SubmissionCodingKeys.KeyJti] as? String == subjectPresentationSubmission.jti)
-        assert(presentationSubmissionPayload[SubmissionCodingKeys.KeyIss] as? String == inspectionIss)
+    private func expectedPayload(
+        iss: String,
+        presentationDefinitionId: String,
+        vendorOriginContext: String?
+    ) -> [String: Any] {
+        var vp = [String: Any]()
+        vp[SubmissionCodingKeys.KeyContext] = SubmissionCodingKeys.ValueContextList
+        vp[SubmissionCodingKeys.KeyType] = SubmissionCodingKeys.ValueVerifiablePresentation
+        vp[SubmissionCodingKeys.KeyPresentationSubmission] = [
+            SubmissionCodingKeys.KeyId: "<uuid>",
+            SubmissionCodingKeys.KeyDefinitionId: presentationDefinitionId,
+            SubmissionCodingKeys.KeyDescriptorMap: PresentationSubmissionMocks.SelectionsList.enumerated().map { index, credential in
+                [
+                    SubmissionCodingKeys.KeyId: credential.inputDescriptor,
+                    SubmissionCodingKeys.KeyPath: "$.verifiableCredential[\(index)]",
+                    SubmissionCodingKeys.KeyFormat: SubmissionCodingKeys.ValueJwtVcFormat
+                ]
+            }
+        ]
+        vp[SubmissionCodingKeys.KeyVerifiableCredential] =
+            PresentationSubmissionMocks.SelectionsList.map { $0.jwtVc }
+        if let vendorOriginContext {
+            vp[SubmissionCodingKeys.KeyVendorOriginContext] = vendorOriginContext
+        }
 
-        let identificationSubmissionPayload = subjectIdentificationSubmission.generatePayload(iss: issuingIss)
-        assert(identificationSubmissionPayload[SubmissionCodingKeys.KeyJti] as? String == subjectIdentificationSubmission.jti)
-        assert(identificationSubmissionPayload[SubmissionCodingKeys.KeyIss] as? String == issuingIss)
+        return [
+            SubmissionCodingKeys.KeyJti: "<uuid>",
+            SubmissionCodingKeys.KeyIss: iss,
+            SubmissionCodingKeys.KeyVp: vp
+        ]
     }
 
-    func testPushDelegate() {
-        assert(subjectPresentationSubmission.pushDelegate!.pushUrl == PresentationSubmissionMocks.PushDelegate.pushUrl)
-        assert(subjectPresentationSubmission.pushDelegate!.pushToken == PresentationSubmissionMocks.PushDelegate.pushToken)
+    private func normalizedPayload(_ payload: [String: Any]) -> [String: Any] {
+        var normalizedPayload = payload
+
+        guard let jti = payload[SubmissionCodingKeys.KeyJti] as? String else {
+            XCTFail("Missing jti in submission payload")
+            return normalizedPayload
+        }
+        XCTAssertNotNil(UUID(uuidString: jti))
+        normalizedPayload[SubmissionCodingKeys.KeyJti] = "<uuid>"
+
+        guard
+            var vp = payload[SubmissionCodingKeys.KeyVp] as? [String: Any],
+            var presentationSubmission =
+                vp[SubmissionCodingKeys.KeyPresentationSubmission] as? [String: Any],
+            let submissionId = presentationSubmission[SubmissionCodingKeys.KeyId] as? String
+        else {
+            XCTFail("Missing presentation submission id in payload")
+            return normalizedPayload
+        }
+
+        XCTAssertNotNil(UUID(uuidString: submissionId))
+        presentationSubmission[SubmissionCodingKeys.KeyId] = "<uuid>"
+        vp[SubmissionCodingKeys.KeyPresentationSubmission] = presentationSubmission
+        normalizedPayload[SubmissionCodingKeys.KeyVp] = vp
+
+        return normalizedPayload
+    }
+
+    func testPayload() {
+        let presentationSubmissionPayload = subjectPresentationSubmission.generatePayload(iss: inspectionIss)
+        XCTAssertEqual(
+            normalizedPayload(presentationSubmissionPayload) as NSDictionary,
+            expectedPayload(
+                iss: inspectionIss,
+                presentationDefinitionId:
+                    PresentationSubmissionMocks.PresentationRequest.presentationDefinitionId,
+                vendorOriginContext:
+                    PresentationSubmissionMocks.PresentationRequest.vendorOriginContext
+            ) as NSDictionary
+        )
+
+        let identificationSubmissionPayload = subjectIdentificationSubmission.generatePayload(iss: issuingIss)
+        XCTAssertEqual(
+            normalizedPayload(identificationSubmissionPayload) as NSDictionary,
+            expectedPayload(
+                iss: issuingIss,
+                presentationDefinitionId: credentialManifest.presentationDefinitionId,
+                vendorOriginContext: credentialManifest.vendorOriginContext
+            ) as NSDictionary
+        )
     }
 
     func testRequestBody() {
         let requestBodyJsonObj = subjectPresentationSubmission.generateRequestBody(jwt: JwtServiceMocks.JWT)
-        assert(requestBodyJsonObj[SubmissionCodingKeys.KeyExchangeId] as? String == subjectPresentationSubmission.exchangeId)
-        assert(requestBodyJsonObj[SubmissionCodingKeys.KeyContext] as? [String] == SubmissionCodingKeys.ValueContextList)
-
-        let pushDelegateBodyJsonObj = requestBodyJsonObj[SubmissionCodingKeys.KeyPushDelegate] as! [String: Any]
-
-        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushUrl] as? String == PresentationSubmissionMocks.PushDelegate.pushUrl)
-        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushToken] as? String == PresentationSubmissionMocks.PushDelegate.pushToken)
-
-        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushUrl] as? String == subjectPresentationSubmission.pushDelegate!.pushUrl)
-        assert(pushDelegateBodyJsonObj[VCLPushDelegate.CodingKeys.KeyPushToken] as? String == subjectPresentationSubmission.pushDelegate!.pushToken)
+        XCTAssertEqual(
+            requestBodyJsonObj as NSDictionary,
+            [
+                SubmissionCodingKeys.KeyExchangeId:
+                    PresentationSubmissionMocks.PresentationRequest.exchangeId,
+                SubmissionCodingKeys.KeyJwtVp: JwtServiceMocks.JWT.encodedJwt,
+                SubmissionCodingKeys.KeyPushDelegate: [
+                    VCLPushDelegate.CodingKeys.KeyPushUrl: PresentationSubmissionMocks.PushDelegate.pushUrl,
+                    VCLPushDelegate.CodingKeys.KeyPushToken: PresentationSubmissionMocks.PushDelegate.pushToken
+                ]
+            ] as NSDictionary
+        )
     }
     
     func testContext() {
-        assert(SubmissionCodingKeys.KeyContext == "@context")
-        assert(SubmissionCodingKeys.ValueContextList == ["https://www.w3.org/2018/credentials/v1"])
+        XCTAssertEqual(SubmissionCodingKeys.KeyContext, "@context")
+        XCTAssertEqual(SubmissionCodingKeys.ValueContextList, ["https://www.w3.org/2018/credentials/v1"])
     }
 }
