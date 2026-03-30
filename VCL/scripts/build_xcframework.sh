@@ -34,5 +34,5 @@ xcodebuild -create-xcframework \
     -framework "./build/$FRAMEWORK_NAME-iOS.xcarchive/Products/Library/Frameworks/$FRAMEWORK_NAME.framework" \
     -framework "./build/$FRAMEWORK_NAME-iOS-simulator.xcarchive/Products/Library/Frameworks/$FRAMEWORK_NAME.framework" \
     -output "./build/$FRAMEWORK_NAME.xcframework"
-# Clean up interfce naming
-find . -name "*.swiftinterface" -exec sed -i -e "s/$FRAMEWORK_NAME\.//g" {} \;
+# Clean up interface naming
+find "./build/$FRAMEWORK_NAME.xcframework" -name "*.swiftinterface" -exec sed -i '' -e "s/$FRAMEWORK_NAME\.//g" {} \;
