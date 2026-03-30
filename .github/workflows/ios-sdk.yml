@@ -54,13 +54,8 @@ jobs:
     runs-on: macos-15
     env:
       XC_VERSION: "16.3"
-      #Certs
-      ENCRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz.gpg"
-      DECRYPTED_CERTS_FILE_PATH: "./certs.p12.tar.gz"
-      CERTS_FILE_PATH: "./certs.p12"
       # Recomends to use separated PAT token to access to another repos
       PAT_TOKEN: ${{ secrets.VCL_RW_ACCESS_TOKEN }}
-      KEYCHAIN: "velocity.keychain"
       RC_SUFFIX: 'rc'
       GLOBAL_ENV: ${{ needs.set-environment.outputs.GLOBAL_ENV }}
     steps:
@@ -74,26 +69,6 @@ jobs:
       - name: Extract branch name
         shell: bash
         run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')" >> $GITHUB_ENV
-      # Certificate
-      - name: Certificate
-        run: "echo ${{ secrets.APPLE_CERTS_BASE64 }} | base64 -d > ${{ env.ENCRYPTED_CERTS_FILE_PATH }}"
-      # Configure keychain and code signing
-      - name: Configure keychain and code signing
-        run: |
-          security create-keychain -p "" "${{ env.KEYCHAIN }}"
-          security list-keychains -s "${{ env.KEYCHAIN }}"
-          security unlock-keychain -p "" ${{ env.KEYCHAIN }}
-          security set-keychain-settings ${{ env.KEYCHAIN }}
-          security default-keychain -s ${{ env.KEYCHAIN }}
-          security list-keychains
-
-          gpg -d -o "${{ env.DECRYPTED_CERTS_FILE_PATH }}" --pinentry-mode=loopback --passphrase "${{ secrets.CERTS_ENCRYPTION_PWD }}" "${{ env.ENCRYPTED_CERTS_FILE_PATH }}"
-          tar xzvf ${{ env.DECRYPTED_CERTS_FILE_PATH }}
-
-          security import "${{ env.CERTS_FILE_PATH }}" -k "${{ env.KEYCHAIN }}" -P "${{ secrets.CERTS_ENCRYPTION_PWD }}" -A
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" "${{ env.KEYCHAIN }}"
-
-          security find-identity -p codesigning -v
       # VCL build
       - name: VCL build
         run: scripts/build_xcframework.sh

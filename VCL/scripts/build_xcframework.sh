@@ -13,7 +13,10 @@ xcodebuild archive \
     -archivePath "./build/$FRAMEWORK_NAME-iOS.xcarchive" \
     -sdk iphoneos \
     SKIP_INSTALL=NO \
-    BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+    BUILD_LIBRARY_FOR_DISTRIBUTION=YES \
+    CODE_SIGN_IDENTITY="" \
+    CODE_SIGNING_REQUIRED=NO \
+    CODE_SIGNING_ALLOWED=NO
 # iOS simulators
 xcodebuild archive \
     -scheme $FRAMEWORK_NAME \
@@ -22,7 +25,10 @@ xcodebuild archive \
     -archivePath "./build/$FRAMEWORK_NAME-iOS-simulator.xcarchive" \
     -sdk iphonesimulator \
     SKIP_INSTALL=NO \
-    BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+    BUILD_LIBRARY_FOR_DISTRIBUTION=YES \
+    CODE_SIGN_IDENTITY="" \
+    CODE_SIGNING_REQUIRED=NO \
+    CODE_SIGNING_ALLOWED=NO
 # Create the xcframework from them
 xcodebuild -create-xcframework \
     -framework "./build/$FRAMEWORK_NAME-iOS.xcarchive/Products/Library/Frameworks/$FRAMEWORK_NAME.framework" \
