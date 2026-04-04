@@ -18,8 +18,13 @@ final class PresentationRequestByDeepLinkVerifierImpl: PresentationRequestByDeep
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
         if let deepLinkDid = deepLink.did {
-            if (didDocument.id == presentationRequest.iss && didDocument.id == deepLinkDid ||
-                didDocument.alsoKnownAs.contains(presentationRequest.iss) && didDocument.alsoKnownAs.contains(deepLinkDid)) {
+            if isDidBoundToDidDocument(
+                presentationRequest.iss,
+                didDocument: didDocument
+            ) && isDidBoundToDidDocument(
+                deepLinkDid,
+                didDocument: didDocument
+            ) {
                 completionBlock(.success(true))
             } else {
                 VCLLog.e("presentation request: \(presentationRequest.jwt.encodedJwt) \ndidDocument: \(didDocument)")
@@ -31,6 +36,10 @@ final class PresentationRequestByDeepLinkVerifierImpl: PresentationRequestByDeep
                 completionBlock: completionBlock
             )
         }
+    }
+
+    private func isDidBoundToDidDocument(_ did: String, didDocument: VCLDidDocument) -> Bool {
+        didDocument.id == did || didDocument.alsoKnownAs.contains(did)
     }
     
     private func onError(
