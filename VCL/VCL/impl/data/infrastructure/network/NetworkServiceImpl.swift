@@ -73,8 +73,19 @@ final class NetworkServiceImpl: NetworkService {
                 self?.logResponse(response)
                 completionBlock(.success(response))
             } else {
+                let errorPayload = String(data: jsonData, encoding: .utf8) ?? ""
+                let parsedError = VCLError(payload: errorPayload)
+                let hasStructuredPayload = errorPayload.toDictionary() != nil
+                
                 completionBlock(.failure(
-                    VCLError(payload: String(data: jsonData, encoding: .utf8) ?? "")
+                    VCLError(
+                        payload: parsedError.payload,
+                        error: parsedError.error,
+                        errorCode: parsedError.errorCode,
+                        requestId: parsedError.requestId,
+                        message: parsedError.message ?? (hasStructuredPayload ? nil : errorPayload),
+                        statusCode: parsedError.statusCode ?? httpResponse.statusCode
+                    )
                 ))
             }
         }

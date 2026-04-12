@@ -40,7 +40,7 @@ final class VCLJwtSignServiceRemoteImpl: VCLJwtSignService {
                 if let jwtStr = try signedJwtResult.get().payload.toDictionary()?[CodingKeys.KeyCompactJwt] as? String {
                     completionBlock(.success(VCLJwt(encodedJwt: jwtStr)))
                 } else {
-                    completionBlock(.failure(VCLError(payload: "Failed to parse data from \(self?.jwtSignServiceUrl ?? "")")))
+                    completionBlock(.failure(VCLError(message: "Failed to parse data from \(self?.jwtSignServiceUrl ?? "")")))
                 }
             } catch {
                 completionBlock(.failure(VCLError(error: error)))

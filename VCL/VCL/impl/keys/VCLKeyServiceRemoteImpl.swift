@@ -50,7 +50,7 @@ final class VCLKeyServiceRemoteImpl: VCLKeyService {
                 } else {
                     completionBlock(
                         .failure(
-                            VCLError(payload: "Failed to create did:jwk from the provided URL: \(self?.keyServiceUrls.createDidKeyServiceUrl ?? "")")
+                            VCLError(message: "Failed to create did:jwk from the provided URL: \(self?.keyServiceUrls.createDidKeyServiceUrl ?? "")")
                         )
                     )
                 }

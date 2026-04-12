@@ -28,7 +28,7 @@ class CredentialSubjectContextRepositoryImpl: CredentialSubjectContextRepository
                 if let ldContextResponse = try result.get().payload.toDictionary() {
                     completionBlock(VCLResult.success(ldContextResponse))
                 } else {
-                    let error = VCLError(payload: "Unexpected LD-Context payload for \(credentialSubjectContextEndpoint)")
+                    let error = VCLError(message: "Unexpected LD-Context payload for \(credentialSubjectContextEndpoint)")
                     completionBlock(VCLResult.failure(error))
                 }
             } catch {

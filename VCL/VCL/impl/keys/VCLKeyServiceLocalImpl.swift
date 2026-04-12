@@ -69,7 +69,7 @@ final class VCLKeyServiceLocalImpl: VCLKeyService {
         if let keyId = UUID(uuidString: keyId) {
             completionBlock(.success(keyManagementOperations.retrieveKeyFromStorage(withId: keyId)))
         } else {
-            completionBlock(.failure(VCLError(payload: "Invalid UUID format of keyID: \(keyId)")))
+            completionBlock(.failure(VCLError(message: "Invalid UUID format of keyID: \(keyId)")))
         }
     }
     
