@@ -74,22 +74,37 @@ final class NetworkServiceImpl: NetworkService {
                 completionBlock(.success(response))
             } else {
                 let errorPayload = String(data: jsonData, encoding: .utf8) ?? ""
-                let parsedError = VCLError(payload: errorPayload)
-                let hasStructuredPayload = errorPayload.toDictionary() != nil
-                
-                completionBlock(.failure(
-                    VCLError(
-                        payload: parsedError.payload,
-                        error: parsedError.error,
-                        errorCode: parsedError.errorCode,
-                        requestId: parsedError.requestId,
-                        message: parsedError.message ?? (hasStructuredPayload ? nil : errorPayload),
-                        statusCode: parsedError.statusCode ?? httpResponse.statusCode
-                    )
-                ))
+                let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type")
+                completionBlock(.failure(Self.createError(
+                    from: errorPayload,
+                    contentType: contentType,
+                    statusCode: httpResponse.statusCode
+                )))
             }
         }
         task.resume()
+    }
+    
+    private static func createError(from errorPayload: String, contentType: String?, statusCode: Int) -> VCLError {
+        if isJsonContentType(contentType) {
+            return VCLError(
+                error: VCLError(payload: errorPayload),
+                statusCode: statusCode
+            )
+        }
+        
+        return VCLError(
+            message: errorPayload.isEmpty ? nil : errorPayload,
+            statusCode: statusCode
+        )
+    }
+    
+    private static func isJsonContentType(_ contentType: String?) -> Bool {
+        guard let contentType = contentType?.lowercased() else {
+            return false
+        }
+        
+        return contentType.contains("application/json") || contentType.contains("+json")
     }
     
     private func createUrlRequest(request: Request) -> URLRequest? {
