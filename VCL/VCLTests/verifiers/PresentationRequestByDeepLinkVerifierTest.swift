@@ -19,7 +19,7 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
 
     private let deepLink = DeepLinkMocks.PresentationRequestDeepLinkDevNet
 
-    func testVerifyCredentialManifestSuccess() {
+    func testVerifyPresentationRequestSuccess() {
         subject = PresentationRequestByDeepLinkVerifierImpl()
         
         subject.verifyPresentationRequest(
@@ -36,7 +36,7 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
         }
     }
 
-    func testVerifyCredentialManifestSuccessWithDidDocumentIdInDeepLink() {
+    func testVerifyPresentationRequestSuccessWithDidDocumentIdInDeepLink() {
         subject = PresentationRequestByDeepLinkVerifierImpl()
         let deepLinkWithDidDocumentId = deepLinkWithInspectorDid(DidDocumentMocks.DidDocumentMock.id)
 
@@ -54,7 +54,7 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
         }
     }
 
-    func testVerifyCredentialManifestSuccessWithDidDocumentIdInPresentationRequest() {
+    func testVerifyPresentationRequestSuccessWithDidDocumentIdInPresentationRequest() {
         subject = PresentationRequestByDeepLinkVerifierImpl()
 
         let originalDidDocumentId = DidDocumentMocks.DidDocumentMock.id
@@ -84,7 +84,7 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
         }
     }
 
-    func testVerifyCredentialManifestError() {
+    func testVerifyPresentationRequestError() {
         subject = PresentationRequestByDeepLinkVerifierImpl()
         
         subject.verifyPresentationRequest(
