@@ -425,7 +425,9 @@ class CredentialIssuerVerifierTest: XCTestCase {
                 let _ = try $0.get()
                 XCTFail("\(VCLErrorCode.InvalidCredentialSubjectContext.rawValue) error code is expected")
             } catch {
-                assert((error as! VCLError).errorCode == VCLErrorCode.InvalidCredentialSubjectContext.rawValue)
+                let vclError = error as! VCLError
+                assert(vclError.errorCode == VCLErrorCode.InvalidCredentialSubjectContext.rawValue)
+                assert(vclError.message?.contains("Unexpected LD-Context payload for") == true)
             }
         }
     }

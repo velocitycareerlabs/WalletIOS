@@ -14,7 +14,7 @@ final class GlobalErrorStorage {
     private let queue = DispatchQueue(label: "GlobalErrorStorageQueue", attributes: .concurrent)
 
     func update(_ error: VCLError) {
-        queue.async(flags: .barrier) {
+        queue.sync(flags: .barrier) {
             self.error = error
         }
     }
@@ -26,7 +26,7 @@ final class GlobalErrorStorage {
     }
 
     func clear() {
-        queue.async(flags: .barrier) {
+        queue.sync(flags: .barrier) {
             self.error = nil
         }
     }

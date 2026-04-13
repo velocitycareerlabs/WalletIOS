@@ -63,7 +63,7 @@ public struct VCLError: Error {
             self.error = nil
             self.errorCode = errorCode
             self.requestId = nil
-            self.message = "\(String(describing: error))"
+            self.message = error.map { "\($0)" }
             self.statusCode = statusCode
         }
     }

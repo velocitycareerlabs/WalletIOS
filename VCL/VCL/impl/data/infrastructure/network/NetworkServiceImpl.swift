@@ -73,12 +73,38 @@ final class NetworkServiceImpl: NetworkService {
                 self?.logResponse(response)
                 completionBlock(.success(response))
             } else {
-                completionBlock(.failure(
-                    VCLError(payload: String(data: jsonData, encoding: .utf8) ?? "")
-                ))
+                let errorPayload = String(data: jsonData, encoding: .utf8) ?? ""
+                let contentType = httpResponse.value(forHTTPHeaderField: "Content-Type")
+                completionBlock(.failure(Self.createError(
+                    from: errorPayload,
+                    contentType: contentType,
+                    statusCode: httpResponse.statusCode
+                )))
             }
         }
         task.resume()
+    }
+    
+    private static func createError(from errorPayload: String, contentType: String?, statusCode: Int) -> VCLError {
+        if isJsonContentType(contentType) {
+            return VCLError(
+                error: VCLError(payload: errorPayload),
+                statusCode: statusCode
+            )
+        }
+        
+        return VCLError(
+            message: errorPayload.isEmpty ? nil : errorPayload,
+            statusCode: statusCode
+        )
+    }
+    
+    private static func isJsonContentType(_ contentType: String?) -> Bool {
+        guard let contentType = contentType?.lowercased() else {
+            return false
+        }
+        
+        return contentType.contains("application/json") || contentType.contains("+json")
     }
     
     private func createUrlRequest(request: Request) -> URLRequest? {

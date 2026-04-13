@@ -178,8 +178,16 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                             )
                         }
                         catch {
+                            let vclError = error as? VCLError ?? VCLError(error: error)
                             self?.onError(
-                                VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
+                                VCLError(
+                                    payload: vclError.payload,
+                                    error: vclError.error,
+                                    errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue,
+                                    requestId: vclError.requestId,
+                                    message: vclError.message,
+                                    statusCode: vclError.statusCode
+                                ),
                                 completionBlock
                             )
                         }
@@ -211,6 +219,7 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         let group = DispatchGroup()
         
         let completeContextsStorage = CompleteContextsStorage()
+        let errorStorage = GlobalErrorStorage()
         
 //        let credentialSubjectContext = credentialSubjectContexts[0]
         for credentialSubjectContext in credentialSubjectContexts {
@@ -231,7 +240,9 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                         let ldContextResponse = try result.get()
                         completeContextsStorage.append(ldContextResponse)
                     } catch {
-                        VCLLog.e("\(error)")
+                        let vclError = error as? VCLError ?? VCLError(error: error)
+                        errorStorage.update(vclError)
+                        VCLLog.e(vclError.message ?? "\(vclError)")
                     }
                 }
             }
@@ -241,10 +252,14 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         group.wait()
         
         if completeContextsStorage.isEmpty() {
-            onError(
-                VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
-                completionBlock
-            )
+            if let error = errorStorage.get() {
+                completionBlock(.failure(error))
+            } else {
+                onError(
+                    VCLError(errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue),
+                    completionBlock
+                )
+            }
         } else {
             completionBlock(.success(completeContextsStorage.get()))
         }

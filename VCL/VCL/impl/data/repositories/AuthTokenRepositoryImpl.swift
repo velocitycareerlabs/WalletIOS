@@ -42,7 +42,7 @@ final class AuthTokenRepositoryImpl: AuthTokenRepository {
                 } else {
                     completionBlock(
                         VCLResult.failure(
-                            VCLError(payload: "Failed to parse auth token response")
+                            VCLError(message: "Failed to parse auth token response")
                         )
                     )
                 }

@@ -26,7 +26,6 @@ final class NetworkServiceFailure: NetworkService {
             cachePolicy: NSURLRequest.CachePolicy,
             completionBlock: @escaping (VCLResult<Response>) -> Void
     ) {
-        completionBlock(.failure(VCLError(payload: errorMessage)))
+        completionBlock(.failure(VCLError(message: errorMessage)))
     }
 }
-
