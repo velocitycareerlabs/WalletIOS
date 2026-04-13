@@ -14,7 +14,7 @@ final class CompleteContextsStorage {
     private let queue = DispatchQueue(label: "CompleteContextsStorageQueue", attributes: .concurrent)
     
     func append(_ completeContext: [String: Any]) {
-        queue.async(flags: .barrier) {
+        queue.sync(flags: .barrier) {
             self.storage.append(completeContext)
         }
     }
