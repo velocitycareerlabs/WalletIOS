@@ -12,6 +12,9 @@ import XCTest
 @testable import VCL
 
 class VCLErrorTes: XCTestCase {
+    private struct DummyError: Error, CustomStringConvertible {
+        let description: String
+    }
     
     func testErrorFromPayload() {
         let error = VCLError(payload: ErrorMocks.Payload)
@@ -74,6 +77,12 @@ class VCLErrorTes: XCTestCase {
         assert(errorFromError.requestId == error.requestId)
         assert(errorFromError.message == error.message)
     }
+    
+    func testErrorFromNonVCLErrorDoesNotWrapOptionalInMessage() {
+        let error = VCLError(error: DummyError(description: "dummy failure"))
+        
+        assert(error.message == "dummy failure")
+    }
 
     func testErrorToJsonFromPayload() {
         let error = VCLError(payload: ErrorMocks.Payload)
@@ -105,4 +114,3 @@ class VCLErrorTes: XCTestCase {
         assert(errorDictionary[VCLError.CodingKeys.KeyStatusCode] as? Int == ErrorMocks.StatusCode)
     }
 }
-
