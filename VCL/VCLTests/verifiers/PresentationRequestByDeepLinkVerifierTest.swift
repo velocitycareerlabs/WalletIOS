@@ -19,7 +19,7 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
 
     private let deepLink = DeepLinkMocks.PresentationRequestDeepLinkDevNet
 
-    func testVerifyCredentialManifestSuccess() {
+    func testVerifyPresentationRequestSuccess() {
         subject = PresentationRequestByDeepLinkVerifierImpl()
         
         subject.verifyPresentationRequest(
@@ -36,7 +36,55 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
         }
     }
 
-    func testVerifyCredentialManifestError() {
+    func testVerifyPresentationRequestSuccessWithDidDocumentIdInDeepLink() {
+        subject = PresentationRequestByDeepLinkVerifierImpl()
+        let deepLinkWithDidDocumentId = deepLinkWithInspectorDid(DidDocumentMocks.DidDocumentMock.id)
+
+        subject.verifyPresentationRequest(
+            presentationRequest: presentationRequest,
+            deepLink: deepLinkWithDidDocumentId,
+            didDocument: DidDocumentMocks.DidDocumentMock
+        ) { isVerifiedRes in
+            do {
+                let isVerified = try isVerifiedRes.get()
+                assert(isVerified)
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+    }
+
+    func testVerifyPresentationRequestSuccessWithDidDocumentIdInPresentationRequest() {
+        subject = PresentationRequestByDeepLinkVerifierImpl()
+
+        let originalDidDocumentId = DidDocumentMocks.DidDocumentMock.id
+        var didDocumentPayload = DidDocumentMocks.DidDocumentMock.payload
+        didDocumentPayload[VCLDidDocument.CodingKeys.KeyId] = presentationRequest.iss
+
+        var alsoKnownAs = DidDocumentMocks.DidDocumentMock.alsoKnownAs
+        if !alsoKnownAs.contains(originalDidDocumentId) {
+            alsoKnownAs.append(originalDidDocumentId)
+        }
+        didDocumentPayload[VCLDidDocument.CodingKeys.KeyAlsoKnownAs] = alsoKnownAs
+
+        let didDocumentWithPresentationRequestIss = VCLDidDocument(payload: didDocumentPayload)
+        let deepLinkWithDidDocumentAlias = deepLinkWithInspectorDid(originalDidDocumentId)
+
+        subject.verifyPresentationRequest(
+            presentationRequest: presentationRequest,
+            deepLink: deepLinkWithDidDocumentAlias,
+            didDocument: didDocumentWithPresentationRequestIss
+        ) { isVerifiedRes in
+            do {
+                let isVerified = try isVerifiedRes.get()
+                assert(isVerified)
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+    }
+
+    func testVerifyPresentationRequestError() {
         subject = PresentationRequestByDeepLinkVerifierImpl()
         
         subject.verifyPresentationRequest(
@@ -51,5 +99,29 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
                 assert((error as! VCLError).errorCode == VCLErrorCode.MismatchedPresentationRequestInspectorDid.rawValue)
             }
         }
+    }
+
+    func testVerifyPresentationRequestErrorWhenDeepLinkDidMissing() {
+        subject = PresentationRequestByDeepLinkVerifierImpl()
+
+        subject.verifyPresentationRequest(
+            presentationRequest: presentationRequest,
+            deepLink: VCLDeepLink(value: "velocity-network://inspect"),
+            didDocument: DidDocumentMocks.DidDocumentMock
+        ) { isVerifiedRes in
+            do {
+                _ = try isVerifiedRes.get()
+                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+            } catch {
+                let vclError = error as! VCLError
+                XCTAssertEqual(vclError.errorCode, VCLErrorCode.SdkError.rawValue)
+                XCTAssertTrue(vclError.message?.contains("DID not found in deep link") == true)
+            }
+        }
+    }
+
+    private func deepLinkWithInspectorDid(_ inspectorDid: String) -> VCLDeepLink {
+        let encodedInspectorDid = inspectorDid.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? inspectorDid
+        return VCLDeepLink(value: "velocity-network://inspect?inspectorDid=\(encodedInspectorDid)")
     }
 }
