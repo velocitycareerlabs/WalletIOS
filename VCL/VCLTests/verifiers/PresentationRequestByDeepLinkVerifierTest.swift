@@ -101,6 +101,25 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
         }
     }
 
+    func testVerifyPresentationRequestErrorWhenDeepLinkDidMissing() {
+        subject = PresentationRequestByDeepLinkVerifierImpl()
+
+        subject.verifyPresentationRequest(
+            presentationRequest: presentationRequest,
+            deepLink: VCLDeepLink(value: "velocity-network://inspect"),
+            didDocument: DidDocumentMocks.DidDocumentMock
+        ) { isVerifiedRes in
+            do {
+                _ = try isVerifiedRes.get()
+                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+            } catch {
+                let vclError = error as! VCLError
+                XCTAssertEqual(vclError.errorCode, VCLErrorCode.SdkError.rawValue)
+                XCTAssertTrue(vclError.message?.contains("DID not found in deep link") == true)
+            }
+        }
+    }
+
     private func deepLinkWithInspectorDid(_ inspectorDid: String) -> VCLDeepLink {
         let encodedInspectorDid = inspectorDid.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? inspectorDid
         return VCLDeepLink(value: "velocity-network://inspect?inspectorDid=\(encodedInspectorDid)")

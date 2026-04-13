@@ -17,24 +17,25 @@ final class PresentationRequestByDeepLinkVerifierImpl: PresentationRequestByDeep
         didDocument: VCLDidDocument,
         completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if let deepLinkDid = deepLink.did {
-            if isDidBoundToDidDocument(
-                presentationRequest.iss,
-                didDocument: didDocument
-            ) && isDidBoundToDidDocument(
-                deepLinkDid,
-                didDocument: didDocument
-            ) {
-                completionBlock(.success(true))
-            } else {
-                VCLLog.e("presentation request: \(presentationRequest.jwt.encodedJwt) \ndidDocument: \(didDocument)")
-                completionBlock(.failure(VCLError(errorCode: VCLErrorCode.MismatchedPresentationRequestInspectorDid.rawValue)))
-            }
-        } else {
+        guard let deepLinkDid = deepLink.did else {
             onError(
                 errorMessage: "DID not found in deep link: \(deepLink.value)",
                 completionBlock: completionBlock
             )
+            return
+        }
+
+        if isDidBoundToDidDocument(
+            presentationRequest.iss,
+            didDocument: didDocument
+        ) && isDidBoundToDidDocument(
+            deepLinkDid,
+            didDocument: didDocument
+        ) {
+            completionBlock(.success(true))
+        } else {
+            VCLLog.e("presentation request: \(presentationRequest.jwt.encodedJwt) \ndidDocument: \(didDocument)")
+            completionBlock(.failure(VCLError(errorCode: VCLErrorCode.MismatchedPresentationRequestInspectorDid.rawValue)))
         }
     }
 
