@@ -11,7 +11,7 @@ import Foundation
 import XCTest
 @testable import VCL
 
-class VCLErrorTes: XCTestCase {
+class VCLErrorTest: XCTestCase {
     private struct DummyError: Error, CustomStringConvertible {
         let description: String
     }

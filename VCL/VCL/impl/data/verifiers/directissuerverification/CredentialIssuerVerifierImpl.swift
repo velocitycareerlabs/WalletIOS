@@ -178,15 +178,15 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                             )
                         }
                         catch {
-                            let error = error as? VCLError ?? VCLError(error: error)
+                            let vclError = error as? VCLError ?? VCLError(error: error)
                             self?.onError(
                                 VCLError(
-                                    payload: error.payload,
-                                    error: error.error,
+                                    payload: vclError.payload,
+                                    error: vclError.error,
                                     errorCode: VCLErrorCode.InvalidCredentialSubjectContext.rawValue,
-                                    requestId: error.requestId,
-                                    message: error.message,
-                                    statusCode: error.statusCode
+                                    requestId: vclError.requestId,
+                                    message: vclError.message,
+                                    statusCode: vclError.statusCode
                                 ),
                                 completionBlock
                             )
@@ -240,9 +240,9 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
                         let ldContextResponse = try result.get()
                         completeContextsStorage.append(ldContextResponse)
                     } catch {
-                        let error = error as? VCLError ?? VCLError(error: error)
-                        errorStorage.update(error)
-                        VCLLog.e(error.message ?? "\(error)")
+                        let vclError = error as? VCLError ?? VCLError(error: error)
+                        errorStorage.update(vclError)
+                        VCLLog.e(vclError.message ?? "\(vclError)")
                     }
                 }
             }

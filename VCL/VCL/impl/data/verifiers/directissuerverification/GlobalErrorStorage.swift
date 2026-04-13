@@ -26,7 +26,7 @@ final class GlobalErrorStorage {
     }
 
     func clear() {
-        queue.async(flags: .barrier) {
+        queue.sync(flags: .barrier) {
             self.error = nil
         }
     }
