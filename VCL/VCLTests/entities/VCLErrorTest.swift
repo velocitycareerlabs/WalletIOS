@@ -25,15 +25,19 @@ class VCLErrorTest: XCTestCase {
         assert(error.requestId == ErrorMocks.RequestId)
         assert(error.message == ErrorMocks.Message)
         assert(error.statusCode == ErrorMocks.StatusCode)
+        assert(error.cause == nil)
+        assert(error.callStackSymbols?.isEmpty == false)
     }
     
     func testErrorFromProperties() {
+        let cause = DummyError(description: "manual cause")
         let error = VCLError(
             error: ErrorMocks.Error,
             errorCode: ErrorMocks.ErrorCode,
             requestId: ErrorMocks.RequestId,
             message: ErrorMocks.Message,
-            statusCode: ErrorMocks.StatusCode
+            statusCode: ErrorMocks.StatusCode,
+            cause: cause
         )
         
         assert(error.payload == nil)
@@ -42,15 +46,19 @@ class VCLErrorTest: XCTestCase {
         assert(error.requestId == ErrorMocks.RequestId)
         assert(error.message == ErrorMocks.Message)
         assert(error.statusCode == ErrorMocks.StatusCode)
+        assert((error.cause as? DummyError)?.description == cause.description)
+        assert(error.callStackSymbols?.isEmpty == false)
     }
     
     func testErrorFromError1() {
+        let cause = DummyError(description: "wrapped cause")
         let error = VCLError(
             error: ErrorMocks.Error,
             errorCode: ErrorMocks.ErrorCode,
             requestId: ErrorMocks.RequestId,
             message: ErrorMocks.Message,
-            statusCode: ErrorMocks.StatusCode
+            statusCode: ErrorMocks.StatusCode,
+            cause: cause
         )
         let errorFromError = VCLError(error: error)
         
@@ -60,6 +68,8 @@ class VCLErrorTest: XCTestCase {
         assert(error.requestId == errorFromError.requestId)
         assert(error.message == errorFromError.message)
         assert(error.statusCode == errorFromError.statusCode)
+        assert((errorFromError.cause as? DummyError)?.description == cause.description)
+        assert(error.callStackSymbols == errorFromError.callStackSymbols)
     }
     
     func testErrorFromError2() {
@@ -82,6 +92,21 @@ class VCLErrorTest: XCTestCase {
         let error = VCLError(error: DummyError(description: "dummy failure"))
         
         assert(error.message == "dummy failure")
+        assert((error.cause as? DummyError)?.description == "dummy failure")
+        assert(error.callStackSymbols?.isEmpty == false)
+    }
+
+    func testErrorFromNonVCLErrorUsesWrappedErrorAsCause() {
+        let underlyingError = VCLError(error: DummyError(description: "underlying failure"))
+        let wrappedNSError = NSError(
+            domain: "test",
+            code: 1,
+            userInfo: [NSUnderlyingErrorKey: underlyingError]
+        )
+        let error = VCLError(error: wrappedNSError)
+
+        assert((error.cause as NSError?)?.domain == "test")
+        assert((error.cause as NSError?)?.userInfo[NSUnderlyingErrorKey] as? VCLError != nil)
     }
 
     func testErrorToJsonFromPayload() {
@@ -97,12 +122,14 @@ class VCLErrorTest: XCTestCase {
     }
 
     func testErrorToJsonFromProperties() {
+        let cause = DummyError(description: "manual cause")
         let error = VCLError(
             error: ErrorMocks.Error,
             errorCode: ErrorMocks.ErrorCode,
             requestId: ErrorMocks.RequestId,
             message: ErrorMocks.Message,
-            statusCode : ErrorMocks.StatusCode
+            statusCode : ErrorMocks.StatusCode,
+            cause: cause
         )
         let errorDictionary = error.toDictionary()
 

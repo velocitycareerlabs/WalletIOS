@@ -16,6 +16,8 @@ public struct VCLError: Error {
     public let requestId: String?
     public let message: String?
     public let statusCode: Int?
+    public let cause: Error?
+    internal let callStackSymbols: [String]?
 
     public init(
         payload: String? = nil,
@@ -23,7 +25,8 @@ public struct VCLError: Error {
         errorCode: String = VCLErrorCode.SdkError.rawValue,
         requestId: String? = nil,
         message: String? = nil,
-        statusCode: Int? = nil
+        statusCode: Int? = nil,
+        cause: Error? = nil
     ) {
         self.payload = payload
         self.error = error
@@ -31,6 +34,8 @@ public struct VCLError: Error {
         self.requestId = requestId
         self.message = message
         self.statusCode = statusCode
+        self.cause = cause
+        self.callStackSymbols = Thread.callStackSymbols
     }
 
     public init(
@@ -44,6 +49,8 @@ public struct VCLError: Error {
         self.requestId = payloadJson?[CodingKeys.KeyRequestId] as? String
         self.message = payloadJson?[CodingKeys.KeyMessage] as? String
         self.statusCode = payloadJson?[CodingKeys.KeyStatusCode] as? Int
+        self.cause = nil
+        self.callStackSymbols = Thread.callStackSymbols
     }
     
     public init(
@@ -58,6 +65,8 @@ public struct VCLError: Error {
             self.requestId = vclError.requestId
             self.message = vclError.message
             self.statusCode = vclError.statusCode ?? statusCode
+            self.cause = vclError.cause
+            self.callStackSymbols = vclError.callStackSymbols
         } else {
             self.payload = nil
             self.error = nil
@@ -65,6 +74,8 @@ public struct VCLError: Error {
             self.requestId = nil
             self.message = error.map { "\($0)" }
             self.statusCode = statusCode
+            self.cause = error
+            self.callStackSymbols = Thread.callStackSymbols
         }
     }
 
