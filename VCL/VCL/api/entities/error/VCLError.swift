@@ -41,14 +41,13 @@ public struct VCLError: Error {
         errorCode: String? = nil
     ) {
         let payloadJson = payload?.toDictionary()
-        self.init(
-            payload: payload,
-            error: payloadJson?[CodingKeys.KeyError] as? String,
-            errorCode: (errorCode ?? payloadJson?[CodingKeys.KeyErrorCode] as? String) ?? VCLErrorCode.SdkError.rawValue,
-            requestId: payloadJson?[CodingKeys.KeyRequestId] as? String,
-            message: payloadJson?[CodingKeys.KeyMessage] as? String,
-            statusCode: payloadJson?[CodingKeys.KeyStatusCode] as? Int
-        )
+        self.payload = payload
+        self.error = payloadJson?[CodingKeys.KeyError] as? String
+        self.errorCode = (errorCode ?? payloadJson?[CodingKeys.KeyErrorCode] as? String) ?? VCLErrorCode.SdkError.rawValue
+        self.requestId = payloadJson?[CodingKeys.KeyRequestId] as? String
+        self.message = payloadJson?[CodingKeys.KeyMessage] as? String
+        self.statusCode = payloadJson?[CodingKeys.KeyStatusCode] as? Int
+        self.cause = nil
     }
     
     public init(
@@ -57,22 +56,21 @@ public struct VCLError: Error {
         statusCode: Int? = nil
     ) {
         if let vclError = error as? VCLError {
-            self.init(
-                payload: vclError.payload,
-                error: vclError.error,
-                errorCode: vclError.errorCode,
-                requestId: vclError.requestId,
-                message: vclError.message,
-                statusCode: vclError.statusCode ?? statusCode,
-                cause: vclError.cause
-            )
+            self.payload = vclError.payload
+            self.error = vclError.error
+            self.errorCode = vclError.errorCode
+            self.requestId = vclError.requestId
+            self.message = vclError.message
+            self.statusCode = vclError.statusCode ?? statusCode
+            self.cause = vclError.cause
         } else {
-            self.init(
-                errorCode: errorCode,
-                message: error.map { "\($0)" },
-                statusCode: statusCode,
-                cause: error
-            )
+            self.payload = nil
+            self.error = nil
+            self.errorCode = errorCode
+            self.requestId = nil
+            self.message = error.map { "\($0)" }
+            self.statusCode = statusCode
+            self.cause = error
         }
     }
 
