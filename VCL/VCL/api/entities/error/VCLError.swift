@@ -86,7 +86,8 @@ public struct VCLError: Error {
             CodingKeys.KeyErrorCode: errorCode,
             CodingKeys.KeyRequestId: requestId,
             CodingKeys.KeyMessage: message,
-            CodingKeys.KeyStatusCode: statusCode
+            CodingKeys.KeyStatusCode: statusCode,
+            CodingKeys.KeyCallStackSymbols: callStackSymbols
         ]
     }
     
@@ -97,5 +98,6 @@ public struct VCLError: Error {
         public static let KeyRequestId = "requestId"
         public static let KeyMessage = "message"
         public static let KeyStatusCode = "statusCode"
+        public static let KeyCallStackSymbols = "callStackSymbols"
     }
 }

@@ -112,6 +112,7 @@ class VCLErrorTest: XCTestCase {
     func testErrorToJsonFromPayload() {
         let error = VCLError(payload: ErrorMocks.Payload)
         let errorDictionary = error.toDictionary()
+        let callStackSymbols = errorDictionary[VCLError.CodingKeys.KeyCallStackSymbols] as? [String]
 
         assert(errorDictionary[VCLError.CodingKeys.KeyPayload] as? String == ErrorMocks.Payload)
         assert(errorDictionary[VCLError.CodingKeys.KeyError] as? String == ErrorMocks.Error)
@@ -119,6 +120,7 @@ class VCLErrorTest: XCTestCase {
         assert(errorDictionary[VCLError.CodingKeys.KeyRequestId] as? String == ErrorMocks.RequestId)
         assert(errorDictionary[VCLError.CodingKeys.KeyMessage] as? String == ErrorMocks.Message)
         assert(errorDictionary[VCLError.CodingKeys.KeyStatusCode] as? Int == ErrorMocks.StatusCode)
+        assert(callStackSymbols?.isEmpty == false)
     }
 
     func testErrorToJsonFromProperties() {
@@ -132,6 +134,7 @@ class VCLErrorTest: XCTestCase {
             cause: cause
         )
         let errorDictionary = error.toDictionary()
+        let callStackSymbols = errorDictionary[VCLError.CodingKeys.KeyCallStackSymbols] as? [String]
 
         assert(errorDictionary[VCLError.CodingKeys.KeyPayload] as? String == nil)
         assert(errorDictionary[VCLError.CodingKeys.KeyError] as? String == ErrorMocks.Error)
@@ -139,5 +142,6 @@ class VCLErrorTest: XCTestCase {
         assert(errorDictionary[VCLError.CodingKeys.KeyRequestId] as? String == ErrorMocks.RequestId)
         assert(errorDictionary[VCLError.CodingKeys.KeyMessage] as? String == ErrorMocks.Message)
         assert(errorDictionary[VCLError.CodingKeys.KeyStatusCode] as? Int == ErrorMocks.StatusCode)
+        assert(callStackSymbols == error.callStackSymbols)
     }
 }
