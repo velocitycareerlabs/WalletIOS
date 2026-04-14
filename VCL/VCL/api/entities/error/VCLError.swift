@@ -10,12 +10,54 @@
 import Foundation
 
 public struct VCLError: Error {
+    public struct Diagnostic {
+        public let nativePlatform: String
+        public let nativeErrorType: String?
+        public let nativeStackFrames: [String]?
+        public let nativeStackTop: String?
+        public let nativeCause: String?
+
+        public init(
+            nativePlatform: String = CodingKeys.ValueNativePlatformIos,
+            nativeErrorType: String? = nil,
+            nativeStackFrames: [String]? = nil,
+            nativeStackTop: String? = nil,
+            nativeCause: String? = nil
+        ) {
+            self.nativePlatform = nativePlatform
+            self.nativeErrorType = nativeErrorType
+            self.nativeStackFrames = nativeStackFrames
+            self.nativeStackTop = nativeStackTop
+            self.nativeCause = nativeCause
+        }
+
+        func toDictionary() -> [String: Any?] {
+            return [
+                CodingKeys.KeyNativePlatform: nativePlatform,
+                CodingKeys.KeyNativeErrorType: nativeErrorType,
+                CodingKeys.KeyNativeStackFrames: nativeStackFrames,
+                CodingKeys.KeyNativeStackTop: nativeStackTop,
+                CodingKeys.KeyNativeCause: nativeCause
+            ]
+        }
+
+        public struct CodingKeys {
+            public static let KeyNativePlatform = "nativePlatform"
+            public static let KeyNativeErrorType = "nativeErrorType"
+            public static let KeyNativeStackFrames = "nativeStackFrames"
+            public static let KeyNativeStackTop = "nativeStackTop"
+            public static let KeyNativeCause = "nativeCause"
+            public static let ValueNativePlatformIos = "ios"
+        }
+    }
+
     public let payload: String?
     public let error: String?
     public let errorCode: String
     public let requestId: String?
     public let message: String?
     public let statusCode: Int?
+    public let diagnostic: Diagnostic?
 
     public init(
         payload: String? = nil,
@@ -23,7 +65,8 @@ public struct VCLError: Error {
         errorCode: String = VCLErrorCode.SdkError.rawValue,
         requestId: String? = nil,
         message: String? = nil,
-        statusCode: Int? = nil
+        statusCode: Int? = nil,
+        diagnostic: Diagnostic? = nil
     ) {
         self.payload = payload
         self.error = error
@@ -31,6 +74,7 @@ public struct VCLError: Error {
         self.requestId = requestId
         self.message = message
         self.statusCode = statusCode
+        self.diagnostic = diagnostic
     }
 
     public init(
@@ -44,6 +88,7 @@ public struct VCLError: Error {
         self.requestId = payloadJson?[CodingKeys.KeyRequestId] as? String
         self.message = payloadJson?[CodingKeys.KeyMessage] as? String
         self.statusCode = payloadJson?[CodingKeys.KeyStatusCode] as? Int
+        self.diagnostic = Self.captureDiagnostic(nativeErrorType: CodingKeys.ValuePayloadDiagnosticType)
     }
     
     public init(
@@ -58,6 +103,7 @@ public struct VCLError: Error {
             self.requestId = vclError.requestId
             self.message = vclError.message
             self.statusCode = vclError.statusCode ?? statusCode
+            self.diagnostic = vclError.diagnostic
         } else {
             self.payload = nil
             self.error = nil
@@ -65,6 +111,7 @@ public struct VCLError: Error {
             self.requestId = nil
             self.message = error.map { "\($0)" }
             self.statusCode = statusCode
+            self.diagnostic = error.map { Self.captureDiagnostic(from: $0) }
         }
     }
 
@@ -75,8 +122,30 @@ public struct VCLError: Error {
             CodingKeys.KeyErrorCode: errorCode,
             CodingKeys.KeyRequestId: requestId,
             CodingKeys.KeyMessage: message,
-            CodingKeys.KeyStatusCode: statusCode
+            CodingKeys.KeyStatusCode: statusCode,
+            CodingKeys.KeyDiagnostic: diagnostic?.toDictionary()
         ]
+    }
+
+    private static func captureDiagnostic(from error: Error) -> Diagnostic {
+        return captureDiagnostic(
+            nativeErrorType: String(describing: type(of: error)),
+            nativeCause: ((error as NSError).userInfo[NSUnderlyingErrorKey]).map { "\($0)" }
+        )
+    }
+
+    private static func captureDiagnostic(
+        nativeErrorType: String,
+        nativeCause: String? = nil
+    ) -> Diagnostic {
+        let nativeStackFrames = Thread.callStackSymbols
+
+        return Diagnostic(
+            nativeErrorType: nativeErrorType,
+            nativeStackFrames: nativeStackFrames.isEmpty ? nil : nativeStackFrames,
+            nativeStackTop: nativeStackFrames.first,
+            nativeCause: nativeCause
+        )
     }
     
     public struct CodingKeys {
@@ -86,5 +155,7 @@ public struct VCLError: Error {
         public static let KeyRequestId = "requestId"
         public static let KeyMessage = "message"
         public static let KeyStatusCode = "statusCode"
+        public static let KeyDiagnostic = "diagnostic"
+        public static let ValuePayloadDiagnosticType = "VCLErrorPayload"
     }
 }
