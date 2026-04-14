@@ -31,14 +31,25 @@ public struct VCLError: Error {
             self.nativeCause = nativeCause
         }
 
-        func toDictionary() -> [String: Any?] {
-            return [
-                CodingKeys.KeyNativePlatform: nativePlatform,
-                CodingKeys.KeyNativeErrorType: nativeErrorType,
-                CodingKeys.KeyNativeStackFrames: nativeStackFrames,
-                CodingKeys.KeyNativeStackTop: nativeStackTop,
-                CodingKeys.KeyNativeCause: nativeCause
+        func toDictionary() -> [String: Any] {
+            var dictionary: [String: Any] = [
+                CodingKeys.KeyNativePlatform: nativePlatform
             ]
+
+            if let nativeErrorType {
+                dictionary[CodingKeys.KeyNativeErrorType] = nativeErrorType
+            }
+            if let nativeStackFrames {
+                dictionary[CodingKeys.KeyNativeStackFrames] = nativeStackFrames
+            }
+            if let nativeStackTop {
+                dictionary[CodingKeys.KeyNativeStackTop] = nativeStackTop
+            }
+            if let nativeCause {
+                dictionary[CodingKeys.KeyNativeCause] = nativeCause
+            }
+
+            return dictionary
         }
 
         public struct CodingKeys {
@@ -122,9 +133,16 @@ public struct VCLError: Error {
             CodingKeys.KeyErrorCode: errorCode,
             CodingKeys.KeyRequestId: requestId,
             CodingKeys.KeyMessage: message,
-            CodingKeys.KeyStatusCode: statusCode,
-            CodingKeys.KeyDiagnostic: diagnostic?.toDictionary()
+            CodingKeys.KeyStatusCode: statusCode
         ]
+    }
+
+    public func toDiagnosticDictionary() -> [String: Any] {
+        var dictionary = toDictionary().compactMapValues { $0 }
+        if let diagnostic {
+            dictionary[CodingKeys.KeyDiagnostic] = diagnostic.toDictionary()
+        }
+        return dictionary
     }
 
     private static func captureDiagnostic(from error: Error) -> Diagnostic {
@@ -139,10 +157,12 @@ public struct VCLError: Error {
         nativeCause: String? = nil
     ) -> Diagnostic {
         let nativeStackFrames = Thread.callStackSymbols
+            .filter { !$0.contains("VCLError") && !$0.contains("captureDiagnostic") }
+            .prefix(CodingKeys.MaxDiagnosticStackFrames)
 
         return Diagnostic(
             nativeErrorType: nativeErrorType,
-            nativeStackFrames: nativeStackFrames.isEmpty ? nil : nativeStackFrames,
+            nativeStackFrames: nativeStackFrames.isEmpty ? nil : Array(nativeStackFrames),
             nativeStackTop: nativeStackFrames.first,
             nativeCause: nativeCause
         )
@@ -157,5 +177,6 @@ public struct VCLError: Error {
         public static let KeyStatusCode = "statusCode"
         public static let KeyDiagnostic = "diagnostic"
         public static let ValuePayloadDiagnosticType = "VCLErrorPayload"
+        public static let MaxDiagnosticStackFrames = 5
     }
 }
