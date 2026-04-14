@@ -17,6 +17,7 @@ public struct VCLError: Error {
     public let message: String?
     public let statusCode: Int?
     public let cause: Error?
+    internal let callStackSymbols: [String]?
 
     public init(
         payload: String? = nil,
@@ -34,6 +35,7 @@ public struct VCLError: Error {
         self.message = message
         self.statusCode = statusCode
         self.cause = cause
+        self.callStackSymbols = Thread.callStackSymbols
     }
 
     public init(
@@ -48,6 +50,7 @@ public struct VCLError: Error {
         self.message = payloadJson?[CodingKeys.KeyMessage] as? String
         self.statusCode = payloadJson?[CodingKeys.KeyStatusCode] as? Int
         self.cause = nil
+        self.callStackSymbols = Thread.callStackSymbols
     }
     
     public init(
@@ -63,6 +66,7 @@ public struct VCLError: Error {
             self.message = vclError.message
             self.statusCode = vclError.statusCode ?? statusCode
             self.cause = vclError.cause
+            self.callStackSymbols = vclError.callStackSymbols
         } else {
             self.payload = nil
             self.error = nil
@@ -71,6 +75,7 @@ public struct VCLError: Error {
             self.message = error.map { "\($0)" }
             self.statusCode = statusCode
             self.cause = error
+            self.callStackSymbols = Thread.callStackSymbols
         }
     }
 

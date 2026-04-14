@@ -26,6 +26,7 @@ class VCLErrorTest: XCTestCase {
         assert(error.message == ErrorMocks.Message)
         assert(error.statusCode == ErrorMocks.StatusCode)
         assert(error.cause == nil)
+        assert(error.callStackSymbols?.isEmpty == false)
     }
     
     func testErrorFromProperties() {
@@ -46,6 +47,7 @@ class VCLErrorTest: XCTestCase {
         assert(error.message == ErrorMocks.Message)
         assert(error.statusCode == ErrorMocks.StatusCode)
         assert((error.cause as? DummyError)?.description == cause.description)
+        assert(error.callStackSymbols?.isEmpty == false)
     }
     
     func testErrorFromError1() {
@@ -67,6 +69,7 @@ class VCLErrorTest: XCTestCase {
         assert(error.message == errorFromError.message)
         assert(error.statusCode == errorFromError.statusCode)
         assert((errorFromError.cause as? DummyError)?.description == cause.description)
+        assert(error.callStackSymbols == errorFromError.callStackSymbols)
     }
     
     func testErrorFromError2() {
@@ -90,6 +93,7 @@ class VCLErrorTest: XCTestCase {
         
         assert(error.message == "dummy failure")
         assert((error.cause as? DummyError)?.description == "dummy failure")
+        assert(error.callStackSymbols?.isEmpty == false)
     }
 
     func testErrorFromNonVCLErrorUsesWrappedErrorAsCause() {
