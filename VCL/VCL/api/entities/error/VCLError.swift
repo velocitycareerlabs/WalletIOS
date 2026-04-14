@@ -13,22 +13,47 @@ public struct VCLError: Error {
     public struct Diagnostic {
         public let nativePlatform: String
         public let nativeErrorType: String?
-        public let nativeStackFrames: [String]?
-        public let nativeStackTop: String?
-        public let nativeCause: String?
+        public let nativeCauseType: String?
+        public let nativeCauseMessage: String?
+        public let nativeCauseStackTop: String?
+
+        fileprivate let wrapperStackFramesInternal: [String]?
+        fileprivate let causeStackFramesInternal: [String]?
 
         public init(
             nativePlatform: String = CodingKeys.ValueNativePlatformIos,
             nativeErrorType: String? = nil,
-            nativeStackFrames: [String]? = nil,
-            nativeStackTop: String? = nil,
-            nativeCause: String? = nil
+            nativeCauseType: String? = nil,
+            nativeCauseMessage: String? = nil,
+            nativeCauseStackTop: String? = nil
+        ) {
+            self.init(
+                nativePlatform: nativePlatform,
+                nativeErrorType: nativeErrorType,
+                nativeCauseType: nativeCauseType,
+                nativeCauseMessage: nativeCauseMessage,
+                nativeCauseStackTop: nativeCauseStackTop,
+                wrapperStackFramesInternal: nil,
+                causeStackFramesInternal: nil
+            )
+        }
+
+        fileprivate init(
+            nativePlatform: String = CodingKeys.ValueNativePlatformIos,
+            nativeErrorType: String? = nil,
+            nativeCauseType: String? = nil,
+            nativeCauseMessage: String? = nil,
+            nativeCauseStackTop: String? = nil,
+            wrapperStackFramesInternal: [String]? = nil,
+            causeStackFramesInternal: [String]? = nil
         ) {
             self.nativePlatform = nativePlatform
             self.nativeErrorType = nativeErrorType
-            self.nativeStackFrames = nativeStackFrames
-            self.nativeStackTop = nativeStackTop
-            self.nativeCause = nativeCause
+            self.nativeCauseType = nativeCauseType
+            self.nativeCauseMessage = nativeCauseMessage
+            self.nativeCauseStackTop = nativeCauseStackTop
+            self.wrapperStackFramesInternal = wrapperStackFramesInternal
+            self.causeStackFramesInternal = causeStackFramesInternal
         }
 
         func toDictionary() -> [String: Any] {
@@ -39,14 +64,14 @@ public struct VCLError: Error {
             if let nativeErrorType {
                 dictionary[CodingKeys.KeyNativeErrorType] = nativeErrorType
             }
-            if let nativeStackFrames {
-                dictionary[CodingKeys.KeyNativeStackFrames] = nativeStackFrames
+            if let nativeCauseType {
+                dictionary[CodingKeys.KeyNativeCauseType] = nativeCauseType
             }
-            if let nativeStackTop {
-                dictionary[CodingKeys.KeyNativeStackTop] = nativeStackTop
+            if let nativeCauseMessage {
+                dictionary[CodingKeys.KeyNativeCauseMessage] = nativeCauseMessage
             }
-            if let nativeCause {
-                dictionary[CodingKeys.KeyNativeCause] = nativeCause
+            if let nativeCauseStackTop {
+                dictionary[CodingKeys.KeyNativeCauseStackTop] = nativeCauseStackTop
             }
 
             return dictionary
@@ -55,9 +80,9 @@ public struct VCLError: Error {
         public struct CodingKeys {
             public static let KeyNativePlatform = "nativePlatform"
             public static let KeyNativeErrorType = "nativeErrorType"
-            public static let KeyNativeStackFrames = "nativeStackFrames"
-            public static let KeyNativeStackTop = "nativeStackTop"
-            public static let KeyNativeCause = "nativeCause"
+            public static let KeyNativeCauseType = "nativeCauseType"
+            public static let KeyNativeCauseMessage = "nativeCauseMessage"
+            public static let KeyNativeCauseStackTop = "nativeCauseStackTop"
             public static let ValueNativePlatformIos = "ios"
         }
     }
@@ -146,26 +171,39 @@ public struct VCLError: Error {
     }
 
     private static func captureDiagnostic(from error: Error) -> Diagnostic {
+        let underlyingError = (error as NSError).userInfo[NSUnderlyingErrorKey] as? Error
+
         return captureDiagnostic(
             nativeErrorType: String(describing: type(of: error)),
-            nativeCause: ((error as NSError).userInfo[NSUnderlyingErrorKey]).map { "\($0)" }
+            wrapperStackFramesInternal: Thread.callStackSymbols,
+            nativeCauseType: underlyingError.map { String(describing: type(of: $0)) },
+            nativeCauseMessage: underlyingError.map { "\($0)" },
+            causeStackFramesInternal: causeStackFrames(from: underlyingError)
         )
     }
 
     private static func captureDiagnostic(
         nativeErrorType: String,
-        nativeCause: String? = nil
+        wrapperStackFramesInternal: [String] = Thread.callStackSymbols,
+        nativeCauseType: String? = nil,
+        nativeCauseMessage: String? = nil,
+        causeStackFramesInternal: [String]? = nil
     ) -> Diagnostic {
-        let nativeStackFrames = Thread.callStackSymbols
-            .filter { !$0.contains("VCLError") && !$0.contains("captureDiagnostic") }
-            .prefix(CodingKeys.MaxDiagnosticStackFrames)
-
         return Diagnostic(
             nativeErrorType: nativeErrorType,
-            nativeStackFrames: nativeStackFrames.isEmpty ? nil : Array(nativeStackFrames),
-            nativeStackTop: nativeStackFrames.first,
-            nativeCause: nativeCause
+            nativeCauseType: nativeCauseType,
+            nativeCauseMessage: nativeCauseMessage,
+            nativeCauseStackTop: causeStackFramesInternal?.first,
+            wrapperStackFramesInternal: wrapperStackFramesInternal,
+            causeStackFramesInternal: causeStackFramesInternal
         )
+    }
+
+    private static func causeStackFrames(from error: Error?) -> [String]? {
+        if let vclError = error as? VCLError {
+            return vclError.diagnostic?.wrapperStackFramesInternal
+        }
+        return nil
     }
     
     public struct CodingKeys {
@@ -177,6 +215,5 @@ public struct VCLError: Error {
         public static let KeyStatusCode = "statusCode"
         public static let KeyDiagnostic = "diagnostic"
         public static let ValuePayloadDiagnosticType = "VCLErrorPayload"
-        public static let MaxDiagnosticStackFrames = 5
     }
 }

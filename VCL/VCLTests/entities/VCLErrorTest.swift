@@ -18,9 +18,9 @@ class VCLErrorTest: XCTestCase {
 
     private let diagnostic = VCLError.Diagnostic(
         nativeErrorType: "NativeErrorType",
-        nativeStackFrames: ["frame 1", "frame 2"],
-        nativeStackTop: "frame 1",
-        nativeCause: "NativeCause"
+        nativeCauseType: "NativeCauseType",
+        nativeCauseMessage: "NativeCauseMessage",
+        nativeCauseStackTop: "NativeCauseStackTop"
     )
     
     func testErrorFromPayload() {
@@ -34,9 +34,9 @@ class VCLErrorTest: XCTestCase {
         assert(error.statusCode == ErrorMocks.StatusCode)
         assert(error.diagnostic?.nativePlatform == VCLError.Diagnostic.CodingKeys.ValueNativePlatformIos)
         assert(error.diagnostic?.nativeErrorType == VCLError.CodingKeys.ValuePayloadDiagnosticType)
-        assert(error.diagnostic?.nativeStackFrames?.isEmpty == false)
-        assert(error.diagnostic?.nativeStackTop == error.diagnostic?.nativeStackFrames?.first)
-        assert((error.diagnostic?.nativeStackFrames?.count ?? 0) <= VCLError.CodingKeys.MaxDiagnosticStackFrames)
+        assert(error.diagnostic?.nativeCauseType == nil)
+        assert(error.diagnostic?.nativeCauseMessage == nil)
+        assert(error.diagnostic?.nativeCauseStackTop == nil)
     }
     
     func testErrorFromProperties() {
@@ -57,9 +57,9 @@ class VCLErrorTest: XCTestCase {
         assert(error.statusCode == ErrorMocks.StatusCode)
         assert(error.diagnostic?.nativePlatform == VCLError.Diagnostic.CodingKeys.ValueNativePlatformIos)
         assert(error.diagnostic?.nativeErrorType == diagnostic.nativeErrorType)
-        assert(error.diagnostic?.nativeStackFrames == diagnostic.nativeStackFrames)
-        assert(error.diagnostic?.nativeStackTop == diagnostic.nativeStackTop)
-        assert(error.diagnostic?.nativeCause == diagnostic.nativeCause)
+        assert(error.diagnostic?.nativeCauseType == diagnostic.nativeCauseType)
+        assert(error.diagnostic?.nativeCauseMessage == diagnostic.nativeCauseMessage)
+        assert(error.diagnostic?.nativeCauseStackTop == diagnostic.nativeCauseStackTop)
     }
     
     func testErrorFromError1() {
@@ -81,9 +81,9 @@ class VCLErrorTest: XCTestCase {
         assert(error.statusCode == errorFromError.statusCode)
         assert(error.diagnostic?.nativePlatform == errorFromError.diagnostic?.nativePlatform)
         assert(error.diagnostic?.nativeErrorType == errorFromError.diagnostic?.nativeErrorType)
-        assert(error.diagnostic?.nativeStackFrames == errorFromError.diagnostic?.nativeStackFrames)
-        assert(error.diagnostic?.nativeStackTop == errorFromError.diagnostic?.nativeStackTop)
-        assert(error.diagnostic?.nativeCause == errorFromError.diagnostic?.nativeCause)
+        assert(error.diagnostic?.nativeCauseType == errorFromError.diagnostic?.nativeCauseType)
+        assert(error.diagnostic?.nativeCauseMessage == errorFromError.diagnostic?.nativeCauseMessage)
+        assert(error.diagnostic?.nativeCauseStackTop == errorFromError.diagnostic?.nativeCauseStackTop)
     }
     
     func testErrorFromError2() {
@@ -108,9 +108,24 @@ class VCLErrorTest: XCTestCase {
         assert(error.message == "dummy failure")
         assert(error.diagnostic?.nativePlatform == VCLError.Diagnostic.CodingKeys.ValueNativePlatformIos)
         assert(error.diagnostic?.nativeErrorType == "DummyError")
-        assert(error.diagnostic?.nativeStackFrames?.isEmpty == false)
-        assert(error.diagnostic?.nativeStackTop == error.diagnostic?.nativeStackFrames?.first)
-        assert((error.diagnostic?.nativeStackFrames?.count ?? 0) <= VCLError.CodingKeys.MaxDiagnosticStackFrames)
+        assert(error.diagnostic?.nativeCauseType == nil)
+        assert(error.diagnostic?.nativeCauseMessage == nil)
+        assert(error.diagnostic?.nativeCauseStackTop == nil)
+    }
+
+    func testErrorFromNonVCLErrorCapturesCauseMetadataWhenAvailable() {
+        let underlyingError = VCLError(error: DummyError(description: "underlying failure"))
+        let wrappedNSError = NSError(
+            domain: "test",
+            code: 1,
+            userInfo: [NSUnderlyingErrorKey: underlyingError]
+        )
+        let error = VCLError(error: wrappedNSError)
+
+        assert(error.diagnostic?.nativeErrorType == "NSError")
+        assert(error.diagnostic?.nativeCauseType == "VCLError")
+        assert(error.diagnostic?.nativeCauseMessage?.contains("underlying failure") == true)
+        assert(error.diagnostic?.nativeCauseStackTop != nil)
     }
 
     func testErrorToJsonFromPayload() {
@@ -153,9 +168,9 @@ class VCLErrorTest: XCTestCase {
 
         assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativePlatform] as? String == VCLError.Diagnostic.CodingKeys.ValueNativePlatformIos)
         assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeErrorType] as? String == VCLError.CodingKeys.ValuePayloadDiagnosticType)
-        assert((diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeStackFrames] as? [String])?.count ?? 0 <= VCLError.CodingKeys.MaxDiagnosticStackFrames)
-        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeStackTop] as? String != nil)
-        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCause] as? String == nil)
+        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseType] as? String == nil)
+        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseMessage] as? String == nil)
+        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseStackTop] as? String == nil)
         assert(JSONSerialization.isValidJSONObject(errorDictionary))
     }
 
@@ -173,9 +188,9 @@ class VCLErrorTest: XCTestCase {
 
         assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativePlatform] as? String == VCLError.Diagnostic.CodingKeys.ValueNativePlatformIos)
         assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeErrorType] as? String == diagnostic.nativeErrorType)
-        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeStackFrames] as? [String] == diagnostic.nativeStackFrames)
-        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeStackTop] as? String == diagnostic.nativeStackTop)
-        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCause] as? String == diagnostic.nativeCause)
+        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseType] as? String == diagnostic.nativeCauseType)
+        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseMessage] as? String == diagnostic.nativeCauseMessage)
+        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseStackTop] as? String == diagnostic.nativeCauseStackTop)
         assert(JSONSerialization.isValidJSONObject(errorDictionary))
     }
 }
