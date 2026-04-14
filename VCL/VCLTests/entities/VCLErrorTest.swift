@@ -19,8 +19,7 @@ class VCLErrorTest: XCTestCase {
     private let diagnostic = VCLError.Diagnostic(
         nativeErrorType: "NativeErrorType",
         nativeCauseType: "NativeCauseType",
-        nativeCauseMessage: "NativeCauseMessage",
-        nativeCauseStackTop: "NativeCauseStackTop"
+        nativeCauseMessage: "NativeCauseMessage"
     )
     
     func testErrorFromPayload() {
@@ -36,7 +35,6 @@ class VCLErrorTest: XCTestCase {
         assert(error.diagnostic?.nativeErrorType == VCLError.CodingKeys.ValuePayloadDiagnosticType)
         assert(error.diagnostic?.nativeCauseType == nil)
         assert(error.diagnostic?.nativeCauseMessage == nil)
-        assert(error.diagnostic?.nativeCauseStackTop == nil)
     }
     
     func testErrorFromProperties() {
@@ -59,7 +57,6 @@ class VCLErrorTest: XCTestCase {
         assert(error.diagnostic?.nativeErrorType == diagnostic.nativeErrorType)
         assert(error.diagnostic?.nativeCauseType == diagnostic.nativeCauseType)
         assert(error.diagnostic?.nativeCauseMessage == diagnostic.nativeCauseMessage)
-        assert(error.diagnostic?.nativeCauseStackTop == diagnostic.nativeCauseStackTop)
     }
     
     func testErrorFromError1() {
@@ -83,7 +80,6 @@ class VCLErrorTest: XCTestCase {
         assert(error.diagnostic?.nativeErrorType == errorFromError.diagnostic?.nativeErrorType)
         assert(error.diagnostic?.nativeCauseType == errorFromError.diagnostic?.nativeCauseType)
         assert(error.diagnostic?.nativeCauseMessage == errorFromError.diagnostic?.nativeCauseMessage)
-        assert(error.diagnostic?.nativeCauseStackTop == errorFromError.diagnostic?.nativeCauseStackTop)
     }
     
     func testErrorFromError2() {
@@ -110,7 +106,6 @@ class VCLErrorTest: XCTestCase {
         assert(error.diagnostic?.nativeErrorType == "DummyError")
         assert(error.diagnostic?.nativeCauseType == nil)
         assert(error.diagnostic?.nativeCauseMessage == nil)
-        assert(error.diagnostic?.nativeCauseStackTop == nil)
     }
 
     func testErrorFromNonVCLErrorCapturesCauseMetadataWhenAvailable() {
@@ -125,7 +120,6 @@ class VCLErrorTest: XCTestCase {
         assert(error.diagnostic?.nativeErrorType == "NSError")
         assert(error.diagnostic?.nativeCauseType == "VCLError")
         assert(error.diagnostic?.nativeCauseMessage?.contains("underlying failure") == true)
-        assert(error.diagnostic?.nativeCauseStackTop != nil)
     }
 
     func testErrorToJsonFromPayload() {
@@ -170,7 +164,6 @@ class VCLErrorTest: XCTestCase {
         assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeErrorType] as? String == VCLError.CodingKeys.ValuePayloadDiagnosticType)
         assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseType] as? String == nil)
         assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseMessage] as? String == nil)
-        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseStackTop] as? String == nil)
         assert(JSONSerialization.isValidJSONObject(errorDictionary))
     }
 
@@ -190,7 +183,6 @@ class VCLErrorTest: XCTestCase {
         assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeErrorType] as? String == diagnostic.nativeErrorType)
         assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseType] as? String == diagnostic.nativeCauseType)
         assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseMessage] as? String == diagnostic.nativeCauseMessage)
-        assert(diagnosticDictionary?[VCLError.Diagnostic.CodingKeys.KeyNativeCauseStackTop] as? String == diagnostic.nativeCauseStackTop)
         assert(JSONSerialization.isValidJSONObject(errorDictionary))
     }
 }
