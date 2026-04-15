@@ -19,9 +19,12 @@ jobs:
       - name: Validate release notes for publish PRs
         shell: bash
         run: |
-          git fetch origin "${{ github.base_ref }}" --depth=1
+          base_sha="${{ github.event.pull_request.base.sha }}"
+          if ! git rev-parse --verify "${base_sha}^{commit}" >/dev/null 2>&1; then
+            git fetch origin "${base_sha}" --depth=1
+          fi
 
-          version_diff=$(git diff --unified=0 "origin/${{ github.base_ref }}...HEAD" -- VCL/VCL.xcodeproj/project.pbxproj || true)
+          version_diff=$(git diff --unified=0 "${base_sha}...HEAD" -- VCL/VCL.xcodeproj/project.pbxproj)
           if ! printf '%s\n' "$version_diff" | grep -q '^[+-].*MARKETING_VERSION = '; then
             echo "No SDK version change detected; skipping release notes validation."
             exit 0
@@ -38,7 +41,7 @@ jobs:
             exit 1
           fi
 
-          if git diff --quiet "origin/${{ github.base_ref }}...HEAD" -- "$release_notes_file"; then
+          if git diff --quiet "${base_sha}...HEAD" -- "$release_notes_file"; then
             echo "$release_notes_file must be added or updated in the same PR as the version bump."
             exit 1
           fi
