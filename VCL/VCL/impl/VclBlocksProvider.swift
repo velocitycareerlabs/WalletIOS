@@ -14,7 +14,8 @@ class VclBlocksProvider {
     private init(){}
     
     static func chooseKeyService(
-        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
     ) throws -> VCLKeyService {
         switch (cryptoServicesDescriptor.cryptoServiceType) {
         case VCLCryptoServiceType.Local:
@@ -23,7 +24,7 @@ class VclBlocksProvider {
         case VCLCryptoServiceType.Remote:
             if let keyServiceUrls = cryptoServicesDescriptor.remoteCryptoServicesUrlsDescriptor?.keyServiceUrls {
                 return VCLKeyServiceRemoteImpl(
-                    NetworkServiceImpl(),
+                    networkServiceFactory(),
                     keyServiceUrls
                 )
             } else {
@@ -40,18 +41,22 @@ class VclBlocksProvider {
     }
     
     static func chooseJwtSignService(
-        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
     ) throws -> VCLJwtSignService {
         switch (cryptoServicesDescriptor.cryptoServiceType) {
         case VCLCryptoServiceType.Local:
             return VCLJwtSignServiceLocalImpl(
-                try chooseKeyService(cryptoServicesDescriptor)
+                try chooseKeyService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                )
             )
             
         case VCLCryptoServiceType.Remote:
             if let jwtSignServiceUrl = cryptoServicesDescriptor.remoteCryptoServicesUrlsDescriptor?.jwtServiceUrls.jwtSignServiceUrl {
                 return VCLJwtSignServiceRemoteImpl(
-                    NetworkServiceImpl(),
+                    networkServiceFactory(),
                     jwtSignServiceUrl
                 )
             } else {
@@ -68,7 +73,8 @@ class VclBlocksProvider {
     }
     
     static func chooseJwtVerifyService(
-        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
     ) throws -> VCLJwtVerifyService {
         switch (cryptoServicesDescriptor.cryptoServiceType) {
         case VCLCryptoServiceType.Local:
@@ -77,7 +83,7 @@ class VclBlocksProvider {
         case VCLCryptoServiceType.Remote:
             if let jwtVerifyServiceUrl = cryptoServicesDescriptor.remoteCryptoServicesUrlsDescriptor?.jwtServiceUrls.jwtVerifyServiceUrl {
                 return VCLJwtVerifyServiceRemoteImpl(
-                    NetworkServiceImpl(),
+                    networkServiceFactory(),
                     jwtVerifyServiceUrl
                 )
             } else {
@@ -93,11 +99,13 @@ class VclBlocksProvider {
         }
     }
     
-    static func provideCountriesModel() -> CountriesModel {
+    static func provideCountriesModel(
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
+    ) -> CountriesModel {
         return CountriesModelImpl(
             CountriesUseCaseImpl(
                 CountriesRepositoryImpl(
-                    NetworkServiceImpl(),
+                    networkServiceFactory(),
                     CacheServiceImpl()
                 ),
                 ExecutorImpl.instance
@@ -106,12 +114,13 @@ class VclBlocksProvider {
     }
     
     static func provideCredentialTypeSchemasModel(
-        credenctiialTypes: VCLCredentialTypes
+        credenctiialTypes: VCLCredentialTypes,
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
     ) -> CredentialTypeSchemasModel {
         return CredentialTypeSchemasModelImpl(
             CredentialTypeSchemasUseCaseImpl(
                 CredentialTypeSchemaRepositoryImpl(
-                    NetworkServiceImpl(),
+                    networkServiceFactory(),
                     CacheServiceImpl()
                 ),
                 credenctiialTypes,
@@ -121,11 +130,13 @@ class VclBlocksProvider {
         )
     }
     
-    static func provideCredentialTypesModel() -> CredentialTypesModel {
+    static func provideCredentialTypesModel(
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
+    ) -> CredentialTypesModel {
         return CredentialTypesModelImpl(
             CredentialTypesUseCaseImpl(
                 CredentialTypesRepositoryImpl(
-                    NetworkServiceImpl(),
+                    networkServiceFactory(),
                     CacheServiceImpl()
                 ),
                 ExecutorImpl.instance
@@ -134,18 +145,25 @@ class VclBlocksProvider {
     }
     
     static func providePresentationRequestUseCase(
-        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
     ) throws -> PresentationRequestUseCase {
         return PresentationRequestUseCaseImpl(
             PresentationRequestRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             ResolveDidDocumentRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             JwtServiceRepositoryImpl(
-                try chooseJwtSignService(cryptoServicesDescriptor),
-                try chooseJwtVerifyService(cryptoServicesDescriptor)
+                try chooseJwtSignService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                ),
+                try chooseJwtVerifyService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                )
             ),
             PresentationRequestByDeepLinkVerifierImpl(),
             ExecutorImpl.instance
@@ -153,42 +171,58 @@ class VclBlocksProvider {
     }
     
     static func providePresentationSubmissionUseCase(
-        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
     ) throws -> PresentationSubmissionUseCase {
         return PresentationSubmissionUseCaseImpl(
             PresentationSubmissionRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             JwtServiceRepositoryImpl(
-                try chooseJwtSignService(cryptoServicesDescriptor),
-                try chooseJwtVerifyService(cryptoServicesDescriptor)
+                try chooseJwtSignService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                ),
+                try chooseJwtVerifyService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                )
             ),
             ExecutorImpl.instance
         )
     }
     
-    static func provideOrganizationsUseCase() -> OrganizationsUseCase {
+    static func provideOrganizationsUseCase(
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
+    ) -> OrganizationsUseCase {
         return OrganizationsUseCaseImpl(
             OrganizationsRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             ExecutorImpl.instance
         )
     }
     
     static func provideCredentialManifestUseCase(
-        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
     ) throws -> CredentialManifestUseCase {
         return CredentialManifestUseCaseImpl(
             CredentialManifestRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             ResolveDidDocumentRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             JwtServiceRepositoryImpl(
-                try chooseJwtSignService(cryptoServicesDescriptor),
-                try chooseJwtVerifyService(cryptoServicesDescriptor)
+                try chooseJwtSignService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                ),
+                try chooseJwtVerifyService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                )
             ),
             CredentialManifestByDeepLinkVerifierImpl(),
             ExecutorImpl.instance
@@ -196,37 +230,48 @@ class VclBlocksProvider {
     }
     
     static func provideIdentificationSubmissionUseCase(
-        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
     ) throws -> IdentificationSubmissionUseCase {
         return IdentificationSubmissionUseCaseImpl(
             IdentificationSubmissionRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             JwtServiceRepositoryImpl(
-                try chooseJwtSignService(cryptoServicesDescriptor),
-                try chooseJwtVerifyService(cryptoServicesDescriptor)
+                try chooseJwtSignService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                ),
+                try chooseJwtVerifyService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                )
             ),
             ExecutorImpl.instance
         )
     }
     
-    static func provideExchangeProgressUseCase() -> ExchangeProgressUseCase {
+    static func provideExchangeProgressUseCase(
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
+    ) -> ExchangeProgressUseCase {
         return ExchangeProgressUseCaseImpl(
             ExchangeProgressRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             ExecutorImpl.instance
         )
     }
     
-    static func provideGenerateOffersUseCase() -> GenerateOffersUseCase {
+    static func provideGenerateOffersUseCase(
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
+    ) -> GenerateOffersUseCase {
         return GenerateOffersUseCaseImpl(
             GenerateOffersRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             OffersByDeepLinkVerifierImpl(
                 ResolveDidDocumentRepositoryImpl(
-                    NetworkServiceImpl()
+                    networkServiceFactory()
                 )
             ),
             ExecutorImpl.instance
@@ -236,81 +281,105 @@ class VclBlocksProvider {
     static func provideFinalizeOffersUseCase(
         _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
         _ credentialTypesModel: CredentialTypesModel,
-        _ isDirectIssuerCheckOn: Bool
+        _ isDirectIssuerCheckOn: Bool,
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
     ) throws -> FinalizeOffersUseCase {
         var credentialIssuerVerifier: CredentialIssuerVerifier = CredentialIssuerVerifierEmptyImpl()
         if (isDirectIssuerCheckOn) {
             credentialIssuerVerifier = CredentialIssuerVerifierImpl(
                 credentialTypesModel,
                 CredentialSubjectContextRepositoryImpl(
-                    NetworkServiceImpl()
+                    networkServiceFactory()
                 )
             )
         }
         return FinalizeOffersUseCaseImpl(
             FinalizeOffersRepositoryImpl(
-                NetworkServiceImpl()),
+                networkServiceFactory()),
             JwtServiceRepositoryImpl(
-                try chooseJwtSignService(cryptoServicesDescriptor),
-                try chooseJwtVerifyService(cryptoServicesDescriptor)
+                try chooseJwtSignService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                ),
+                try chooseJwtVerifyService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                )
             ),
             credentialIssuerVerifier,
             CredentialDidVerifierImpl(),
             CredentialsByDeepLinkVerifierImpl(
                 ResolveDidDocumentRepositoryImpl(
-                    NetworkServiceImpl()
+                    networkServiceFactory()
                 )
             ),
             ExecutorImpl.instance
         )
     }
     
-    static func provideAuthTokenUseCase() -> AuthTokenUseCase {
+    static func provideAuthTokenUseCase(
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
+    ) -> AuthTokenUseCase {
         return AuthTokenUseCaseImpl(
             AuthTokenRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             ExecutorImpl.instance
         )
     }
     
-    static func provideCredentialTypesUIFormSchemaUseCase() -> CredentialTypesUIFormSchemaUseCase {
+    static func provideCredentialTypesUIFormSchemaUseCase(
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
+    ) -> CredentialTypesUIFormSchemaUseCase {
         return CredentialTypesUIFormSchemaUseCaseImpl(
             CredentialTypesUIFormSchemaRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             ExecutorImpl.instance,
             DispatcherImpl()
         )
     }
     
-    static func provideVerifiedProfileUseCase() -> VerifiedProfileUseCase {
+    static func provideVerifiedProfileUseCase(
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
+    ) -> VerifiedProfileUseCase {
         return VerifiedProfileUseCaseImpl(
             VerifiedProfileRepositoryImpl(
-                NetworkServiceImpl()
+                networkServiceFactory()
             ),
             ExecutorImpl.instance
         )
     }
     
     static func provideJwtServiceUseCase(
-        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
     ) throws -> JwtServiceUseCase {
         return JwtServiceUseCaseImpl(
             JwtServiceRepositoryImpl(
-                try chooseJwtSignService(cryptoServicesDescriptor),
-                try chooseJwtVerifyService(cryptoServicesDescriptor)
+                try chooseJwtSignService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                ),
+                try chooseJwtVerifyService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                )
             ),
             ExecutorImpl.instance
         )
     }
     
     static func provideKeyServiceUseCase(
-        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor
+        _ cryptoServicesDescriptor: VCLCryptoServicesDescriptor,
+        networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }
     ) throws -> KeyServiceUseCase {
         return KeyServiceUseCaseImpl(
             KeyServiceRepositoryImpl(
-                try chooseKeyService(cryptoServicesDescriptor)
+                try chooseKeyService(
+                    cryptoServicesDescriptor,
+                    networkServiceFactory: networkServiceFactory
+                )
             ),
             ExecutorImpl.instance
         )
