@@ -91,9 +91,9 @@ final class CredentialManifestUseCaseTest: XCTestCase {
         ) {
             do {
                 let _ = try $0.get()
-                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+                XCTFail("\(VCLErrorCode.ClientRequestRejected.rawValue) error code is expected")
             } catch {
-                assert((error as! VCLError).errorCode == VCLErrorCode.SdkError.rawValue)
+                XCTAssertEqual((error as? VCLError)?.errorCode, VCLErrorCode.ClientRequestRejected.rawValue)
             }
         }
     }
