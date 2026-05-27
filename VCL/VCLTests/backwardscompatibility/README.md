@@ -8,7 +8,7 @@ This directory contains tests that lock in current Swift SDK error propagation b
 
 - Undecodable query parameters are accepted by `VCLDeepLink` and fail later at the SDK entrypoint with an SDK error. Android rejects these during deep link construction.
 - Plain-text HTTP error responses preserve `message` and `statusCode`, but `payload` remains `nil`. Android preserves the same plain text in `payload` as well.
-- Presentation missing-endpoint failures currently report `credentialManifestDescriptor.endpoint = null`. Android reports a presentation-specific endpoint-null message.
+- Presentation missing-endpoint failures in the current Swift implementation are emitted by `PresentationRequestRepositoryImpl` as `credentialManifestDescriptor.endpoint = null`. Android PR #195's baseline expects `presentationRequestDescriptor.endpoint = null` for the same presentation entrypoint scenario.
 - Malformed or disallowed `request_uri` values surface as `NSURLErrorDomain Code=-1002` in Swift. Android exposes the corresponding Java URL error text.
 - Non-JSON DID document responses fail while parsing, for example `Failed to parse not json`. The Android-modeled behavior continues to request validation and reports missing public JWK material.
 - Missing DID verification material stores `public jwk not found for kid...` in `VCLError.error`, not `VCLError.message`.
