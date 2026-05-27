@@ -34,6 +34,11 @@ public final class VCLImpl: VCL {
     
     private let initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
     private var profileServiceTypeVerifier: ProfileServiceTypeVerifier?
+    private let networkServiceFactory: () -> NetworkService
+
+    init(networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }) {
+        self.networkServiceFactory = networkServiceFactory
+    }
     
     public func initialize(
         initializationDescriptor: VCLInitializationDescriptor,
@@ -55,35 +60,58 @@ public final class VCLImpl: VCL {
     }
     
     private func initializeUseCases() throws {
-        authTokenUseCase = VclBlocksProvider.provideAuthTokenUseCase()
+        authTokenUseCase = VclBlocksProvider.provideAuthTokenUseCase(
+            networkServiceFactory: networkServiceFactory
+        )
         presentationRequestUseCase =
         try VclBlocksProvider.providePresentationRequestUseCase(
-            initializationDescriptor.cryptoServicesDescriptor
+            initializationDescriptor.cryptoServicesDescriptor,
+            networkServiceFactory: networkServiceFactory
         )
         presentationSubmissionUseCase = try VclBlocksProvider.providePresentationSubmissionUseCase(
-            initializationDescriptor.cryptoServicesDescriptor
+            initializationDescriptor.cryptoServicesDescriptor,
+            networkServiceFactory: networkServiceFactory
         )
-        exchangeProgressUseCase = VclBlocksProvider.provideExchangeProgressUseCase()
-        organizationsUseCase = VclBlocksProvider.provideOrganizationsUseCase()
+        exchangeProgressUseCase = VclBlocksProvider.provideExchangeProgressUseCase(
+            networkServiceFactory: networkServiceFactory
+        )
+        organizationsUseCase = VclBlocksProvider.provideOrganizationsUseCase(
+            networkServiceFactory: networkServiceFactory
+        )
         credentialManifestUseCase =
         try VclBlocksProvider.provideCredentialManifestUseCase(
-            initializationDescriptor.cryptoServicesDescriptor
+            initializationDescriptor.cryptoServicesDescriptor,
+            networkServiceFactory: networkServiceFactory
         )
         identificationSubmissionUseCase = try VclBlocksProvider.provideIdentificationSubmissionUseCase(
-            initializationDescriptor.cryptoServicesDescriptor
+            initializationDescriptor.cryptoServicesDescriptor,
+            networkServiceFactory: networkServiceFactory
         )
-        generateOffersUseCase = VclBlocksProvider.provideGenerateOffersUseCase()
+        generateOffersUseCase = VclBlocksProvider.provideGenerateOffersUseCase(
+            networkServiceFactory: networkServiceFactory
+        )
         finalizeOffersUseCase =
         try VclBlocksProvider.provideFinalizeOffersUseCase(
             initializationDescriptor.cryptoServicesDescriptor,
             credentialTypesModel,
-            initializationDescriptor.isDirectIssuerCheckOn
+            initializationDescriptor.isDirectIssuerCheckOn,
+            networkServiceFactory: networkServiceFactory
         )
         credentialTypesUIFormSchemaUseCase =
-        VclBlocksProvider.provideCredentialTypesUIFormSchemaUseCase()
-        verifiedProfileUseCase = VclBlocksProvider.provideVerifiedProfileUseCase()
-        jwtServiceUseCase = try VclBlocksProvider.provideJwtServiceUseCase(initializationDescriptor.cryptoServicesDescriptor)
-        keyServiceUseCase = try VclBlocksProvider.provideKeyServiceUseCase(initializationDescriptor.cryptoServicesDescriptor)
+        VclBlocksProvider.provideCredentialTypesUIFormSchemaUseCase(
+            networkServiceFactory: networkServiceFactory
+        )
+        verifiedProfileUseCase = VclBlocksProvider.provideVerifiedProfileUseCase(
+            networkServiceFactory: networkServiceFactory
+        )
+        jwtServiceUseCase = try VclBlocksProvider.provideJwtServiceUseCase(
+            initializationDescriptor.cryptoServicesDescriptor,
+            networkServiceFactory: networkServiceFactory
+        )
+        keyServiceUseCase = try VclBlocksProvider.provideKeyServiceUseCase(
+            initializationDescriptor.cryptoServicesDescriptor,
+            networkServiceFactory: networkServiceFactory
+        )
     }
     
     private func completionHandler(
@@ -112,9 +140,13 @@ public final class VCLImpl: VCL {
         successHandler: @escaping () -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        credentialTypesModel = VclBlocksProvider.provideCredentialTypesModel()
+        credentialTypesModel = VclBlocksProvider.provideCredentialTypesModel(
+            networkServiceFactory: networkServiceFactory
+        )
         
-        countriesModel = VclBlocksProvider.provideCountriesModel()
+        countriesModel = VclBlocksProvider.provideCountriesModel(
+            networkServiceFactory: networkServiceFactory
+        )
         
         countriesModel.initialize(cacheSequence: cacheSequence) { [weak self] result in
             do {
@@ -137,7 +169,10 @@ public final class VCLImpl: VCL {
                 }
                 else {
                     if let credentialTypes = self.credentialTypesModel.data {
-                        self.credentialTypeSchemasModel = VclBlocksProvider.provideCredentialTypeSchemasModel(credenctiialTypes: credentialTypes)
+                        self.credentialTypeSchemasModel = VclBlocksProvider.provideCredentialTypeSchemasModel(
+                            credenctiialTypes: credentialTypes,
+                            networkServiceFactory: self.networkServiceFactory
+                        )
                         self.credentialTypeSchemasModel?.initialize(cacheSequence: cacheSequence) { result in
                             do {
                                 _ = try result.get()

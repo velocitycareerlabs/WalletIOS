@@ -40,8 +40,7 @@ final class PresentationRequestRepositoryImpl: PresentationRequestRepository {
                     }
                 }
         } else {
-            completionBlock(.failure(VCLError(message: "credentialManifestDescriptor.endpoint = null")))
+            completionBlock(.failure(VCLError(message: "presentationRequestDescriptor.endpoint = null")))
         }
     }
 }
-

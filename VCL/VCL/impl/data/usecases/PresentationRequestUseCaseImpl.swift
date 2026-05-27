@@ -63,7 +63,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                                 )
                             } else {
                                 self?.onError(
-                                    VCLError(error: "public jwk not found for kid: \(presentationRequest.jwt.kid ?? "")"),
+                                    VCLError(message: "public jwk not found for kid: \(presentationRequest.jwt.kid ?? "")"),
                                     completionBlock
                                 )
                             }
