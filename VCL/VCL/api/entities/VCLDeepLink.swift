@@ -29,6 +29,8 @@ public struct VCLDeepLink {
             topLevelQueryParam(key: CodingKeys.KeyInspectorDid) ??
             requestUri?.decode()?.getUrlQueryParams()?[CodingKeys.KeyIssuerDid] ??
             requestUri?.decode()?.getUrlQueryParams()?[CodingKeys.KeyInspectorDid] ??
+            retrieveQueryParam(key: CodingKeys.KeyIssuerDid) ??
+            retrieveQueryParam(key: CodingKeys.KeyInspectorDid) ??
             requestUri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix) // fallback for old agents
     } }
     
