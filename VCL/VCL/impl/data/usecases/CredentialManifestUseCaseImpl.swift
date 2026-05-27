@@ -54,36 +54,53 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                     resolveDidDocumentRepository.resolveDidDocument(did: credentialManifest.iss) { [weak self] didDocumentResult in
                         do {
                             let didDocument = try didDocumentResult.get()
-                            if let publicJwk = didDocument.getPublicJwk(kid: credentialManifest.jwt.kid ?? "") {
-                                self?.verifyCredentialManifestJwt(
-                                    publicJwk,
-                                    credentialManifest,
-                                    didDocument,
-                                    completionBlock
-                                )
-                            } else {
-                                self?.onError(
-                                    VCLError(message: "public jwk not found for kid: \(credentialManifest.jwt.kid ?? "")"),
-                                    completionBlock
-                                )
+                            if let error = self?.validateDidDocument(didDocument, credentialManifest: credentialManifest) {
+                                self?.onError(error, completionBlock)
+                                return
                             }
+                            self?.verifyCredentialManifestJwt(
+                                credentialManifest,
+                                didDocument,
+                                completionBlock
+                            )
                         } catch {
-                            self?.onError(error, completionBlock)
+                            self?.onError(
+                                ErrorTaxonomy.classifyDidResolution(
+                                    VCLError(error: error),
+                                    requestKind: ErrorTaxonomy.requestKindIssuing,
+                                    requestDid: credentialManifest.iss
+                                ),
+                                completionBlock
+                            )
                         }
                     }
                 } catch {
-                    self.onError(error, completionBlock)
+                    self.onError(
+                        ErrorTaxonomy.classifyClientRequestFetch(
+                            VCLError(error: error),
+                            requestUri: credentialManifestDescriptor.endpoint,
+                            requestKind: ErrorTaxonomy.requestKindIssuing
+                        ),
+                        completionBlock
+                    )
                 }
             }
         }
     }
     
     private func verifyCredentialManifestJwt(
-        _ publicJwk: VCLPublicJwk,
         _ credentialManifest: VCLCredentialManifest,
         _ didDocument: VCLDidDocument,
         _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
     ) {
+        guard let kid = credentialManifest.jwt.kid else {
+            onError(missingJwtKidError(requestDid: credentialManifest.iss), completionBlock)
+            return
+        }
+        guard let publicJwk = didDocument.getPublicJwk(kid: kid) else {
+            onError(unresolvedJwtKeyError(kid: kid, requestDid: credentialManifest.iss), completionBlock)
+            return
+        }
         jwtServiceRepository.verifyJwt(
             jwt: credentialManifest.jwt,
             publicJwk: publicJwk,
@@ -97,9 +114,46 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                     completionBlock
                 )
             } catch {
-                self?.onError(error, completionBlock)
+                self?.onError(
+                    ErrorTaxonomy.classifyRequestValidation(
+                        VCLError(error: error),
+                        requestKind: ErrorTaxonomy.requestKindIssuing,
+                        requestDid: credentialManifest.iss
+                    ),
+                    completionBlock
+                )
             }
         }
+    }
+    
+    private func validateDidDocument(
+        _ didDocument: VCLDidDocument,
+        credentialManifest: VCLCredentialManifest
+    ) -> VCLError? {
+        if didDocument.payload.isEmpty || didDocument.hasVerificationMethods == false {
+            return ErrorTaxonomy.classifyDidResolution(
+                VCLError(message: "public jwk not found for kid"),
+                requestKind: ErrorTaxonomy.requestKindIssuing,
+                requestDid: credentialManifest.iss
+            )
+        }
+        return nil
+    }
+    
+    private func missingJwtKidError(requestDid: String?) -> VCLError {
+        ErrorTaxonomy.classifyRequestValidation(
+            VCLError(message: "JWT kid is missing"),
+            requestKind: ErrorTaxonomy.requestKindIssuing,
+            requestDid: requestDid
+        )
+    }
+    
+    private func unresolvedJwtKeyError(kid: String, requestDid: String?) -> VCLError {
+        ErrorTaxonomy.classifyRequestValidation(
+            VCLError(message: "public jwk not found for kid: \(kid)"),
+            requestKind: ErrorTaxonomy.requestKindIssuing,
+            requestDid: requestDid
+        )
     }
     
     private func verifyCredentialManifestByDeepLink(
@@ -125,7 +179,14 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                     )
                 }
                 catch {
-                    self?.onError(error, completionBlock)
+                    self?.onError(
+                        ErrorTaxonomy.classifyRequestValidation(
+                            VCLError(error: error),
+                            requestKind: ErrorTaxonomy.requestKindIssuing,
+                            requestDid: credentialManifest.iss
+                        ),
+                        completionBlock
+                    )
                 }
             }
         } else {
@@ -147,7 +208,11 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
             }
         } else {
             onError(
-                VCLError(error: "Failed to verify credentialManifest jwt:\n\(credentialManifest.jwt)"),
+                ErrorTaxonomy.classifyRequestValidation(
+                    VCLError(error: "Failed to verify credentialManifest jwt:\n\(credentialManifest.jwt)"),
+                    requestKind: ErrorTaxonomy.requestKindIssuing,
+                    requestDid: credentialManifest.iss
+                ),
                 completionBlock
             )
         }

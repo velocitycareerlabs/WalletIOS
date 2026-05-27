@@ -33,14 +33,27 @@ final class PresentationRequestRepositoryImpl: PresentationRequestRepository {
                         if let encodedJwtStr = presentationRequestResponse.payload.toDictionary()?[VCLPresentationRequest.CodingKeys.KeyPresentationRequest] as? String {
                             completionBlock(.success(encodedJwtStr))
                         } else {
-                            completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: presentationRequestResponse.payload, encoding: .utf8) ?? "")")))
+                            completionBlock(.failure(ErrorTaxonomy.classifyClientRequestFetch(
+                                VCLError(message: "Failed to parse \(String(data: presentationRequestResponse.payload, encoding: .utf8) ?? "")"),
+                                requestUri: presentationRequestDescriptor.deepLink.requestUri,
+                                requestKind: ErrorTaxonomy.requestKindPresentation
+                            )))
                         }
                     } catch {
-                        completionBlock(.failure(VCLError(error: error)))
+                        completionBlock(.failure(ErrorTaxonomy.classifyClientRequestFetch(
+                            VCLError(error: error),
+                            requestUri: presentationRequestDescriptor.deepLink.requestUri,
+                            requestKind: ErrorTaxonomy.requestKindPresentation
+                        )))
                     }
                 }
         } else {
-            completionBlock(.failure(VCLError(message: "presentationRequestDescriptor.endpoint = null")))
+            completionBlock(.failure(ErrorTaxonomy.invalidLink(
+                message: "presentationRequestDescriptor.endpoint = null",
+                sourceErrorCode: VelocityDeepLinkValidator.sourceInvalidOrMissingRequestEndpoint,
+                requestUri: presentationRequestDescriptor.deepLink.requestUri,
+                requestKind: ErrorTaxonomy.requestKindPresentation
+            )))
         }
     }
 }

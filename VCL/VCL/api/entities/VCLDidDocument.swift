@@ -48,6 +48,13 @@ public struct VCLDidDocument {
             return nil
         }
     }
+    
+    var hasVerificationMethods: Bool {
+        guard let verificationMethod = payload[CodingKeys.KeyVerificationMethod] as? [Any] else {
+            return false
+        }
+        return verificationMethod.isEmpty == false
+    }
 
     public struct CodingKeys {
         public static let KeyId = "id"

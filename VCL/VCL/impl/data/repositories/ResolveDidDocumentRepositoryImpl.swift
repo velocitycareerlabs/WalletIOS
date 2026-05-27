@@ -30,11 +30,9 @@ final class ResolveDidDocumentRepositoryImpl: ResolveDidDocumentRepository {
             response in
             do{
                 let didDocumentResponse = try response.get()
-                if let didDocumentPayload = didDocumentResponse.payload.toDictionary() {
-                    completionBlock(.success(VCLDidDocument(payload: didDocumentPayload)))
-                } else {
-                    completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: didDocumentResponse.payload, encoding: .utf8) ?? "")")))
-                }
+                completionBlock(.success(VCLDidDocument(
+                    payloadStr: String(data: didDocumentResponse.payload, encoding: .utf8) ?? ""
+                )))
             }
             catch {
                 completionBlock(.failure(VCLError(error: error)))

@@ -54,36 +54,53 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                     ) { didDocumentResult in
                         do {
                             let didDocument = try didDocumentResult.get()
-                            if let publicJwk = didDocument.getPublicJwk(kid: presentationRequest.jwt.kid ?? "") {
-                                self?.verifyPresentationRequest(
-                                    publicJwk,
-                                    presentationRequest,
-                                    didDocument,
-                                    completionBlock
-                                )
-                            } else {
-                                self?.onError(
-                                    VCLError(message: "public jwk not found for kid: \(presentationRequest.jwt.kid ?? "")"),
-                                    completionBlock
-                                )
+                            if let error = self?.validateDidDocument(didDocument, presentationRequest: presentationRequest) {
+                                self?.onError(error, completionBlock)
+                                return
                             }
+                            self?.verifyPresentationRequest(
+                                presentationRequest,
+                                didDocument,
+                                completionBlock
+                            )
                         } catch {
-                            self?.onError(VCLError(error: error), completionBlock)
+                            self?.onError(
+                                ErrorTaxonomy.classifyDidResolution(
+                                    VCLError(error: error),
+                                    requestKind: ErrorTaxonomy.requestKindPresentation,
+                                    requestDid: presentationRequest.iss
+                                ),
+                                completionBlock
+                            )
                         }
                     }
                 } catch {
-                    self?.onError(VCLError(error: error), completionBlock)
+                    self?.onError(
+                        ErrorTaxonomy.classifyClientRequestFetch(
+                            VCLError(error: error),
+                            requestUri: presentationRequestDescriptor.endpoint,
+                            requestKind: ErrorTaxonomy.requestKindPresentation
+                        ),
+                        completionBlock
+                    )
                 }
             }
         }
     }
     
     private func verifyPresentationRequest(
-        _ publicJwk: VCLPublicJwk,
         _ presentationRequest: VCLPresentationRequest,
         _ didDocument: VCLDidDocument,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
     ) {
+        guard let kid = presentationRequest.jwt.kid else {
+            onError(missingJwtKidError(requestDid: presentationRequest.iss), completionBlock)
+            return
+        }
+        guard let publicJwk = didDocument.getPublicJwk(kid: kid) else {
+            onError(unresolvedJwtKeyError(kid: kid, requestDid: presentationRequest.iss), completionBlock)
+            return
+        }
         jwtServiceRepository.verifyJwt(
             jwt: presentationRequest.jwt,
             publicJwk: publicJwk,
@@ -105,13 +122,57 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                             completionBlock
                         )
                     }catch {
-                        self?.onError(error, completionBlock)
+                        self?.onError(
+                            ErrorTaxonomy.classifyRequestValidation(
+                                VCLError(error: error),
+                                requestKind: ErrorTaxonomy.requestKindPresentation,
+                                requestDid: presentationRequest.iss
+                            ),
+                            completionBlock
+                        )
                     }
                 }
             } catch {
-                self?.onError(error, completionBlock)
+                self?.onError(
+                    ErrorTaxonomy.classifyRequestValidation(
+                        VCLError(error: error),
+                        requestKind: ErrorTaxonomy.requestKindPresentation,
+                        requestDid: presentationRequest.iss
+                    ),
+                    completionBlock
+                )
             }
         }
+    }
+    
+    private func validateDidDocument(
+        _ didDocument: VCLDidDocument,
+        presentationRequest: VCLPresentationRequest
+    ) -> VCLError? {
+        if didDocument.payload.isEmpty || didDocument.hasVerificationMethods == false {
+            return ErrorTaxonomy.classifyDidResolution(
+                VCLError(message: "public jwk not found for kid"),
+                requestKind: ErrorTaxonomy.requestKindPresentation,
+                requestDid: presentationRequest.iss
+            )
+        }
+        return nil
+    }
+    
+    private func missingJwtKidError(requestDid: String?) -> VCLError {
+        ErrorTaxonomy.classifyRequestValidation(
+            VCLError(message: "JWT kid is missing"),
+            requestKind: ErrorTaxonomy.requestKindPresentation,
+            requestDid: requestDid
+        )
+    }
+    
+    private func unresolvedJwtKeyError(kid: String, requestDid: String?) -> VCLError {
+        ErrorTaxonomy.classifyRequestValidation(
+            VCLError(message: "public jwk not found for kid: \(kid)"),
+            requestKind: ErrorTaxonomy.requestKindPresentation,
+            requestDid: requestDid
+        )
     }
     
     private func onVerificationSuccess(
@@ -124,7 +185,14 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                 completionBlock(.success(presentationRequest))
             }
         } else {
-            onError(VCLError(message: "Failed  to verify: \(presentationRequest.jwt.payload ?? [:])"), completionBlock)
+            onError(
+                ErrorTaxonomy.classifyRequestValidation(
+                    VCLError(message: "Failed  to verify: \(presentationRequest.jwt.payload ?? [:])"),
+                    requestKind: ErrorTaxonomy.requestKindPresentation,
+                    requestDid: presentationRequest.iss
+                ),
+                completionBlock
+            )
         }
     }
     

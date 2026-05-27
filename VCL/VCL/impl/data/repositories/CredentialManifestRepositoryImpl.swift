@@ -33,15 +33,27 @@ final class CredentialManifestRepositoryImpl: CredentialManifestRepository {
                         completionBlock(.success(jwtStr))
                         
                     } else {
-                        completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: credentialManifestReposnse.payload, encoding: .utf8) ?? "")")))
+                        completionBlock(.failure(ErrorTaxonomy.classifyClientRequestFetch(
+                            VCLError(message: "Failed to parse \(String(data: credentialManifestReposnse.payload, encoding: .utf8) ?? "")"),
+                            requestUri: credentialManifestDescriptor.deepLink?.requestUri,
+                            requestKind: ErrorTaxonomy.requestKindIssuing
+                        )))
                     }
                 } catch {
-                    completionBlock(.failure(VCLError(error: error)))
+                    completionBlock(.failure(ErrorTaxonomy.classifyClientRequestFetch(
+                        VCLError(error: error),
+                        requestUri: credentialManifestDescriptor.deepLink?.requestUri,
+                        requestKind: ErrorTaxonomy.requestKindIssuing
+                    )))
                 }
             }
         } else {
-            completionBlock(.failure(VCLError(message: "credentialManifestDescriptor.endpoint = null")))
+            completionBlock(.failure(ErrorTaxonomy.invalidLink(
+                message: "credentialManifestDescriptor.endpoint = null",
+                sourceErrorCode: VelocityDeepLinkValidator.sourceInvalidOrMissingRequestEndpoint,
+                requestUri: credentialManifestDescriptor.deepLink?.requestUri,
+                requestKind: ErrorTaxonomy.requestKindIssuing
+            )))
         }
     }
 }
-

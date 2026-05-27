@@ -1,5 +1,5 @@
 //
-//  ErrorTaxonomyBackwardCompatibilityBaselineTest.swift
+//  ErrorTaxonomyContractTest.swift
 //  VCLTests
 //
 //  Copyright 2022 Velocity Career Labs inc.
@@ -9,29 +9,52 @@ import Foundation
 import XCTest
 @testable import VCL
 
-final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
-    func testMalformedLinksAndMissingRequiredParamsReturnSdkError() {
+final class ErrorTaxonomyContractTest: XCTestCase {
+    func testMalformedLinksAndMissingRequiredParamsReturnInvalidLink() {
         entryPoints.forEach { entryPoint in
             let missingDidDeepLink = VCLDeepLink(value: "velocity-network://\(entryPoint.schemePath)")
             
             [VCLDeepLink(value: "not a url"), missingDidDeepLink].forEach { deepLink in
                 let error = getEntryPointError(entryPoint, deepLink: deepLink)
                 
-                XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
-                XCTAssertTrue(error.message?.contains("did was not found") == true)
+                assertTaxonomy(error, code: .InvalidLink, phase: ErrorTaxonomy.phaseLinkValidation, kind: entryPoint.requestKind)
             }
         }
     }
     
-    func testUnsupportedSchemeWithKnownQueryParamsReturnsNullEndpointSdkError() {
+    func testUnsupportedSchemeWithKnownQueryParamsReturnsInvalidLink() {
         entryPoints.forEach { entryPoint in
             let deepLink = VCLDeepLink(
                 value: "https://example.com/\(entryPoint.schemePath)?\(entryPoint.didParam)=did:example:entity"
             )
             let error = getEntryPointError(entryPoint, deepLink: deepLink)
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
-            XCTAssertEqual(error.message, entryPoint.endpointNullMessage)
+            assertTaxonomy(error, code: .InvalidLink, phase: ErrorTaxonomy.phaseLinkValidation, kind: entryPoint.requestKind)
+        }
+    }
+    
+    func testUnsupportedFlowPathReturnsInvalidLink() {
+        entryPoints.forEach { entryPoint in
+            let deepLink = VCLDeepLink(
+                value: "velocity-network://unknown-flow?request_uri=\(entryPoint.encodedRequestUri)" +
+                    "&\(entryPoint.didParam)=did:example:entity"
+            )
+            let error = getEntryPointError(entryPoint, deepLink: deepLink)
+            
+            assertTaxonomy(error, code: .InvalidLink, phase: ErrorTaxonomy.phaseLinkValidation, kind: entryPoint.requestKind)
+        }
+    }
+    
+    func testWrongFlowDidParamUsesSwiftCompatibilityDidResolution() {
+        entryPoints.forEach { entryPoint in
+            let deepLink = VCLDeepLink(
+                value: "velocity-network://\(entryPoint.schemePath)?request_uri=\(entryPoint.encodedRequestUri)" +
+                    "&\(entryPoint.otherDidParam)=did:example:entity"
+            )
+            let error = getEntryPointError(entryPoint, deepLink: deepLink)
+            
+            assertTaxonomy(error, code: entryPoint.requestInvalidCode, phase: ErrorTaxonomy.phaseRequestValidation, kind: entryPoint.requestKind)
+            XCTAssertEqual(error.sourceErrorCode, entryPoint.mismatchErrorCode)
         }
     }
     
@@ -42,24 +65,22 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
         ].enumerated().forEach { index, deepLink in
             let error = getEntryPointError(entryPoints[index], deepLink: deepLink)
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
-            XCTAssertTrue(error.message?.contains("did was not found") == true)
+            assertTaxonomy(error, code: .InvalidLink, phase: ErrorTaxonomy.phaseLinkValidation, kind: entryPoints[index].requestKind)
         }
     }
     
-    func testMissingRequestUriProducesEndpointNullSdkErrors() {
+    func testMissingRequestUriProducesInvalidLink() {
         entryPoints.forEach { entryPoint in
             let deepLink = VCLDeepLink(
                 value: "velocity-network://\(entryPoint.schemePath)?\(entryPoint.didParam)=did:example:entity"
             )
             let error = getEntryPointError(entryPoint, deepLink: deepLink)
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
-            XCTAssertEqual(error.message, entryPoint.endpointNullMessage)
+            assertTaxonomy(error, code: .InvalidLink, phase: ErrorTaxonomy.phaseLinkValidation, kind: entryPoint.requestKind)
         }
     }
     
-    func testMalformedAndDisallowedRequestUriValuesReachTransportAsRawEndpointText() {
+    func testMalformedAndDisallowedRequestUriValuesReturnInvalidLink() {
         entryPoints.forEach { entryPoint in
             let malformedRequestUriDeepLink = VCLDeepLink(
                 value: "velocity-network://\(entryPoint.schemePath)?request_uri=not-a-url" +
@@ -73,27 +94,49 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
             let malformedRequestUri = getEntryPointError(entryPoint, deepLink: malformedRequestUriDeepLink)
             let disallowedSchemeRequestUri = getEntryPointError(entryPoint, deepLink: disallowedSchemeDeepLink)
             
-            XCTAssertEqual(malformedRequestUri.errorCode, VCLErrorCode.SdkError.rawValue)
-            XCTAssertTrue(
-                malformedRequestUri.message?.contains("NSURLErrorDomain Code=-1002") == true,
-                "message: \(malformedRequestUri.message ?? "nil")"
-            )
-            XCTAssertEqual(disallowedSchemeRequestUri.errorCode, VCLErrorCode.SdkError.rawValue)
-            XCTAssertTrue(
-                disallowedSchemeRequestUri.message?.contains("NSURLErrorDomain Code=-1002") == true,
-                "message: \(disallowedSchemeRequestUri.message ?? "nil")"
-            )
+            assertTaxonomy(malformedRequestUri, code: .InvalidLink, phase: ErrorTaxonomy.phaseLinkValidation, kind: entryPoint.requestKind)
+            assertTaxonomy(disallowedSchemeRequestUri, code: .InvalidLink, phase: ErrorTaxonomy.phaseLinkValidation, kind: entryPoint.requestKind)
         }
     }
     
-    func testTransportFailureReturnsSdkErrorWithNetworkStatusOnly() {
+    func testInvalidDirectRequestEndpointReturnsInvalidLink() {
+        let endpoint = "ftp://example.com/request"
+        let error = getCredentialManifestDescriptorError(
+            descriptor: credentialManifestDescriptorByService(endpoint: endpoint)
+        )
+        
+        assertTaxonomy(error, code: .InvalidLink, phase: ErrorTaxonomy.phaseLinkValidation, kind: ErrorTaxonomy.requestKindIssuing)
+        XCTAssertEqual(error.sourceErrorCode, VelocityDeepLinkValidator.sourceInvalidOrMissingRequestEndpoint)
+        XCTAssertEqual(error.requestUri, endpoint)
+    }
+    
+    func testMissingDirectRequestEndpointReturnsInvalidLink() {
+        let error = getCredentialManifestDescriptorError(
+            descriptor: credentialManifestDescriptorByService(endpoint: "")
+        )
+        
+        assertTaxonomy(error, code: .InvalidLink, phase: ErrorTaxonomy.phaseLinkValidation, kind: ErrorTaxonomy.requestKindIssuing)
+        XCTAssertEqual(error.sourceErrorCode, VelocityDeepLinkValidator.sourceInvalidOrMissingRequestEndpoint)
+        XCTAssertEqual(error.requestUri, "")
+    }
+    
+    func testMissingDirectRequestDidReturnsInvalidLink() {
+        let error = getCredentialManifestDescriptorError(
+            descriptor: credentialManifestDescriptorByService(did: "")
+        )
+        
+        assertTaxonomy(error, code: .InvalidLink, phase: ErrorTaxonomy.phaseLinkValidation, kind: ErrorTaxonomy.requestKindIssuing)
+        XCTAssertTrue(error.message?.contains("did was not found") == true)
+    }
+    
+    func testTransportFailureReturnsConnectivityFailureWithNetworkStatusOnly() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
                 router: defaultRouter(entryPoint).copy(requestFailure: BaselineNetworkError(message: "offline"))
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: .ConnectivityFailure, phase: ErrorTaxonomy.phaseClientRequestFetch, kind: entryPoint.requestKind)
             XCTAssertEqual(error.statusCode, VCLStatusCode.NetworkError.rawValue)
             XCTAssertTrue(error.message?.contains("offline") == true)
         }
@@ -111,10 +154,11 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                     )
                 )
                 
-                XCTAssertEqual(error.errorCode, ErrorMocks.ErrorCode)
+                assertTaxonomy(error, code: .ClientRequestUnauthorized, phase: ErrorTaxonomy.phaseClientRequestFetch, kind: entryPoint.requestKind)
+                XCTAssertEqual(error.sourceErrorCode, ErrorMocks.ErrorCode)
                 XCTAssertEqual(error.requestId, ErrorMocks.RequestId)
                 XCTAssertEqual(error.message, ErrorMocks.Message)
-                XCTAssertEqual(error.statusCode, ErrorMocks.StatusCode)
+                XCTAssertEqual(error.statusCode, statusCode)
             }
         }
     }
@@ -134,7 +178,8 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                     )
                 )
                 
-                XCTAssertEqual(error.errorCode, ErrorMocks.ErrorCode)
+                assertTaxonomy(error, code: .ClientRequestRejected, phase: ErrorTaxonomy.phaseClientRequestFetch, kind: entryPoint.requestKind)
+                XCTAssertEqual(error.sourceErrorCode, ErrorMocks.ErrorCode)
                 XCTAssertEqual(error.statusCode, statusCode)
             }
         }
@@ -151,10 +196,10 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 )
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: .ClientRequestRejected, phase: ErrorTaxonomy.phaseClientRequestFetch, kind: entryPoint.requestKind)
             XCTAssertEqual(error.statusCode, 500)
             XCTAssertEqual(error.message, "plain text failure")
-            XCTAssertNil(error.payload)
+            XCTAssertEqual(error.payload, "plain text failure")
         }
     }
     
@@ -172,10 +217,10 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 )
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: .ClientRequestRejected, phase: ErrorTaxonomy.phaseClientRequestFetch, kind: entryPoint.requestKind)
             XCTAssertEqual(error.requestId, ErrorMocks.RequestId)
             XCTAssertEqual(error.message, ErrorMocks.Message)
-            XCTAssertEqual(error.statusCode, ErrorMocks.StatusCode)
+            XCTAssertEqual(error.statusCode, 422)
         }
     }
     
@@ -186,7 +231,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 router: defaultRouter(entryPoint).copy(requestPayload: "")
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: .ClientRequestRejected, phase: ErrorTaxonomy.phaseClientRequestFetch, kind: entryPoint.requestKind)
         }
     }
     
@@ -197,7 +242,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 router: defaultRouter(entryPoint).copy(requestPayload: "not json")
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: .ClientRequestRejected, phase: ErrorTaxonomy.phaseClientRequestFetch, kind: entryPoint.requestKind)
         }
     }
     
@@ -208,8 +253,19 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 router: defaultRouter(entryPoint).copy(requestPayload: "{}")
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: .ClientRequestRejected, phase: ErrorTaxonomy.phaseClientRequestFetch, kind: entryPoint.requestKind)
         }
+    }
+    
+    func testCredentialManifestByServiceSucceedsWithoutDeepLinkVerification() {
+        let vcl = initializedVcl(router: BaselineHttpRouter())
+        let credentialManifest = awaitCredentialManifest(
+            vcl: vcl,
+            descriptor: credentialManifestDescriptorByService()
+        )
+        
+        XCTAssertNil(credentialManifest.deepLink)
+        XCTAssertEqual(credentialManifest.did, DeepLinkMocks.IssuerDid)
     }
     
     func testDidResolutionNetworkFailurePropagatesSdkErrorAndStatusFromNetwork() {
@@ -223,7 +279,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 )
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: entryPoint.didUnresolvableCode, phase: ErrorTaxonomy.phaseDidResolution, kind: entryPoint.requestKind)
             XCTAssertEqual(error.statusCode, 404)
             XCTAssertEqual(error.message, "resolve failed")
         }
@@ -236,7 +292,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 router: defaultRouter(entryPoint).copy(didDocumentPayload: "not json")
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: entryPoint.didUnresolvableCode, phase: ErrorTaxonomy.phaseDidResolution, kind: entryPoint.requestKind)
             XCTAssertTrue(error.message?.contains("public jwk not found for kid") == true)
         }
     }
@@ -248,11 +304,52 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 router: defaultRouter(entryPoint).copy(didDocumentPayload: "{}")
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: entryPoint.didUnresolvableCode, phase: ErrorTaxonomy.phaseDidResolution, kind: entryPoint.requestKind)
             XCTAssertTrue(
                 error.message?.contains("public jwk not found for kid") == true,
                 "error: \(error.error ?? "nil"), message: \(error.message ?? "nil")"
             )
+        }
+    }
+    
+    func testEmptyDidDocumentVerificationMethodsReturnsDidUnresolvable() {
+        entryPoints.forEach { entryPoint in
+            let error = getEntryPointError(
+                entryPoint,
+                router: defaultRouter(entryPoint).copy(didDocumentPayload: #"{"verificationMethod":[]}"#)
+            )
+            
+            assertTaxonomy(error, code: entryPoint.didUnresolvableCode, phase: ErrorTaxonomy.phaseDidResolution, kind: entryPoint.requestKind)
+            XCTAssertTrue(error.message?.contains("public jwk not found for kid") == true)
+        }
+    }
+    
+    func testMissingJwtKidReturnsRequestInvalid() {
+        entryPoints.forEach { entryPoint in
+            let error = getEntryPointError(
+                entryPoint,
+                router: defaultRouter(entryPoint).copy(
+                    requestPayload: entryPoint.requestPayload(for: encodedJwtWithoutKid(entryPoint.defaultRequestJwt))
+                )
+            )
+            
+            assertTaxonomy(error, code: entryPoint.requestInvalidCode, phase: ErrorTaxonomy.phaseRequestValidation, kind: entryPoint.requestKind)
+            XCTAssertEqual(error.message, "JWT kid is missing")
+        }
+    }
+    
+    func testJwtKidMissingFromDidDocumentVerificationMethodsReturnsRequestInvalid() {
+        entryPoints.forEach { entryPoint in
+            let missingVerificationMethodKid = "\(entryPoint.requestDid)#missing-key"
+            let error = getEntryPointError(
+                entryPoint,
+                router: defaultRouter(entryPoint).copy(
+                    requestPayload: entryPoint.requestPayload(for: encodedJwtWithKid(entryPoint.defaultRequestJwt, kid: missingVerificationMethodKid))
+                )
+            )
+            
+            assertTaxonomy(error, code: entryPoint.requestInvalidCode, phase: ErrorTaxonomy.phaseRequestValidation, kind: entryPoint.requestKind)
+            XCTAssertEqual(error.message, "public jwk not found for kid: \(missingVerificationMethodKid)")
         }
     }
     
@@ -267,7 +364,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 )
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: entryPoint.notRegisteredCode, phase: ErrorTaxonomy.phaseRegistrationCheck, kind: entryPoint.requestKind)
             XCTAssertEqual(error.statusCode, 404)
             XCTAssertEqual(error.message, "profile missing")
         }
@@ -280,7 +377,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 router: defaultRouter(entryPoint).copy(verifiedProfilePayload: "{}")
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: entryPoint.requestUnauthorizedCode, phase: ErrorTaxonomy.phaseRequestAuthorization, kind: entryPoint.requestKind)
             XCTAssertEqual(error.statusCode, VCLStatusCode.VerificationError.rawValue)
             XCTAssertTrue(error.message?.contains("Wrong service type") == true)
         }
@@ -296,7 +393,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 router: defaultRouter(entryPoint).copy(verifiedProfilePayload: wrongServiceProfile)
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: entryPoint.requestUnauthorizedCode, phase: ErrorTaxonomy.phaseRequestAuthorization, kind: entryPoint.requestKind)
             XCTAssertEqual(error.statusCode, VCLStatusCode.VerificationError.rawValue)
             XCTAssertTrue(error.message?.contains("Wrong service type") == true)
         }
@@ -314,24 +411,42 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 ? awaitCredentialManifestError(vcl: vcl, descriptor: credentialManifestDescriptor(deepLink: deepLink))
                 : awaitPresentationRequestError(vcl: vcl, descriptor: presentationDescriptor(deepLink: deepLink))
             
-            XCTAssertEqual(error.errorCode, entryPoint.mismatchErrorCode)
+            assertTaxonomy(error, code: entryPoint.requestInvalidCode, phase: ErrorTaxonomy.phaseRequestValidation, kind: entryPoint.requestKind)
+            XCTAssertEqual(error.sourceErrorCode, entryPoint.mismatchErrorCode)
             XCTAssertTrue(router.requestedEndpoints.contains { $0.contains(entryPoint.lastDid) })
         }
     }
     
-    func testMalformedDidSyntaxIsAcceptedUntilRequestValidation() {
+    func testMalformedDidSyntaxReturnsInvalidLink() {
         entryPoints.forEach { entryPoint in
-            let deepLink = VCLDeepLink(
-                value: "velocity-network://\(entryPoint.schemePath)?request_uri=\(entryPoint.encodedRequestUri)" +
-                    "&\(entryPoint.didParam)=not-a-did"
-            )
-            let error = getEntryPointError(entryPoint, deepLink: deepLink)
-            
-            XCTAssertEqual(error.errorCode, entryPoint.mismatchErrorCode)
+            ["not-a-did", "did:", "did:example", "did:Example:entity"].forEach { did in
+                let deepLink = VCLDeepLink(
+                    value: "velocity-network://\(entryPoint.schemePath)?request_uri=\(entryPoint.encodedRequestUri)" +
+                        "&\(entryPoint.didParam)=\(did)"
+                )
+                let error = getEntryPointError(entryPoint, deepLink: deepLink)
+                
+                assertTaxonomy(error, code: .InvalidLink, phase: ErrorTaxonomy.phaseLinkValidation, kind: entryPoint.requestKind)
+                XCTAssertEqual(error.sourceErrorCode, VelocityDeepLinkValidator.sourceInvalidOrMissingDid)
+            }
         }
     }
     
-    func testRequestValidationFailuresUseLegacyMismatchErrorCodes() {
+    func testDidValidationDoesNotUseBacktrackingRegex() {
+        entryPoints.forEach { entryPoint in
+            let did = "did:example:" + String(repeating: ":", count: 10_000)
+            let deepLink = VCLDeepLink(
+                value: "velocity-network://\(entryPoint.schemePath)?request_uri=\(entryPoint.encodedRequestUri)" +
+                    "&\(entryPoint.didParam)=\(did)"
+            )
+            let error = getEntryPointError(entryPoint, deepLink: deepLink)
+            
+            assertTaxonomy(error, code: entryPoint.requestInvalidCode, phase: ErrorTaxonomy.phaseRequestValidation, kind: entryPoint.requestKind)
+            XCTAssertEqual(error.sourceErrorCode, entryPoint.mismatchErrorCode)
+        }
+    }
+    
+    func testRequestValidationFailuresUseTaxonomyCodes() {
         entryPoints.forEach { entryPoint in
             let deepLink = VCLDeepLink(
                 value: "velocity-network://\(entryPoint.schemePath)?request_uri=\(entryPoint.encodedRequestUri)" +
@@ -339,7 +454,8 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
             )
             let error = getEntryPointError(entryPoint, deepLink: deepLink)
             
-            XCTAssertEqual(error.errorCode, entryPoint.mismatchErrorCode)
+            assertTaxonomy(error, code: entryPoint.requestInvalidCode, phase: ErrorTaxonomy.phaseRequestValidation, kind: entryPoint.requestKind)
+            XCTAssertEqual(error.sourceErrorCode, entryPoint.mismatchErrorCode)
         }
     }
     
@@ -355,9 +471,46 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                 jwtVerificationResult: .failure(expectedError)
             )
             
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            assertTaxonomy(error, code: entryPoint.requestInvalidCode, phase: ErrorTaxonomy.phaseRequestValidation, kind: entryPoint.requestKind)
             XCTAssertEqual(error.message, "jwt signature verification failed")
         }
+    }
+    
+    private func assertTaxonomy(_ error: VCLError, code: VCLErrorCode, phase: String, kind: String) {
+        XCTAssertEqual(error.errorCode, code.rawValue)
+        XCTAssertEqual(error.validationPhase, phase)
+        XCTAssertEqual(error.requestKind, kind)
+    }
+    
+    private func simpleRequestUri() -> String {
+        "https://example.com/request".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+    }
+    
+    private func encodedJwtWithoutKid(_ encodedJwt: String) -> String {
+        var header = jwtHeader(encodedJwt)
+        header.removeValue(forKey: VCLJwt.CodingKeys.KeyKid)
+        return encodedJwtWithHeader(encodedJwt, header: header)
+    }
+    
+    private func encodedJwtWithKid(_ encodedJwt: String, kid: String) -> String {
+        var header = jwtHeader(encodedJwt)
+        header[VCLJwt.CodingKeys.KeyKid] = kid
+        return encodedJwtWithHeader(encodedJwt, header: header)
+    }
+    
+    private func jwtHeader(_ encodedJwt: String) -> [String: Any] {
+        let parts = encodedJwt.components(separatedBy: ".")
+        return parts.first?.decodeBase64URL()?.toDictionary() ?? [:]
+    }
+    
+    private func encodedJwtWithHeader(_ encodedJwt: String, header: [String: Any]) -> String {
+        var parts = encodedJwt.components(separatedBy: ".")
+        let data = (header.toJsonString() ?? "{}").data(using: .utf8) ?? Data()
+        parts[0] = data.base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+        return parts.joined(separator: ".")
     }
     
     fileprivate enum EntryPoint {
@@ -419,6 +572,15 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
         return awaitPresentationRequestError(vcl: vcl, descriptor: presentationDescriptor(deepLink: deepLink))
     }
     
+    private func getCredentialManifestDescriptorError(
+        descriptor: VCLCredentialManifestDescriptor,
+        router: BaselineHttpRouter = BaselineHttpRouter(),
+        jwtVerificationResult: VCLResult<Bool> = .success(true)
+    ) -> VCLError {
+        let vcl = initializedVcl(router: router, jwtVerificationResult: jwtVerificationResult)
+        return awaitCredentialManifestError(vcl: vcl, descriptor: descriptor)
+    }
+    
     private func initializedVcl(
         router: BaselineHttpRouter,
         jwtVerificationResult: VCLResult<Bool> = .success(true)
@@ -437,7 +599,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
                         jwtVerifyService: FixedJwtVerifyService(result: jwtVerificationResult)
                     )
                 ),
-                errorCodeCompatibilityMode: .Legacy
+                errorCodeCompatibilityMode: .Taxonomy
             ),
             successHandler: { expectation.fulfill() },
             errorHandler: {
@@ -452,7 +614,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
     
     private func awaitCredentialManifestError(
         vcl: VCLImpl,
-        descriptor: VCLCredentialManifestDescriptorByDeepLink
+        descriptor: VCLCredentialManifestDescriptor
     ) -> VCLError {
         let expectation = expectation(description: "credential manifest failure")
         var result: VCLError?
@@ -469,6 +631,33 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
         )
         wait(for: [expectation], timeout: 5)
         return result ?? VCLError(message: "getCredentialManifest did not invoke errorHandler")
+    }
+    
+    private func awaitCredentialManifest(
+        vcl: VCLImpl,
+        descriptor: VCLCredentialManifestDescriptor
+    ) -> VCLCredentialManifest {
+        let expectation = expectation(description: "credential manifest success")
+        var result: VCLCredentialManifest?
+        var error: VCLError?
+        vcl.getCredentialManifest(
+            credentialManifestDescriptor: descriptor,
+            successHandler: {
+                result = $0
+                expectation.fulfill()
+            },
+            errorHandler: {
+                error = $0
+                expectation.fulfill()
+            }
+        )
+        wait(for: [expectation], timeout: 5)
+        XCTAssertNil(error, "getCredentialManifest failed: \(String(describing: error?.toDictionary()))")
+        return result ?? VCLCredentialManifest(
+            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
+            verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary() ?? [:]),
+            didJwk: DidJwkMocks.DidJwk
+        )
     }
     
     private func awaitPresentationRequestError(
@@ -499,6 +688,21 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
         )
     }
     
+    private func credentialManifestDescriptorByService(
+        endpoint: String = CredentialManifestDescriptorMocks.IssuingServiceEndPoint,
+        did: String = DeepLinkMocks.IssuerDid
+    ) -> VCLCredentialManifestDescriptorByService {
+        VCLCredentialManifestDescriptorByService(
+            service: VCLService(payload: [
+                VCLService.CodingKeys.KeyId: "\(DeepLinkMocks.IssuerDid)#credential-agent-issuer-1",
+                VCLService.CodingKeys.KeyType: VCLServiceType.CareerIssuer.rawValue,
+                VCLService.CodingKeys.KeyServiceEndpoint: endpoint
+            ]),
+            didJwk: DidJwkMocks.DidJwk,
+            did: did
+        )
+    }
+    
     private func presentationDescriptor(deepLink: VCLDeepLink) -> VCLPresentationRequestDescriptor {
         VCLPresentationRequestDescriptor(
             deepLink: deepLink,
@@ -513,7 +717,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
     }
 }
 
-private extension ErrorTaxonomyBackwardCompatibilityBaselineTest.EntryPoint {
+private extension ErrorTaxonomyContractTest.EntryPoint {
     var defaultDeepLink: VCLDeepLink {
         switch self {
         case .issuing:
@@ -541,12 +745,75 @@ private extension ErrorTaxonomyBackwardCompatibilityBaselineTest.EntryPoint {
         }
     }
     
+    var requestInvalidCode: VCLErrorCode {
+        switch self {
+        case .issuing:
+            return .IssuerRequestInvalid
+        case .presentation:
+            return .VerifierRequestInvalid
+        }
+    }
+    
+    var didUnresolvableCode: VCLErrorCode {
+        switch self {
+        case .issuing:
+            return .IssuerDidUnresolvable
+        case .presentation:
+            return .VerifierDidUnresolvable
+        }
+    }
+    
+    var notRegisteredCode: VCLErrorCode {
+        switch self {
+        case .issuing:
+            return .IssuerNotRegistered
+        case .presentation:
+            return .VerifierNotRegistered
+        }
+    }
+    
+    var requestUnauthorizedCode: VCLErrorCode {
+        switch self {
+        case .issuing:
+            return .IssuerRequestUnauthorized
+        case .presentation:
+            return .VerifierRequestUnauthorized
+        }
+    }
+    
+    var requestKind: String {
+        switch self {
+        case .issuing:
+            return ErrorTaxonomy.requestKindIssuing
+        case .presentation:
+            return ErrorTaxonomy.requestKindPresentation
+        }
+    }
+    
+    var requestDid: String {
+        switch self {
+        case .issuing:
+            return DeepLinkMocks.IssuerDid
+        case .presentation:
+            return DeepLinkMocks.InspectorDid
+        }
+    }
+    
     var didParam: String {
         switch self {
         case .issuing:
             return "issuerDid"
         case .presentation:
             return "inspectorDid"
+        }
+    }
+    
+    var otherDidParam: String {
+        switch self {
+        case .issuing:
+            return "inspectorDid"
+        case .presentation:
+            return "issuerDid"
         }
     }
     
@@ -570,6 +837,24 @@ private extension ErrorTaxonomyBackwardCompatibilityBaselineTest.EntryPoint {
     
     var lastDid: String {
         "did:example:last"
+    }
+    
+    var defaultRequestJwt: String {
+        switch self {
+        case .issuing:
+            return CredentialManifestMocks.JwtCredentialManifest1
+        case .presentation:
+            return PresentationRequestMocks.EncodedPresentationRequest
+        }
+    }
+    
+    func requestPayload(for encodedJwt: String) -> String {
+        switch self {
+        case .issuing:
+            return [VCLCredentialManifest.CodingKeys.KeyIssuingRequest: encodedJwt].toJsonString() ?? "{}"
+        case .presentation:
+            return [VCLPresentationRequest.CodingKeys.KeyPresentationRequest: encodedJwt].toJsonString() ?? "{}"
+        }
     }
 }
 
@@ -748,6 +1033,7 @@ private final class BaselineHttpRouter: NetworkService {
         }
         
         return VCLError(
+            payload: errorPayload.isEmpty ? nil : errorPayload,
             message: errorPayload.isEmpty ? nil : errorPayload,
             statusCode: statusCode
         )
