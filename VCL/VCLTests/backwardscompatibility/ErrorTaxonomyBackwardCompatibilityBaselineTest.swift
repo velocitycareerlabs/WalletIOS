@@ -527,7 +527,7 @@ private extension ErrorTaxonomyBackwardCompatibilityBaselineTest.EntryPoint {
         case .issuing:
             return "credentialManifestDescriptor.endpoint = null"
         case .presentation:
-            return "credentialManifestDescriptor.endpoint = null"
+            return "presentationRequestDescriptor.endpoint = null"
         }
     }
     
