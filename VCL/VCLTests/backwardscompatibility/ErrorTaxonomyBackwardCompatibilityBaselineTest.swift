@@ -250,7 +250,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: XCTestCase {
             
             XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
             XCTAssertTrue(
-                error.error?.contains("public jwk not found for kid") == true,
+                error.message?.contains("public jwk not found for kid") == true,
                 "error: \(error.error ?? "nil"), message: \(error.message ?? "nil")"
             )
         }

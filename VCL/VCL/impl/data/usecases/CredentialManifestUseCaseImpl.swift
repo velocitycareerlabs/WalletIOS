@@ -63,7 +63,7 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                                 )
                             } else {
                                 self?.onError(
-                                    VCLError(error: "public jwk not found for kid: \(credentialManifest.jwt.kid ?? "")"),
+                                    VCLError(message: "public jwk not found for kid: \(credentialManifest.jwt.kid ?? "")"),
                                     completionBlock
                                 )
                             }
