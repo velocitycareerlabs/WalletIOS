@@ -66,6 +66,7 @@
 		283AB6032DB105AB000907DB /* VCLAuthTokenTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AB6022DB105AA000907DB /* VCLAuthTokenTest.swift */; };
 		283AF0012DED000000000001 /* ErrorTaxonomyBackwardCompatibilityBaselineTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AF0002DED000000000001 /* ErrorTaxonomyBackwardCompatibilityBaselineTest.swift */; };
 		283AF0112DED000000000001 /* ErrorTaxonomyContractTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AF0102DED000000000001 /* ErrorTaxonomyContractTest.swift */; };
+		283AF0212DED000000000001 /* ErrorTaxonomyTestHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AF0202DED000000000001 /* ErrorTaxonomyTestHarness.swift */; };
 		283AF0132DED000000000001 /* ErrorTaxonomy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AF0122DED000000000001 /* ErrorTaxonomy.swift */; };
 		283AF0152DED000000000001 /* VelocityDeepLinkValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AF0142DED000000000001 /* VelocityDeepLinkValidator.swift */; };
 		283AF0172DED000000000001 /* ErrorTaxonomyCompatibilityMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AF0162DED000000000001 /* ErrorTaxonomyCompatibilityMapper.swift */; };
@@ -384,6 +385,7 @@
 		283AB6022DB105AA000907DB /* VCLAuthTokenTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLAuthTokenTest.swift; sourceTree = "<group>"; };
 		283AF0002DED000000000001 /* ErrorTaxonomyBackwardCompatibilityBaselineTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTaxonomyBackwardCompatibilityBaselineTest.swift; sourceTree = "<group>"; };
 		283AF0102DED000000000001 /* ErrorTaxonomyContractTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTaxonomyContractTest.swift; sourceTree = "<group>"; };
+		283AF0202DED000000000001 /* ErrorTaxonomyTestHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTaxonomyTestHarness.swift; sourceTree = "<group>"; };
 		283AF0122DED000000000001 /* ErrorTaxonomy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTaxonomy.swift; sourceTree = "<group>"; };
 		283AF0142DED000000000001 /* VelocityDeepLinkValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelocityDeepLinkValidator.swift; sourceTree = "<group>"; };
 		283AF0162DED000000000001 /* ErrorTaxonomyCompatibilityMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTaxonomyCompatibilityMapper.swift; sourceTree = "<group>"; };
@@ -1155,6 +1157,7 @@
 		283AF0022DED000000000001 /* backwardscompatibility */ = {
 			isa = PBXGroup;
 			children = (
+				283AF0202DED000000000001 /* ErrorTaxonomyTestHarness.swift */,
 				283AF0002DED000000000001 /* ErrorTaxonomyBackwardCompatibilityBaselineTest.swift */,
 				283AF0102DED000000000001 /* ErrorTaxonomyContractTest.swift */,
 			);
@@ -1813,6 +1816,7 @@
 				283BCF7029B921350023B219 /* VCLErrorTest.swift in Sources */,
 				283AF0012DED000000000001 /* ErrorTaxonomyBackwardCompatibilityBaselineTest.swift in Sources */,
 				283AF0112DED000000000001 /* ErrorTaxonomyContractTest.swift in Sources */,
+				283AF0212DED000000000001 /* ErrorTaxonomyTestHarness.swift in Sources */,
 				283CBD9D2DE5A79C007528D1 /* Utils.swift in Sources */,
 				28BEC7212A0E6E37000DEC88 /* KeyServiceMocks.swift in Sources */,
 				281B64862C22CD3800413861 /* VCLOffersTest.swift in Sources */,

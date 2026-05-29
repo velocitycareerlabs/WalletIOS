@@ -10,13 +10,13 @@
 import Foundation
 
 final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
-    
+
     private let presentationRequestRepository: PresentationRequestRepository
     private let resolveDidDocumentRepository: ResolveDidDocumentRepository
     private let jwtServiceRepository: JwtServiceRepository
     private let presentationRequestByDeepLinkVerifier: PresentationRequestByDeepLinkVerifier
     private let executor: Executor
-    
+
     init(
         _ presentationRequestRepository: PresentationRequestRepository,
         _ resolveDidDocumentRepository: ResolveDidDocumentRepository,
@@ -30,7 +30,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         self.presentationRequestByDeepLinkVerifier = presentationRequestByDeepLinkVerifier
         self.executor = executor
     }
-    
+
     func getPresentationRequest(
         presentationRequestDescriptor: VCLPresentationRequestDescriptor,
         verifiedProfile: VCLVerifiedProfile,
@@ -40,42 +40,16 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
             self?.presentationRequestRepository.getPresentationRequest(
                 presentationRequestDescriptor: presentationRequestDescriptor
             ) { encodedJwtStrResult in
+                guard let self = self else { return }
                 do {
-                    let presentationRequest = VCLPresentationRequest(
-                        jwt: VCLJwt(encodedJwt: try encodedJwtStrResult.get()),
+                    self.decodePresentationRequestJwt(
+                        encodedJwt: try encodedJwtStrResult.get(),
+                        presentationRequestDescriptor: presentationRequestDescriptor,
                         verifiedProfile: verifiedProfile,
-                        deepLink: presentationRequestDescriptor.deepLink,
-                        pushDelegate: presentationRequestDescriptor.pushDelegate,
-                        didJwk: presentationRequestDescriptor.didJwk,
-                        remoteCryptoServicesToken: presentationRequestDescriptor.remoteCryptoServicesToken
+                        completionBlock: completionBlock
                     )
-                    self?.resolveDidDocumentRepository.resolveDidDocument(
-                        did: presentationRequest.iss
-                    ) { didDocumentResult in
-                        do {
-                            let didDocument = try didDocumentResult.get()
-                            if let error = self?.validateDidDocument(didDocument, presentationRequest: presentationRequest) {
-                                self?.onError(error, completionBlock)
-                                return
-                            }
-                            self?.verifyPresentationRequest(
-                                presentationRequest,
-                                didDocument,
-                                completionBlock
-                            )
-                        } catch {
-                            self?.onError(
-                                ErrorTaxonomy.classifyDidResolution(
-                                    VCLError(error: error),
-                                    requestKind: ErrorTaxonomy.requestKindPresentation,
-                                    requestDid: presentationRequest.iss
-                                ),
-                                completionBlock
-                            )
-                        }
-                    }
                 } catch {
-                    self?.onError(
+                    self.onError(
                         ErrorTaxonomy.classifyClientRequestFetch(
                             VCLError(error: error),
                             requestUri: presentationRequestDescriptor.endpoint,
@@ -87,7 +61,72 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
             }
         }
     }
-    
+
+    private func decodePresentationRequestJwt(
+        encodedJwt: String,
+        presentationRequestDescriptor: VCLPresentationRequestDescriptor,
+        verifiedProfile: VCLVerifiedProfile,
+        completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
+    ) {
+        jwtServiceRepository.decodeJwt(encodedJwt: encodedJwt) { [weak self] jwtResult in
+            guard let self = self else { return }
+            do {
+                let presentationRequest = VCLPresentationRequest(
+                    jwt: try jwtResult.get(),
+                    verifiedProfile: verifiedProfile,
+                    deepLink: presentationRequestDescriptor.deepLink,
+                    pushDelegate: presentationRequestDescriptor.pushDelegate,
+                    didJwk: presentationRequestDescriptor.didJwk,
+                    remoteCryptoServicesToken: presentationRequestDescriptor.remoteCryptoServicesToken
+                )
+                self.resolvePresentationRequestDid(
+                    presentationRequest,
+                    completionBlock
+                )
+            } catch {
+                self.onError(
+                    ErrorTaxonomy.classifyRequestValidation(
+                        VCLError(error: error),
+                        requestKind: ErrorTaxonomy.requestKindPresentation,
+                        requestDid: nil
+                    ),
+                    completionBlock
+                )
+            }
+        }
+    }
+
+    private func resolvePresentationRequestDid(
+        _ presentationRequest: VCLPresentationRequest,
+        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
+    ) {
+        resolveDidDocumentRepository.resolveDidDocument(
+            did: presentationRequest.iss
+        ) { [weak self] didDocumentResult in
+            do {
+                let didDocument = try didDocumentResult.get()
+                if let error = self?.validateDidDocument(didDocument, presentationRequest: presentationRequest) {
+                    self?.onError(error, completionBlock)
+                    return
+                }
+                self?.verifyPresentationRequest(
+                    presentationRequest,
+                    didDocument,
+                    completionBlock
+                )
+            } catch {
+                self?.onError(
+                    ErrorTaxonomy.classifyDidResolution(
+                        VCLError(error: error),
+                        requestKind: ErrorTaxonomy.requestKindPresentation,
+                        requestDid: presentationRequest.iss
+                    ),
+                    completionBlock
+                )
+            }
+        }
+    }
+
     private func verifyPresentationRequest(
         _ presentationRequest: VCLPresentationRequest,
         _ didDocument: VCLDidDocument,
@@ -144,7 +183,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
             }
         }
     }
-    
+
     private func validateDidDocument(
         _ didDocument: VCLDidDocument,
         presentationRequest: VCLPresentationRequest
@@ -158,7 +197,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         }
         return nil
     }
-    
+
     private func missingJwtKidError(requestDid: String?) -> VCLError {
         ErrorTaxonomy.classifyRequestValidation(
             VCLError(message: "JWT kid is missing"),
@@ -166,7 +205,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
             requestDid: requestDid
         )
     }
-    
+
     private func unresolvedJwtKeyError(kid: String, requestDid: String?) -> VCLError {
         ErrorTaxonomy.classifyRequestValidation(
             VCLError(message: "public jwk not found for kid: \(kid)"),
@@ -174,7 +213,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
             requestDid: requestDid
         )
     }
-    
+
     private func onVerificationSuccess(
         _ isVerified: Bool,
         _ presentationRequest: VCLPresentationRequest,
@@ -195,7 +234,7 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
             )
         }
     }
-    
+
     private func onError(
         _ error: Error,
         _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
