@@ -15,22 +15,15 @@ final class CredentialManifestByDeepLinkVerifierImpl: CredentialManifestByDeepLi
         credentialManifest: VCLCredentialManifest,
         deepLink: VCLDeepLink,
         didDocument: VCLDidDocument,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Void>) -> Void
     ) {
-        if let deepLinkDid = deepLink.did {
-            if (didDocument.id == credentialManifest.iss && didDocument.id == deepLinkDid ||
-                didDocument.alsoKnownAs.contains(credentialManifest.iss) && didDocument.alsoKnownAs.contains(deepLinkDid)) {
-                completionBlock(VCLResult.success(true))
-            } else {
-                onError(
-                    errorCode: VCLErrorCode.MismatchedRequestIssuerDid,
-                    errorMessage: "credential manifest: \(credentialManifest.jwt.encodedJwt) \ndidDocument: \(didDocument)",
-                    completionBlock: completionBlock
-                )
-            }
+        if (didDocument.id == credentialManifest.iss && didDocument.id == deepLink.did ||
+            didDocument.alsoKnownAs.contains(credentialManifest.iss) && didDocument.alsoKnownAs.contains(deepLink.did ?? "")) {
+            completionBlock(.success(()))
         } else {
             onError(
-                errorMessage: "DID not found in deep link: \(deepLink.value)",
+                errorCode: VCLErrorCode.MismatchedRequestIssuerDid,
+                errorMessage: "credential manifest: \(credentialManifest.jwt.encodedJwt) \ndidDocument: \(didDocument)",
                 completionBlock: completionBlock
             )
         }
@@ -39,7 +32,7 @@ final class CredentialManifestByDeepLinkVerifierImpl: CredentialManifestByDeepLi
     private func onError(
         errorCode: VCLErrorCode = VCLErrorCode.SdkError,
         errorMessage: String,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Void>) -> Void
     ) {
         VCLLog.e(errorMessage)
         completionBlock(
@@ -47,4 +40,3 @@ final class CredentialManifestByDeepLinkVerifierImpl: CredentialManifestByDeepLi
         )
     }
 }
-

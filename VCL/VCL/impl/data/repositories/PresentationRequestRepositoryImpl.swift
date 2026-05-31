@@ -30,14 +30,12 @@ final class PresentationRequestRepositoryImpl: PresentationRequestRepository {
             ) { response in
                     do {
                         let presentationRequestResponse = try response.get()
-                        if let encodedJwtStr = presentationRequestResponse.payload.toDictionary()?[VCLPresentationRequest.CodingKeys.KeyPresentationRequest] as? String {
-                            completionBlock(.success(encodedJwtStr))
+                        if let payload = presentationRequestResponse.payload.toDictionary() {
+                            completionBlock(.success(
+                                payload[VCLPresentationRequest.CodingKeys.KeyPresentationRequest] as? String ?? ""
+                            ))
                         } else {
-                            completionBlock(.failure(ErrorTaxonomy.classifyClientRequestFetch(
-                                VCLError(message: "Failed to parse \(String(data: presentationRequestResponse.payload, encoding: .utf8) ?? "")"),
-                                requestUri: presentationRequestDescriptor.deepLink.requestUri,
-                                requestKind: ErrorTaxonomy.requestKindPresentation
-                            )))
+                            completionBlock(.success(String(data: presentationRequestResponse.payload, encoding: .utf8) ?? ""))
                         }
                     } catch {
                         completionBlock(.failure(ErrorTaxonomy.classifyClientRequestFetch(

@@ -29,15 +29,12 @@ final class CredentialManifestRepositoryImpl: CredentialManifestRepository {
             ) { response in
                 do {
                     let credentialManifestReposnse = try response.get()
-                    if let jwtStr = credentialManifestReposnse.payload.toDictionary()?[VCLCredentialManifest.CodingKeys.KeyIssuingRequest] as? String {
-                        completionBlock(.success(jwtStr))
-                        
+                    if let payload = credentialManifestReposnse.payload.toDictionary() {
+                        completionBlock(.success(
+                            payload[VCLCredentialManifest.CodingKeys.KeyIssuingRequest] as? String ?? ""
+                        ))
                     } else {
-                        completionBlock(.failure(ErrorTaxonomy.classifyClientRequestFetch(
-                            VCLError(message: "Failed to parse \(String(data: credentialManifestReposnse.payload, encoding: .utf8) ?? "")"),
-                            requestUri: credentialManifestDescriptor.deepLink?.requestUri,
-                            requestKind: ErrorTaxonomy.requestKindIssuing
-                        )))
+                        completionBlock(.success(String(data: credentialManifestReposnse.payload, encoding: .utf8) ?? ""))
                     }
                 } catch {
                     completionBlock(.failure(ErrorTaxonomy.classifyClientRequestFetch(

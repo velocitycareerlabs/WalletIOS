@@ -14,7 +14,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         .Legacy
     }
 
-    func testMalformedLinksAndMissingRequiredParamsReturnSdkError() {
+    func testMalformedLinksAndMissingRequiredParamsMapInvalidLinkToLegacyError() {
         entryPoints.forEach { entryPoint in
             let missingDidDeepLink = VCLDeepLink(value: "velocity-network://\(entryPoint.schemePath)")
 
@@ -27,7 +27,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         }
     }
 
-    func testUnsupportedSchemeWithKnownQueryParamsReturnsNullEndpointSdkError() {
+    func testUnsupportedSchemeWithKnownQueryParamsMapsInvalidLinkToEndpointNullLegacyError() {
         entryPoints.forEach { entryPoint in
             let deepLink = VCLDeepLink(
                 value: "https://example.com/\(entryPoint.schemePath)?\(entryPoint.didParam)=did:example:entity"
@@ -51,7 +51,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         }
     }
 
-    func testMissingRequestUriProducesEndpointNullSdkErrors() {
+    func testMissingRequestUriMapsInvalidLinkToEndpointNullLegacyError() {
         entryPoints.forEach { entryPoint in
             let deepLink = VCLDeepLink(
                 value: "velocity-network://\(entryPoint.schemePath)?\(entryPoint.didParam)=did:example:entity"
@@ -90,7 +90,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         }
     }
 
-    func testTransportFailureReturnsSdkErrorWithNetworkStatusOnly() {
+    func testTransportFailureMapsConnectivityFailureToLegacyErrorWithNetworkStatusOnly() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -144,7 +144,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         }
     }
 
-    func testPlainTextRequestEndpointRejectionsDefaultToSdkErrorWithHttpStatusAndPayloadMessage() {
+    func testPlainTextRequestEndpointRejectionsMapClientRequestRejectedToLegacyErrorWithHttpStatusAndPayloadMessage() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -162,7 +162,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         }
     }
 
-    func testJsonRequestEndpointRejectionsWithoutErrorCodeDefaultToSdkError() {
+    func testJsonRequestEndpointRejectionsWithoutErrorCodeMapClientRequestRejectedToLegacyError() {
         var payloadWithoutErrorCode = ErrorMocks.Payload.toDictionary()!
         payloadWithoutErrorCode.removeValue(forKey: VCLError.CodingKeys.KeyErrorCode)
 
@@ -183,7 +183,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         }
     }
 
-    func testEmptyRequestEndpointResponseReturnsSdkError() {
+    func testEmptyRequestEndpointResponseMapsRequestInvalidToLegacyError() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -191,10 +191,11 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
             )
 
             XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            XCTAssertEqual(error.message, "JWT must contain header, payload, and signature")
         }
     }
 
-    func testMalformedRequestEndpointResponseReturnsSdkError() {
+    func testMalformedRequestEndpointResponseMapsRequestInvalidToLegacyError() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -202,21 +203,30 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
             )
 
             XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+            XCTAssertEqual(error.message, "JWT must contain header, payload, and signature")
         }
     }
 
-    func testMissingExpectedRequestFieldsReturnSdkErrorAfterEmptyJwtIsDecoded() {
+    func testEmptyOrUnextractableRequestPayloadsMapRequestInvalidToLegacyError() {
         entryPoints.forEach { entryPoint in
-            let error = getEntryPointError(
-                entryPoint,
-                router: defaultRouter(entryPoint).copy(requestPayload: "{}")
-            )
+            [
+                "{}",
+                #"{"unexpected":"value"}"#,
+                entryPoint.requestPayload(for: ""),
+                entryPoint.requestPayload(value: 123)
+            ].forEach { requestPayload in
+                let error = getEntryPointError(
+                    entryPoint,
+                    router: defaultRouter(entryPoint).copy(requestPayload: requestPayload)
+                )
 
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+                XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+                XCTAssertEqual(error.message, "JWT must contain header, payload, and signature")
+            }
         }
     }
 
-    func testDidResolutionNetworkFailurePropagatesSdkErrorAndStatusFromNetwork() {
+    func testDidResolutionNetworkFailureMapsDidUnresolvableToLegacyErrorAndStatusFromNetwork() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -233,7 +243,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         }
     }
 
-    func testInvalidDidDocumentShapeReturnsSdkErrorAtRequestValidation() {
+    func testInvalidDidDocumentShapeMapsDidUnresolvableToLegacyError() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -245,7 +255,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         }
     }
 
-    func testMissingDidDocumentVerificationMaterialReturnsSdkError() {
+    func testMissingDidDocumentVerificationMaterialMapsDidUnresolvableToLegacyError() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -260,7 +270,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         }
     }
 
-    func testVerifiedProfileLookupFailurePropagatesNetworkErrorDetails() {
+    func testVerifiedProfile404MapsIssuerOrVerifierNotRegisteredToLegacyError() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -277,20 +287,64 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         }
     }
 
-    func testEmptyVerifiedProfileFailsServiceTypeVerification() {
+    func testVerifiedProfile5xxMapsRegistrationCheckInconclusiveToLegacyError() {
         entryPoints.forEach { entryPoint in
-            let error = getEntryPointError(
-                entryPoint,
-                router: defaultRouter(entryPoint).copy(verifiedProfilePayload: "{}")
-            )
+            [500, 503].forEach { statusCode in
+                let error = getEntryPointError(
+                    entryPoint,
+                    router: defaultRouter(entryPoint).copy(
+                        verifiedProfilePayload: #"{"message":"service unavailable","errorCode":"server_error"}"#,
+                        verifiedProfileStatusCode: statusCode,
+                        verifiedProfileContentType: Request.ContentType.ApplicationJson.rawValue
+                    )
+                )
 
-            XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
-            XCTAssertEqual(error.statusCode, VCLStatusCode.VerificationError.rawValue)
-            XCTAssertTrue(error.message?.contains("Wrong service type") == true)
+                XCTAssertEqual(error.errorCode, "server_error")
+                XCTAssertEqual(error.statusCode, statusCode)
+                XCTAssertEqual(error.message, "service unavailable")
+            }
         }
     }
 
-    func testWrongIssuerOrVerifierServiceTypeReturnsSdkErrorWithVerificationStatus() {
+    func testUnexpectedVerifiedProfile4xxMapsRegistrationCheckInconclusiveToLegacyError() {
+        entryPoints.forEach { entryPoint in
+            [400, 401, 403, 409, 422, 429].forEach { statusCode in
+                let error = getEntryPointError(
+                    entryPoint,
+                    router: defaultRouter(entryPoint).copy(
+                        verifiedProfilePayload: #"{"message":"unexpected profile rejection","errorCode":"profile_rejected"}"#,
+                        verifiedProfileStatusCode: statusCode,
+                        verifiedProfileContentType: Request.ContentType.ApplicationJson.rawValue
+                    )
+                )
+
+                XCTAssertEqual(error.errorCode, "profile_rejected")
+                XCTAssertEqual(error.statusCode, statusCode)
+                XCTAssertEqual(error.message, "unexpected profile rejection")
+            }
+        }
+    }
+
+    func testMalformedOrEmptyVerifiedProfile200MapsRegistrationCheckInconclusiveToLegacyError() {
+        [
+            "{}",
+            "",
+            "not json"
+        ].forEach { verifiedProfilePayload in
+            entryPoints.forEach { entryPoint in
+                let error = getEntryPointError(
+                    entryPoint,
+                    router: defaultRouter(entryPoint).copy(verifiedProfilePayload: verifiedProfilePayload)
+                )
+
+                XCTAssertEqual(error.errorCode, VCLErrorCode.SdkError.rawValue)
+                XCTAssertEqual(error.statusCode, 200)
+                XCTAssertEqual(error.message, "Failed to parse verified profile payload.")
+            }
+        }
+    }
+
+    func testWrongIssuerOrVerifierServiceTypeMapsRequestUnauthorizedToLegacyErrorWithVerificationStatus() {
         entryPoints.forEach { entryPoint in
             let wrongServiceProfile = entryPoint == .issuing
                 ? VerifiedProfileMocks.VerifiedProfileInspectorJsonStr
@@ -347,7 +401,7 @@ final class ErrorTaxonomyBackwardCompatibilityBaselineTest: ErrorTaxonomyTestCas
         }
     }
 
-    func testJwtVerificationFailurePropagatesSdkErrorFromInjectedJwtService() {
+    func testJwtVerificationFailureMapsRequestInvalidToLegacyErrorFromInjectedJwtService() {
         let expectedError = VCLError(
             errorCode: VCLErrorCode.SdkError.rawValue,
             message: "jwt signature verification failed"

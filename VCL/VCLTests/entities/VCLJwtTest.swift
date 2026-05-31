@@ -17,16 +17,13 @@ final class VCLJwtTest: XCTestCase {
     let jwtStr = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
 
     func testEmptyJwt() {
-        subject = VCLJwt(encodedJwt: "")
-
-        assert(subject.header == nil)
-        assert(subject.payload == nil)
-        assert(subject.signature == nil)
-        assert(subject.encodedJwt == "")
+        XCTAssertThrowsError(try VCLJwt(encodedJwt: "")) { error in
+            XCTAssertEqual((error as? VCLError)?.message, "JWT must contain header, payload, and signature")
+        }
     }
 
-    func testJwt() {
-        subject = VCLJwt(encodedJwt: jwtStr)
+    func testJwt() throws {
+        subject = try VCLJwt(encodedJwt: jwtStr)
 
         assert(subject.header! == ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9".decodeBase64URL()?.toDictionary())!)
         assert(subject.payload! == ("eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ".decodeBase64URL()?.toDictionary())!)

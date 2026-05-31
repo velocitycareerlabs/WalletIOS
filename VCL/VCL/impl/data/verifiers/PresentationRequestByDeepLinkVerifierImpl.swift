@@ -15,24 +15,16 @@ final class PresentationRequestByDeepLinkVerifierImpl: PresentationRequestByDeep
         presentationRequest: VCLPresentationRequest,
         deepLink: VCLDeepLink,
         didDocument: VCLDidDocument,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Void>) -> Void
     ) {
-        guard let deepLinkDid = deepLink.did else {
-            onError(
-                errorMessage: "DID not found in deep link: \(deepLink.value)",
-                completionBlock: completionBlock
-            )
-            return
-        }
-
         if isDidBoundToDidDocument(
             presentationRequest.iss,
             didDocument: didDocument
         ) && isDidBoundToDidDocument(
-            deepLinkDid,
+            deepLink.did ?? "",
             didDocument: didDocument
         ) {
-            completionBlock(.success(true))
+            completionBlock(.success(()))
         } else {
             VCLLog.e("presentation request: \(presentationRequest.jwt.encodedJwt) \ndidDocument: \(didDocument)")
             completionBlock(.failure(VCLError(errorCode: VCLErrorCode.MismatchedPresentationRequestInspectorDid.rawValue)))
@@ -41,16 +33,5 @@ final class PresentationRequestByDeepLinkVerifierImpl: PresentationRequestByDeep
 
     private func isDidBoundToDidDocument(_ did: String, didDocument: VCLDidDocument) -> Bool {
         didDocument.id == did || didDocument.alsoKnownAs.contains(did)
-    }
-    
-    private func onError(
-        errorCode: VCLErrorCode = VCLErrorCode.SdkError,
-        errorMessage: String,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
-    ) {
-        VCLLog.e(errorMessage)
-        completionBlock(
-            (VCLResult.failure(VCLError(errorCode: errorCode.rawValue, message: errorMessage)))
-        )
     }
 }

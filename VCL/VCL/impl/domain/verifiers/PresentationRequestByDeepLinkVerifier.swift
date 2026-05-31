@@ -14,6 +14,6 @@ protocol PresentationRequestByDeepLinkVerifier {
         presentationRequest: VCLPresentationRequest,
         deepLink: VCLDeepLink,
         didDocument: VCLDidDocument,
-        completionBlock: @escaping (VCLResult<Bool>) -> Void
+        completionBlock: @escaping (VCLResult<Void>) -> Void
     )
 }

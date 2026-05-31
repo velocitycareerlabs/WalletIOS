@@ -149,7 +149,7 @@ class ErrorTaxonomyTestCase: XCTestCase {
         wait(for: [expectation], timeout: 5)
         XCTAssertNil(error, "getCredentialManifest failed: \(String(describing: error?.toDictionary()))")
         return result ?? VCLCredentialManifest(
-            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
+            jwt: try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
             verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary() ?? [:]),
             didJwk: DidJwkMocks.DidJwk
         )
@@ -211,6 +211,12 @@ class ErrorTaxonomyTestCase: XCTestCase {
         return encodedJwtWithHeader(encodedJwt, header: header)
     }
 
+    func encodedJwtWithoutIss(_ encodedJwt: String) -> String {
+        var payload = jwtPayload(encodedJwt)
+        payload.removeValue(forKey: VCLJwt.CodingKeys.KeyIss)
+        return encodedJwtWithPayload(encodedJwt, payload: payload)
+    }
+
     func encodedJwtWithKid(_ encodedJwt: String, kid: String) -> String {
         var header = jwtHeader(encodedJwt)
         header[VCLJwt.CodingKeys.KeyKid] = kid
@@ -222,10 +228,28 @@ class ErrorTaxonomyTestCase: XCTestCase {
         return parts.first?.decodeBase64URL()?.toDictionary() ?? [:]
     }
 
+    private func jwtPayload(_ encodedJwt: String) -> [String: Any] {
+        let parts = encodedJwt.components(separatedBy: ".")
+        guard parts.count > 1 else {
+            return [:]
+        }
+        return parts[1].decodeBase64URL()?.toDictionary() ?? [:]
+    }
+
     private func encodedJwtWithHeader(_ encodedJwt: String, header: [String: Any]) -> String {
         var parts = encodedJwt.components(separatedBy: ".")
         let data = (header.toJsonString() ?? "{}").data(using: .utf8) ?? Data()
         parts[0] = data.base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+        return parts.joined(separator: ".")
+    }
+
+    private func encodedJwtWithPayload(_ encodedJwt: String, payload: [String: Any]) -> String {
+        var parts = encodedJwt.components(separatedBy: ".")
+        let data = (payload.toJsonString() ?? "{}").data(using: .utf8) ?? Data()
+        parts[1] = data.base64EncodedString()
             .replacingOccurrences(of: "+", with: "-")
             .replacingOccurrences(of: "/", with: "_")
             .replacingOccurrences(of: "=", with: "")
@@ -376,6 +400,15 @@ extension ErrorTaxonomyTestCase.EntryPoint {
             return [VCLCredentialManifest.CodingKeys.KeyIssuingRequest: encodedJwt].toJsonString() ?? "{}"
         case .presentation:
             return [VCLPresentationRequest.CodingKeys.KeyPresentationRequest: encodedJwt].toJsonString() ?? "{}"
+        }
+    }
+
+    func requestPayload(value: Any) -> String {
+        switch self {
+        case .issuing:
+            return [VCLCredentialManifest.CodingKeys.KeyIssuingRequest: value].toJsonString() ?? "{}"
+        case .presentation:
+            return [VCLPresentationRequest.CodingKeys.KeyPresentationRequest: value].toJsonString() ?? "{}"
         }
     }
 }

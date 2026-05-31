@@ -114,6 +114,14 @@ enum ErrorTaxonomy {
                 requestKind: requestKind
             )
         }
+        if error.statusCode != 404 {
+            return error.withTaxonomy(
+                .RegistrationCheckInconclusive,
+                validationPhase: phaseRegistrationCheck,
+                requestDid: requestDid,
+                requestKind: requestKind
+            )
+        }
         return error.withTaxonomy(
             requestKind.notRegisteredCode,
             validationPhase: phaseRegistrationCheck,
@@ -171,6 +179,7 @@ enum ErrorTaxonomy {
         VCLErrorCode.VerifierDidUnresolvable.rawValue,
         VCLErrorCode.IssuerNotRegistered.rawValue,
         VCLErrorCode.VerifierNotRegistered.rawValue,
+        VCLErrorCode.RegistrationCheckInconclusive.rawValue,
         VCLErrorCode.IssuerRequestInvalid.rawValue,
         VCLErrorCode.VerifierRequestInvalid.rawValue,
         VCLErrorCode.IssuerRequestUnauthorized.rawValue,

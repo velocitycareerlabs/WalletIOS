@@ -29,5 +29,5 @@ class JwtServiceMocks {
 
     static let PublicJwk = VCLPublicJwk(valueStr: KeyServiceMocks.JWK)
 
-    static let JWT = VCLJwt(encodedJwt: SignedJwt)
+    static let JWT = try! VCLJwt(encodedJwt: SignedJwt)
 }

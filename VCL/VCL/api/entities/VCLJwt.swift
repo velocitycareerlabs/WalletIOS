@@ -27,23 +27,7 @@ public struct VCLJwt {
         initialize(header: header, payload: payload, signature: signature, encodedJwt: encodedJwt)
     }
 
-    public init(encodedJwt: String) {
-        let decodedJwt = encodedJwt.decodeJwtBase64Url()
-        if decodedJwt.count == 3 {
-            initialize(
-                header: decodedJwt[0]?.toDictionary(),
-                payload: decodedJwt[1]?.toDictionary(),
-                signature: decodedJwt[2],
-                encodedJwt: encodedJwt
-            )
-        } else {
-            initialize(
-                encodedJwt: encodedJwt
-            )
-        }
-    }
-
-    public init(validatedEncodedJwt encodedJwt: String) throws {
+    public init(encodedJwt: String) throws {
         let jwtParts = encodedJwt.split(separator: ".", omittingEmptySubsequences: false).map { String($0) }
         guard jwtParts.count == 3 else {
             throw VCLError(message: "JWT must contain header, payload, and signature")
@@ -63,6 +47,10 @@ public struct VCLJwt {
             signature: jwtParts[2],
             encodedJwt: encodedJwt
         )
+    }
+
+    public init(validatedEncodedJwt encodedJwt: String) throws {
+        try self.init(encodedJwt: encodedJwt)
     }
 
     private mutating func initialize(

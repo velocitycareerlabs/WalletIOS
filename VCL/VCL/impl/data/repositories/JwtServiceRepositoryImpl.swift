@@ -27,7 +27,7 @@ final class JwtServiceRepositoryImpl: JwtServiceRepository {
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
         do {
-            completionBlock(.success(try VCLJwt(validatedEncodedJwt: encodedJwt)))
+            completionBlock(.success(try VCLJwt(encodedJwt: encodedJwt)))
         } catch {
             completionBlock(.failure(VCLError(error: error)))
         }

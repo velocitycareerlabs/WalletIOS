@@ -21,8 +21,8 @@ final class FinalizeOffersUseCaseTest: XCTestCase {
     private var credentialManifestPassed: VCLCredentialManifest!
     private var finalizeOffersDescriptorFailed: VCLFinalizeOffersDescriptor!
     private var finalizeOffersDescriptorPassed: VCLFinalizeOffersDescriptor!
-    private let vclJwtFailed = VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1)
-    private let vclJwtPassed = VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromRegularIssuer)
+    private let vclJwtFailed = try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1)
+    private let vclJwtPassed = try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromRegularIssuer)
     private let credentialsAmount = CredentialMocks.JwtCredentialsFromRegularIssuer.toList()?.count
     
     override func setUp() {

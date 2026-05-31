@@ -1154,14 +1154,14 @@
 			path = entities;
 			sourceTree = "<group>";
 		};
-		283AF0022DED000000000001 /* backwardscompatibility */ = {
+		283AF0022DED000000000001 /* integration */ = {
 			isa = PBXGroup;
 			children = (
 				283AF0202DED000000000001 /* ErrorTaxonomyTestHarness.swift */,
 				283AF0002DED000000000001 /* ErrorTaxonomyBackwardCompatibilityBaselineTest.swift */,
 				283AF0102DED000000000001 /* ErrorTaxonomyContractTest.swift */,
 			);
-			path = backwardscompatibility;
+			path = integration;
 			sourceTree = "<group>";
 		};
 		28905A7C2ACC1D4E0011B7FE /* local */ = {
@@ -1217,7 +1217,7 @@
 		289A536D264D647200B84389 /* VCLTests */ = {
 			isa = PBXGroup;
 			children = (
-				283AF0022DED000000000001 /* backwardscompatibility */,
+				283AF0022DED000000000001 /* integration */,
 				288405FA26C925F10030E967 /* entities */,
 				284BF89C270EDE8700030401 /* GlobalConfigTest.swift */,
 				289A5370264D647200B84389 /* Info.plist */,

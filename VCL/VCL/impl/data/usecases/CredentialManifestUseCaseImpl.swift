@@ -80,6 +80,10 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                     didJwk: credentialManifestDescriptor.didJwk,
                     remoteCryptoServicesToken: credentialManifestDescriptor.remoteCryptoServicesToken
                 )
+                guard credentialManifest.iss.isEmpty == false else {
+                    self.onError(missingJwtIssError(), completionBlock)
+                    return
+                }
                 self.resolveCredentialManifestDid(
                     credentialManifest,
                     completionBlock
@@ -186,6 +190,14 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
         )
     }
 
+    private func missingJwtIssError() -> VCLError {
+        ErrorTaxonomy.classifyRequestValidation(
+            VCLError(message: "JWT iss is missing"),
+            requestKind: ErrorTaxonomy.requestKindIssuing,
+            requestDid: nil
+        )
+    }
+
     private func unresolvedJwtKeyError(kid: String, requestDid: String?) -> VCLError {
         ErrorTaxonomy.classifyRequestValidation(
             VCLError(message: "public jwk not found for kid: \(kid)"),
@@ -206,15 +218,10 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
                 didDocument: didDocument
             ) { [weak self] in
                 do {
-                    let isVerified = try $0.get()
-                    VCLLog.d(
-                        "Credential manifest deep link verification result: \(isVerified)"
-                    )
-                    self?.onVerificationSuccess(
-                        isVerified,
-                        credentialManifest,
-                        completionBlock
-                    )
+                    try $0.get()
+                    self?.executor.runOnMain {
+                        completionBlock(.success(credentialManifest))
+                    }
                 }
                 catch {
                     self?.onError(
@@ -232,27 +239,6 @@ final class CredentialManifestUseCaseImpl: CredentialManifestUseCase {
             executor.runOnMain {
                 completionBlock(VCLResult.success(credentialManifest))
             }
-        }
-    }
-
-    private func onVerificationSuccess(
-        _ isVerified: Bool,
-        _ credentialManifest: VCLCredentialManifest,
-        _ completionBlock: @escaping (VCLResult<VCLCredentialManifest>) -> Void
-    ) {
-        if (isVerified) {
-            executor.runOnMain {
-                completionBlock(VCLResult.success(credentialManifest))
-            }
-        } else {
-            onError(
-                ErrorTaxonomy.classifyRequestValidation(
-                    VCLError(error: "Failed to verify credentialManifest jwt:\n\(credentialManifest.jwt)"),
-                    requestKind: ErrorTaxonomy.requestKindIssuing,
-                    requestDid: credentialManifest.iss
-                ),
-                completionBlock
-            )
         }
     }
 

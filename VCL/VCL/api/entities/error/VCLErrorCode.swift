@@ -36,6 +36,7 @@ public enum VCLErrorCode: String {
     case VerifierDidUnresolvable = "verifier_did_unresolvable"
     case IssuerNotRegistered = "issuer_not_registered"
     case VerifierNotRegistered = "verifier_not_registered"
+    case RegistrationCheckInconclusive = "registration_check_inconclusive"
     case IssuerRequestInvalid = "issuer_request_invalid"
     case VerifierRequestInvalid = "verifier_request_invalid"
     case IssuerRequestUnauthorized = "issuer_request_unauthorized"

@@ -191,7 +191,7 @@ final class ErrorTaxonomyContractTest: ErrorTaxonomyTestCase {
         }
     }
 
-    func testPlainTextRequestEndpointRejectionsDefaultToSdkErrorWithHttpStatusAndPayloadMessage() {
+    func testPlainTextRequestEndpointRejectionsReturnClientRequestRejectedWithHttpStatusAndPayloadMessage() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -209,7 +209,7 @@ final class ErrorTaxonomyContractTest: ErrorTaxonomyTestCase {
         }
     }
 
-    func testJsonRequestEndpointRejectionsWithoutErrorCodeDefaultToSdkError() {
+    func testJsonRequestEndpointRejectionsWithoutErrorCodeReturnClientRequestRejected() {
         var payloadWithoutErrorCode = ErrorMocks.Payload.toDictionary()!
         payloadWithoutErrorCode.removeValue(forKey: VCLError.CodingKeys.KeyErrorCode)
 
@@ -230,36 +230,49 @@ final class ErrorTaxonomyContractTest: ErrorTaxonomyTestCase {
         }
     }
 
-    func testEmptyRequestEndpointResponseReturnsSdkError() {
+    func testEmptyRequestEndpointResponseReturnsIssuerOrVerifierRequestInvalid() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
                 router: defaultRouter(entryPoint).copy(requestPayload: "")
             )
 
-            assertTaxonomy(error, code: .ClientRequestRejected, phase: ErrorTaxonomy.phaseClientRequestFetch, kind: entryPoint.requestKind)
+            assertTaxonomy(error, code: entryPoint.requestInvalidCode, phase: ErrorTaxonomy.phaseRequestValidation, kind: entryPoint.requestKind)
+            XCTAssertEqual(error.sourceErrorCode, VCLErrorCode.SdkError.rawValue)
+            XCTAssertEqual(error.message, "JWT must contain header, payload, and signature")
         }
     }
 
-    func testMalformedRequestEndpointResponseReturnsSdkError() {
+    func testMalformedRequestEndpointResponseReturnsIssuerOrVerifierRequestInvalid() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
                 router: defaultRouter(entryPoint).copy(requestPayload: "not json")
             )
 
-            assertTaxonomy(error, code: .ClientRequestRejected, phase: ErrorTaxonomy.phaseClientRequestFetch, kind: entryPoint.requestKind)
+            assertTaxonomy(error, code: entryPoint.requestInvalidCode, phase: ErrorTaxonomy.phaseRequestValidation, kind: entryPoint.requestKind)
+            XCTAssertEqual(error.sourceErrorCode, VCLErrorCode.SdkError.rawValue)
+            XCTAssertEqual(error.message, "JWT must contain header, payload, and signature")
         }
     }
 
-    func testMissingExpectedRequestFieldsReturnSdkErrorAfterEmptyJwtIsDecoded() {
+    func testEmptyOrUnextractableRequestPayloadsReturnIssuerOrVerifierRequestInvalid() {
         entryPoints.forEach { entryPoint in
-            let error = getEntryPointError(
-                entryPoint,
-                router: defaultRouter(entryPoint).copy(requestPayload: "{}")
-            )
+            [
+                "{}",
+                #"{"unexpected":"value"}"#,
+                entryPoint.requestPayload(for: ""),
+                entryPoint.requestPayload(value: 123)
+            ].forEach { requestPayload in
+                let error = getEntryPointError(
+                    entryPoint,
+                    router: defaultRouter(entryPoint).copy(requestPayload: requestPayload)
+                )
 
-            assertTaxonomy(error, code: .ClientRequestRejected, phase: ErrorTaxonomy.phaseClientRequestFetch, kind: entryPoint.requestKind)
+                assertTaxonomy(error, code: entryPoint.requestInvalidCode, phase: ErrorTaxonomy.phaseRequestValidation, kind: entryPoint.requestKind)
+                XCTAssertEqual(error.sourceErrorCode, VCLErrorCode.SdkError.rawValue)
+                XCTAssertEqual(error.message, "JWT must contain header, payload, and signature")
+            }
         }
     }
 
@@ -274,7 +287,7 @@ final class ErrorTaxonomyContractTest: ErrorTaxonomyTestCase {
         XCTAssertEqual(credentialManifest.did, DeepLinkMocks.IssuerDid)
     }
 
-    func testDidResolutionNetworkFailurePropagatesSdkErrorAndStatusFromNetwork() {
+    func testDidResolutionNetworkFailurePropagatesDidUnresolvableAndStatusFromNetwork() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -291,7 +304,7 @@ final class ErrorTaxonomyContractTest: ErrorTaxonomyTestCase {
         }
     }
 
-    func testInvalidDidDocumentShapeReturnsSdkErrorAtRequestValidation() {
+    func testInvalidDidDocumentShapeReturnsDidUnresolvable() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -303,7 +316,7 @@ final class ErrorTaxonomyContractTest: ErrorTaxonomyTestCase {
         }
     }
 
-    func testMissingDidDocumentVerificationMaterialReturnsSdkError() {
+    func testMissingDidDocumentVerificationMaterialReturnsDidUnresolvable() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -344,6 +357,20 @@ final class ErrorTaxonomyContractTest: ErrorTaxonomyTestCase {
         }
     }
 
+    func testMissingJwtIssReturnsRequestInvalid() {
+        entryPoints.forEach { entryPoint in
+            let error = getEntryPointError(
+                entryPoint,
+                router: defaultRouter(entryPoint).copy(
+                    requestPayload: entryPoint.requestPayload(for: encodedJwtWithoutIss(entryPoint.defaultRequestJwt))
+                )
+            )
+
+            assertTaxonomy(error, code: entryPoint.requestInvalidCode, phase: ErrorTaxonomy.phaseRequestValidation, kind: entryPoint.requestKind)
+            XCTAssertEqual(error.message, "JWT iss is missing")
+        }
+    }
+
     func testMalformedRequestJwtReturnsRequestInvalid() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
@@ -374,7 +401,7 @@ final class ErrorTaxonomyContractTest: ErrorTaxonomyTestCase {
         }
     }
 
-    func testVerifiedProfileLookupFailurePropagatesNetworkErrorDetails() {
+    func testVerifiedProfile404ReturnsIssuerOrVerifierNotRegistered() {
         entryPoints.forEach { entryPoint in
             let error = getEntryPointError(
                 entryPoint,
@@ -391,20 +418,67 @@ final class ErrorTaxonomyContractTest: ErrorTaxonomyTestCase {
         }
     }
 
-    func testEmptyVerifiedProfileFailsServiceTypeVerification() {
+    func testVerifiedProfile5xxReturnsRegistrationCheckInconclusive() {
         entryPoints.forEach { entryPoint in
-            let error = getEntryPointError(
-                entryPoint,
-                router: defaultRouter(entryPoint).copy(verifiedProfilePayload: "{}")
-            )
+            [500, 503].forEach { statusCode in
+                let error = getEntryPointError(
+                    entryPoint,
+                    router: defaultRouter(entryPoint).copy(
+                        verifiedProfilePayload: #"{"message":"service unavailable","errorCode":"server_error"}"#,
+                        verifiedProfileStatusCode: statusCode,
+                        verifiedProfileContentType: Request.ContentType.ApplicationJson.rawValue
+                    )
+                )
 
-            assertTaxonomy(error, code: entryPoint.requestUnauthorizedCode, phase: ErrorTaxonomy.phaseRequestAuthorization, kind: entryPoint.requestKind)
-            XCTAssertEqual(error.statusCode, VCLStatusCode.VerificationError.rawValue)
-            XCTAssertTrue(error.message?.contains("Wrong service type") == true)
+                assertTaxonomy(error, code: .RegistrationCheckInconclusive, phase: ErrorTaxonomy.phaseRegistrationCheck, kind: entryPoint.requestKind)
+                XCTAssertEqual(error.statusCode, statusCode)
+                XCTAssertEqual(error.sourceErrorCode, "server_error")
+                XCTAssertEqual(error.message, "service unavailable")
+            }
         }
     }
 
-    func testWrongIssuerOrVerifierServiceTypeReturnsSdkErrorWithVerificationStatus() {
+    func testUnexpectedVerifiedProfile4xxReturnsRegistrationCheckInconclusive() {
+        entryPoints.forEach { entryPoint in
+            [400, 401, 403, 409, 422, 429].forEach { statusCode in
+                let error = getEntryPointError(
+                    entryPoint,
+                    router: defaultRouter(entryPoint).copy(
+                        verifiedProfilePayload: #"{"message":"unexpected profile rejection","errorCode":"profile_rejected"}"#,
+                        verifiedProfileStatusCode: statusCode,
+                        verifiedProfileContentType: Request.ContentType.ApplicationJson.rawValue
+                    )
+                )
+
+                assertTaxonomy(error, code: .RegistrationCheckInconclusive, phase: ErrorTaxonomy.phaseRegistrationCheck, kind: entryPoint.requestKind)
+                XCTAssertEqual(error.statusCode, statusCode)
+                XCTAssertEqual(error.sourceErrorCode, "profile_rejected")
+                XCTAssertEqual(error.message, "unexpected profile rejection")
+            }
+        }
+    }
+
+    func testMalformedOrEmptyVerifiedProfile200ReturnsRegistrationCheckInconclusive() {
+        [
+            "{}",
+            "",
+            "not json"
+        ].forEach { verifiedProfilePayload in
+            entryPoints.forEach { entryPoint in
+                let error = getEntryPointError(
+                    entryPoint,
+                    router: defaultRouter(entryPoint).copy(verifiedProfilePayload: verifiedProfilePayload)
+                )
+
+                assertTaxonomy(error, code: .RegistrationCheckInconclusive, phase: ErrorTaxonomy.phaseRegistrationCheck, kind: entryPoint.requestKind)
+                XCTAssertEqual(error.statusCode, 200)
+                XCTAssertEqual(error.sourceErrorCode, VCLErrorCode.SdkError.rawValue)
+                XCTAssertEqual(error.message, "Failed to parse verified profile payload.")
+            }
+        }
+    }
+
+    func testWrongIssuerOrVerifierServiceTypeReturnsRequestUnauthorizedWithVerificationStatus() {
         entryPoints.forEach { entryPoint in
             let wrongServiceProfile = entryPoint == .issuing
                 ? VerifiedProfileMocks.VerifiedProfileInspectorJsonStr
@@ -480,7 +554,7 @@ final class ErrorTaxonomyContractTest: ErrorTaxonomyTestCase {
         }
     }
 
-    func testJwtVerificationFailurePropagatesSdkErrorFromInjectedJwtService() {
+    func testJwtVerificationFailurePropagatesRequestInvalidFromInjectedJwtService() {
         let expectedError = VCLError(
             errorCode: VCLErrorCode.SdkError.rawValue,
             message: "jwt signature verification failed"

@@ -53,7 +53,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
     
     func setUpSubjectProperties() {
         credentialManifestWithoutPermittedServices = VCLCredentialManifest(
-            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromNotaryIssuer),
+            jwt: try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromNotaryIssuer),
             verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileWithoutServices.toDictionary()!),
             didJwk: DidJwkMocks.DidJwk
         )
@@ -65,7 +65,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         credentialManifestFromNotaryIssuer = VCLCredentialManifest(
-            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromNotaryIssuer),
+            jwt: try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromNotaryIssuer),
             verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfNotaryIssuer.toDictionary()!),
             didJwk: DidJwkMocks.DidJwk
         )
@@ -77,7 +77,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         credentialManifestFromRegularIssuer = VCLCredentialManifest(
-            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromRegularIssuer),
+            jwt: try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromRegularIssuer),
             verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfRegularIssuer.toDictionary()!),
             didJwk: DidJwkMocks.DidJwk
         )
@@ -89,7 +89,7 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
 
         credentialManifestFromIdentityIssuer = VCLCredentialManifest(
-            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromRegularIssuer),
+            jwt: try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromRegularIssuer),
             verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfIdentityIssuer.toDictionary()!),
             didJwk: DidJwkMocks.DidJwk
         )
@@ -101,12 +101,12 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
         
         CredentialManifestForValidCredentialMicrsoftQa = VCLCredentialManifest(
-            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestForValidCredentialMicrsoftQa),
+            jwt: try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestForValidCredentialMicrsoftQa),
             verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerInspectorMicrosoftQa.toDictionary()!),
             didJwk: DidJwkMocks.DidJwk
         )
         CredentialManifestForInvalidCredentialMicrsoftQa = VCLCredentialManifest(
-            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestForInvalidCredentialMicrsoftQa),
+            jwt: try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestForInvalidCredentialMicrsoftQa),
             verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerInspectorMicrosoftQa.toDictionary()!),
             didJwk: DidJwkMocks.DidJwk
         )

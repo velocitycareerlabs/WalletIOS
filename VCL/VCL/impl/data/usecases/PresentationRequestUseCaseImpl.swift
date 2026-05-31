@@ -79,6 +79,10 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                     didJwk: presentationRequestDescriptor.didJwk,
                     remoteCryptoServicesToken: presentationRequestDescriptor.remoteCryptoServicesToken
                 )
+                guard presentationRequest.iss.isEmpty == false else {
+                    self.onError(missingJwtIssError(), completionBlock)
+                    return
+                }
                 self.resolvePresentationRequestDid(
                     presentationRequest,
                     completionBlock
@@ -153,13 +157,10 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
                     didDocument: didDocument
                 ) { byDeepLinkVerificationRes in
                     do {
-                        let isVerified = try byDeepLinkVerificationRes.get()
-                        VCLLog.d("Presentation request by deep link verification result: \(isVerified)")
-                        self?.onVerificationSuccess(
-                            isVerified,
-                            presentationRequest,
-                            completionBlock
-                        )
+                        try byDeepLinkVerificationRes.get()
+                        self?.executor.runOnMain {
+                            completionBlock(.success(presentationRequest))
+                        }
                     }catch {
                         self?.onError(
                             ErrorTaxonomy.classifyRequestValidation(
@@ -206,33 +207,20 @@ final class PresentationRequestUseCaseImpl: PresentationRequestUseCase {
         )
     }
 
+    private func missingJwtIssError() -> VCLError {
+        ErrorTaxonomy.classifyRequestValidation(
+            VCLError(message: "JWT iss is missing"),
+            requestKind: ErrorTaxonomy.requestKindPresentation,
+            requestDid: nil
+        )
+    }
+
     private func unresolvedJwtKeyError(kid: String, requestDid: String?) -> VCLError {
         ErrorTaxonomy.classifyRequestValidation(
             VCLError(message: "public jwk not found for kid: \(kid)"),
             requestKind: ErrorTaxonomy.requestKindPresentation,
             requestDid: requestDid
         )
-    }
-
-    private func onVerificationSuccess(
-        _ isVerified: Bool,
-        _ presentationRequest: VCLPresentationRequest,
-        _ completionBlock: @escaping (VCLResult<VCLPresentationRequest>) -> Void
-    ) {
-        if isVerified == true {
-            executor.runOnMain {
-                completionBlock(.success(presentationRequest))
-            }
-        } else {
-            onError(
-                ErrorTaxonomy.classifyRequestValidation(
-                    VCLError(message: "Failed  to verify: \(presentationRequest.jwt.payload ?? [:])"),
-                    requestKind: ErrorTaxonomy.requestKindPresentation,
-                    requestDid: presentationRequest.iss
-                ),
-                completionBlock
-            )
-        }
     }
 
     private func onError(
