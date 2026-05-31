@@ -233,8 +233,8 @@ extension String {
             return nil
         }
 
-        return encodedCredentialList.map { jwtEncodedCredential in
-            VCLJwt(encodedJwt: jwtEncodedCredential as? String ?? "")
+        return encodedCredentialList.compactMap { jwtEncodedCredential in
+            try? VCLJwt(encodedJwt: jwtEncodedCredential as? String ?? "")
         }
     }
     

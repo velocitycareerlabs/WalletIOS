@@ -84,10 +84,12 @@ final class PresentationRequestUseCaseTest: XCTestCase {
         ) {
             do  {
                 let _ = try $0.get()
-                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
+                XCTFail("\(VCLErrorCode.VerifierRequestInvalid.rawValue) error code is expected")
             }
             catch {
-                assert((error as! VCLError).errorCode == VCLErrorCode.SdkError.rawValue)
+                let error = error as? VCLError
+                XCTAssertEqual(error?.errorCode, VCLErrorCode.VerifierRequestInvalid.rawValue)
+                XCTAssertEqual(error?.validationPhase, ErrorTaxonomy.phaseRequestValidation)
             }
         }
     }

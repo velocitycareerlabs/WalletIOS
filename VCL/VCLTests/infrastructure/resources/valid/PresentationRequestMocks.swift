@@ -20,11 +20,11 @@ class PresentationRequestMocks {
     static let EncodedPresentationRequestResponse =
         "{\"presentation_request\":\"\(EncodedPresentationRequest)\"}"
 
-    static let PresentationRequestJwt = VCLJwt(
+    static let PresentationRequestJwt = try! VCLJwt(
         encodedJwt: EncodedPresentationRequest
     )
 
-    static let PresentationRequestFeedJwt = VCLJwt(
+    static let PresentationRequestFeedJwt = try! VCLJwt(
         encodedJwt: EncodedPresentationRequestFeed
     )
     

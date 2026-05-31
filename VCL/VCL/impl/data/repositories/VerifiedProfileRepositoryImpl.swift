@@ -28,10 +28,14 @@ final class VerifiedProfileRepositoryImpl: VerifiedProfileRepository {
             cachePolicy: .useProtocolCachePolicy
         ) { verifiedProfileResult in
                 do {
-                    if let verifiedProfileDict = try verifiedProfileResult.get().payload.toDictionary() {
+                    let response = try verifiedProfileResult.get()
+                    if let verifiedProfileDict = response.payload.toDictionary(), !verifiedProfileDict.isEmpty {
                         completionBlock(VCLResult.success(VCLVerifiedProfile(payload: verifiedProfileDict)))
                     } else {
-                        completionBlock(VCLResult.failure(VCLError(message: "Failed to parse verified profile payload.")))
+                        completionBlock(VCLResult.failure(VCLError(
+                            message: "Failed to parse verified profile payload.",
+                            statusCode: response.code
+                        )))
                     }
                 } catch {
                     completionBlock(.failure(VCLError(error: error)))

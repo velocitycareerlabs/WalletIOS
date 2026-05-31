@@ -94,6 +94,7 @@ final class NetworkServiceImpl: NetworkService {
         }
         
         return VCLError(
+            payload: errorPayload.isEmpty ? nil : errorPayload,
             message: errorPayload.isEmpty ? nil : errorPayload,
             statusCode: statusCode
         )

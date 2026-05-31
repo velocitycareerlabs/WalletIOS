@@ -16,8 +16,8 @@ class TokenMocks {
     public static let TokenStr2 =
         "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksiLCJraWQiOiIjZXhjaGFuZ2Uta2V5LTEifQ.eyJuYmYiOjE3NDQwMjMwODksImp0aSI6Im5OZEhWRktyaDk2ZjJWWXFzN29UZiIsImlzcyI6ImRpZDp3ZWI6ZGV2cmVnaXN0cmFyLnZlbG9jaXR5bmV0d29yay5mb3VuZGF0aW9uOmQ6ZXhhbXBsZS0yMS5jb20tOGI4MmNlOWEiLCJhdWQiOiJkaWQ6d2ViOmRldnJlZ2lzdHJhci52ZWxvY2l0eW5ldHdvcmsuZm91bmRhdGlvbjpkOmV4YW1wbGUtMjEuY29tLThiODJjZTlhIiwiZXhwIjoxNzQ0NjI3ODg5LCJzdWIiOiI2NjZhZTExODE5MjVmNmE0YTQ5N2RiYmMiLCJpYXQiOjE3NDQwMjMwODl9.j7Wp9DaHc6ZiFftfEf6sydy_LD73i6LW-oRoj_raOBEj4WVU3r4Qzpv8bgVUTd5_YGeZC_w2HHHRZOWOHLdJCg"
 
-    public static let TokenJwt1 = VCLJwt(encodedJwt: TokenMocks.TokenStr1)
-    public static let TokenJwt2 = VCLJwt(encodedJwt: TokenMocks.TokenStr2)
+    public static let TokenJwt1 = try! VCLJwt(encodedJwt: TokenMocks.TokenStr1)
+    public static let TokenJwt2 = try! VCLJwt(encodedJwt: TokenMocks.TokenStr2)
     
     public static let AuthTokenStr = "{\"access_token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksiLCJraWQiOiIjZXhjaGFuZ2Uta2V5LTEifQ.eyJuYmYiOjE3NDU3NDEwMDIsImp0aSI6IlE3aHZuM3BBXzJ5dUNIQl8tSEppWSIsImlzcyI6ImRpZDp3ZWI6ZGV2cmVnaXN0cmFyLnZlbG9jaXR5bmV0d29yay5mb3VuZGF0aW9uOmQ6ZXhhbXBsZS0yMS5jb20tOGI4MmNlOWEiLCJhdWQiOiJkaWQ6d2ViOmRldnJlZ2lzdHJhci52ZWxvY2l0eW5ldHdvcmsuZm91bmRhdGlvbjpkOmV4YW1wbGUtMjEuY29tLThiODJjZTlhIiwiZXhwIjoxNzQ1NzQxMDE3LCJzdWIiOiI2NjZhZTExODE5MjVmNmE0YTQ5N2RiYmMiLCJpYXQiOjE3NDU3NDEwMDJ9.awjYaf_2VqzNs_A3Ox3JlC8aNftGdW10oEkO5uoVEfklDlVBI_cXkH0vajeXF4EUXYWql2-c2lslIh94ASmVyg\",\"token_type\":\"Bearer\",\"refresh_token\":\"d9bb90b98fced3df74b7ec7cef1da44bf02bcd466688182178b798bb46a0195c5e1dd88bc57aa7085582ee686ffc968b31610807fd3158b41638484e4a68ef3d\"}"
     public static let AuthToken = VCLAuthToken(

@@ -18,6 +18,11 @@ class VCLJwtSignServiceMock: VCLJwtSignService {
         remoteCryptoServicesToken: VCLToken?,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
-        completionBlock(.success(VCLJwt(encodedJwt: "")))
+        completionBlock(.success(VCLJwt(
+            header: nil,
+            payload: nil,
+            signature: nil,
+            encodedJwt: ""
+        )))
     }
 }

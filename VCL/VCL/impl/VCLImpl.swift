@@ -35,6 +35,21 @@ public final class VCLImpl: VCL {
     private let initializationWatcher = InitializationWatcher(initAmount: VCLImpl.ModelsToInitializeAmount)
     private var profileServiceTypeVerifier: ProfileServiceTypeVerifier?
     private let networkServiceFactory: () -> NetworkService
+    private let presentationRequestDescriptorValidator = PublicRequestDescriptorValidator(
+        config: PublicRequestDescriptorValidator.Config(
+            requestKind: ErrorTaxonomy.requestKindPresentation,
+            expectedPath: "inspect",
+            requireDeepLink: true
+        )
+    )
+    private let credentialManifestDescriptorValidator = PublicRequestDescriptorValidator(
+        config: PublicRequestDescriptorValidator.Config(
+            requestKind: ErrorTaxonomy.requestKindIssuing,
+            expectedPath: "issue",
+            requireDeepLink: false
+        )
+    )
+    private let errorTaxonomyCompatibilityMapper = ErrorTaxonomyCompatibilityMapper()
 
     init(networkServiceFactory: @escaping () -> NetworkService = { NetworkServiceImpl() }) {
         self.networkServiceFactory = networkServiceFactory
@@ -215,34 +230,48 @@ public final class VCLImpl: VCL {
         successHandler: @escaping (VCLPresentationRequest) -> Void,
         errorHandler: @escaping (VCLError) -> Void
     ) {
-        if let did = presentationRequestDescriptor.did {
-            profileServiceTypeVerifier?.verifyServiceTypeOfVerifiedProfile(
-                verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: did),
-                expectedServiceTypes: VCLServiceTypes(serviceType: VCLServiceType.Inspector),
-                successHandler: { [weak self] verifiedProfile in
-                    guard let self = self else { return }
-                    self.presentationRequestUseCase.getPresentationRequest(
-                        presentationRequestDescriptor: presentationRequestDescriptor,
-                        verifiedProfile: verifiedProfile
-                    ) { presentationRequestResult in
-                        do {
-                            successHandler(try presentationRequestResult.get())
-                        } catch {
-                            self.logError(message: "getPresentationRequest", error: error)
-                            errorHandler(VCLError(error: error))
-                        }
-                    }
-                },
-                errorHandler: { [weak self] in
-                    self?.logError(message: "profile verification failed", error: $0)
-                    errorHandler($0)
-                }
-            )
-        } else {
-            let error = VCLError(message: "did was not found in ֿ\(presentationRequestDescriptor)")
-            logError(message: "getPresentationRequest::verifiedProfile", error: error)
-            errorHandler(error)
+        if let error = presentationRequestDescriptorValidator.validate(presentationRequestDescriptor) {
+            logError(message: "getPresentationRequest::descriptorValidation", error: error)
+            errorHandler(toPublicError(
+                error,
+                requestKind: ErrorTaxonomy.requestKindPresentation
+            ))
+            return
         }
+        let did = presentationRequestDescriptor.did!
+        profileServiceTypeVerifier?.verifyServiceTypeOfVerifiedProfile(
+            verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: did),
+            expectedServiceTypes: VCLServiceTypes(serviceType: VCLServiceType.Inspector),
+            successHandler: { [weak self] verifiedProfile in
+                guard let self = self else { return }
+                self.presentationRequestUseCase.getPresentationRequest(
+                    presentationRequestDescriptor: presentationRequestDescriptor,
+                    verifiedProfile: verifiedProfile
+                ) { presentationRequestResult in
+                    do {
+                        successHandler(try presentationRequestResult.get())
+                    } catch {
+                        self.logError(message: "getPresentationRequest", error: error)
+                        errorHandler(self.toPublicError(
+                            VCLError(error: error),
+                            requestKind: ErrorTaxonomy.requestKindPresentation
+                        ))
+                    }
+                }
+            },
+            errorHandler: { [weak self] in
+                let taxonomyError = self?.classifyProfileVerificationError(
+                    $0,
+                    requestKind: ErrorTaxonomy.requestKindPresentation,
+                    requestDid: did
+                ) ?? $0
+                self?.logError(message: "profile verification failed", error: taxonomyError)
+                errorHandler(self?.toPublicError(
+                    taxonomyError,
+                    requestKind: ErrorTaxonomy.requestKindPresentation
+                ) ?? taxonomyError)
+            }
+        )
     }
     
     public func submitPresentation(
@@ -305,34 +334,48 @@ public final class VCLImpl: VCL {
         errorHandler: @escaping (VCLError) -> Void
     ) {
         VCLLog.d("credentialManifestDescriptor: \(credentialManifestDescriptor.toPropsString())")
-        if let did = credentialManifestDescriptor.did {
-            profileServiceTypeVerifier?.verifyServiceTypeOfVerifiedProfile(
-                verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: did),
-                expectedServiceTypes: VCLServiceTypes(issuingType: credentialManifestDescriptor.issuingType),
-                successHandler: { [weak self] verifiedProfile in
-                    self?.credentialManifestUseCase.getCredentialManifest(
-                        credentialManifestDescriptor: credentialManifestDescriptor,
-                        verifiedProfile: verifiedProfile
-                    ) { [weak self] credentialManifestResult in
-                        do {
-                            successHandler(try credentialManifestResult.get())
-                        }
-                        catch {
-                            self?.logError(message: "getCredentialManifest", error: error)
-                            errorHandler(VCLError(error: error))
-                        }
-                    }
-                },
-                errorHandler: { [weak self] in
-                    self?.logError(message: "profile verification failed", error: $0)
-                    errorHandler($0)
-                }
-            )
-        } else {
-            let error = VCLError(message: "did was not found in \(credentialManifestDescriptor)")
-            logError(message: "getCredentialManifest::verifiedProfile", error: error)
-            errorHandler(error)
+        if let error = credentialManifestDescriptorValidator.validate(credentialManifestDescriptor) {
+            logError(message: "getCredentialManifest::descriptorValidation", error: error)
+            errorHandler(toPublicError(
+                error,
+                requestKind: ErrorTaxonomy.requestKindIssuing
+            ))
+            return
         }
+        let did = credentialManifestDescriptor.did!
+        profileServiceTypeVerifier?.verifyServiceTypeOfVerifiedProfile(
+            verifiedProfileDescriptor: VCLVerifiedProfileDescriptor(did: did),
+            expectedServiceTypes: VCLServiceTypes(issuingType: credentialManifestDescriptor.issuingType),
+            successHandler: { [weak self] verifiedProfile in
+                self?.credentialManifestUseCase.getCredentialManifest(
+                    credentialManifestDescriptor: credentialManifestDescriptor,
+                    verifiedProfile: verifiedProfile
+                ) { [weak self] credentialManifestResult in
+                    do {
+                        successHandler(try credentialManifestResult.get())
+                    }
+                    catch {
+                        self?.logError(message: "getCredentialManifest", error: error)
+                        errorHandler(self?.toPublicError(
+                            VCLError(error: error),
+                            requestKind: ErrorTaxonomy.requestKindIssuing
+                        ) ?? VCLError(error: error))
+                    }
+                }
+            },
+            errorHandler: { [weak self] in
+                let taxonomyError = self?.classifyProfileVerificationError(
+                    $0,
+                    requestKind: ErrorTaxonomy.requestKindIssuing,
+                    requestDid: did
+                ) ?? $0
+                self?.logError(message: "profile verification failed", error: taxonomyError)
+                errorHandler(self?.toPublicError(
+                    taxonomyError,
+                    requestKind: ErrorTaxonomy.requestKindIssuing
+                ) ?? taxonomyError)
+            }
+        )
     }
     
     public func generateOffers(
@@ -547,6 +590,23 @@ public final class VCLImpl: VCL {
 }
 
 extension VCLImpl {
+    func classifyProfileVerificationError(_ error: VCLError, requestKind: String, requestDid: String?) -> VCLError {
+        if error.sourceErrorCode == ProfileServiceTypeVerifier.sourceWrongServiceType {
+            return ErrorTaxonomy.classifyServiceAuthorization(error, requestKind: requestKind, requestDid: requestDid)
+        }
+        return ErrorTaxonomy.classifyRegistration(error, requestKind: requestKind, requestDid: requestDid)
+    }
+    
+    func toPublicError(_ error: VCLError, requestKind: String) -> VCLError {
+        if initializationDescriptor.errorCodeCompatibilityMode == .Legacy {
+            return errorTaxonomyCompatibilityMapper.map(
+                error: error,
+                requestKind: requestKind
+            )
+        }
+        return error
+    }
+    
     func logError(message: String = "", error: Error) {
         VCLLog.e("\(message): \(error)")
     }

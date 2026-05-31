@@ -27,4 +27,18 @@ public enum VCLErrorCode: String {
     case MismatchedPresentationRequestInspectorDid = "mismatched_presentation_request_inspector_did"
     // General error
     case SdkError = "sdk_error"
+    // Error taxonomy
+    case InvalidLink = "invalid_link"
+    case ConnectivityFailure = "connectivity_failure"
+    case ClientRequestUnauthorized = "client_request_unauthorized"
+    case ClientRequestRejected = "client_request_rejected"
+    case IssuerDidUnresolvable = "issuer_did_unresolvable"
+    case VerifierDidUnresolvable = "verifier_did_unresolvable"
+    case IssuerNotRegistered = "issuer_not_registered"
+    case VerifierNotRegistered = "verifier_not_registered"
+    case RegistrationCheckInconclusive = "registration_check_inconclusive"
+    case IssuerRequestInvalid = "issuer_request_invalid"
+    case VerifierRequestInvalid = "verifier_request_invalid"
+    case IssuerRequestUnauthorized = "issuer_request_unauthorized"
+    case VerifierRequestUnauthorized = "verifier_request_unauthorized"
 }

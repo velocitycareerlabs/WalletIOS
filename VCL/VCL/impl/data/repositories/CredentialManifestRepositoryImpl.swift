@@ -29,19 +29,28 @@ final class CredentialManifestRepositoryImpl: CredentialManifestRepository {
             ) { response in
                 do {
                     let credentialManifestReposnse = try response.get()
-                    if let jwtStr = credentialManifestReposnse.payload.toDictionary()?[VCLCredentialManifest.CodingKeys.KeyIssuingRequest] as? String {
-                        completionBlock(.success(jwtStr))
-                        
+                    if let payload = credentialManifestReposnse.payload.toDictionary() {
+                        completionBlock(.success(
+                            payload[VCLCredentialManifest.CodingKeys.KeyIssuingRequest] as? String ?? ""
+                        ))
                     } else {
-                        completionBlock(.failure(VCLError(message: "Failed to parse \(String(data: credentialManifestReposnse.payload, encoding: .utf8) ?? "")")))
+                        completionBlock(.success(String(data: credentialManifestReposnse.payload, encoding: .utf8) ?? ""))
                     }
                 } catch {
-                    completionBlock(.failure(VCLError(error: error)))
+                    completionBlock(.failure(ErrorTaxonomy.classifyClientRequestFetch(
+                        VCLError(error: error),
+                        requestUri: credentialManifestDescriptor.deepLink?.requestUri,
+                        requestKind: ErrorTaxonomy.requestKindIssuing
+                    )))
                 }
             }
         } else {
-            completionBlock(.failure(VCLError(message: "credentialManifestDescriptor.endpoint = null")))
+            completionBlock(.failure(ErrorTaxonomy.invalidLink(
+                message: "credentialManifestDescriptor.endpoint = null",
+                sourceErrorCode: VelocityDeepLinkValidator.sourceInvalidOrMissingRequestEndpoint,
+                requestUri: credentialManifestDescriptor.deepLink?.requestUri,
+                requestKind: ErrorTaxonomy.requestKindIssuing
+            )))
         }
     }
 }
-

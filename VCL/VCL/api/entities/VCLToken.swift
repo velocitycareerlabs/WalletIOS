@@ -17,7 +17,12 @@ public struct VCLToken {
     
     public init(value: String) {
         self.value = value
-        self.jwtValue = VCLJwt(encodedJwt: value)
+        self.jwtValue = (try? VCLJwt(encodedJwt: value)) ?? VCLJwt(
+            header: nil,
+            payload: nil,
+            signature: nil,
+            encodedJwt: value
+        )
     }
     
     public init(jwtValue: VCLJwt) {

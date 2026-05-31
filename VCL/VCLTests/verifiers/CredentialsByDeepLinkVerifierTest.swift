@@ -25,8 +25,8 @@ class CredentialsByDeepLinkVerifierTest: XCTestCase {
         
         subject.verifyCredentials(
             jwtCredentials: [
-                    VCLJwt(encodedJwt: CredentialMocks.JwtCredentialEmploymentPastFromRegularIssuer),
-                    VCLJwt(encodedJwt: CredentialMocks.JwtCredentialEducationDegreeRegistrationFromRegularIssuer)
+                    try! VCLJwt(encodedJwt: CredentialMocks.JwtCredentialEmploymentPastFromRegularIssuer),
+                    try! VCLJwt(encodedJwt: CredentialMocks.JwtCredentialEducationDegreeRegistrationFromRegularIssuer)
                 ],
             deepLink: deepLink
         ) { isVerifiedRes in
@@ -48,8 +48,8 @@ class CredentialsByDeepLinkVerifierTest: XCTestCase {
         
         subject.verifyCredentials(
             jwtCredentials: [
-                VCLJwt(encodedJwt: CredentialMocks.JwtCredentialEmploymentPastFromRegularIssuer),
-                VCLJwt(encodedJwt: CredentialMocks.JwtCredentialEducationDegreeRegistrationFromRegularIssuer)
+                try! VCLJwt(encodedJwt: CredentialMocks.JwtCredentialEmploymentPastFromRegularIssuer),
+                try! VCLJwt(encodedJwt: CredentialMocks.JwtCredentialEducationDegreeRegistrationFromRegularIssuer)
             ],
             deepLink: deepLink
         ) { isVerifiedRes in

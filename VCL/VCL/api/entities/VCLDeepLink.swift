@@ -25,8 +25,22 @@ public struct VCLDeepLink {
     }}
     
     public var did: String? { get{
-        (retrieveQueryParam(key: CodingKeys.KeyIssuerDid) ?? retrieveQueryParam(key: CodingKeys.KeyInspectorDid)) ??
-        requestUri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix) // fallback for old agents
+        let topLevelIssuerDid = topLevelQueryParam(key: CodingKeys.KeyIssuerDid)
+        let topLevelInspectorDid = topLevelQueryParam(key: CodingKeys.KeyInspectorDid)
+        let requestUriParams = requestUri?.decode()?.getUrlQueryParams()
+        let requestUriIssuerDid = requestUriParams?[CodingKeys.KeyIssuerDid]
+        let requestUriInspectorDid = requestUriParams?[CodingKeys.KeyInspectorDid]
+        let decodedIssuerDid = retrieveQueryParam(key: CodingKeys.KeyIssuerDid)
+        let decodedInspectorDid = retrieveQueryParam(key: CodingKeys.KeyInspectorDid)
+        let didSubPath = requestUri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix)
+        
+        return topLevelIssuerDid ??
+            topLevelInspectorDid ??
+            requestUriIssuerDid ??
+            requestUriInspectorDid ??
+            decodedIssuerDid ??
+            decodedInspectorDid ??
+            didSubPath // fallback for old agents
     } }
     
     private func generateUri(uriKey: String, asSubParams: Bool = false) -> String? {
@@ -47,6 +61,16 @@ public struct VCLDeepLink {
     
     private func retrieveQueryParam(key: String) -> String? {
         return self.value.decode()?.getUrlQueryParams()?[key]
+    }
+    
+    private func topLevelQueryParam(key: String) -> String? {
+        guard
+            let components = URLComponents(string: value),
+            let queryItems = components.queryItems
+        else {
+            return nil
+        }
+        return queryItems.last { $0.name == key }?.value
     }
     
     public struct CodingKeys {

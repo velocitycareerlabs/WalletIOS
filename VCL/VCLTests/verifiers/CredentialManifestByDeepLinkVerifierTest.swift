@@ -15,7 +15,7 @@ class CredentialManifestByDeepLinkVerifierTest: XCTestCase {
     private var subject: CredentialManifestByDeepLinkVerifier!
     
     private let credentialManifest = VCLCredentialManifest(
-        jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
+        jwt: try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
         verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileOfRegularIssuer.toDictionary()!),
         didJwk: DidJwkMocks.DidJwk
     )
@@ -28,10 +28,9 @@ class CredentialManifestByDeepLinkVerifierTest: XCTestCase {
             credentialManifest: credentialManifest,
             deepLink: deepLink,
             didDocument: DidDocumentMocks.DidDocumentMock
-        ) { isVerifiedRes in
+        ) { verificationResult in
             do {
-                let isVerified = try isVerifiedRes.get()
-                assert(isVerified)
+                try verificationResult.get()
             } catch {
                 XCTFail("\(error)")
             }
@@ -46,9 +45,9 @@ class CredentialManifestByDeepLinkVerifierTest: XCTestCase {
             credentialManifest: credentialManifest,
             deepLink: deepLink,
             didDocument: DidDocumentMocks.DidDocumentWithWrongDidMock
-        ) { isVerifiedRes in
+        ) { verificationResult in
             do {
-                _ = try isVerifiedRes.get()
+                try verificationResult.get()
                 XCTFail("\(VCLErrorCode.MismatchedRequestIssuerDid.rawValue) error code is expected")
             } catch {
                 assert((error as! VCLError).errorCode == VCLErrorCode.MismatchedRequestIssuerDid.rawValue)

@@ -1,6 +1,6 @@
 //
 //  JwtServiceRepositoryImpl.swift
-//  
+//
 //
 //  Created by Michael Avoyan on 08/04/2021.
 //
@@ -10,10 +10,10 @@
 import Foundation
 
 final class JwtServiceRepositoryImpl: JwtServiceRepository {
-    
+
     public let jwtSignService: VCLJwtSignService
     public let jwtVerifyService: VCLJwtVerifyService
-    
+
     init(
         _ jwtSignService: VCLJwtSignService,
         _ jwtVerifyService: VCLJwtVerifyService
@@ -21,7 +21,18 @@ final class JwtServiceRepositoryImpl: JwtServiceRepository {
         self.jwtSignService = jwtSignService
         self.jwtVerifyService = jwtVerifyService
     }
-    
+
+    func decodeJwt(
+        encodedJwt: String,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    ) {
+        do {
+            completionBlock(.success(try VCLJwt(encodedJwt: encodedJwt)))
+        } catch {
+            completionBlock(.failure(VCLError(error: error)))
+        }
+    }
+
     func verifyJwt(
         jwt: VCLJwt,
         publicJwk: VCLPublicJwk,
@@ -35,7 +46,7 @@ final class JwtServiceRepositoryImpl: JwtServiceRepository {
             completionBlock: { verificationResult in completionBlock(verificationResult) }
         )
     }
-    
+
     func generateSignedJwt(
         jwtDescriptor: VCLJwtDescriptor,
         nonce: String? = nil,

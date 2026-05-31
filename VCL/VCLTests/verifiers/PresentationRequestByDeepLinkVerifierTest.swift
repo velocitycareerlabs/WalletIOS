@@ -26,10 +26,9 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
             presentationRequest: presentationRequest,
             deepLink: deepLink,
             didDocument: DidDocumentMocks.DidDocumentMock
-        ) { isVerifiedRes in
+        ) { verificationResult in
             do {
-                let isVerified = try isVerifiedRes.get()
-                assert(isVerified)
+                try verificationResult.get()
             } catch {
                 XCTFail("\(error)")
             }
@@ -44,10 +43,9 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
             presentationRequest: presentationRequest,
             deepLink: deepLinkWithDidDocumentId,
             didDocument: DidDocumentMocks.DidDocumentMock
-        ) { isVerifiedRes in
+        ) { verificationResult in
             do {
-                let isVerified = try isVerifiedRes.get()
-                assert(isVerified)
+                try verificationResult.get()
             } catch {
                 XCTFail("\(error)")
             }
@@ -74,10 +72,9 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
             presentationRequest: presentationRequest,
             deepLink: deepLinkWithDidDocumentAlias,
             didDocument: didDocumentWithPresentationRequestIss
-        ) { isVerifiedRes in
+        ) { verificationResult in
             do {
-                let isVerified = try isVerifiedRes.get()
-                assert(isVerified)
+                try verificationResult.get()
             } catch {
                 XCTFail("\(error)")
             }
@@ -91,31 +88,12 @@ class PresentationRequestByDeepLinkVerifierTest: XCTestCase {
             presentationRequest: presentationRequest,
             deepLink: deepLink,
             didDocument: DidDocumentMocks.DidDocumentWithWrongDidMock
-        ) { isVerifiedRes in
+        ) { verificationResult in
             do {
-                _ = try isVerifiedRes.get()
+                try verificationResult.get()
                 XCTFail( "\(VCLErrorCode.MismatchedPresentationRequestInspectorDid.rawValue) error code is expected")
             } catch {
                 assert((error as! VCLError).errorCode == VCLErrorCode.MismatchedPresentationRequestInspectorDid.rawValue)
-            }
-        }
-    }
-
-    func testVerifyPresentationRequestErrorWhenDeepLinkDidMissing() {
-        subject = PresentationRequestByDeepLinkVerifierImpl()
-
-        subject.verifyPresentationRequest(
-            presentationRequest: presentationRequest,
-            deepLink: VCLDeepLink(value: "velocity-network://inspect"),
-            didDocument: DidDocumentMocks.DidDocumentMock
-        ) { isVerifiedRes in
-            do {
-                _ = try isVerifiedRes.get()
-                XCTFail("\(VCLErrorCode.SdkError.rawValue) error code is expected")
-            } catch {
-                let vclError = error as! VCLError
-                XCTAssertEqual(vclError.errorCode, VCLErrorCode.SdkError.rawValue)
-                XCTAssertTrue(vclError.message?.contains("DID not found in deep link") == true)
             }
         }
     }

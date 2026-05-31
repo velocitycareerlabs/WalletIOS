@@ -10,6 +10,7 @@
 import Foundation
 
 final class ProfileServiceTypeVerifier {
+    static let sourceWrongServiceType = "wrong_service_type"
     
     private let verifiedProfileUseCase: VerifiedProfileUseCase
 
@@ -59,7 +60,8 @@ final class ProfileServiceTypeVerifier {
                         profileName: verifiedProfile.name,
                         message: "Wrong service type - expected: \(expectedServiceTypes.all), found: \(verifiedProfile.serviceTypes.all)"
                     ),
-                    statusCode: VCLStatusCode.VerificationError.rawValue
+                    statusCode: VCLStatusCode.VerificationError.rawValue,
+                    sourceErrorCode: Self.sourceWrongServiceType
                 )
             )
         }

@@ -54,7 +54,9 @@ extension Data {
         if let jsonArray = try? JSONSerialization.jsonObject(with: self) as? [String] {
             var jwtCredentials = [VCLJwt]()
             for jwtEncodedCredential in jsonArray {
-                let jwt = VCLJwt(encodedJwt: jwtEncodedCredential)
+                guard let jwt = try? VCLJwt(encodedJwt: jwtEncodedCredential) else {
+                    return nil
+                }
                 jwtCredentials.append(jwt)
             }
             return jwtCredentials

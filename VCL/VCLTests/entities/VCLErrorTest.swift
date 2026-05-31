@@ -144,4 +144,25 @@ class VCLErrorTest: XCTestCase {
         assert(errorDictionary[VCLError.CodingKeys.KeyStatusCode] as? Int == ErrorMocks.StatusCode)
         assert(callStackSymbols == error.callStackSymbols)
     }
+    
+    func testErrorToJsonFromTaxonomyDiagnostics() {
+        let error = VCLError(
+            errorCode: VCLErrorCode.IssuerRequestInvalid.rawValue,
+            message: "Invalid request",
+            sourceErrorCode: VCLErrorCode.MismatchedRequestIssuerDid.rawValue,
+            validationPhase: "request_validation",
+            requestDid: "did:example:issuer",
+            requestUri: "https://example.com/request",
+            requestKind: "issuing_request"
+        )
+        let errorDictionary = error.toDictionary()
+        
+        assert(errorDictionary[VCLError.CodingKeys.KeyErrorCode] as? String == VCLErrorCode.IssuerRequestInvalid.rawValue)
+        assert(errorDictionary[VCLError.CodingKeys.KeyMessage] as? String == "Invalid request")
+        assert(errorDictionary[VCLError.CodingKeys.KeySourceErrorCode] as? String == VCLErrorCode.MismatchedRequestIssuerDid.rawValue)
+        assert(errorDictionary[VCLError.CodingKeys.KeyValidationPhase] as? String == "request_validation")
+        assert(errorDictionary[VCLError.CodingKeys.KeyRequestDid] as? String == "did:example:issuer")
+        assert(errorDictionary[VCLError.CodingKeys.KeyRequestUri] as? String == "https://example.com/request")
+        assert(errorDictionary[VCLError.CodingKeys.KeyRequestKind] as? String == "issuing_request")
+    }
 }

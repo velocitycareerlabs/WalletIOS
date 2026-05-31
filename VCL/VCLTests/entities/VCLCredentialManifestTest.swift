@@ -16,7 +16,7 @@ class VCLCredentialManifestTest: XCTestCase {
 
     override func setUp() {
         subject = VCLCredentialManifest(
-            jwt: VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
+            jwt: try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifest1),
             verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerJsonStr1.toDictionary()!),
             didJwk: DidJwkMocks.DidJwk
         )
