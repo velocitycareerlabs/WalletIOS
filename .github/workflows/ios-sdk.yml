@@ -53,7 +53,7 @@ jobs:
       - set-environment
     runs-on: macos-15
     env:
-      XC_VERSION: "16.3"
+      XC_VERSION: "26.4"
       # Recomends to use separated PAT token to access to another repos
       PAT_TOKEN: ${{ secrets.VCL_RW_ACCESS_TOKEN }}
       RC_SUFFIX: 'rc'
@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v4
       # Select latest Xcode
       - name: Select latest Xcode
-        run: "sudo xcode-select -s /Applications/Xcode_${{ env.XC_VERSION }}.app"
+        run: "sudo xcode-select -s /Applications/Xcode_${{ env.XC_VERSION }}.app || sudo xcode-select -s /Applications/Xcode_16.4.app"
       # Extract branch name
       - name: Extract branch name
         shell: bash
@@ -83,8 +83,7 @@ jobs:
         run: echo "FRAMEWORK_VERSION=$(cat VCL.xcodeproj/project.pbxproj | grep PRODUCT_BUNDLE_IDENTIFIER -B 1 | grep MARKETING_VERSION | cut -d'=' -f2 | uniq | sed -e 's/^[ \t]*//;s/;//')${{ env.RELEASE_TAG }}" >> "$GITHUB_ENV"
         working-directory: VCL
         env:
-          # RELEASE_TAG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
-          RELEASE_TAG: ${{ '' }}
+          RELEASE_TAG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
       # Clone Additional repos
       - name: Clone Additional repos
         run: |
