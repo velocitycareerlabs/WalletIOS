@@ -15,6 +15,10 @@ on:
           - dev
           - rc
           - prod
+      rc_number:
+        description: Positive RC counter used only when environment is rc, for example 1 publishes 2.10.0-rc.1
+        required: false
+        type: string
 env:
   GLOBAL_ENV: ${{ github.event_name == 'push' && format('{0}', 'dev') || inputs.environment }}
 
@@ -72,7 +76,6 @@ jobs:
       XC_VERSION: "26.4"
       # Recomends to use separated PAT token to access to another repos
       PAT_TOKEN: ${{ secrets.VCL_RW_ACCESS_TOKEN }}
-      RC_SUFFIX: 'rc'
       GLOBAL_ENV: ${{ needs.set-environment.outputs.GLOBAL_ENV }}
     steps:
       # Git clone repository
@@ -85,6 +88,29 @@ jobs:
       - name: Extract branch name
         shell: bash
         run: echo "BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | sed 's/\//_/g')" >> "$GITHUB_ENV"
+      # Get Version
+      - name: Get Version
+        shell: bash
+        run: |
+          base_framework_version=$(awk -F'= ' '/MARKETING_VERSION/ { gsub(/;/, "", $2); gsub(/[[:space:]]/, "", $2); print $2 }' VCL.xcodeproj/project.pbxproj | uniq | tail -n 1)
+          framework_version="$base_framework_version"
+
+          if [ "$GLOBAL_ENV" = "rc" ]; then
+            if ! [[ "$RC_NUMBER" =~ ^[1-9][0-9]*$ ]]; then
+              echo "RC publishes require workflow input rc_number as a positive integer."
+              exit 1
+            fi
+            framework_version="${base_framework_version}-rc.${RC_NUMBER}"
+          fi
+
+          {
+            echo "BASE_FRAMEWORK_VERSION=${base_framework_version}"
+            echo "FRAMEWORK_VERSION=${framework_version}"
+            echo "RELEASE_VERSION=v${framework_version}"
+          } >> "$GITHUB_ENV"
+        working-directory: VCL
+        env:
+          RC_NUMBER: ${{ github.event.inputs.rc_number }}
       # VCL build
       - name: VCL build
         run: scripts/build_xcframework.sh
@@ -94,17 +120,28 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      # Get Version
-      - name: Get Version
-        run: echo "FRAMEWORK_VERSION=$(cat VCL.xcodeproj/project.pbxproj | grep PRODUCT_BUNDLE_IDENTIFIER -B 1 | grep MARKETING_VERSION | cut -d'=' -f2 | uniq | sed -e 's/^[ \t]*//;s/;//')${{ env.RELEASE_TAG }}" >> "$GITHUB_ENV"
-        working-directory: VCL
-        env:
-          RELEASE_TAG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
       # Clone Additional repos
       - name: Clone Additional repos
         run: |
           git clone "https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository_owner }}/Specs.git"
           git clone "https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository_owner }}/VCL-Swift.git"
+      - name: Validate publish version is new
+        shell: bash
+        run: |
+          if [ -d "Specs/VCL/${FRAMEWORK_VERSION}" ]; then
+            echo "Specs already contains VCL/${FRAMEWORK_VERSION}."
+            exit 1
+          fi
+
+          if git -C VCL-Swift ls-remote --exit-code --tags origin "refs/tags/${FRAMEWORK_VERSION}" >/dev/null 2>&1; then
+            echo "VCL-Swift tag ${FRAMEWORK_VERSION} already exists."
+            exit 1
+          fi
+
+          if [ "$GLOBAL_ENV" = "prod" ] && git ls-remote --exit-code --tags origin "refs/tags/${RELEASE_VERSION}" >/dev/null 2>&1; then
+            echo "WalletIOS tag ${RELEASE_VERSION} already exists."
+            exit 1
+          fi
       # Publish to Specs
       - name: Publish to Specs
         run: |
