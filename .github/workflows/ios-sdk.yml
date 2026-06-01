@@ -102,9 +102,15 @@ jobs:
           RELEASE_TAG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}{1}', '-', env.RC_SUFFIX ) || '' }}
       # Clone Additional repos
       - name: Clone Additional repos
+        shell: bash
         run: |
-          git clone "https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository_owner }}/Specs.git"
-          git clone "https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository_owner }}/VCL-Swift.git"
+          git_auth="${PAT_TOKEN}"
+          if [[ "${git_auth}" != *:* ]]; then
+            git_auth="${GITHUB_ACTOR}:${PAT_TOKEN}"
+          fi
+
+          git clone "https://${git_auth}@github.com/${{ github.repository_owner }}/Specs.git"
+          git clone "https://${git_auth}@github.com/${{ github.repository_owner }}/VCL-Swift.git"
       # Publish to Specs
       - name: Publish to Specs
         run: |
