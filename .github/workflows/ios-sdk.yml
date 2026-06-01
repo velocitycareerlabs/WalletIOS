@@ -87,8 +87,8 @@ jobs:
       # Clone Additional repos
       - name: Clone Additional repos
         run: |
-          git clone https://${{ env.PAT_TOKEN }}@github.com/${{ github.repository_owner }}/Specs.git
-          git clone https://${{ env.PAT_TOKEN }}@github.com/${{ github.repository_owner }}/VCL-Swift.git
+          git clone https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository_owner }}/Specs.git
+          git clone https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository_owner }}/VCL-Swift.git
       # Publish to Specs
       - name: Publish to Specs
         run: |
