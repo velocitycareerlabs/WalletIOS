@@ -104,8 +104,16 @@ jobs:
       - name: Clone Additional repos
         shell: bash
         run: |
-          git clone "https://${PAT_TOKEN}@github.com/${{ github.repository_owner }}/Specs.git"
-          git clone "https://${PAT_TOKEN}@github.com/${{ github.repository_owner }}/VCL-Swift.git"
+          credential="${PAT_TOKEN}"
+          if [[ "${credential}" != *:* ]]; then
+            credential="x-access-token:${PAT_TOKEN}"
+          fi
+          auth_header="AUTHORIZATION: basic $(printf '%s' "${credential}" | base64 | tr -d '\n')"
+
+          git -c "http.https://github.com/.extraheader=${auth_header}" clone "https://github.com/${{ github.repository_owner }}/Specs.git"
+          git -c "http.https://github.com/.extraheader=${auth_header}" clone "https://github.com/${{ github.repository_owner }}/VCL-Swift.git"
+          git -C Specs config --local "http.https://github.com/.extraheader" "${auth_header}"
+          git -C VCL-Swift config --local "http.https://github.com/.extraheader" "${auth_header}"
       # Publish to Specs
       - name: Publish to Specs
         run: |
