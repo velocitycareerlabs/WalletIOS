@@ -30,8 +30,24 @@ jobs:
       # Select latest Xcode
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_${{ env.XC_VERSION }}.app || sudo xcode-select -s /Applications/Xcode_16.4.app"
+      - name: Prepare iOS simulator
+        shell: bash
+        run: |
+          read -r runtime device_type < <(
+            ruby -rjson -e 'runtime = JSON.parse(IO.popen(["xcrun", "simctl", "list", "runtimes", "-j"], &:read))["runtimes"].select { |r| r["isAvailable"] && r["identifier"].include?("iOS") }.max_by { |r| Gem::Version.new(r["version"]) }; device = runtime&.dig("supportedDeviceTypes")&.find { |d| d["productFamily"] == "iPhone" }; puts [runtime&.dig("identifier"), device&.dig("identifier")].compact.join(" ")'
+          )
+
+          if [ -z "$device_type" ] || [ -z "$runtime" ]; then
+            echo "Unable to find an available iPhone simulator device type and iOS runtime."
+            xcrun simctl list devicetypes
+            xcrun simctl list runtimes
+            exit 1
+          fi
+
+          simulator_udid=$(xcrun simctl create "WalletIOS CI" "$device_type" "$runtime")
+          echo "IOS_SIMULATOR_UDID=$simulator_udid" >> "$GITHUB_ENV"
       - name: Run tests
-        run: xcodebuild test -project VCL.xcodeproj -scheme VCL -destination 'platform=iOS Simulator,OS=latest,name=iPhone 17'
+        run: xcodebuild test -project VCL.xcodeproj -scheme VCL -destination "platform=iOS Simulator,id=${IOS_SIMULATOR_UDID}"
         working-directory: VCL
 
   set-environment:
@@ -87,8 +103,8 @@ jobs:
       # Clone Additional repos
       - name: Clone Additional repos
         run: |
-          git clone https://${{ env.PAT_TOKEN }}@github.com/${{ github.repository_owner }}/Specs.git
-          git clone https://${{ env.PAT_TOKEN }}@github.com/${{ github.repository_owner }}/VCL-Swift.git
+          git clone "https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository_owner }}/Specs.git"
+          git clone "https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository_owner }}/VCL-Swift.git"
       # Publish to Specs
       - name: Publish to Specs
         run: |
