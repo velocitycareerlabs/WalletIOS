@@ -104,8 +104,8 @@ jobs:
       - name: Clone Additional repos
         shell: bash
         run: |
-          git clone "https://${PAT_TOKEN}@github.com/${{ github.repository_owner }}/Specs.git"
-          git clone "https://${PAT_TOKEN}@github.com/${{ github.repository_owner }}/VCL-Swift.git"
+          git clone "https://${{ env.PAT_TOKEN }}@github.com/${{ github.repository_owner }}/Specs.git"
+          git clone "https://${{ env.PAT_TOKEN }}@github.com/${{ github.repository_owner }}/VCL-Swift.git"
       # Publish to Specs
       - name: Publish to Specs
         run: |
