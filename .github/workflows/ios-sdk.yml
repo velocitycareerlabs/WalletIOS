@@ -92,7 +92,15 @@ jobs:
       - name: Get Version
         shell: bash
         run: |
-          base_framework_version=$(awk -F'= ' '/MARKETING_VERSION/ { gsub(/;/, "", $2); gsub(/[[:space:]]/, "", $2); print $2 }' VCL.xcodeproj/project.pbxproj | uniq | tail -n 1)
+          base_framework_version=$(
+            xcodebuild -project VCL.xcodeproj -scheme VCL -configuration Release -destination generic/platform=iOS -showBuildSettings |
+              awk -F'= ' '/^[[:space:]]*MARKETING_VERSION = / { gsub(/[[:space:]]/, "", $2); print $2; exit }'
+          )
+
+          if [ -z "$base_framework_version" ]; then
+            echo "Unable to determine VCL MARKETING_VERSION."
+            exit 1
+          fi
 
           if [ "$GLOBAL_ENV" = "rc" ]; then
             if ! [[ "$RC_NUMBER" =~ ^[1-9][0-9]*$ ]]; then
@@ -111,7 +119,7 @@ jobs:
           } >> "$GITHUB_ENV"
         working-directory: VCL
         env:
-          RC_NUMBER: ${{ github.event.inputs.rc_number }}
+          RC_NUMBER: ${{ inputs.rc_number }}
       # VCL build
       - name: VCL build
         run: scripts/build_xcframework.sh
