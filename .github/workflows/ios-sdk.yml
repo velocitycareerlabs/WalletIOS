@@ -95,13 +95,25 @@ jobs:
       - name: Get Version
         shell: bash
         run: |
-          base_framework_version=$(
-            xcodebuild -project VCL.xcodeproj -scheme VCL -configuration Release -destination generic/platform=iOS -showBuildSettings |
-              awk -F'= ' '/^[[:space:]]*MARKETING_VERSION = / { gsub(/[[:space:]]/, "", $2); print $2; exit }'
-          )
+          base_versions=$(awk '
+            /MARKETING_VERSION =/ {
+              version = $3
+              sub(/;$/, "", version)
+            }
+            /PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;/ {
+              print version
+            }
+          ' VCL.xcodeproj/project.pbxproj | sort -u)
+          base_version_count=$(printf '%s\n' "$base_versions" | sed '/^$/d' | wc -l | tr -d ' ')
 
-          if [ -z "$base_framework_version" ]; then
-            echo "Unable to determine VCL MARKETING_VERSION."
+          if [ "$base_version_count" != "1" ]; then
+            echo "Expected exactly one SDK MARKETING_VERSION for io.velocitycareerlabs.VCL, found: ${base_versions}"
+            exit 1
+          fi
+
+          base_framework_version=$(printf '%s\n' "$base_versions" | sed '/^$/d')
+          if [[ ! "$base_framework_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "SDK MARKETING_VERSION must be a semver base version like 2.10.0. Found: ${base_framework_version}"
             exit 1
           fi
 
@@ -142,20 +154,39 @@ jobs:
         run: |
           set -euo pipefail
 
+          check_remote_tag_absent() {
+            local repo_dir="$1"
+            local tag_name="$2"
+            local label="$3"
+            local output
+            local status
+
+            set +e
+            output=$(git -C "$repo_dir" ls-remote --exit-code --tags origin "refs/tags/${tag_name}" 2>&1)
+            status=$?
+            set -e
+
+            if [ "$status" -eq 0 ]; then
+              echo "${label} tag ${tag_name} already exists."
+              exit 1
+            fi
+
+            if [ "$status" -eq 2 ]; then
+              return 0
+            fi
+
+            echo "Unable to check ${label} tag ${tag_name}:"
+            echo "$output"
+            exit "$status"
+          }
+
           if [ -d "Specs/VCL/${FRAMEWORK_VERSION}" ]; then
             echo "Specs already contains VCL/${FRAMEWORK_VERSION}."
             exit 1
           fi
 
-          if git -C VCL-Swift ls-remote --exit-code --tags origin "refs/tags/${FRAMEWORK_VERSION}" >/dev/null 2>&1; then
-            echo "VCL-Swift tag ${FRAMEWORK_VERSION} already exists."
-            exit 1
-          fi
-
-          if git ls-remote --exit-code --tags origin "refs/tags/${RELEASE_VERSION}" >/dev/null 2>&1; then
-            echo "WalletIOS tag ${RELEASE_VERSION} already exists."
-            exit 1
-          fi
+          check_remote_tag_absent VCL-Swift "${FRAMEWORK_VERSION}" "VCL-Swift"
+          check_remote_tag_absent . "${RELEASE_VERSION}" "WalletIOS"
       # Publish to Specs
       - name: Publish to Specs
         run: |
