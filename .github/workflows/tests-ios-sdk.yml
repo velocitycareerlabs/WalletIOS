@@ -27,29 +27,37 @@ jobs:
             git fetch origin "${base_sha}" --depth=1
           fi
 
-          version_diff=$(git diff --unified=0 "${base_sha}...HEAD" -- VCL/VCL.xcodeproj/project.pbxproj)
-          if ! printf '%s\n' "$version_diff" | grep -q '^[+-].*MARKETING_VERSION = '; then
+          extract_sdk_version() {
+            local ref="$1"
+            git show "${ref}:VCL/VCL.xcodeproj/project.pbxproj" | awk '
+              /MARKETING_VERSION =/ {
+                version = $3
+                sub(/;$/, "", version)
+              }
+              /PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;/ {
+                print version
+              }
+            ' | sed '/^$/d' | sort -u
+          }
+
+          base_versions=$(extract_sdk_version "${base_sha}")
+          head_versions=$(extract_sdk_version "HEAD")
+          base_version_count=$(printf '%s\n' "$base_versions" | sed '/^$/d' | wc -l | tr -d ' ')
+          head_version_count=$(printf '%s\n' "$head_versions" | sed '/^$/d' | wc -l | tr -d ' ')
+
+          if [ "$base_version_count" != "1" ] || [ "$head_version_count" != "1" ]; then
+            echo "Expected exactly one SDK MARKETING_VERSION for io.velocitycareerlabs.VCL in base and head."
+            echo "Base versions: ${base_versions:-<none>}"
+            echo "Head versions: ${head_versions:-<none>}"
+            exit 1
+          fi
+
+          if [ "$base_versions" = "$head_versions" ]; then
             echo "No SDK version change detected; skipping release notes validation."
             exit 0
           fi
 
-          framework_versions=$(awk '
-            /MARKETING_VERSION =/ {
-              version = $3
-              sub(/;$/, "", version)
-            }
-            /PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;/ {
-              print version
-            }
-          ' VCL/VCL.xcodeproj/project.pbxproj | sort -u)
-          framework_version_count=$(printf '%s\n' "$framework_versions" | sed '/^$/d' | wc -l | tr -d ' ')
-
-          if [ "$framework_version_count" != "1" ]; then
-            echo "Expected exactly one SDK MARKETING_VERSION for io.velocitycareerlabs.VCL, found: ${framework_versions}"
-            exit 1
-          fi
-
-          framework_version=$(printf '%s\n' "$framework_versions" | sed '/^$/d')
+          framework_version="$head_versions"
           release_version="v${framework_version}"
           release_notes_file=".github/releases/${release_version}.md"
           major_minor=$(printf '%s' "$framework_version" | cut -d. -f1,2)
