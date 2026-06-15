@@ -214,11 +214,9 @@ jobs:
 
            if [ "${GLOBAL_ENV}" = "prod" ]; then
              echo "${PAT_TOKEN}" | gh auth login --with-token
-             gh release create "${FRAMEWORK_VERSION}" --title "VCL-${FRAMEWORK_VERSION}" "${RELEASE_ARG}"
+             gh release create "${FRAMEWORK_VERSION}" --title "VCL-${FRAMEWORK_VERSION}" --latest
            fi
         working-directory: VCL-Swift
-        env:
-          RELEASE_ARG: ${{ env.GLOBAL_ENV != 'prod' && format('{0}', '--prerelease' ) || format('{0}', '--latest') }}
       - name: Tag and release WalletIOS source
         shell: bash
         run: |
