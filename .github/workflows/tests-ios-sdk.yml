@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - main
-      - release/**
+      - release/v*
 jobs:
   tests-ios-sdk:
     runs-on: macos-15
@@ -14,6 +14,78 @@ jobs:
       # Git clone repository
       - name: Git clone repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Validate release notes for publish PRs
+        shell: bash
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          base_sha="${BASE_SHA}"
+          if ! git rev-parse --verify "${base_sha}^{commit}" >/dev/null 2>&1; then
+            git fetch origin "${base_sha}" --depth=1
+          fi
+
+          extract_sdk_version() {
+            local ref="$1"
+            git show "${ref}:VCL/VCL.xcodeproj/project.pbxproj" | awk '
+              /MARKETING_VERSION =/ {
+                version = $3
+                sub(/;$/, "", version)
+              }
+              /PRODUCT_BUNDLE_IDENTIFIER = io.velocitycareerlabs.VCL;/ {
+                print version
+              }
+            ' | sed '/^$/d' | sort -u
+          }
+
+          base_versions=$(extract_sdk_version "${base_sha}")
+          head_versions=$(extract_sdk_version "HEAD")
+          base_version_count=$(printf '%s\n' "$base_versions" | sed '/^$/d' | wc -l | tr -d ' ')
+          head_version_count=$(printf '%s\n' "$head_versions" | sed '/^$/d' | wc -l | tr -d ' ')
+
+          if [ "$base_version_count" != "1" ] || [ "$head_version_count" != "1" ]; then
+            echo "Expected exactly one SDK MARKETING_VERSION for io.velocitycareerlabs.VCL in base and head."
+            echo "Base versions: ${base_versions:-<none>}"
+            echo "Head versions: ${head_versions:-<none>}"
+            exit 1
+          fi
+
+          if [ "$base_versions" = "$head_versions" ]; then
+            echo "No SDK version change detected; skipping release notes validation."
+            exit 0
+          fi
+
+          framework_version="$head_versions"
+          release_version="v${framework_version}"
+          release_notes_file=".github/releases/${release_version}.md"
+          major_minor=$(printf '%s' "$framework_version" | cut -d. -f1,2)
+          patch_version=$(printf '%s' "$framework_version" | cut -d. -f3)
+
+          if [ ! -f "$release_notes_file" ]; then
+            echo "$release_notes_file must exist for version $release_version."
+            exit 1
+          fi
+
+          if git diff --quiet "${base_sha}...HEAD" -- "$release_notes_file"; then
+            echo "$release_notes_file must be added or updated in the same PR as the version bump."
+            exit 1
+          fi
+
+          grep -q '^## Changes$' "$release_notes_file" || { echo "$release_notes_file is missing a '## Changes' section."; exit 1; }
+          grep -q '^## Backward incompatibilities$' "$release_notes_file" || { echo "$release_notes_file is missing a '## Backward incompatibilities' section."; exit 1; }
+          grep -Eq '^### \[#[0-9]+\]\([^)]+\)( .+)?$' "$release_notes_file" || { echo "$release_notes_file must include at least one release entry heading in the form '### [#PR](URL) ...'."; exit 1; }
+
+          if [[ "$BASE_REF" == release/v* ]] && [ "$BASE_REF" != "release/v${major_minor}" ]; then
+            echo "Version ${framework_version} must target branch release/v${major_minor}, not ${BASE_REF}."
+            exit 1
+          fi
+
+          if [ "$BASE_REF" = "main" ] && [ "$patch_version" != "0" ]; then
+            echo "Patch version ${framework_version} should not be bumped via a PR targeting main."
+            exit 1
+          fi
       # Select latest Xcode
       - name: Select latest Xcode
         run: "sudo xcode-select -s /Applications/Xcode_${{ env.XC_VERSION }}.app || sudo xcode-select -s /Applications/Xcode_16.4.app"

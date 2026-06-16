@@ -132,10 +132,39 @@ jobs:
             echo "BASE_FRAMEWORK_VERSION=${base_framework_version}"
             echo "FRAMEWORK_VERSION=${framework_version}"
             echo "RELEASE_VERSION=v${framework_version}"
+            echo "RELEASE_NOTES_FILE=${GITHUB_WORKSPACE}/.github/releases/v${base_framework_version}.md"
           } >> "$GITHUB_ENV"
         working-directory: VCL
         env:
           RC_NUMBER: ${{ inputs.rc_number }}
+      - name: Validate prod release context
+        if: env.GLOBAL_ENV == 'prod'
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          major_minor=$(printf '%s' "${BASE_FRAMEWORK_VERSION}" | cut -d. -f1,2)
+          patch_version=$(printf '%s' "${BASE_FRAMEWORK_VERSION}" | cut -d. -f3)
+          expected_release_branch="release/v${major_minor}"
+
+          if [ "${GITHUB_REF_NAME}" != "main" ] && [ "${GITHUB_REF_NAME}" != "${expected_release_branch}" ]; then
+            echo "Prod builds for ${BASE_FRAMEWORK_VERSION} may only run from main or ${expected_release_branch}."
+            exit 1
+          fi
+
+          if [ "$patch_version" != "0" ] && [ "${GITHUB_REF_NAME}" != "${expected_release_branch}" ]; then
+            echo "Patch release ${BASE_FRAMEWORK_VERSION} must run from ${expected_release_branch}."
+            exit 1
+          fi
+
+          if [ ! -f "${RELEASE_NOTES_FILE}" ]; then
+            echo "Missing release notes file: ${RELEASE_NOTES_FILE}"
+            exit 1
+          fi
+
+          grep -q '^## Changes$' "${RELEASE_NOTES_FILE}" || { echo "Release notes must include a '## Changes' section."; exit 1; }
+          grep -q '^## Backward incompatibilities$' "${RELEASE_NOTES_FILE}" || { echo "Release notes must include a '## Backward incompatibilities' section."; exit 1; }
+          grep -Eq '^### \[#[0-9]+\]\([^)]+\)( .+)?$' "${RELEASE_NOTES_FILE}" || { echo "Release notes must include at least one release entry heading in the form '### [#PR](URL) ...'."; exit 1; }
       # VCL build
       - name: VCL build
         run: scripts/build_xcframework.sh
@@ -214,8 +243,8 @@ jobs:
            git push origin "${FRAMEWORK_VERSION}"
 
            if [ "${GLOBAL_ENV}" = "prod" ]; then
-             echo "${PAT_TOKEN}" | gh auth login --with-token
-             gh release create "${FRAMEWORK_VERSION}" --title "VCL-${FRAMEWORK_VERSION}" --latest
+            echo "${PAT_TOKEN}" | gh auth login --with-token
+            gh release create "${FRAMEWORK_VERSION}" --title "VCL-${FRAMEWORK_VERSION}" --latest
            fi
         working-directory: VCL-Swift
       - name: Tag and release WalletIOS source
@@ -231,5 +260,6 @@ jobs:
             gh release create "${RELEASE_VERSION}" \
               --repo "${GITHUB_REPOSITORY}" \
               --title "${RELEASE_VERSION}" \
+              --notes-file "${RELEASE_NOTES_FILE}" \
               --latest
           fi
