@@ -241,8 +241,9 @@ jobs:
         run: |
            set -euo pipefail
 
+           rm -rf Frameworks/VCL.xcframework
            cp -r ../VCL/build/VCL.xcframework Frameworks/
-           git add Frameworks/
+           git add -A Frameworks/VCL.xcframework
            if git diff --cached --quiet; then
             echo "VCL-Swift Frameworks already match ${FRAMEWORK_VERSION}; tagging current HEAD."
            else
