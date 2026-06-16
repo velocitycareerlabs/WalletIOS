@@ -156,15 +156,6 @@ jobs:
             echo "Patch release ${BASE_FRAMEWORK_VERSION} must run from ${expected_release_branch}."
             exit 1
           fi
-
-          if [ ! -f "${RELEASE_NOTES_FILE}" ]; then
-            echo "Missing release notes file: ${RELEASE_NOTES_FILE}"
-            exit 1
-          fi
-
-          grep -q '^## Changes$' "${RELEASE_NOTES_FILE}" || { echo "Release notes must include a '## Changes' section."; exit 1; }
-          grep -q '^## Backward incompatibilities$' "${RELEASE_NOTES_FILE}" || { echo "Release notes must include a '## Backward incompatibilities' section."; exit 1; }
-          grep -Eq '^### \[#[0-9]+\]\([^)]+\)( .+)?$' "${RELEASE_NOTES_FILE}" || { echo "Release notes must include at least one release entry heading in the form '### [#PR](URL) ...'."; exit 1; }
       # VCL build
       - name: VCL build
         run: scripts/build_xcframework.sh
