@@ -202,8 +202,7 @@ jobs:
           }
 
           if [ -d "Specs/VCL/${FRAMEWORK_VERSION}" ]; then
-            echo "Specs already contains VCL/${FRAMEWORK_VERSION}."
-            exit 1
+            echo "Specs already contains VCL/${FRAMEWORK_VERSION}; publish step will verify it matches the generated podspec."
           fi
 
           check_remote_tag_absent VCL-Swift "${FRAMEWORK_VERSION}" "VCL-Swift"
@@ -213,8 +212,24 @@ jobs:
         run: |
           set -euo pipefail
 
-          cp -r VCL/0.6.0 "VCL/${FRAMEWORK_VERSION}"
-          sed -i '' "s/0\.6\.0/${FRAMEWORK_VERSION}/g" "VCL/${FRAMEWORK_VERSION}/VCL.podspec"
+          generated_spec_dir=$(mktemp -d)
+          trap 'rm -rf "${generated_spec_dir}"' EXIT
+
+          cp -r VCL/0.6.0 "${generated_spec_dir}/${FRAMEWORK_VERSION}"
+          sed -i '' "s/0\.6\.0/${FRAMEWORK_VERSION}/g" "${generated_spec_dir}/${FRAMEWORK_VERSION}/VCL.podspec"
+
+          if [ -d "VCL/${FRAMEWORK_VERSION}" ]; then
+            if diff -qr "VCL/${FRAMEWORK_VERSION}" "${generated_spec_dir}/${FRAMEWORK_VERSION}" >/dev/null; then
+              echo "Specs already contains matching VCL/${FRAMEWORK_VERSION}; skipping Specs commit."
+              exit 0
+            fi
+
+            echo "Specs already contains VCL/${FRAMEWORK_VERSION}, but it differs from the generated podspec."
+            diff -ru "VCL/${FRAMEWORK_VERSION}" "${generated_spec_dir}/${FRAMEWORK_VERSION}" || true
+            exit 1
+          fi
+
+          mv "${generated_spec_dir}/${FRAMEWORK_VERSION}" "VCL/${FRAMEWORK_VERSION}"
           git add "VCL/${FRAMEWORK_VERSION}"
           git commit -m "sdk ${FRAMEWORK_VERSION}"
           git push
@@ -226,10 +241,15 @@ jobs:
         run: |
            set -euo pipefail
 
+           rm -rf Frameworks/VCL.xcframework
            cp -r ../VCL/build/VCL.xcframework Frameworks/
-           git add Frameworks/
-           git commit -m "sdk ${FRAMEWORK_VERSION}"
-           git push
+           git add -A Frameworks/VCL.xcframework
+           if git diff --cached --quiet; then
+            echo "VCL-Swift Frameworks already match ${FRAMEWORK_VERSION}; tagging current HEAD."
+           else
+            git commit -m "sdk ${FRAMEWORK_VERSION}"
+            git push
+           fi
            git tag "${FRAMEWORK_VERSION}"
            git push origin "${FRAMEWORK_VERSION}"
 
