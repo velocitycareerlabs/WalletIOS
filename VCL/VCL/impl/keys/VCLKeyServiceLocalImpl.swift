@@ -127,11 +127,14 @@ final class VCLKeyServiceLocalImpl: VCLKeyService {
         }
     }
 
+    /// Encodes the DID once and derives the kid from it: JSON key order is not stable between
+    /// serializations, so encoding the JWK again for the kid can produce a different did:jwk string.
     private static func didJwk(publicJwk: ECPublicJwk, keyId: String) -> VCLDidJwk {
-        VCLDidJwk(
-            did: VCLDidJwk.generateDidJwk(publicKey: publicJwk),
+        let did = VCLDidJwk.generateDidJwk(publicKey: publicJwk)
+        return VCLDidJwk(
+            did: did,
             publicJwk: VCLPublicJwk(valueDict: publicJwk.toDictionary()),
-            kid: VCLDidJwk.generateKidFromDidJwk(publicKey: publicJwk),
+            kid: "\(did)\(VCLDidJwk.DidJwkSuffix)",
             keyId: keyId
         )
     }

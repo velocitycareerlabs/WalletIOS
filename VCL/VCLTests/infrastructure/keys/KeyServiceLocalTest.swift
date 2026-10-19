@@ -40,6 +40,7 @@ class KeyServiceLocalTest: XCTestCase {
                 assert(jwkDict["use"] as? String == "sig")
                 assert(jwkDict["x"] as? String != nil)
                 assert(jwkDict["y"] as? String != nil)
+                XCTAssertEqual(didJwk.kid, "\(didJwk.did)\(VCLDidJwk.DidJwkSuffix)")
             } catch {
                 XCTFail("\(error)")
             }
@@ -73,8 +74,7 @@ class KeyServiceLocalTest: XCTestCase {
         let jwkDict = didJwk.publicJwk.valueDict
 
         XCTAssertTrue(didJwk.did.hasPrefix(VCLDidJwk.DidJwkPrefix), file: file, line: line)
-        XCTAssertTrue(didJwk.kid.hasPrefix(didJwk.did), file: file, line: line)
-        XCTAssertTrue(didJwk.kid.hasSuffix(VCLDidJwk.DidJwkSuffix), file: file, line: line)
+        XCTAssertEqual(didJwk.kid, "\(didJwk.did)\(VCLDidJwk.DidJwkSuffix)", file: file, line: line)
         XCTAssertNotNil(UUID(uuidString: didJwk.keyId), file: file, line: line)
 
         XCTAssertEqual(jwkDict["kty"] as? String, "EC", file: file, line: line)
