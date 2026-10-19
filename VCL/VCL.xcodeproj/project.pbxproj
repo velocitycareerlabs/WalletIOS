@@ -45,6 +45,7 @@
 		281E505326CAA07900D0FB4F /* OrganizationsDescriptorMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281E505226CAA07900D0FB4F /* OrganizationsDescriptorMocks.swift */; };
 		281EDC30295AE46200D2D381 /* VCLJwtDescriptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281EDC2F295AE46200D2D381 /* VCLJwtDescriptor.swift */; };
 		281EDC32295AF3A000D2D381 /* VCLPublicJwkTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281EDC31295AF3A000D2D381 /* VCLPublicJwkTest.swift */; };
+		28DD0B012F00000000000002 /* VCLDidJwkTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28DD0B012F00000000000001 /* VCLDidJwkTest.swift */; };
 		281EDC49295AFE2800D2D381 /* VCLDidJwk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281EDC48295AFE2800D2D381 /* VCLDidJwk.swift */; };
 		2821473026C03345002613A9 /* VCLCredentialManifestDescriptorByDeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2821472F26C03345002613A9 /* VCLCredentialManifestDescriptorByDeepLink.swift */; };
 		2821473B26C033CF002613A9 /* VCLDeepLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2821473A26C033CF002613A9 /* VCLDeepLink.swift */; };
@@ -364,6 +365,7 @@
 		281E505226CAA07900D0FB4F /* OrganizationsDescriptorMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizationsDescriptorMocks.swift; sourceTree = "<group>"; };
 		281EDC2F295AE46200D2D381 /* VCLJwtDescriptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLJwtDescriptor.swift; sourceTree = "<group>"; };
 		281EDC31295AF3A000D2D381 /* VCLPublicJwkTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLPublicJwkTest.swift; sourceTree = "<group>"; };
+		28DD0B012F00000000000001 /* VCLDidJwkTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLDidJwkTest.swift; sourceTree = "<group>"; };
 		281EDC48295AFE2800D2D381 /* VCLDidJwk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLDidJwk.swift; sourceTree = "<group>"; };
 		2821472F26C03345002613A9 /* VCLCredentialManifestDescriptorByDeepLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLCredentialManifestDescriptorByDeepLink.swift; sourceTree = "<group>"; };
 		2821473A26C033CF002613A9 /* VCLDeepLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLDeepLink.swift; sourceTree = "<group>"; };
@@ -1137,6 +1139,7 @@
 				28C3B7B42806028F0026E542 /* VCLCredentialManifestDescriptorRefreshTest.swift */,
 				2806600129B5EB6A00433302 /* VCLCredentialManifestTest.swift */,
 				2884060526C9262D0030E967 /* VCLDeepLinkTest.swift */,
+				28DD0B012F00000000000001 /* VCLDidJwkTest.swift */,
 				283BCF6F29B921350023B219 /* VCLErrorTest.swift */,
 				2806600C29B5EB8700433302 /* VCLFinalizeOffersDescriptorTest.swift */,
 				28F1A627299E9AD6001A151F /* VCLIssuingTypeTest.swift */,
@@ -1830,6 +1833,7 @@
 				2873A46E2ACC9B36003AE086 /* JwtVerifyServiceLocalTest.swift in Sources */,
 				2884060626C9262D0030E967 /* VCLDeepLinkTest.swift in Sources */,
 				281EDC32295AF3A000D2D381 /* VCLPublicJwkTest.swift in Sources */,
+				28DD0B012F00000000000002 /* VCLDidJwkTest.swift in Sources */,
 				28A4B2AF2AF29DB300C0992E /* VCLJwtSignServiceTest.swift in Sources */,
 				28C9B25D2A0D143200AC87BD /* KeyServiceUseCaseTest.swift in Sources */,
 				284B89D32B2B32C6000E9776 /* OffersByDeepLinkVerifierTest.swift in Sources */,

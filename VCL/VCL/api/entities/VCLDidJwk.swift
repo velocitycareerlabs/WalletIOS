@@ -11,7 +11,7 @@ import Foundation
 import VCToken
 
 public struct VCLDidJwk {
-    /// The did in jwk format encoded to Base64 format -  - the holder did
+    /// The did in jwk format, the JWK encoded as base64url without padding - the holder did
     public let did: String
     /// The public JWK
     public let publicJwk: VCLPublicJwk
@@ -26,7 +26,7 @@ public struct VCLDidJwk {
     public static let DidJwkSuffix = "#0"
     
     static func generateDidJwk(publicKey: ECPublicJwk) -> String {
-        return "\(VCLDidJwk.DidJwkPrefix)\(publicKey.toDictionary().toJsonString()?.encodeToBase64() ?? "")"
+        return "\(VCLDidJwk.DidJwkPrefix)\(publicKey.toDictionary().toJsonString()?.encodeToBase64Url() ?? "")"
     }
     
     static func generateKidFromDidJwk(publicKey: ECPublicJwk) -> String {
