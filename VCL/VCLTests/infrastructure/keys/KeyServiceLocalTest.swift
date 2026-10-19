@@ -33,6 +33,7 @@ class KeyServiceLocalTest: XCTestCase {
                 assert(didJwk.did.hasPrefix(VCLDidJwk.DidJwkPrefix))
                 assert(didJwk.kid.hasPrefix(VCLDidJwk.DidJwkPrefix))
                 assert(didJwk.kid.hasSuffix(VCLDidJwk.DidJwkSuffix))
+                XCTAssertEqual(didJwk.kid, "\(didJwk.did)\(VCLDidJwk.DidJwkSuffix)")
                 
                 assert(jwkDict["kty"] as? String == "EC")
                 assert(jwkDict["use"] as? String == "sig")
@@ -40,7 +41,6 @@ class KeyServiceLocalTest: XCTestCase {
                 assert(jwkDict["use"] as? String == "sig")
                 assert(jwkDict["x"] as? String != nil)
                 assert(jwkDict["y"] as? String != nil)
-                XCTAssertEqual(didJwk.kid, "\(didJwk.did)\(VCLDidJwk.DidJwkSuffix)")
             } catch {
                 XCTFail("\(error)")
             }
