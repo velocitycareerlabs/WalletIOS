@@ -66,6 +66,7 @@
 		283AB6032DB105AB000907DB /* VCLAuthTokenTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AB6022DB105AA000907DB /* VCLAuthTokenTest.swift */; };
 		283AF0012DED000000000001 /* ErrorTaxonomyBackwardCompatibilityBaselineTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AF0002DED000000000001 /* ErrorTaxonomyBackwardCompatibilityBaselineTest.swift */; };
 		283AF0112DED000000000001 /* ErrorTaxonomyContractTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AF0102DED000000000001 /* ErrorTaxonomyContractTest.swift */; };
+		28E5256A2F00000000000004 /* LocalJwtVerificationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E5256A2F00000000000003 /* LocalJwtVerificationTest.swift */; };
 		283AF0212DED000000000001 /* ErrorTaxonomyTestHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AF0202DED000000000001 /* ErrorTaxonomyTestHarness.swift */; };
 		283AF0132DED000000000001 /* ErrorTaxonomy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AF0122DED000000000001 /* ErrorTaxonomy.swift */; };
 		283AF0152DED000000000001 /* VelocityDeepLinkValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283AF0142DED000000000001 /* VelocityDeepLinkValidator.swift */; };
@@ -244,6 +245,7 @@
 		28A4B2AF2AF29DB300C0992E /* VCLJwtSignServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A4B2AE2AF29DB300C0992E /* VCLJwtSignServiceTest.swift */; };
 		28A595AD26CA700000D6E176 /* CredentialManifestMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A595AC26CA700000D6E176 /* CredentialManifestMocks.swift */; };
 		28A595B826CA724900D6E176 /* JwtServiceMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A595B726CA724900D6E176 /* JwtServiceMocks.swift */; };
+		28E5256A2F00000000000002 /* JwtVerificationMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E5256A2F00000000000001 /* JwtVerificationMocks.swift */; };
 		28A6FAA82B28D0D400C7675E /* VCLOffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6FAA72B28D0D400C7675E /* VCLOffer.swift */; };
 		28A6FAAB2B28DFD400C7675E /* CredentialManifestByDeepLinkVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6FAAA2B28DFD400C7675E /* CredentialManifestByDeepLinkVerifier.swift */; };
 		28A6FAAD2B28DFEC00C7675E /* CredentialsByDeepLinkVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A6FAAC2B28DFEC00C7675E /* CredentialsByDeepLinkVerifier.swift */; };
@@ -385,6 +387,7 @@
 		283AB6022DB105AA000907DB /* VCLAuthTokenTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLAuthTokenTest.swift; sourceTree = "<group>"; };
 		283AF0002DED000000000001 /* ErrorTaxonomyBackwardCompatibilityBaselineTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTaxonomyBackwardCompatibilityBaselineTest.swift; sourceTree = "<group>"; };
 		283AF0102DED000000000001 /* ErrorTaxonomyContractTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTaxonomyContractTest.swift; sourceTree = "<group>"; };
+		28E5256A2F00000000000003 /* LocalJwtVerificationTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalJwtVerificationTest.swift; sourceTree = "<group>"; };
 		283AF0202DED000000000001 /* ErrorTaxonomyTestHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTaxonomyTestHarness.swift; sourceTree = "<group>"; };
 		283AF0122DED000000000001 /* ErrorTaxonomy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTaxonomy.swift; sourceTree = "<group>"; };
 		283AF0142DED000000000001 /* VelocityDeepLinkValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VelocityDeepLinkValidator.swift; sourceTree = "<group>"; };
@@ -565,6 +568,7 @@
 		28A4B2AE2AF29DB300C0992E /* VCLJwtSignServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLJwtSignServiceTest.swift; sourceTree = "<group>"; };
 		28A595AC26CA700000D6E176 /* CredentialManifestMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialManifestMocks.swift; sourceTree = "<group>"; };
 		28A595B726CA724900D6E176 /* JwtServiceMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JwtServiceMocks.swift; sourceTree = "<group>"; };
+		28E5256A2F00000000000001 /* JwtVerificationMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JwtVerificationMocks.swift; sourceTree = "<group>"; };
 		28A6FAA72B28D0D400C7675E /* VCLOffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCLOffer.swift; sourceTree = "<group>"; };
 		28A6FAAA2B28DFD400C7675E /* CredentialManifestByDeepLinkVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialManifestByDeepLinkVerifier.swift; sourceTree = "<group>"; };
 		28A6FAAC2B28DFEC00C7675E /* CredentialsByDeepLinkVerifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsByDeepLinkVerifier.swift; sourceTree = "<group>"; };
@@ -1160,6 +1164,7 @@
 				283AF0202DED000000000001 /* ErrorTaxonomyTestHarness.swift */,
 				283AF0002DED000000000001 /* ErrorTaxonomyBackwardCompatibilityBaselineTest.swift */,
 				283AF0102DED000000000001 /* ErrorTaxonomyContractTest.swift */,
+				28E5256A2F00000000000003 /* LocalJwtVerificationTest.swift */,
 			);
 			path = integration;
 			sourceTree = "<group>";
@@ -1348,6 +1353,7 @@
 				285D153B26CA90E200532E1C /* GenerateOffersMocks.swift */,
 				284D72242A670E0C00298DB9 /* JsonLdMocks.swift */,
 				28A595B726CA724900D6E176 /* JwtServiceMocks.swift */,
+				28E5256A2F00000000000001 /* JwtVerificationMocks.swift */,
 				28BEC7202A0E6E37000DEC88 /* KeyServiceMocks.swift */,
 				28E64F882A0C08EC00A92FC0 /* microsoft */,
 				289A538B264D64E500B84389 /* network */,
@@ -1816,6 +1822,7 @@
 				283BCF7029B921350023B219 /* VCLErrorTest.swift in Sources */,
 				283AF0012DED000000000001 /* ErrorTaxonomyBackwardCompatibilityBaselineTest.swift in Sources */,
 				283AF0112DED000000000001 /* ErrorTaxonomyContractTest.swift in Sources */,
+				28E5256A2F00000000000004 /* LocalJwtVerificationTest.swift in Sources */,
 				283AF0212DED000000000001 /* ErrorTaxonomyTestHarness.swift in Sources */,
 				283CBD9D2DE5A79C007528D1 /* Utils.swift in Sources */,
 				28BEC7212A0E6E37000DEC88 /* KeyServiceMocks.swift in Sources */,
@@ -1827,6 +1834,7 @@
 				289A53AA264D64E500B84389 /* CredentialTypesUseCaseTest.swift in Sources */,
 				28C562402A6861B900C10161 /* CredentialIssuerVerifierTest.swift in Sources */,
 				28A595B826CA724900D6E176 /* JwtServiceMocks.swift in Sources */,
+				28E5256A2F00000000000002 /* JwtVerificationMocks.swift in Sources */,
 				2873A46E2ACC9B36003AE086 /* JwtVerifyServiceLocalTest.swift in Sources */,
 				2884060626C9262D0030E967 /* VCLDeepLinkTest.swift in Sources */,
 				281EDC32295AF3A000D2D381 /* VCLPublicJwkTest.swift in Sources */,

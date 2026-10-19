@@ -47,6 +47,22 @@ final class KeyServiceUseCaseTest: XCTestCase {
         }
     }
     
+    func testGenerateJwkP256() throws {
+        var result: VCLResult<VCLDidJwk> = .failure(VCLError(message: "generateDidJwk did not complete"))
+        subject.generateDidJwk(
+            didJwkDescriptor: VCLDidJwkDescriptor(signatureAlgorithm: VCLSignatureAlgorithm.ES256)
+        ) { result = $0 }
+        let didJwk = try result.get()
+        let jwkDict = didJwk.publicJwk.valueDict
+
+        XCTAssertTrue(didJwk.did.hasPrefix(VCLDidJwk.DidJwkPrefix))
+        XCTAssertEqual(jwkDict["kty"] as? String, "EC")
+        XCTAssertEqual(jwkDict["crv"] as? String, VCLSignatureAlgorithm.ES256.curve)
+        XCTAssertEqual(jwkDict["use"] as? String, "sig")
+        XCTAssertNotNil(jwkDict["x"] as? String)
+        XCTAssertNotNil(jwkDict["y"] as? String)
+    }
+
     func testGenerateDifferentJwks() {
         subject.generateDidJwk(
             didJwkDescriptor: VCLDidJwkDescriptor(signatureAlgorithm: VCLSignatureAlgorithm.SECP256k1)
