@@ -19,6 +19,19 @@ final class VCLDidJwkTest: XCTestCase {
         keyId: "~~~???"
     )
 
+    /// `publicKey` serialized as canonical JSON (sorted keys). The 157 bytes need "==" padding in standard base64,
+    /// and the kid makes standard base64 emit "+" and "/".
+    private let crossSdkJwkJson =
+        "{\"crv\":\"secp256k1\",\"kid\":\"~~~???\",\"kty\":\"EC\",\"use\":\"sig\"," +
+        "\"x\":\"oe8F7VOZkNdjgQ3KtufzypF0dMhvB6UjzXATUCWv6Tc\",\"y\":\"4P4VIDRmac6fREcHdGkCuTjt2LJshaVvYjc0eUdGihw\"}"
+
+    /// Produced outside this SDK, and identical from both sources:
+    /// - `@verii/did-doc` 1.3.0-pre.1792474660.0 (LFDT-Verii/core 2ed15d93) `getDidUriFromJwk` for the JWK above.
+    /// - WalletAndroid 09a6404 `VCLDidJwk.DidJwkPrefix` + `String.encodeToBase64URL()` (nimbus-jose-jwt 10.5) on `crossSdkJwkJson`.
+    private let crossSdkDidJwk =
+        "did:jwk:eyJjcnYiOiJzZWNwMjU2azEiLCJraWQiOiJ-fn4_Pz8iLCJrdHkiOiJFQyIsInVzZSI6InNpZyIsIngiOiJvZThGN1ZPWmtOZGpnUTNLdHVmenlwRjBkTWh2" +
+        "QjZVanpYQVRVQ1d2NlRjIiwieSI6IjRQNFZJRFJtYWM2ZlJFY0hkR2tDdVRqdDJMSnNoYVZ2WWpjMGVVZEdpaHcifQ"
+
     func testEncodeToBase64UrlReplacesUnsafeCharactersAndDropsPadding() {
         let json = "{\"kid\":\"~~~???\"}"
 
@@ -46,6 +59,20 @@ final class VCLDidJwkTest: XCTestCase {
             try XCTUnwrap(jwkJson.toDictionary()) as NSDictionary,
             publicKey.toDictionary() as NSDictionary
         )
+    }
+
+    /// generateDidJwk(publicKey:) serializes the JWK with a key order that changes between processes,
+    /// so the exact cross-SDK string is checked on the JSON-to-did step it delegates to.
+    func testGenerateDidJwkMatchesCrossSdkFixture() throws {
+        XCTAssertEqual(
+            try XCTUnwrap(crossSdkJwkJson.toDictionary()) as NSDictionary,
+            publicKey.toDictionary() as NSDictionary
+        )
+        XCTAssertEqual(VCLDidJwk.generateDidJwk(jwkJson: crossSdkJwkJson), crossSdkDidJwk)
+    }
+
+    func testToPublicJwkDecodesCrossSdkFixture() {
+        XCTAssertEqual(crossSdkDidJwk.toPublicJwk().valueDict as NSDictionary, publicKey.toDictionary() as NSDictionary)
     }
 
     func testGenerateKidFromDidJwkAppendsFragmentToBase64UrlDid() throws {

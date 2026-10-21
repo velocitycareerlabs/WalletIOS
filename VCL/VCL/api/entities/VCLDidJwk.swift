@@ -26,7 +26,12 @@ public struct VCLDidJwk {
     public static let DidJwkSuffix = "#0"
     
     static func generateDidJwk(publicKey: ECPublicJwk) -> String {
-        return "\(VCLDidJwk.DidJwkPrefix)\(publicKey.toDictionary().toJsonString()?.encodeToBase64Url() ?? "")"
+        return generateDidJwk(jwkJson: publicKey.toDictionary().toJsonString() ?? "")
+    }
+
+    /// Builds the did:jwk for an already serialized JWK.
+    static func generateDidJwk(jwkJson: String) -> String {
+        return "\(VCLDidJwk.DidJwkPrefix)\(jwkJson.encodeToBase64Url())"
     }
     
     static func generateKidFromDidJwk(publicKey: ECPublicJwk) -> String {
