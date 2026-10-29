@@ -41,6 +41,9 @@ class CredentialIssuerVerifierTest: XCTestCase {
 
     private var finalizeOffersDescriptorOfIdentityIssuer: VCLFinalizeOffersDescriptor!
     private var credentialManifestFromIdentityIssuer: VCLCredentialManifest!
+
+    private var finalizeOffersDescriptorOfIdentityAndNotaryIssuer: VCLFinalizeOffersDescriptor!
+    private var finalizeOffersDescriptorOfIdentityAndRegularIssuer: VCLFinalizeOffersDescriptor!
     
     private var finalizeOffersDescriptorOfMicrosoftQa: VCLFinalizeOffersDescriptor!
     private var CredentialManifestForValidCredentialMicrsoftQa: VCLCredentialManifest!
@@ -100,6 +103,13 @@ class CredentialIssuerVerifierTest: XCTestCase {
             rejectedOfferIds: []
         )
         
+        finalizeOffersDescriptorOfIdentityAndNotaryIssuer = finalizeOffersDescriptorOf(
+            VerifiedProfileMocks.VerifiedProfileOfIdentityAndNotaryIssuer
+        )
+        finalizeOffersDescriptorOfIdentityAndRegularIssuer = finalizeOffersDescriptorOf(
+            VerifiedProfileMocks.VerifiedProfileOfIdentityAndRegularIssuer
+        )
+
         CredentialManifestForValidCredentialMicrsoftQa = VCLCredentialManifest(
             jwt: try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestForValidCredentialMicrsoftQa),
             verifiedProfile: VCLVerifiedProfile(payload: VerifiedProfileMocks.VerifiedProfileIssuerInspectorMicrosoftQa.toDictionary()!),
@@ -118,6 +128,19 @@ class CredentialIssuerVerifierTest: XCTestCase {
         )
     }
     
+    func finalizeOffersDescriptorOf(_ verifiedProfile: String) -> VCLFinalizeOffersDescriptor {
+        return VCLFinalizeOffersDescriptor(
+            credentialManifest: VCLCredentialManifest(
+                jwt: try! VCLJwt(encodedJwt: CredentialManifestMocks.JwtCredentialManifestFromRegularIssuer),
+                verifiedProfile: VCLVerifiedProfile(payload: verifiedProfile.toDictionary()!),
+                didJwk: DidJwkMocks.DidJwk
+            ),
+            challenge: OffersMock.challenge,
+            approvedOfferIds: [],
+            rejectedOfferIds: []
+        )
+    }
+
     func setUpSubjects() {
         subject1 = CredentialIssuerVerifierImpl(
             CredentialTypesModelMock(
@@ -412,6 +435,62 @@ class CredentialIssuerVerifierTest: XCTestCase {
                 XCTFail("\(VCLErrorCode.IssuerRequiresIdentityPermission.rawValue) error code is expected")
             } catch {
                 assert((error as! VCLError).errorCode == VCLErrorCode.IssuerRequiresIdentityPermission.rawValue)
+            }
+        }
+    }
+
+    func testVerifyRegularCredentialFromIdentityAndNotaryIssuerSuccess() {
+        subject3.verifyCredentials(
+            jwtCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toJwtList()!,
+            finalizeOffersDescriptor: finalizeOffersDescriptorOfIdentityAndNotaryIssuer
+        ) {
+            do {
+                let isVerified = try $0.get()
+                assert(isVerified)
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+    }
+
+    func testVerifyRegularCredentialFromIdentityAndRegularIssuerSuccess() {
+        subject5.verifyCredentials(
+            jwtCredentials: CredentialMocks.JwtCredentialsFromRegularIssuer.toJwtList()!,
+            finalizeOffersDescriptor: finalizeOffersDescriptorOfIdentityAndRegularIssuer
+        ) {
+            do {
+                let isVerified = try $0.get()
+                assert(isVerified)
+            } catch {
+                XCTFail("\(error)")
+            }
+        }
+    }
+
+    func testVerifyRegularCredentialFromIdentityAndRegularIssuerWrongDidFailed() {
+        subject6.verifyCredentials(
+            jwtCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toJwtList()!,
+            finalizeOffersDescriptor: finalizeOffersDescriptorOfIdentityAndRegularIssuer
+        ) {
+            do {
+                let _ = try $0.get()
+                XCTFail("\(VCLErrorCode.IssuerRequiresNotaryPermission.rawValue) error code is expected")
+            } catch {
+                XCTAssertEqual((error as! VCLError).errorCode, VCLErrorCode.IssuerRequiresNotaryPermission.rawValue)
+            }
+        }
+    }
+
+    func testVerifyIdentityCredentialFromIdentityAndRegularIssuerSuccess() {
+        subject9.verifyCredentials(
+            jwtCredentials: CredentialMocks.JwtCredentialsFromNotaryIssuer.toJwtList()!,
+            finalizeOffersDescriptor: finalizeOffersDescriptorOfIdentityAndRegularIssuer
+        ) {
+            do {
+                let isVerified = try $0.get()
+                assert(isVerified)
+            } catch {
+                XCTFail("\(error)")
             }
         }
     }
