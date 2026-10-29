@@ -110,12 +110,13 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         _ serviceTypes: VCLServiceTypes,
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
+        // An organization can hold both identity and career issuing permissions. Its
+        // identity credentials are checked against the identity ones and its other
+        // credentials against the career ones.
         if (
-            serviceTypes.contains(serviceType: VCLServiceType.IdentityIssuer) ||
-            serviceTypes.contains(serviceType: VCLServiceType.IdDocumentIssuer) ||
-            serviceTypes.contains(serviceType: VCLServiceType.NotaryIdDocumentIssuer) ||
-            serviceTypes.contains(serviceType: VCLServiceType.NotaryContactIssuer) ||
-            serviceTypes.contains(serviceType: VCLServiceType.ContactIssuer)
+            serviceTypes.containsAtLeastOneOf(serviceTypes: IdentityIssuerTypes) &&
+            (isIdentityCredentialType(credentialType) ||
+                !serviceTypes.containsAtLeastOneOf(serviceTypes: CareerIssuerTypes))
         ) {
             verifyIdentityIssuer(
                 credentialType,
@@ -130,17 +131,15 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         }
     }
     
+    func isIdentityCredentialType(_ credentialType: VCLCredentialType) -> Bool {
+        return IdentityIssuerTypes.all.contains { $0.rawValue == credentialType.issuerCategory }
+    }
+    
     func verifyIdentityIssuer(
         _ credentialType: VCLCredentialType,
         _ completionBlock: @escaping (VCLResult<Bool>) -> Void
     ) {
-        if (
-            credentialType.issuerCategory == VCLServiceType.IdentityIssuer.rawValue ||
-            credentialType.issuerCategory == VCLServiceType.IdDocumentIssuer.rawValue ||
-            credentialType.issuerCategory == VCLServiceType.NotaryIdDocumentIssuer.rawValue ||
-            credentialType.issuerCategory == VCLServiceType.NotaryContactIssuer.rawValue ||
-            credentialType.issuerCategory == VCLServiceType.ContactIssuer.rawValue
-        ) {
+        if isIdentityCredentialType(credentialType) {
             completionBlock(VCLResult.success(true))
         } else {
             onError(
@@ -361,3 +360,6 @@ final class CredentialIssuerVerifierImpl: CredentialIssuerVerifier {
         static let ValPrimarySourceProfile = "https://velocitynetwork.foundation/contexts#primarySourceProfile"
     }
 }
+
+private let IdentityIssuerTypes = VCLServiceTypes(issuingType: VCLIssuingType.Identity)
+private let CareerIssuerTypes = VCLServiceTypes(issuingType: VCLIssuingType.Career)
