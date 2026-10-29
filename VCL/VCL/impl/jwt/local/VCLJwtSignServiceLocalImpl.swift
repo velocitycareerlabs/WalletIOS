@@ -7,6 +7,7 @@
 //  Copyright 2022 Velocity Career Labs inc.
 //  SPDX-License-Identifier: Apache-2.0
 
+import CryptoKit
 import Foundation
 @preconcurrency import VCToken
 @preconcurrency import VCCrypto
@@ -32,6 +33,52 @@ final class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
         remoteCryptoServicesToken: VCLToken? = nil,
         completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
     ) {
+        if didJwk.publicJwk.curve == VCLSignatureAlgorithm.ES256.curve {
+            signP256(jwtDescriptor: jwtDescriptor, nonce: nonce, didJwk: didJwk, completionBlock: completionBlock)
+        } else {
+            signSecp256k1(jwtDescriptor: jwtDescriptor, nonce: nonce, didJwk: didJwk, completionBlock: completionBlock)
+        }
+    }
+
+    private func signP256(
+        jwtDescriptor: VCLJwtDescriptor,
+        nonce: String?,
+        didJwk: VCLDidJwk,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    ) {
+        do {
+            guard let keyServiceLocalImpl = keyServiceLocalImpl else {
+                throw VCLError(message: "ES256 signing requires the local key service")
+            }
+            let privateKey = try keyServiceLocalImpl.retrieveP256PrivateKey(keyId: didJwk.keyId)
+            let header = Header(
+                type: GlobalConfig.TypeJwt,
+                algorithm: VCLSignatureAlgorithm.ES256.jwsAlgorithm,
+                jsonWebKey: try VCLKeyServiceLocalImpl.p256PublicJwk(publicKey: privateKey.publicKey, keyId: didJwk.keyId),
+                keyId: didJwk.kid
+            )
+            let claims = VCLClaims(all: generateClaims(jwtDescriptor: jwtDescriptor, nonce: nonce))
+            let protectedMessage = try createProtectedMessage(headers: header, claims: claims)
+            guard let jwsTokenSigned = JwsToken(
+                headers: header,
+                content: claims,
+                protectedMessage: protectedMessage,
+                signature: try privateKey.signature(for: Data(protectedMessage.utf8)).rawRepresentation
+            ) else {
+                throw VCLError(message: "Failed to create signed JwsToken")
+            }
+            completionBlock(.success(try VCLJwt(encodedJwt: jwsTokenSigned.serialize())))
+        } catch {
+            completionBlock(.failure(VCLError(error: error)))
+        }
+    }
+
+    private func signSecp256k1(
+        jwtDescriptor: VCLJwtDescriptor,
+        nonce: String?,
+        didJwk: VCLDidJwk,
+        completionBlock: @escaping (VCLResult<VCLJwt>) -> Void
+    ) {
             let secp256k1Signer = Secp256k1Signer()
             getSecretReference(
                 keyId: didJwk.keyId,
@@ -47,7 +94,7 @@ final class VCLJwtSignServiceLocalImpl: VCLJwtSignService {
                                     
                                     let header = Header(
                                         type: GlobalConfig.TypeJwt,
-                                        algorithm: VCLSignatureAlgorithm.fromString(value: didJwk.publicJwk.curve).jwsAlgorithm,
+                                        algorithm: VCLSignatureAlgorithm.SECP256k1.jwsAlgorithm,
                                         jsonWebKey: publicJwk,
                                         keyId: didJwk.kid
                                     )
