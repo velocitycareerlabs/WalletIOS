@@ -157,6 +157,14 @@ extension String {
     func encodeToBase64() -> String {
         return Data(self.utf8).base64EncodedString()
     }
+
+    /// Base64url without padding (RFC 4648 section 5), as required by did:jwk and JWS.
+    func encodeToBase64Url() -> String {
+        return encodeToBase64()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+    }
     
     func toData() -> Data {
         return self.data(using: .utf8) ?? Data()
@@ -243,7 +251,7 @@ extension String {
         return VCLPublicJwk(
             valueStr:self.removePrefix(VCLDidJwk.DidJwkPrefix)
                 .removeFirstSuffix(VCLDidJwk.DidJwkSuffix)
-                .decodeBase64() ?? ""
+                .decodeBase64URL() ?? ""
         )
     }
 }

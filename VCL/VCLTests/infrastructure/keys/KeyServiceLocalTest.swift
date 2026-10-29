@@ -36,6 +36,10 @@ class KeyServiceLocalTest: XCTestCase {
                 assert(jwkDict["use"] as? String == "sig")
                 assert(jwkDict["x"] as? String != nil)
                 assert(jwkDict["y"] as? String != nil)
+
+                let encodedJwk = didJwk.did.removePrefix(VCLDidJwk.DidJwkPrefix)
+                XCTAssertNil(encodedJwk.rangeOfCharacter(from: CharacterSet(charactersIn: "+/=")), didJwk.did)
+                XCTAssertEqual(encodedJwk.decodeBase64URL()?.toDictionary() as NSDictionary?, jwkDict as NSDictionary)
             } catch {
                 XCTFail("\(error)")
             }
