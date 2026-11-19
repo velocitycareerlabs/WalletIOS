@@ -83,6 +83,21 @@ class DeepLinkMocks {
         "\(DevNetProtocol)://issue?request_uri=\(percentEncoded(HubCredentialManifestRequestUriStr))" +
         "&issuerDid=\(percentEncoded(HubIssuerDid))&vendorOriginContext=\(percentEncoded(HubVendorOriginContext))"
 
+    // A link that repeats issuerDid and whose request_uri carries another one
+    static let RepeatedIssuerDidDeepLinkStr =
+        "\(MainNetProtocol)://issue?request_uri=https%3A%2F%2Fissuer.example%2Fmanifest%3FissuerDid%3Ddid%3Aweb%3Ac" +
+        "&issuerDid=did:web:a&issuerDid=did:web:b&issuerDid=did:web:a"
+    // A request_uri that repeats issuerDid, in a link without one
+    static let RequestUriRepeatedIssuerDidDeepLinkStr =
+        "\(MainNetProtocol)://issue?request_uri=" +
+        percentEncoded("https://issuer.example/manifest?id=123&issuerDid=did:web:a&issuerDid=did:web:b&issuerDid=did:web:a")
+
+    // A vendorOriginContext with characters that delimit a query
+    static let ReservedCharactersVendorOriginContext = "a=1&b=2?c"
+    static let ReservedCharactersDeepLinkStr =
+        "\(DevNetProtocol)://issue?request_uri=\(percentEncoded("https://issuer.example/manifest?id=1"))" +
+        "&vendorOriginContext=\(percentEncoded(ReservedCharactersVendorOriginContext))"
+
     private static func percentEncoded(_ value: String) -> String {
         return value.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? value
     }

@@ -172,25 +172,68 @@ extension String {
 //        }
 //        return dict
 //    }
-    // A repeated key keeps its last value
     func getUrlQueryParams() -> [String: String]? {
-        return getUrlQueryParamList().reduce(into: [String: String]()) { map, param in
-            map[param.key] = param.value
+        var map: [String: String]? = nil
+        do {
+            let params = self.split(whereSeparator: { (char) -> Bool in
+                return char == "?" || char == "&"
+            })
+            map = [String: String]()
+            for param in params {
+                let pair = param.split(separator: "=")
+                if pair.count == 2 {
+                    let key = String(pair[0])
+                    let value = String(pair[1])
+                    map?[key] = value
+                }
+            }
+        } catch {
+//            VCLLog.error(error)
         }
+        return map
     }
 
-    // Every pair in order, so a repeated key such as credential_types keeps all its values
-    func getUrlQueryParamList() -> [(key: String, value: String)] {
-        let params: [Substring] = self.split(whereSeparator: { char in char == "?" || char == "&" })
-        var list: [(key: String, value: String)] = []
-        for param in params {
-            let pair: [Substring] = param.split(separator: "=")
-            if pair.count == 2 {
-                list.append((key: String(pair[0]), value: String(pair[1])))
+    // The query's items in order, each name and value decoded once, as a browser reads a query: a value keeps any
+    // &, = or ? it encodes, and a repeated name keeps every value. URLComponents reads it; a string it rejects is
+    // split the same way by hand. A query that doesn't decode gives no items, as before, unless lenient, which keeps
+    // the parts that don't decode as they are.
+    func getUrlQueryItems(lenient: Bool = false) -> [(name: String, value: String)] {
+        // URLComponents accepts a stray % on newer iOS versions, so decodability is checked first
+        if lenient == false && self.removingPercentEncoding == nil {
+            return []
+        }
+        if let queryItems: [URLQueryItem] = URLComponents(string: self)?.queryItems {
+            return queryItems.map { (item: URLQueryItem) -> (name: String, value: String) in
+                (name: item.name, value: item.value ?? "")
             }
         }
-        return list
+        guard let start: String.Index = self.firstIndex(of: "?") else {
+            return []
+        }
+        let query: Substring = self[self.index(after: start)...].prefix(while: { char in char != "#" })
+        var items: [(name: String, value: String)] = []
+        for part in query.split(separator: "&") {
+            let pair: [Substring] = part.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
+            let rawName = String(pair[0])
+            let rawValue = pair.count > 1 ? String(pair[1]) : ""
+            guard
+                let name = rawName.removingPercentEncoding ?? (lenient ? rawName : nil),
+                let value = rawValue.removingPercentEncoding ?? (lenient ? rawValue : nil)
+            else {
+                return []
+            }
+            items.append((name: name, value: value))
+        }
+        return items
     }
+
+    // Percent-encodes all but the unreserved characters, so a query name or value can hold any character
+    func encodeQueryComponent() -> String {
+        return self.addingPercentEncoding(withAllowedCharacters: String.queryComponentAllowed) ?? self
+    }
+
+    private static let queryComponentAllowed =
+        CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~")
     
     func removePrefix(_ prefix: String) -> String {
         guard self.hasPrefix(prefix) else { return self }
