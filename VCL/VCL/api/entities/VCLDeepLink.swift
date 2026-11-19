@@ -43,19 +43,26 @@ public struct VCLDeepLink {
             didSubPath // fallback for old agents
     } }
     
-    // The dictionary keeps one value per key, so credential_types, which a link repeats once per type, is added
-    // with every value instead
+    // The dictionary keeps one value per key, so credential_types, which a link repeats once per type, comes with
+    // every value from the request URI's own query instead. The request URI is taken from the link before the rest
+    // is decoded, so text encoded in another value can't add a type. A request URI without credential_types of its
+    // own is handled as before.
     private func generateUri(uriKey: String, asSubParams: Bool = false) -> String? {
-        if let decodedValue = self.value.decode(), let queryParams = decodedValue.getUrlQueryParams() {
+        if let queryParams = self.value.decode()?.getUrlQueryParams() {
             if let uri = queryParams[uriKey] {
                 let credentialTypesKey = CredentialManifestDescriptorCodingKeys.KeyCredentialTypes
+                let requestUriCredentialTypes: [String] = rawQueryParam(key: uriKey)?.decode()?
+                    .getUrlQueryParamValues(key: credentialTypesKey) ?? []
                 var credentialTypes: [String] = []
-                for credentialType in decodedValue.getUrlQueryParamValues(key: credentialTypesKey)
+                for credentialType in requestUriCredentialTypes
                     where credentialType.isEmpty == false && credentialTypes.contains(credentialType) == false {
                     credentialTypes.append(credentialType)
                 }
                 let otherItems: [String] = queryParams
-                    .filter { (key, value) in key != uriKey && key != credentialTypesKey && value.isEmpty == false }
+                    .filter { (key, value) in
+                        key != uriKey && value.isEmpty == false &&
+                            (credentialTypes.isEmpty || key != credentialTypesKey)
+                    }
                     .map { (key, value) in "\(key)=\(value.encode() ?? "")" }
                 let credentialTypeItems: [String] = credentialTypes
                     .map { (credentialType: String) -> String in "\(credentialTypesKey)=\(credentialType.encode() ?? "")" }
@@ -69,6 +76,20 @@ public struct VCLDeepLink {
         return nil
     }
     
+    // A parameter of the link as it's written, before anything is decoded
+    private func rawQueryParam(key: String) -> String? {
+        guard let start: String.Index = value.firstIndex(of: "?") else {
+            return nil
+        }
+        let params: [Substring] = value[value.index(after: start)...].split(separator: "&")
+        guard let param: Substring = params.last(where: { $0.prefix(while: { char in char != "=" }) == key }),
+              let separator: Substring.Index = param.firstIndex(of: "=")
+        else {
+            return nil
+        }
+        return String(param[param.index(after: separator)...])
+    }
+
     private func retrieveQueryParam(key: String) -> String? {
         return self.value.decode()?.getUrlQueryParams()?[key]
     }

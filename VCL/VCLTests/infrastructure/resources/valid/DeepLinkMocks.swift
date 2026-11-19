@@ -83,6 +83,11 @@ class DeepLinkMocks {
         "\(DevNetProtocol)://issue?request_uri=\(percentEncoded(HubCredentialManifestRequestUriStr))" +
         "&issuerDid=\(percentEncoded(HubIssuerDid))&vendorOriginContext=\(percentEncoded(HubVendorOriginContext))"
 
+    // A hub link whose vendorOriginContext encodes another credential_types
+    static let StrayCredentialTypeDeepLinkStr =
+        "\(DevNetProtocol)://issue?vendorOriginContext=depot%3A123%3Acode%3Fcredential_types%3DDriversLicenseV1.0" +
+        "&request_uri=\(percentEncoded(HubCredentialManifestRequestUriStr))"
+
     private static func percentEncoded(_ value: String) -> String {
         return value.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? value
     }
