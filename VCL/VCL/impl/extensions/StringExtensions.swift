@@ -193,54 +193,17 @@ extension String {
         return map
     }
 
-    // The query's items in order, each name and value decoded once, as a browser reads a query: a value keeps any
-    // &, = or ? it encodes, and a repeated name keeps every value. URLComponents reads it; a string it rejects is
-    // split the same way by hand. A query that doesn't decode gives no items, as before, unless lenient, which keeps
-    // the parts that don't decode as they are.
-    func getUrlQueryItems(lenient: Bool = false) -> [(name: String, value: String)] {
-        // URLComponents accepts a stray % on newer iOS versions, so decodability is checked first
-        if lenient == false && self.removingPercentEncoding == nil {
-            return []
-        }
-        if let queryItems: [URLQueryItem] = URLComponents(string: self)?.queryItems {
-            return queryItems.map { (item: URLQueryItem) -> (name: String, value: String) in
-                (name: item.name, value: item.value ?? "")
+    // Every value of a key that the query repeats, in order, split as getUrlQueryParams splits
+    func getUrlQueryParamValues(key: String) -> [String] {
+        var values: [String] = []
+        for param in self.split(whereSeparator: { char in char == "?" || char == "&" }) {
+            let pair: [Substring] = param.split(separator: "=")
+            if pair.count == 2 && String(pair[0]) == key {
+                values.append(String(pair[1]))
             }
         }
-        var items: [(name: String, value: String)] = []
-        for part in getUrlQuerySegments() {
-            let pair: [Substring] = part.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
-            let rawName = String(pair[0])
-            let rawValue = pair.count > 1 ? String(pair[1]) : ""
-            guard
-                let name = rawName.removingPercentEncoding ?? (lenient ? rawName : nil),
-                let value = rawValue.removingPercentEncoding ?? (lenient ? rawValue : nil)
-            else {
-                return []
-            }
-            items.append((name: name, value: value))
-        }
-        return items
+        return values
     }
-
-    // The query's items as they're written
-    func getUrlQuerySegments() -> [String] {
-        guard let start: String.Index = self.firstIndex(of: "?") else {
-            return []
-        }
-        let query: Substring = self[self.index(after: start)...].prefix(while: { char in char != "#" })
-        return query.split(separator: "&").map { (part: Substring) -> String in String(part) }
-    }
-
-    // Escapes the characters a URL query can't hold as they are, such as a space or a quote, and leaves escapes and
-    // delimiters as they are
-    func encodeIllegalQueryCharacters() -> String {
-        return self.addingPercentEncoding(withAllowedCharacters: String.legalQueryCharacters) ?? self
-    }
-
-    private static let legalQueryCharacters = CharacterSet(
-        charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$&'()*+,;=:@/?%"
-    )
     
     func removePrefix(_ prefix: String) -> String {
         guard self.hasPrefix(prefix) else { return self }

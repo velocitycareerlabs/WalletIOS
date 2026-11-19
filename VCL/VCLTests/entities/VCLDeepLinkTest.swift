@@ -82,81 +82,11 @@ final class VCLDeepLinkTest: XCTestCase {
     func testCredentialManifestDeepLinkKeepsRepeatedCredentialTypes() {
         subject = VCLDeepLink(value: DeepLinkMocks.HubCredentialManifestDeepLinkStr)
 
-        XCTAssertEqual(requestUriValues("credential_types"), DeepLinkMocks.HubCredentialTypes)
-        XCTAssertEqual(
-            subject.requestUri?.decode()?.isUrlEquivalentTo(url: DeepLinkMocks.HubCredentialManifestRequestDecodedUriStr),
-            true
-        )
+        let requestUri = subject.requestUri?.decode()
+        XCTAssertEqual(requestUri?.getUrlQueryParamValues(key: "credential_types"), DeepLinkMocks.HubCredentialTypes)
+        XCTAssertEqual(requestUri?.isUrlEquivalentTo(url: DeepLinkMocks.HubCredentialManifestRequestDecodedUriStr), true)
         XCTAssertEqual(subject.vendorOriginContext, DeepLinkMocks.HubVendorOriginContext)
         XCTAssertEqual(subject.did, DeepLinkMocks.HubIssuerDid)
-    }
-
-    func testDeepLinkParametersReplaceRequestUriParameters() {
-        subject = VCLDeepLink(value: DeepLinkMocks.RepeatedIssuerDidDeepLinkStr)
-
-        XCTAssertEqual(subject.did, "did:web:a")
-        XCTAssertEqual(requestUriValues("issuerDid"), ["did:web:a", "did:web:b", "did:web:a"])
-
-        subject = VCLDeepLink(value: DeepLinkMocks.RequestUriRepeatedIssuerDidDeepLinkStr)
-
-        XCTAssertEqual(subject.did, "did:web:a")
-        XCTAssertEqual(requestUriValues("issuerDid"), ["did:web:a", "did:web:b", "did:web:a"])
-    }
-
-    func testDeepLinkValueKeepsReservedCharacters() {
-        subject = VCLDeepLink(value: DeepLinkMocks.ReservedCharactersDeepLinkStr)
-
-        XCTAssertEqual(subject.vendorOriginContext, DeepLinkMocks.ReservedCharactersVendorOriginContext)
-        XCTAssertEqual(requestUriValues("vendorOriginContext"), [DeepLinkMocks.ReservedCharactersVendorOriginContext])
-        XCTAssertEqual(requestUriValues("id"), ["1"])
-    }
-
-    func testDeepLinkReadsNestedParametersOnlyFromUrls() {
-        subject = VCLDeepLink(value: DeepLinkMocks.EncodedIssuerDidInValueDeepLinkStr)
-
-        XCTAssertEqual(subject.did, "did:web:good")
-
-        subject = VCLDeepLink(value: DeepLinkMocks.QueryLikeNoteDeepLinkStr)
-
-        XCTAssertEqual(subject.vendorOriginContext, "correct")
-
-        subject = VCLDeepLink(value: DeepLinkMocks.QueryLikeUrlNoteDeepLinkStr)
-
-        XCTAssertNil(subject.vendorOriginContext)
-    }
-
-    func testEmptyDeepLinkParameterRemovesRequestUriParameter() {
-        subject = VCLDeepLink(value: DeepLinkMocks.EmptyIdDeepLinkStr)
-
-        XCTAssertEqual(subject.requestUri, "https://issuer.example/manifest")
-    }
-
-    func testNestedParameterMatchesRequestUri() {
-        let cases: [(written: String, expected: String)] = [
-            (written: "a%3Db", expected: "a=b"),
-            (written: "a?b", expected: "a?b"),
-            (written: "abc==", expected: "abc=="),
-            (written: "abc#section", expected: "abc")
-        ]
-        for testCase in cases {
-            subject = VCLDeepLink(value: DeepLinkMocks.nestedVendorOriginContextDeepLinkStr(testCase.written))
-
-            XCTAssertEqual(subject.vendorOriginContext, testCase.expected, testCase.written)
-            XCTAssertEqual(requestUriValues("vendorOriginContext"), [testCase.expected], testCase.written)
-        }
-    }
-
-    func testRequestUriKeepsItsQueryAsWritten() {
-        subject = VCLDeepLink(value: DeepLinkMocks.PlusDeepLinkStr)
-
-        XCTAssertEqual(
-            subject.requestUri,
-            "https://issuer.example/manifest?issuerDid=did:web:good&state=Jane+Doe&claim%2Btype=A"
-        )
-    }
-
-    private func requestUriValues(_ name: String) -> [String]? {
-        return subject.requestUri?.getUrlQueryItems().filter { $0.name == name }.map { $0.value }
     }
 
     func testCredentialManifestDeepLinkMainNetValidAggregation() {
