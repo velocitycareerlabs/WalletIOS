@@ -43,30 +43,34 @@ public struct VCLDeepLink {
             didSubPath // fallback for old agents
     } }
     
-    // The link's query is read before anything is decoded, so the request URI's own query stays apart: a repeated
-    // name such as credential_types keeps every value, and a value keeps any &, = or ? it encodes. The link's other
-    // parameters are added to the request URI and replace any it carries under the same name.
+    // The link's query is split before anything is decoded, so the request URI's own query stays apart. The request
+    // URI keeps its query items as the issuer wrote them and gets the link's other parameters as the link wrote them,
+    // so a repeated name such as credential_types keeps every value and no value is decoded and encoded again. A link
+    // parameter replaces any the request URI carries under the same name. Characters a URL can't hold are escaped.
+    // A link whose escapes don't decode gives no request URI, as before.
     private func generateUri(uriKey: String) -> String? {
-        let linkItems = value.getUrlQueryItems()
-        guard let uri = linkItems.last(where: { $0.name == uriKey })?.value else {
+        guard value.removingPercentEncoding != nil else {
             return nil
         }
-        let linkParams = linkItems.filter { $0.name != uriKey }
-        let linkNames = Set<String>(linkParams.map { $0.name })
-        let uriParams = uri.getUrlQueryItems(lenient: true).filter { linkNames.contains($0.name) == false }
-        let params = (uriParams + linkParams).filter { $0.value.isEmpty == false }
-        let base = String(uri.prefix(while: { $0 != "?" }))
-        if params.isEmpty {
-            return base
+        let linkSegments: [String] = value.getUrlQuerySegments()
+        guard
+            let uriSegment: String = linkSegments.last(where: { $0.segmentName == uriKey }),
+            let uri: String = uriSegment.segmentValue.removingPercentEncoding
+        else {
+            return nil
         }
-        let query: String = params
-            .map { "\($0.name.encodeQueryComponent())=\($0.value.encodeQueryComponent())" }
-            .joined(separator: "&")
-        return "\(base)?\(query)"
+        let linkParams: [String] = linkSegments.filter { $0.segmentName != uriKey }
+        let linkNames = Set<String>(linkParams.map { $0.segmentName })
+        let uriParams: [String] = uri.getUrlQuerySegments().filter { linkNames.contains($0.segmentName) == false }
+        let params: [String] = (uriParams + linkParams)
+            .filter { $0.segmentValue.isEmpty == false }
+            .map { $0.encodeIllegalQueryCharacters() }
+        let base = String(uri.prefix(while: { $0 != "?" }))
+        return params.isEmpty ? base : "\(base)?\(params.joined(separator: "&"))"
     }
 
-    // The link's own parameter, else one inside a URL the link carries, such as request_uri or an OpenID issuer.
-    // Other values, such as vendorOriginContext, aren't read as queries.
+    // The link's own parameter, else one inside a URL the link carries, such as request_uri or an OpenID issuer,
+    // decoded once as the server decodes it. Other values, such as vendorOriginContext, aren't read as queries.
     private func retrieveQueryParam(key: String) -> String? {
         let linkItems = value.getUrlQueryItems()
         if let item = linkItems.last(where: { $0.name == key }) {
@@ -74,7 +78,7 @@ public struct VCLDeepLink {
         }
         for item in linkItems.reversed() where item.value.contains("://") {
             if let nested = item.value.getUrlQueryParams()?[key] {
-                return nested
+                return nested.removingPercentEncoding ?? nested
             }
         }
         return nil
@@ -96,5 +100,21 @@ public struct VCLDeepLink {
         public static let KeyVendorOriginContext = "vendorOriginContext"
         public static let KeyIssuerDid = "issuerDid"
         public static let KeyInspectorDid = "inspectorDid"
+    }
+}
+
+private extension String {
+    // A query item's name, decoded, or as it is when its escapes don't decode
+    var segmentName: String {
+        let name = String(self.prefix(while: { $0 != "=" }))
+        return name.removingPercentEncoding ?? name
+    }
+
+    // A query item's value as it's written
+    var segmentValue: String {
+        guard let separator: String.Index = self.firstIndex(of: "=") else {
+            return ""
+        }
+        return String(self[self.index(after: separator)...])
     }
 }

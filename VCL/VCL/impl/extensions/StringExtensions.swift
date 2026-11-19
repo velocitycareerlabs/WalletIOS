@@ -207,12 +207,8 @@ extension String {
                 (name: item.name, value: item.value ?? "")
             }
         }
-        guard let start: String.Index = self.firstIndex(of: "?") else {
-            return []
-        }
-        let query: Substring = self[self.index(after: start)...].prefix(while: { char in char != "#" })
         var items: [(name: String, value: String)] = []
-        for part in query.split(separator: "&") {
+        for part in getUrlQuerySegments() {
             let pair: [Substring] = part.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
             let rawName = String(pair[0])
             let rawValue = pair.count > 1 ? String(pair[1]) : ""
@@ -227,14 +223,24 @@ extension String {
         return items
     }
 
-    // Percent-encodes all but the unreserved characters and +, so a query name or value can hold &, = and ?.
-    // + is left as it is, as before, so a server that decodes form-style still reads it as a space.
-    func encodeQueryComponent() -> String {
-        return self.addingPercentEncoding(withAllowedCharacters: String.queryComponentAllowed) ?? self
+    // The query's items as they're written
+    func getUrlQuerySegments() -> [String] {
+        guard let start: String.Index = self.firstIndex(of: "?") else {
+            return []
+        }
+        let query: Substring = self[self.index(after: start)...].prefix(while: { char in char != "#" })
+        return query.split(separator: "&").map { (part: Substring) -> String in String(part) }
     }
 
-    private static let queryComponentAllowed =
-        CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~+")
+    // Escapes the characters a URL query can't hold as they are, such as a space or a quote, and leaves escapes and
+    // delimiters as they are
+    func encodeIllegalQueryCharacters() -> String {
+        return self.addingPercentEncoding(withAllowedCharacters: String.legalQueryCharacters) ?? self
+    }
+
+    private static let legalQueryCharacters = CharacterSet(
+        charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$&'()*+,;=:@/?%"
+    )
     
     func removePrefix(_ prefix: String) -> String {
         guard self.hasPrefix(prefix) else { return self }

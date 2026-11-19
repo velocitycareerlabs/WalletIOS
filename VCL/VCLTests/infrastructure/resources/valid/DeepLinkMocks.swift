@@ -104,10 +104,14 @@ class DeepLinkMocks {
     // An empty id in the link and another in its request_uri
     static let EmptyIdDeepLinkStr =
         "\(MainNetProtocol)://issue?request_uri=https%3A%2F%2Fissuer.example%2Fmanifest%3Fid%3Dstale&id="
-    // A request_uri value with a +
+    // A request_uri whose own query has a + and an escaped +
     static let PlusDeepLinkStr =
         "\(MainNetProtocol)://issue?request_uri=" +
-        percentEncoded("https://issuer.example/manifest?issuerDid=did:web:good&state=Jane+Doe")
+        percentEncoded("https://issuer.example/manifest?issuerDid=did:web:good&state=Jane+Doe&claim%2Btype=A")
+    // A request_uri whose own query carries an encoded vendorOriginContext
+    static let NestedVendorOriginContextDeepLinkStr =
+        "\(MainNetProtocol)://inspect?request_uri=" +
+        percentEncoded("https://rp.example/request?inspectorDid=did:web:rp.example&vendorOriginContext=a%3Db")
 
     // A vendorOriginContext with characters that delimit a query
     static let ReservedCharactersVendorOriginContext = "a=1&b=2?c"
