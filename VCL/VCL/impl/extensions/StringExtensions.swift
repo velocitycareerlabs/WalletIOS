@@ -180,7 +180,8 @@ extension String {
             })
             map = [String: String]()
             for param in params {
-                let pair = param.split(separator: "=")
+                // Split at the first `=` only, so a value can contain `=`, e.g. base64 padding
+                let pair = param.split(separator: "=", maxSplits: 1)
                 if pair.count == 2 {
                     let key = String(pair[0])
                     let value = String(pair[1])
@@ -197,7 +198,7 @@ extension String {
     func getUrlQueryParamValues(key: String) -> [String] {
         var values: [String] = []
         for param in self.split(whereSeparator: { char in char == "?" || char == "&" }) {
-            let pair: [Substring] = param.split(separator: "=")
+            let pair: [Substring] = param.split(separator: "=", maxSplits: 1)
             if pair.count == 2 && String(pair[0]) == key {
                 values.append(String(pair[1]))
             }
