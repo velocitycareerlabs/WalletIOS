@@ -227,13 +227,14 @@ extension String {
         return items
     }
 
-    // Percent-encodes all but the unreserved characters, so a query name or value can hold any character
+    // Percent-encodes all but the unreserved characters and +, so a query name or value can hold &, = and ?.
+    // + is left as it is, as before, so a server that decodes form-style still reads it as a space.
     func encodeQueryComponent() -> String {
         return self.addingPercentEncoding(withAllowedCharacters: String.queryComponentAllowed) ?? self
     }
 
     private static let queryComponentAllowed =
-        CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~")
+        CharacterSet(charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~+")
     
     func removePrefix(_ prefix: String) -> String {
         guard self.hasPrefix(prefix) else { return self }

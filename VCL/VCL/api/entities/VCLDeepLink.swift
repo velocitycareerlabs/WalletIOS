@@ -27,9 +27,9 @@ public struct VCLDeepLink {
     public var did: String? { get{
         let topLevelIssuerDid = topLevelQueryParam(key: CodingKeys.KeyIssuerDid)
         let topLevelInspectorDid = topLevelQueryParam(key: CodingKeys.KeyInspectorDid)
-        let requestUriParams = requestUri?.decode()?.getUrlQueryParams()
-        let requestUriIssuerDid = requestUriParams?[CodingKeys.KeyIssuerDid]
-        let requestUriInspectorDid = requestUriParams?[CodingKeys.KeyInspectorDid]
+        let requestUriItems = requestUri?.getUrlQueryItems(lenient: true) ?? []
+        let requestUriIssuerDid = requestUriItems.last(where: { $0.name == CodingKeys.KeyIssuerDid })?.value
+        let requestUriInspectorDid = requestUriItems.last(where: { $0.name == CodingKeys.KeyInspectorDid })?.value
         let decodedIssuerDid = retrieveQueryParam(key: CodingKeys.KeyIssuerDid)
         let decodedInspectorDid = retrieveQueryParam(key: CodingKeys.KeyInspectorDid)
         let didSubPath = requestUri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix)
@@ -55,22 +55,24 @@ public struct VCLDeepLink {
         let linkNames = Set<String>(linkParams.map { $0.name })
         let uriParams = uri.getUrlQueryItems(lenient: true).filter { linkNames.contains($0.name) == false }
         let params = (uriParams + linkParams).filter { $0.value.isEmpty == false }
+        let base = String(uri.prefix(while: { $0 != "?" }))
         if params.isEmpty {
-            return uri
+            return base
         }
         let query: String = params
             .map { "\($0.name.encodeQueryComponent())=\($0.value.encodeQueryComponent())" }
             .joined(separator: "&")
-        return "\(uri.prefix(while: { $0 != "?" }))?\(query)"
+        return "\(base)?\(query)"
     }
 
-    // The link's own parameter, else one inside a URL the link carries, such as request_uri or an OpenID issuer
+    // The link's own parameter, else one inside a URL the link carries, such as request_uri or an OpenID issuer.
+    // Other values, such as vendorOriginContext, aren't read as queries.
     private func retrieveQueryParam(key: String) -> String? {
         let linkItems = value.getUrlQueryItems()
         if let item = linkItems.last(where: { $0.name == key }) {
             return item.value
         }
-        for item in linkItems.reversed() {
+        for item in linkItems.reversed() where item.value.contains("://") {
             if let nested = item.value.getUrlQueryParams()?[key] {
                 return nested
             }

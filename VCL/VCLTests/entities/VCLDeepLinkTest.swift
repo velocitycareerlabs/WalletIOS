@@ -111,6 +111,28 @@ final class VCLDeepLinkTest: XCTestCase {
         XCTAssertEqual(requestUriValues("id"), ["1"])
     }
 
+    func testDeepLinkReadsNestedParametersOnlyFromUrls() {
+        subject = VCLDeepLink(value: DeepLinkMocks.EncodedIssuerDidInValueDeepLinkStr)
+
+        XCTAssertEqual(subject.did, "did:web:good")
+
+        subject = VCLDeepLink(value: DeepLinkMocks.QueryLikeNoteDeepLinkStr)
+
+        XCTAssertEqual(subject.vendorOriginContext, "correct")
+    }
+
+    func testEmptyDeepLinkParameterRemovesRequestUriParameter() {
+        subject = VCLDeepLink(value: DeepLinkMocks.EmptyIdDeepLinkStr)
+
+        XCTAssertEqual(subject.requestUri, "https://issuer.example/manifest")
+    }
+
+    func testRequestUriKeepsPlus() {
+        subject = VCLDeepLink(value: DeepLinkMocks.PlusDeepLinkStr)
+
+        XCTAssertEqual(subject.requestUri?.contains("state=Jane+Doe"), true)
+    }
+
     private func requestUriValues(_ name: String) -> [String]? {
         return subject.requestUri?.getUrlQueryItems().filter { $0.name == name }.map { $0.value }
     }
