@@ -69,16 +69,16 @@ public struct VCLDeepLink {
         return params.isEmpty ? base : "\(base)?\(params.joined(separator: "&"))"
     }
 
-    // The link's own parameter, else one inside a URL the link carries, such as request_uri or an OpenID issuer,
-    // decoded once as the server decodes it. Other values, such as vendorOriginContext, aren't read as queries.
+    // The link's own parameter, else one in the query of a URL the link carries, such as request_uri or an OpenID
+    // issuer. Other values, such as vendorOriginContext, aren't read as queries.
     private func retrieveQueryParam(key: String) -> String? {
         let linkItems = value.getUrlQueryItems()
         if let item = linkItems.last(where: { $0.name == key }) {
             return item.value
         }
-        for item in linkItems.reversed() where item.value.contains("://") {
-            if let nested = item.value.getUrlQueryParams()?[key] {
-                return nested.removingPercentEncoding ?? nested
+        for item in linkItems.reversed() {
+            if let nested = item.value.urlQueryValue(key: key) {
+                return nested
             }
         }
         return nil
@@ -116,5 +116,29 @@ private extension String {
             return ""
         }
         return String(self[self.index(after: separator)...])
+    }
+
+    // The parameter in this value's query when the value is a URL, read as the request URI is built and decoded once,
+    // so it matches what's sent. A URL that starts its query with & instead of ?, as some OpenID issuer links do, is
+    // read the same way.
+    func urlQueryValue(key: String) -> String? {
+        guard self.range(of: "^[A-Za-z][A-Za-z0-9+.-]*://", options: .regularExpression) != nil else {
+            return nil
+        }
+        let query: Substring
+        if let question: String.Index = self.firstIndex(of: "?") {
+            query = self[self.index(after: question)...]
+        } else if let ampersand: String.Index = self.firstIndex(of: "&") {
+            query = self[self.index(after: ampersand)...]
+        } else {
+            return nil
+        }
+        let segments: [String] = query.prefix(while: { char in char != "#" })
+            .split(separator: "&")
+            .map { (part: Substring) -> String in String(part) }
+        guard let segment: String = segments.last(where: { $0.segmentName == key }) else {
+            return nil
+        }
+        return segment.segmentValue.removingPercentEncoding ?? segment.segmentValue
     }
 }

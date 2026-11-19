@@ -119,6 +119,10 @@ final class VCLDeepLinkTest: XCTestCase {
         subject = VCLDeepLink(value: DeepLinkMocks.QueryLikeNoteDeepLinkStr)
 
         XCTAssertEqual(subject.vendorOriginContext, "correct")
+
+        subject = VCLDeepLink(value: DeepLinkMocks.QueryLikeUrlNoteDeepLinkStr)
+
+        XCTAssertNil(subject.vendorOriginContext)
     }
 
     func testEmptyDeepLinkParameterRemovesRequestUriParameter() {
@@ -128,10 +132,18 @@ final class VCLDeepLinkTest: XCTestCase {
     }
 
     func testNestedParameterMatchesRequestUri() {
-        subject = VCLDeepLink(value: DeepLinkMocks.NestedVendorOriginContextDeepLinkStr)
+        let cases: [(written: String, expected: String)] = [
+            (written: "a%3Db", expected: "a=b"),
+            (written: "a?b", expected: "a?b"),
+            (written: "abc==", expected: "abc=="),
+            (written: "abc#section", expected: "abc")
+        ]
+        for testCase in cases {
+            subject = VCLDeepLink(value: DeepLinkMocks.nestedVendorOriginContextDeepLinkStr(testCase.written))
 
-        XCTAssertEqual(subject.vendorOriginContext, "a=b")
-        XCTAssertEqual(requestUriValues("vendorOriginContext"), ["a=b"])
+            XCTAssertEqual(subject.vendorOriginContext, testCase.expected, testCase.written)
+            XCTAssertEqual(requestUriValues("vendorOriginContext"), [testCase.expected], testCase.written)
+        }
     }
 
     func testRequestUriKeepsItsQueryAsWritten() {

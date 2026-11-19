@@ -108,10 +108,17 @@ class DeepLinkMocks {
     static let PlusDeepLinkStr =
         "\(MainNetProtocol)://issue?request_uri=" +
         percentEncoded("https://issuer.example/manifest?issuerDid=did:web:good&state=Jane+Doe&claim%2Btype=A")
-    // A request_uri whose own query carries an encoded vendorOriginContext
-    static let NestedVendorOriginContextDeepLinkStr =
+    // A request_uri whose own query carries a vendorOriginContext, written as given
+    static func nestedVendorOriginContextDeepLinkStr(_ writtenVendorOriginContext: String) -> String {
+        return "\(MainNetProtocol)://inspect?request_uri=" + percentEncoded(
+            "https://rp.example/request?inspectorDid=did:web:rp.example&vendorOriginContext=\(writtenVendorOriginContext)"
+        )
+    }
+    // A link value that reads like a query with a URL in it
+    static let QueryLikeUrlNoteDeepLinkStr =
         "\(MainNetProtocol)://inspect?request_uri=" +
-        percentEncoded("https://rp.example/request?inspectorDid=did:web:rp.example&vendorOriginContext=a%3Db")
+        percentEncoded("https://rp.example/request?inspectorDid=did:web:rp.example") +
+        "&note=vendorOriginContext%3Dhttps%3A%2F%2Fexample.com"
 
     // A vendorOriginContext with characters that delimit a query
     static let ReservedCharactersVendorOriginContext = "a=1&b=2?c"
