@@ -172,25 +172,24 @@ extension String {
 //        }
 //        return dict
 //    }
+    // A repeated key keeps its last value
     func getUrlQueryParams() -> [String: String]? {
-        var map: [String: String]? = nil
-        do {
-            let params = self.split(whereSeparator: { (char) -> Bool in
-                return char == "?" || char == "&"
-            })
-            map = [String: String]()
-            for param in params {
-                let pair = param.split(separator: "=")
-                if pair.count == 2 {
-                    let key = String(pair[0])
-                    let value = String(pair[1])
-                    map?[key] = value
-                }
-            }
-        } catch {
-//            VCLLog.error(error)
+        return getUrlQueryParamList().reduce(into: [String: String]()) { map, param in
+            map[param.key] = param.value
         }
-        return map
+    }
+
+    // Every pair in order, so a repeated key such as credential_types keeps all its values
+    func getUrlQueryParamList() -> [(key: String, value: String)] {
+        let params: [Substring] = self.split(whereSeparator: { char in char == "?" || char == "&" })
+        var list: [(key: String, value: String)] = []
+        for param in params {
+            let pair: [Substring] = param.split(separator: "=")
+            if pair.count == 2 {
+                list.append((key: String(pair[0]), value: String(pair[1])))
+            }
+        }
+        return list
     }
     
     func removePrefix(_ prefix: String) -> String {

@@ -70,6 +70,23 @@ class DeepLinkMocks {
     static let CredentialManifestDeepLinkMainNetStr = "\(MainNetProtocol)://issue?request_uri=\(CredentialManifestRequestUriStr)"
     static let CredentialManifestDeepLinkMainNetWithIdStr = "\(MainNetProtocol)://issue?request_uri=\(CredentialManifestRequestUriWithIdStr)"
     
+    // A Credentialing Hub depot link, whose request_uri repeats credential_types
+    static let HubIssuerDid = "did:web:devregistrar.velocitynetwork.foundation:d:example.com"
+    static let HubVendorOriginContext = "depot:65f0c0ffee0000000000d3a1:code"
+    static let HubCredentialTypes = ["PassportV1.0", "NationalIdCardV1.0", "DriversLicenseV1.0", "IdDocumentV1.0"]
+    private static let HubCredentialManifestRequestUriStr =
+        "https://devcih.velocitycareerlabs.io/vn-api/r/\(HubIssuerDid)/get-credential-manifest?id=65f0c0ffee0000000000e1f2&" +
+        HubCredentialTypes.map { "credential_types=\($0)" }.joined(separator: "&")
+    static let HubCredentialManifestRequestDecodedUriStr =
+        "\(HubCredentialManifestRequestUriStr)&issuerDid=\(HubIssuerDid)&vendorOriginContext=\(HubVendorOriginContext)"
+    static let HubCredentialManifestDeepLinkStr =
+        "\(DevNetProtocol)://issue?request_uri=\(percentEncoded(HubCredentialManifestRequestUriStr))" +
+        "&issuerDid=\(percentEncoded(HubIssuerDid))&vendorOriginContext=\(percentEncoded(HubVendorOriginContext))"
+
+    private static func percentEncoded(_ value: String) -> String {
+        return value.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? value
+    }
+
     static let CredentialManifestDeepLinkDevNet = VCLDeepLink(value: CredentialManifestDeepLinkDevNetStr)
     static let CredentialManifestDeepLinkTestNet = VCLDeepLink(value: CredentialManifestDeepLinkTestNetStr)
     static let CredentialManifestDeepLinkMainNet = VCLDeepLink(value: CredentialManifestDeepLinkMainNetStr)

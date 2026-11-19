@@ -79,6 +79,19 @@ final class VCLDeepLinkTest: XCTestCase {
         assert(subject.did == DeepLinkMocks.IssuerDid)
     }
 
+    func testCredentialManifestDeepLinkKeepsRepeatedCredentialTypes() {
+        subject = VCLDeepLink(value: DeepLinkMocks.HubCredentialManifestDeepLinkStr)
+
+        let requestUri = subject.requestUri?.decode()
+        XCTAssertEqual(
+            requestUri?.getUrlQueryParamList().filter { $0.key == "credential_types" }.map { $0.value },
+            DeepLinkMocks.HubCredentialTypes
+        )
+        XCTAssertEqual(requestUri?.isUrlEquivalentTo(url: DeepLinkMocks.HubCredentialManifestRequestDecodedUriStr), true)
+        XCTAssertEqual(subject.vendorOriginContext, DeepLinkMocks.HubVendorOriginContext)
+        XCTAssertEqual(subject.did, DeepLinkMocks.HubIssuerDid)
+    }
+
     func testCredentialManifestDeepLinkMainNetValidAggregation() {
         subject = VCLDeepLink(value: DeepLinkMocks.CredentialManifestDeepLinkMainNetStr)
 
