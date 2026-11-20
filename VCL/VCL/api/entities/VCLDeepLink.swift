@@ -27,9 +27,9 @@ public struct VCLDeepLink {
     public var did: String? { get{
         let topLevelIssuerDid = topLevelQueryParam(key: CodingKeys.KeyIssuerDid)
         let topLevelInspectorDid = topLevelQueryParam(key: CodingKeys.KeyInspectorDid)
-        let requestUriParams = requestUri?.decode()?.getUrlQueryParams()
-        let requestUriIssuerDid = requestUriParams?[CodingKeys.KeyIssuerDid]
-        let requestUriInspectorDid = requestUriParams?[CodingKeys.KeyInspectorDid]
+        let requestUriItems = requestUri?.getUrlQueryItems(lenient: true) ?? []
+        let requestUriIssuerDid = requestUriItems.last(where: { $0.name == CodingKeys.KeyIssuerDid })?.value
+        let requestUriInspectorDid = requestUriItems.last(where: { $0.name == CodingKeys.KeyInspectorDid })?.value
         let decodedIssuerDid = retrieveQueryParam(key: CodingKeys.KeyIssuerDid)
         let decodedInspectorDid = retrieveQueryParam(key: CodingKeys.KeyInspectorDid)
         let didSubPath = requestUri?.getUrlSubPath(subPathPrefix: CodingKeys.KeyDidPrefix)
@@ -43,55 +43,45 @@ public struct VCLDeepLink {
             didSubPath // fallback for old agents
     } }
     
-    // The dictionary keeps one value per key, so credential_types, which a link repeats once per type, comes with
-    // every value from the request URI's own query instead. The request URI is taken from the link before the rest
-    // is decoded, so text encoded in another value can't add a type. A request URI without credential_types of its
-    // own is handled as before.
-    private func generateUri(uriKey: String, asSubParams: Bool = false) -> String? {
-        if let queryParams = self.value.decode()?.getUrlQueryParams() {
-            if let uri = queryParams[uriKey] {
-                let credentialTypesKey = CredentialManifestDescriptorCodingKeys.KeyCredentialTypes
-                let requestUriCredentialTypes: [String] = rawQueryParam(key: uriKey)?.decode()?
-                    .getUrlQueryParamValues(key: credentialTypesKey) ?? []
-                var credentialTypes: [String] = []
-                for credentialType in requestUriCredentialTypes
-                    where credentialType.isEmpty == false && credentialTypes.contains(credentialType) == false {
-                    credentialTypes.append(credentialType)
-                }
-                let otherItems: [String] = queryParams
-                    .filter { (key, value) in
-                        key != uriKey && value.isEmpty == false &&
-                            (credentialTypes.isEmpty || key != credentialTypesKey)
-                    }
-                    .map { (key, value) in "\(key)=\(value.encode() ?? "")" }
-                let credentialTypeItems: [String] = credentialTypes
-                    .map { (credentialType: String) -> String in "\(credentialTypesKey)=\(credentialType.encode() ?? "")" }
-                let queryItems = (otherItems + credentialTypeItems).joined(separator: "&")
-                if queryItems.isEmpty == false {
-                    return asSubParams ? "\(uri)&\(queryParams)" : uri.appendQueryParams(queryParams: queryItems)
-                }
-                return uri
-            }
-        }
-        return nil
-    }
-    
-    // A parameter of the link as it's written, before anything is decoded
-    private func rawQueryParam(key: String) -> String? {
-        guard let start: String.Index = value.firstIndex(of: "?") else {
+    // The link's query is split before anything is decoded, so the request URI's own query stays apart. The request
+    // URI keeps its query items as the issuer wrote them and gets the link's other parameters as the link wrote them,
+    // so a repeated name such as credential_types keeps every value and no value is decoded and encoded again. A link
+    // parameter replaces any the request URI carries under the same name. Characters a URL can't hold are escaped.
+    // A link whose escapes don't decode gives no request URI, as before.
+    private func generateUri(uriKey: String) -> String? {
+        guard value.removingPercentEncoding != nil else {
             return nil
         }
-        let params: [Substring] = value[value.index(after: start)...].split(separator: "&")
-        guard let param: Substring = params.last(where: { $0.prefix(while: { char in char != "=" }) == key }),
-              let separator: Substring.Index = param.firstIndex(of: "=")
+        let linkSegments: [String] = value.getUrlQuerySegments()
+        guard
+            let uriSegment: String = linkSegments.last(where: { $0.segmentName == uriKey }),
+            let uri: String = uriSegment.segmentValue.removingPercentEncoding
         else {
             return nil
         }
-        return String(param[param.index(after: separator)...])
+        let linkParams: [String] = linkSegments.filter { $0.segmentName != uriKey }
+        let linkNames = Set<String>(linkParams.map { $0.segmentName })
+        let uriParams: [String] = uri.getUrlQuerySegments().filter { linkNames.contains($0.segmentName) == false }
+        let params: [String] = (uriParams + linkParams)
+            .filter { $0.segmentValue.isEmpty == false }
+            .map { $0.encodeIllegalQueryCharacters() }
+        let base = String(uri.prefix(while: { $0 != "?" }))
+        return params.isEmpty ? base : "\(base)?\(params.joined(separator: "&"))"
     }
 
+    // The link's own parameter, else one in the query of a URL the link carries, such as request_uri or an OpenID
+    // issuer. Other values, such as vendorOriginContext, aren't read as queries.
     private func retrieveQueryParam(key: String) -> String? {
-        return self.value.decode()?.getUrlQueryParams()?[key]
+        let linkItems = value.getUrlQueryItems()
+        if let item = linkItems.last(where: { $0.name == key }) {
+            return item.value
+        }
+        for item in linkItems.reversed() {
+            if let nested = item.value.urlQueryValue(key: key) {
+                return nested
+            }
+        }
+        return nil
     }
     
     private func topLevelQueryParam(key: String) -> String? {
@@ -110,5 +100,45 @@ public struct VCLDeepLink {
         public static let KeyVendorOriginContext = "vendorOriginContext"
         public static let KeyIssuerDid = "issuerDid"
         public static let KeyInspectorDid = "inspectorDid"
+    }
+}
+
+private extension String {
+    // A query item's name, decoded, or as it is when its escapes don't decode
+    var segmentName: String {
+        let name = String(self.prefix(while: { $0 != "=" }))
+        return name.removingPercentEncoding ?? name
+    }
+
+    // A query item's value as it's written
+    var segmentValue: String {
+        guard let separator: String.Index = self.firstIndex(of: "=") else {
+            return ""
+        }
+        return String(self[self.index(after: separator)...])
+    }
+
+    // The parameter in this value's query when the value is a URL, read as the request URI is built and decoded once,
+    // so it matches what's sent. A URL that starts its query with & instead of ?, as some OpenID issuer links do, is
+    // read the same way.
+    func urlQueryValue(key: String) -> String? {
+        guard self.range(of: "^[A-Za-z][A-Za-z0-9+.-]*://", options: .regularExpression) != nil else {
+            return nil
+        }
+        let query: Substring
+        if let question: String.Index = self.firstIndex(of: "?") {
+            query = self[self.index(after: question)...]
+        } else if let ampersand: String.Index = self.firstIndex(of: "&") {
+            query = self[self.index(after: ampersand)...]
+        } else {
+            return nil
+        }
+        let segments: [String] = query.prefix(while: { char in char != "#" })
+            .split(separator: "&")
+            .map { (part: Substring) -> String in String(part) }
+        guard let segment: String = segments.last(where: { $0.segmentName == key }) else {
+            return nil
+        }
+        return segment.segmentValue.removingPercentEncoding ?? segment.segmentValue
     }
 }

@@ -82,9 +82,11 @@ final class VCLDeepLinkTest: XCTestCase {
     func testCredentialManifestDeepLinkKeepsRepeatedCredentialTypes() {
         subject = VCLDeepLink(value: DeepLinkMocks.HubCredentialManifestDeepLinkStr)
 
-        let requestUri = subject.requestUri?.decode()
-        XCTAssertEqual(requestUri?.getUrlQueryParamValues(key: "credential_types"), DeepLinkMocks.HubCredentialTypes)
-        XCTAssertEqual(requestUri?.isUrlEquivalentTo(url: DeepLinkMocks.HubCredentialManifestRequestDecodedUriStr), true)
+        XCTAssertEqual(serverQueryValues(subject.requestUri, key: "credential_types"), DeepLinkMocks.HubCredentialTypes)
+        XCTAssertEqual(
+            subject.requestUri?.decode()?.isUrlEquivalentTo(url: DeepLinkMocks.HubCredentialManifestRequestDecodedUriStr),
+            true
+        )
         XCTAssertEqual(subject.vendorOriginContext, DeepLinkMocks.HubVendorOriginContext)
         XCTAssertEqual(subject.did, DeepLinkMocks.HubIssuerDid)
     }
@@ -92,10 +94,7 @@ final class VCLDeepLinkTest: XCTestCase {
     func testCredentialManifestDeepLinkTakesCredentialTypesFromRequestUri() {
         subject = VCLDeepLink(value: DeepLinkMocks.StrayCredentialTypeDeepLinkStr)
 
-        XCTAssertEqual(
-            subject.requestUri?.decode()?.getUrlQueryParamValues(key: "credential_types"),
-            DeepLinkMocks.HubCredentialTypes
-        )
+        XCTAssertEqual(serverQueryValues(subject.requestUri, key: "credential_types"), DeepLinkMocks.HubCredentialTypes)
     }
 
     func testCredentialManifestDeepLinkMainNetValidAggregation() {
@@ -107,5 +106,22 @@ final class VCLDeepLinkTest: XCTestCase {
 //        assert(subject.requestUri?.isUrlEquivalentTo(url: DeepLinkMocks.CredentialManifestRequestDecodedUriStr) == true)
         assert(subject.vendorOriginContext == nil)
         assert(subject.did == DeepLinkMocks.IssuerDid)
+    }
+
+    // Every value of a key in the URL's query, read as a server reads it: split at `&`, then at the first `=`, with
+    // each value form-decoded. Text encoded inside another value stays in that value.
+    private func serverQueryValues(_ url: String?, key: String) -> [String] {
+        guard let url = url, let start = url.firstIndex(of: "?") else {
+            return []
+        }
+        var values: [String] = []
+        for item in url[url.index(after: start)...].components(separatedBy: "&") {
+            let pair: [Substring] = item.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
+            if pair.count == 2 && pair[0] == Substring(key) {
+                let value = String(pair[1]).replacingOccurrences(of: "+", with: " ")
+                values.append(value.removingPercentEncoding ?? value)
+            }
+        }
+        return values
     }
 }
