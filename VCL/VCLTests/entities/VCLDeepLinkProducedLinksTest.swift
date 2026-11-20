@@ -235,6 +235,45 @@ final class VCLDeepLinkProducedLinksTest: XCTestCase {
                 ("vendorOriginContext", "José Müller")
             ]
         ),
+        // Should be fixed: iOS reads nil where Android reads an empty string, because Swift's split drops the
+        // empty value after `=`.
+        Case(
+            name: "Empty vendorOriginContext",
+            link: "velocity-network-devnet://inspect?request_uri=https%3A%2F%2Fdevagent.velocitycareerlabs.io%2Fapi%2Fholder%2Fv0.6%2Forg%2Fdid%3Aion%3AEiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA%2Finspect%2Fget-presentation-request%3Fid%3D6630aa11bb22cc33dd44ee55&inspectorDid=did%3Aion%3AEiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA&vendorOriginContext=",
+            did: "did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA",
+            vendorOriginContext: nil,
+            requestUri: "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA/inspect/get-presentation-request",
+            query: [
+                ("id", "6630aa11bb22cc33dd44ee55"),
+                ("inspectorDid", "did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA")
+            ]
+        ),
+        Case(
+            name: "vendorOriginContext with #",
+            link: "velocity-network-devnet://inspect?request_uri=https%3A%2F%2Fdevagent.velocitycareerlabs.io%2Fapi%2Fholder%2Fv0.6%2Forg%2Fdid%3Aion%3AEiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA%2Finspect%2Fget-presentation-request%3Fid%3D6630aa11bb22cc33dd44ee55&inspectorDid=did%3Aion%3AEiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA&vendorOriginContext=order%23123",
+            did: "did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA",
+            vendorOriginContext: "order#123",
+            requestUri: "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA/inspect/get-presentation-request",
+            query: [
+                ("id", "6630aa11bb22cc33dd44ee55"),
+                ("inspectorDid", "did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA"),
+                ("vendorOriginContext", "order#123")
+            ]
+        ),
+        // Should be fixed: the request URI's copy leaves `+` unescaped, so a server reads it as a space. Only the
+        // hub's presentation route reads vendorOriginContext from the request URI, and hub values have no `+`.
+        Case(
+            name: "vendorOriginContext with an email address with +",
+            link: "velocity-network-devnet://inspect?request_uri=https%3A%2F%2Fdevagent.velocitycareerlabs.io%2Fapi%2Fholder%2Fv0.6%2Forg%2Fdid%3Aion%3AEiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA%2Finspect%2Fget-presentation-request%3Fid%3D6630aa11bb22cc33dd44ee55&inspectorDid=did%3Aion%3AEiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA&vendorOriginContext=jane.doe%2Bwallet%40example.com",
+            did: "did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA",
+            vendorOriginContext: "jane.doe+wallet@example.com",
+            requestUri: "https://devagent.velocitycareerlabs.io/api/holder/v0.6/org/did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA/inspect/get-presentation-request",
+            query: [
+                ("id", "6630aa11bb22cc33dd44ee55"),
+                ("inspectorDid", "did:ion:EiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA"),
+                ("vendorOriginContext", "jane.doe wallet@example.com")
+            ]
+        ),
         Case(
             name: "Holder app issuing-sequence part, passed without the scheme",
             link: "issue?request_uri=https%3A%2F%2Fdevagent.velocitycareerlabs.io%2Fapi%2Fholder%2Fv0.6%2Forg%2Fdid%3Aion%3AEiApMLdMb4NPb8sae9-hXGHP79W1gisApVSE80USPEbtJA%2Fissue%2Fget-credential-manifest%3Fid%3D6630aa11bb22cc33dd44ee55%26exchange_id%3D6630ff00ee11dd22cc33bb99%26credential_types%3DPhoneV1.0&vendorOriginContext=second-ctx",
