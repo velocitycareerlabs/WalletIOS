@@ -180,7 +180,8 @@ extension String {
             })
             map = [String: String]()
             for param in params {
-                let pair = param.split(separator: "=")
+                // Split at the first `=` only, so a value can contain `=`, e.g. base64 padding
+                let pair = param.split(separator: "=", maxSplits: 1)
                 if pair.count == 2 {
                     let key = String(pair[0])
                     let value = String(pair[1])
@@ -192,6 +193,63 @@ extension String {
         }
         return map
     }
+
+    // The query's items in order, each name and value decoded once, as a server reads a query: a `+` is a space, a
+    // value keeps any &, = or ? it encodes, and a repeated name keeps every value. URLComponents splits it; a string
+    // it rejects is split the same way by hand. A query that doesn't decode gives no items, as before, unless lenient, which keeps
+    // the parts that don't decode as they are.
+    func getUrlQueryItems(lenient: Bool = false) -> [(name: String, value: String)] {
+        // URLComponents accepts a stray % on newer iOS versions, so decodability is checked first
+        if lenient == false && self.removingPercentEncoding == nil {
+            return []
+        }
+        let parts: [(name: String, value: String)]
+        if let queryItems: [URLQueryItem] = URLComponents(string: self)?.percentEncodedQueryItems {
+            parts = queryItems.map { (item: URLQueryItem) -> (name: String, value: String) in
+                (name: item.name, value: item.value ?? "")
+            }
+        } else {
+            parts = getUrlQuerySegments().map { (part: String) -> (name: String, value: String) in
+                let pair: [Substring] = part.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
+                return (name: String(pair[0]), value: pair.count > 1 ? String(pair[1]) : "")
+            }
+        }
+        var items: [(name: String, value: String)] = []
+        for part in parts {
+            guard
+                let name = part.name.formDecoded ?? (lenient ? part.name : nil),
+                let value = part.value.formDecoded ?? (lenient ? part.value : nil)
+            else {
+                return []
+            }
+            items.append((name: name, value: value))
+        }
+        return items
+    }
+
+    // A query item's name or value decoded as a server decodes it, with `+` read as a space
+    private var formDecoded: String? {
+        return self.replacingOccurrences(of: "+", with: " ").removingPercentEncoding
+    }
+
+    // The query's items as they're written
+    func getUrlQuerySegments() -> [String] {
+        guard let start: String.Index = self.firstIndex(of: "?") else {
+            return []
+        }
+        let query: Substring = self[self.index(after: start)...].prefix(while: { char in char != "#" })
+        return query.split(separator: "&").map { (part: Substring) -> String in String(part) }
+    }
+
+    // Escapes the characters a URL query can't hold as they are, such as a space or a quote, and leaves escapes and
+    // delimiters as they are
+    func encodeIllegalQueryCharacters() -> String {
+        return self.addingPercentEncoding(withAllowedCharacters: String.legalQueryCharacters) ?? self
+    }
+
+    private static let legalQueryCharacters = CharacterSet(
+        charactersIn: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$&'()*+,;=:@/?%"
+    )
     
     func removePrefix(_ prefix: String) -> String {
         guard self.hasPrefix(prefix) else { return self }
